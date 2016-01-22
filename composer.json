@@ -1,0 +1,6 @@
+{
+    "require": {
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "dmstr/yii2-adminlte-asset": "2.*"
+    }
+}
