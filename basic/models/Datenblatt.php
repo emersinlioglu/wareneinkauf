@@ -50,9 +50,9 @@ class Datenblatt extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'firma_id' => Yii::t('app', 'Firma ID'),
-            'projekt_id' => Yii::t('app', 'Projekt ID'),
-            'haus_id' => Yii::t('app', 'Haus ID'),
+            'firma_id' => Yii::t('app', 'Firma'),
+            'projekt_id' => Yii::t('app', 'Projekt'),
+            'haus_id' => Yii::t('app', 'Teileigentumseinheit'),
             'nummer' => Yii::t('app', 'Nummer'),
         ];
     }

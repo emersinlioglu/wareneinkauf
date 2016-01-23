@@ -8,13 +8,14 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'Datenblatt',
 ]) . ' ' . $modelDatenblatt->id;
+//$this->title = '';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Datenblatts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $modelDatenblatt->id, 'url' => ['view', 'id' => $modelDatenblatt->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="datenblatt-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3>Datenblatt Details</h3>
 
     <?= $this->render('_form', [
         'modelDatenblatt' => $modelDatenblatt,
