@@ -38,9 +38,13 @@ use app\models\Einheitstyp;
         </div>
     </div>
     
-    <h2></h2>
+    <h2>Teileigentumseinheiten</h2>
     
-    <table>
+    <?php if (!$model->isNewRecord): ?>
+    <?= Html::submitButton('Teileigentumseinheit hinzufügen', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
+    <?php endif; ?>
+    
+    <table class="table">
     <?php foreach($modelsTeilieigentum as $key => $modelTeilieigentum): ?>
         <tr>
             <td>
@@ -80,10 +84,40 @@ use app\models\Einheitstyp;
     <?php endforeach; ?>
     </table>
 
-    <div class="form-group">
-        <?php if (!$model->isNewRecord): ?>
-        <?= Html::submitButton('Teileigentumseinheit hinzufügen', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
-        <?php endif; ?>
+    <h2>Zählerstand-Angaben:</h2>
+    
+    <?php if (!$model->isNewRecord): ?>
+        <?= Html::submitButton('Zählerstand hinzufügen', ['class' => 'btn btn-success', 'name' => 'addnewZaehlerstand']) ?>
+    <?php endif; ?>
+    
+    <table class="table">
+        <tr>
+            <th>Medium-Nr.</th>
+            <th>Zählerstand</th>
+            <th>Datum</th>
+        </tr>
+        <?php 
+        /* @var $zaehlerstand app\models\Zaehlerstand */
+        if ($model):
+        foreach ($model->zaehlerstands as $key => $zaehlerstand): ?>
+            <tr>
+                <td>
+                    <span class="hide">
+                        <?= $form->field($zaehlerstand, 'id')->hiddenInput(['name' => "Zaehlerstaende[$key][id]"]) ?>
+                    </span>
+                    <?= $form->field($zaehlerstand, 'name')->textInput(['name' => "Zaehlerstaende[$key][name]"]) ?>
+                </td>
+                <td><?= $form->field($zaehlerstand, 'stand')->textInput(['name' => "Zaehlerstaende[$key][stand]"]) ?></td>
+                <td><?= $form->field($zaehlerstand, 'datum')->input('text', ['name' => "Zaehlerstaende[$key][datum]"]); ?></td>
+            </tr>
+        <?php 
+        endforeach; 
+        endif;
+        ?>
+    </table>
+    
+    
+    <div class="form-group" style="text-align: right;">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 

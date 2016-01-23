@@ -4,11 +4,12 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Haus;
+use app\models\Teileigentumseinheit;
+use app\models\Zaehlerstand;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Teileigentumseinheit;
 
 /**
  * HausController implements the CRUD actions for Haus model.
@@ -88,19 +89,21 @@ class HausController extends Controller
             
             $data = Yii::$app->request->post();
             
-            if (isset($data['addnew'])) {
+            if (isset($data['addnewZaehlerstand'])) {
+                $new = new Zaehlerstand();
+                $new->haus_id = $id;
+                $new->save();
+                
+                $this->redirect(['update', 'id' => $model->id]);
+
+            } else if (isset($data['addnew'])) {
+                
                 $new = new Teileigentumseinheit();
                 $new->haus_id = $id;
                 $new->einheitstyp_id = 1;
                 $new->save();
                 
-                $model = $this->findModel($id);
-                $modelsTeilieigentum = $model->teileigentumseinheits;
-                
-                return $this->render('update', [
-                    'model' => $model,
-                    'modelsTeilieigentum' => $modelsTeilieigentum
-                ]);
+                $this->redirect(['update', 'id' => $model->id]);
             } else {
                 
                 if (isset($data['Teileigentumseinheiten'])) {
@@ -112,6 +115,26 @@ class HausController extends Controller
                             $obj->save();
                         }
                     }
+                }
+                
+                if (isset($data['Zaehlerstaende'])) {
+                    foreach ($data['Zaehlerstaende'] as $objData) {
+                        if (isset($objData['id']) && $objData['id'] > 0) {
+                            $obj = Zaehlerstand::findOne($objData['id']);
+                            $obj->load(['Zaehlerstand' => $objData]);
+                            
+                            $date = \DateTime::createFromFormat('Y-m-d', $objData['datum']); 
+                            if ($date) {
+                                $date->setTime(0, 0, 0);
+                                $obj->datum = $date->format('Y-m-d H:i:s');
+                                $obj->datum = $date;
+//                                echo $obj->datum . '<br>';
+                            }
+                            $obj->datum = '2016-01-12 10:00:00';
+                            $obj->save();
+                        }
+                    }
+//                    die;
                 }
 
                 return $this->redirect(['update', 'id' => $model->id]);

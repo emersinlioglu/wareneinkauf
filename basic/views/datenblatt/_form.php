@@ -41,19 +41,49 @@ use yii\i18n\Formatter;
     
     <h3>Hause Details</h3>
     
-    
     <div class="row">
-        <div class="col-sm-2">
-            
-        </div>
-        <div class="col-sm-2">
-             
-        </div>
-        <div class="col-sm-2">
-            
+        <div class="col-sm-3">
+            Anschrift:
         </div>
     </div>
-    
+    <div class="row">
+        <div class="col-sm-2">
+            Straße + Hausnummer: 
+        </div>
+        <div class="col-sm-3">
+            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->strasse : '' ?>
+            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->hausnr : '' ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            PLZ/Ort: 
+        </div>
+        <div class="col-sm-3">
+            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->plz : '' ?>
+            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->ort : '' ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            reserviert: 
+        </div>
+        <div class="col-sm-1">
+            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->reserviert ? 'ja' : 'nein') : '' ?><br>
+        </div>
+        <div class="col-sm-1">
+            verkauft:
+        </div>
+        <div class="col-sm-1">
+            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->verkauft ? 'ja' : 'nein') : '' ?>
+        </div>
+        <div class="col-sm-2">
+            Rechnung/Vertrieb:
+        </div>
+        <div class="col-sm-1">
+            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->rechnung_vertrieb ? 'ja' : 'nein') : '' ?>
+        </div>
+    </div>
     
     <h3>Beschreibung Teileigentumseinheit</h3>
     
@@ -71,19 +101,50 @@ use yii\i18n\Formatter;
         </tr>
         <?php 
         /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
+        if ($modelDatenblatt->haus):
         foreach ($modelDatenblatt->haus->teileigentumseinheits as $teileigentumseinheit): ?>
+            <tr>
+                <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
+                <td><?= $teileigentumseinheit->te_nummer ?></td>
+                <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
+                <td><?= $teileigentumseinheit->geschoss ?></td>
+                <td><?= $teileigentumseinheit->zimmer ?></td>
+                <td><?= $teileigentumseinheit->me_anteil ?></td>
+                <td><?= $teileigentumseinheit->wohnflaeche ?></td>
+                <td>€ <?= number_format ((float)$teileigentumseinheit->kaufpreis, 2); ?></td>
+                <td>€ <?= number_format ((float)$teileigentumseinheit->kp_einheit, 2); ?></td>
+            </tr>
+        <?php 
+        endforeach; 
+        endif;
+        ?>
+    </table>
+        
+    <h3>Zählerangaben</h3>
+    
+    <table class="table">
         <tr>
-            <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
-            <td><?= $teileigentumseinheit->te_nummer ?></td>
-            <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
-            <td><?= $teileigentumseinheit->geschoss ?></td>
-            <td><?= $teileigentumseinheit->zimmer ?></td>
-            <td><?= $teileigentumseinheit->me_anteil ?></td>
-            <td><?= $teileigentumseinheit->wohnflaeche ?></td>
-            <td>€ <?= number_format ((float)$teileigentumseinheit->kaufpreis, 2); ?></td>
-            <td>€ <?= number_format ((float)$teileigentumseinheit->kp_einheit, 2); ?></td>
+            <th>Medium-Nr.</th>
+            <th>Zählerstand</th>
+            <th>Datum</th>
         </tr>
-        <?php endforeach; ?>
+        <?php 
+        /* @var $zaehlerstand app\models\Zaehlerstand */
+        if ($modelDatenblatt->haus):
+        foreach ($modelDatenblatt->haus->zaehlerstands as $zaehlerstand): ?>
+            <tr>
+                <td><?= $zaehlerstand->name ?></td>
+                <td><?= $zaehlerstand->stand ?></td>
+                <td><?php 
+                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $zaehlerstand->datum);
+                echo $datum->format('d.m.Y');
+                ?>
+                </td>
+            </tr>
+        <?php 
+        endforeach; 
+        endif;
+        ?>
     </table>
     
     <?= $this->render('_zahlungen', [

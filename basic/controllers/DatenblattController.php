@@ -147,7 +147,7 @@ class DatenblattController extends Controller
         $modelDatenblatt = $this->findModel($id);
         $modelsZahlungs = $modelDatenblatt->zahlungs;
 
-        if ($modelDatenblatt->load(Yii::$app->request->post())) {
+        if ($modelDatenblatt->load(Yii::$app->request->post()) && $modelDatenblatt->save()) {
 
             
         }
