@@ -46,7 +46,13 @@ use app\models\Einheitstyp;
 
             <td><?= $form->field($modelTeilieigentum, 'kaufpreis')->textInput(['name' => "Teileigentumseinheiten[$key][kaufpreis]"]) ?></td>
 
-            <td><?= $form->field($modelTeilieigentum, 'kp_einheit')->textInput(["Teileigentumseinheiten[$key][kp_einheit]"]) ?></td>
+            <td><?= $form->field($modelTeilieigentum, 'kp_einheit')->textInput(['name' => "Teileigentumseinheiten[$key][kp_einheit]"]) ?></td>
+            
+            <td>
+                <?= Html::a('Löschen', 
+                    Yii::$app->urlManager->createUrl(["haus/deleteteileigentumseinheit", 'hausId' => $model->id , 'teileigentumseinheitId' => $modelTeilieigentum->id]), 
+                    ['class' => 'btn btn-block btn-danger btn-flat']) ?>
+            </td>
         </tr>
     <?php endforeach; ?>
     </table>
