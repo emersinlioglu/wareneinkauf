@@ -15,7 +15,30 @@ use app\models\Einheitstyp;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'projekt_id')->dropDownList(ArrayHelper::map(Projekt::find()->all(), 'id', 'name')) ?>
+    <div class="row">
+        <div class="col-sm-3">
+            <?= $form->field($model, 'projekt_id')->dropDownList(ArrayHelper::map(Projekt::find()->all(), 'id', 'name')) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <?= $form->field($model, 'strasse')->textInput([]) ?>
+            <?= $form->field($model, 'plz')->textInput([]) ?>
+        </div>
+        <div class="col-sm-3">
+            <?= $form->field($model, 'hausnr')->textInput([]) ?>
+            <?= $form->field($model, 'ort')->textInput([]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <?= $form->field($model, 'reserviert')->checkbox([]) ?>
+            <?= $form->field($model, 'verkauft')->checkbox([]) ?>
+            <?= $form->field($model, 'rechnung_vertrieb')->checkbox([]) ?>
+        </div>
+    </div>
+    
+    <h2></h2>
     
     <table>
     <?php foreach($modelsTeilieigentum as $key => $modelTeilieigentum): ?>

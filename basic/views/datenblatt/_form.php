@@ -2,86 +2,49 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use wbraganca\dynamicform\DynamicFormWidget;
+use yii\helpers\ArrayHelper;
+use app\models\Firma;
 
 ?>
 
 <div class="datenblatt-form">
 
-    <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 
+        'options'=>array(
+            'class' => 'datenblatt-form'
+        )
+    ]); ?>
 
-     <div class="row">
-        <div class="col-sm-6">
+    <div class="row">
+        <div class="col-sm-2">
             <?= $form->field($modelDatenblatt, 'nummer')->textInput(['maxlength' => true]) ?>
         </div>
-        <!--<div class="col-sm-6">-->
-            <!--?= $form->field($modelDatenblatt, 'last_name')->textInput(['maxlength' => true]) ?-->
-        <!--</div>-->
     </div>
-
-    <div class="padding-v-md">
-        <div class="line line-dashed"></div>
+    
+    <div class="row">
+        <div class="col-sm-2">
+            <?= $form->field($modelDatenblatt, 'firma_id')->dropDownList(ArrayHelper::map(Firma::find()->all(), 'id', 'name'), ['prompt'=>'Firma auswählen']) ?>
+        </div>
+        <div class="col-sm-2">
+            <?php
+                $projekte = $modelDatenblatt->firma ? $modelDatenblatt->firma->projekts : [];
+                echo $form->field($modelDatenblatt, 'projekt_id')->dropDownList(ArrayHelper::map($projekte, 'id', 'name'), ['prompt'=>'Projekt auswählen']);
+            ?>
+        </div>
+        <div class="col-sm-2">
+            <?php   
+                $haeuser = $modelDatenblatt->firma && $modelDatenblatt->projekt ? $modelDatenblatt->projekt->hauses : [];
+                echo $form->field($modelDatenblatt, 'haus_id')->dropDownList(ArrayHelper::map($haeuser, 'id', 'id'), ['prompt'=>'Haus auswählen']);
+            ?>
+        </div>
     </div>
+    
+    
+    <?= $this->render('_zahlungen', [
+            'form' => $form,
+            'modelsZahlung'  => $modelsZahlung,
+        ]) ?>
 
-    <?php DynamicFormWidget::begin([
-        'widgetContainer' => 'dynamicform_wrapper',
-        'widgetBody' => '.container-items',
-        'widgetItem' => '.zahlung-item',
-        'limit' => 10,
-        'min' => 1,
-        'insertButton' => '.add-zahlung',
-        'deleteButton' => '.remove-zahlung',
-        'model' => $modelsZahlung[0],
-        'formId' => 'dynamic-form',
-        'formFields' => [
-            'betrag',
-            'datum'
-        ],
-    ]); ?>
-    
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Zahlung</th>
-                <!--<th style="width: 450px;">Rooms</th>-->
-                <th class="text-center" style="width: 90px;">
-                    <button type="button" class="add-zahlung btn btn-success btn-xs">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody class="container-items">
-        <?php foreach ($modelsZahlung as $indexZahlung => $modelZahlung): ?>
-            <tr class="zahlung-item">
-                <td class="vcenter">
-                    <?php
-                        // necessary for update action.
-                        if (! $modelZahlung->isNewRecord) {
-                            echo Html::activeHiddenInput($modelZahlung, "[{$indexZahlung}]id");
-                        }
-                    ?>
-                    <?= $form->field($modelZahlung, "[{$indexZahlung}]betrag")->label(false)->textInput(['maxlength' => true]) ?>
-                </td>
-                <!--<td>-->
-                    <!--?= $this->render('_form-rooms', [
-                        'form' => $form,
-                        'indexHouse' => $indexZahlung,
-                        'modelsRoom' => $modelsRoom[$indexZahlung],
-                    ]) ?-->
-                <!--</td>-->
-                <td class="text-center vcenter" style="width: 90px; verti">
-                    <button type="button" class="remove-zahlung btn btn-danger btn-xs">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-         <?php endforeach; ?>
-        </tbody>
-    </table>
-    
-    
-    <?php DynamicFormWidget::end(); ?>
     
     <div class="form-group">
         <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>

@@ -146,100 +146,15 @@ class DatenblattController extends Controller
     {
         $modelDatenblatt = $this->findModel($id);
         $modelsZahlungs = $modelDatenblatt->zahlungs;
-        $modelsRoom = [];
-        $oldRooms = [];
-
-        if (!empty($modelsZahlungs)) {
-//            foreach ($modelsZahlungs as $indexHouse => $modelHouse) {
-//                $rooms = $modelHouse->rooms;
-//                $modelsRoom[$indexHouse] = $rooms;
-//                $oldRooms = ArrayHelper::merge(ArrayHelper::index($rooms, 'id'), $oldRooms);
-//            }
-        }
 
         if ($modelDatenblatt->load(Yii::$app->request->post())) {
 
-            // reset
-            $modelsRoom = [];
-
-            $oldZahlungIDs = ArrayHelper::map($modelsZahlungs, 'id', 'id');
-            $modelsZahlungs = DynamicForm::createMultiple(Zahlung::classname(), $modelsZahlungs);
-            DynamicForm::loadMultiple($modelsZahlungs, Yii::$app->request->post());
-            $deletedZahlungIDs = array_diff($oldZahlungIDs, array_filter(ArrayHelper::map($modelsZahlungs, 'id', 'id')));
-
-            // validate person and houses models
-            $valid = $modelDatenblatt->validate();
-            $valid = DynamicForm::validateMultiple($modelsZahlungs, ['betrag']) && $valid;
-
-            $roomsIDs = [];
-//            if (isset($_POST['Room'][0][0])) {
-//                foreach ($_POST['Room'] as $indexHouse => $rooms) {
-//                    $roomsIDs = ArrayHelper::merge($roomsIDs, array_filter(ArrayHelper::getColumn($rooms, 'id')));
-//                    foreach ($rooms as $indexRoom => $room) {
-//                        $data['Room'] = $room;
-//                        $modelRoom = (isset($room['id']) && isset($oldRooms[$room['id']])) ? $oldRooms[$room['id']] : new Room;
-//                        $modelRoom->load($data);
-//                        $modelsRoom[$indexHouse][$indexRoom] = $modelRoom;
-//                        $valid = $modelRoom->validate();
-//                    }
-//                }
-//            }
-
-//            $oldRoomsIDs = ArrayHelper::getColumn($oldRooms, 'id');
-//            $deletedRoomsIDs = array_diff($oldRoomsIDs, $roomsIDs);
-
-            if ($valid) {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $modelDatenblatt->save(false)) {
-
-//                        if (! empty($deletedRoomsIDs)) {
-//                            Room::deleteAll(['id' => $deletedRoomsIDs]);
-//                        }
-
-                        if (! empty($deletedZahlungIDs)) {
-                            Zahlung::deleteAll(['id' => $deletedZahlungIDs]);
-                        }
-
-                        foreach ($modelsZahlungs as $indexZahlung => $modelZahlung) {
-
-                            if ($flag === false) {
-                                break;
-                            }
-
-                            $modelZahlung->datenblatt_id = $modelDatenblatt->id;
-
-                            if (!($flag = $modelZahlung->save(false))) {
-                                break;
-                            }
-
-//                            if (isset($modelsRoom[$indexZahlung]) && is_array($modelsRoom[$indexZahlung])) {
-//                                foreach ($modelsRoom[$indexZahlung] as $indexRoom => $modelRoom) {
-//                                    $modelRoom->house_id = $modelZahlung->id;
-//                                    if (!($flag = $modelRoom->save(false))) {
-//                                        break;
-//                                    }
-//                                }
-//                            }
-                        }
-                    }
-
-                    if ($flag) {
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $modelDatenblatt->id]);
-                    } else {
-                        $transaction->rollBack();
-                    }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
-                }
-            }
+            
         }
 
         return $this->render('update', [
             'modelDatenblatt' => $modelDatenblatt,
-            'modelsZahlungs' => (empty($modelsZahlungs)) ? [new Zahlung] : $modelsZahlungs,
-//            'modelsRoom' => (empty($modelsRoom)) ? [[new Room]] : $modelsRoom
+            'modelsZahlungs' => $modelsZahlungs,
         ]);
     }
 

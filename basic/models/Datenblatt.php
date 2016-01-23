@@ -8,11 +8,15 @@ use Yii;
  * This is the model class for table "datenblatt".
  *
  * @property integer $id
- * @property integer $haus_id
+ * @property string $firma_id
+ * @property string $projekt_id
+ * @property string $haus_id
  * @property integer $nummer
  *
  * @property Abschlag[] $abschlags
+ * @property Firma $firma
  * @property Haus $haus
+ * @property Projekt $projekt
  * @property KaeuferHasDatenblatt[] $kaeuferHasDatenblatts
  * @property Kaeufer[] $kaeufers
  * @property Nachlass[] $nachlasses
@@ -35,7 +39,7 @@ class Datenblatt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['haus_id', 'nummer'], 'integer']
+            [['firma_id', 'projekt_id', 'haus_id', 'nummer'], 'integer']
         ];
     }
 
@@ -46,6 +50,8 @@ class Datenblatt extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'firma_id' => Yii::t('app', 'Firma ID'),
+            'projekt_id' => Yii::t('app', 'Projekt ID'),
             'haus_id' => Yii::t('app', 'Haus ID'),
             'nummer' => Yii::t('app', 'Nummer'),
         ];
@@ -62,9 +68,25 @@ class Datenblatt extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getFirma()
+    {
+        return $this->hasOne(Firma::className(), ['id' => 'firma_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getHaus()
     {
         return $this->hasOne(Haus::className(), ['id' => 'haus_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjekt()
+    {
+        return $this->hasOne(Projekt::className(), ['id' => 'projekt_id']);
     }
 
     /**

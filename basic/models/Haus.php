@@ -7,8 +7,15 @@ use Yii;
 /**
  * This is the model class for table "haus".
  *
- * @property integer $id
+ * @property string $id
  * @property string $projekt_id
+ * @property string $plz
+ * @property string $ort
+ * @property string $strasse
+ * @property string $hausnr
+ * @property integer $reserviert
+ * @property integer $verkauft
+ * @property integer $rechnung_vertrieb
  *
  * @property Datenblatt[] $datenblatts
  * @property Projekt $projekt
@@ -32,7 +39,9 @@ class Haus extends \yii\db\ActiveRecord
     {
         return [
             [['projekt_id'], 'required'],
-            [['projekt_id'], 'integer']
+            [['projekt_id', 'reserviert', 'verkauft', 'rechnung_vertrieb'], 'integer'],
+            [['plz', 'ort', 'strasse'], 'string', 'max' => 255],
+            [['hausnr'], 'string', 'max' => 45]
         ];
     }
 
@@ -44,6 +53,13 @@ class Haus extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'projekt_id' => Yii::t('app', 'Projekt ID'),
+            'plz' => Yii::t('app', 'Plz'),
+            'ort' => Yii::t('app', 'Ort'),
+            'strasse' => Yii::t('app', 'Strasse'),
+            'hausnr' => Yii::t('app', 'Hausnr'),
+            'reserviert' => Yii::t('app', 'Reserviert'),
+            'verkauft' => Yii::t('app', 'Verkauft'),
+            'rechnung_vertrieb' => Yii::t('app', 'Rechnung Vertrieb'),
         ];
     }
 
