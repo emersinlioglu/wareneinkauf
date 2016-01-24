@@ -42,7 +42,7 @@ use kartik\datetime\DateTimePicker;
     <h2>Teileigentumseinheiten</h2>
     
     <?php if (!$model->isNewRecord): ?>
-    <?= Html::submitButton('Teileigentumseinheit hinzufügen', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
+    <?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
     <?php endif; ?>
     
     <table class="table">
@@ -77,9 +77,10 @@ use kartik\datetime\DateTimePicker;
             <td><?= $form->field($modelTeilieigentum, 'kp_einheit')->textInput(['name' => "Teileigentumseinheiten[$key][kp_einheit]"]) ?></td>
             
             <td>
-                <?= Html::a('Löschen', 
+                <label>&nbsp;</label>
+                <?= Html::a('<span class="fa fa-minus"></span>', 
                     Yii::$app->urlManager->createUrl(["haus/deleteteileigentumseinheit", 'hausId' => $model->id , 'teileigentumseinheitId' => $modelTeilieigentum->id]), 
-                    ['class' => 'btn btn-block btn-danger btn-flat']) ?>
+                    ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -88,7 +89,7 @@ use kartik\datetime\DateTimePicker;
     <h2>Zählerstand-Angaben:</h2>
     
     <?php if (!$model->isNewRecord): ?>
-        <?= Html::submitButton('Zählerstand hinzufügen', ['class' => 'btn btn-success', 'name' => 'addnewZaehlerstand']) ?>
+        <?= Html::submitButton('<span class="fa fa-plus"> Zählerstand hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnewZaehlerstand']) ?>
     <?php endif; ?>
     
     <table class="table">
@@ -111,36 +112,35 @@ use kartik\datetime\DateTimePicker;
                 </td>
                 <td><?= $form->field($zaehlerstand, 'stand')->textInput(['name' => "Zaehlerstaende[$key][stand]"]) ?></td>
                 <td>
-                    <div class="form-group field-zaehlerstand-datum col-sm-2">
-                        <?php              
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $zaehlerstand->datum);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = (new DateTime())->format('d.m.Y');
-                            }
-                            echo '<label>Datum</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Zaehlerstaende[$key][datum]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
-                                ]
-                            ]);
-                        ?>
-                    </div>
+                    <?php              
+                        $datum = DateTime::createFromFormat('Y-m-d H:i:s', $zaehlerstand->datum);
+                        if ($datum) {
+                            $datum = $datum->format('d.m.Y');
+                        } else {
+                            $datum = (new DateTime())->format('d.m.Y');
+                        }
+                        echo '<label>Datum</label>';
+                        echo DateTimePicker::widget([
+                            'name' => "Zaehlerstaende[$key][datum]",
+                            'options' => ['placeholder' => 'Datum auswählen'],
+                            'convertFormat' => true,
+                            'value' => $datum,
+                            'pluginOptions' => [
+                                'minView' => 'month',
+                                'maxView' => 'month',
+                                'viewSelect' => 'month',
+                                'format' => 'dd.mm.yyyy',
+                                'autoclose' => true,
+                                'todayHighlight' => true
+                            ]
+                        ]);
+                    ?>
                 </td>
                 <td>
-                        <?= Html::a('Löschen', 
-                        Yii::$app->urlManager->createUrl(["haus/deletezaehlerstand", 'hausId' => $model->id , 'zaehlerstandId' => $zaehlerstand->id]), 
-                        ['class' => 'btn btn-block btn-danger btn-flat']) ?>
+                    <label>&nbsp;</label>
+                    <?= Html::a('<span class="fa fa-minus"></span>', 
+                    Yii::$app->urlManager->createUrl(["haus/deletezaehlerstand", 'hausId' => $model->id , 'zaehlerstandId' => $zaehlerstand->id]), 
+                    ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
                 </td>
             </tr>
         <?php 

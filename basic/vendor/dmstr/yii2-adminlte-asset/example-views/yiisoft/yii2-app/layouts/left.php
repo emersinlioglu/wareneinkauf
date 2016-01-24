@@ -62,6 +62,7 @@
                     ],
                     ['label' => 'Firmen', 'url' => ['firma/index']],
                     ['label' => 'Projekte', 'url' => ['projekt/index']],
+                    ['label' => 'Häuser', 'url' => ['haus/index']],
                     ['label' => 'Datenblätter', 'url' => ['datenblatt/index']],
                 ],
             ]
