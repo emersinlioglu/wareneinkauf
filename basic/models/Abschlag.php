@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "abschlag".
  *
- * @property integer $id
+ * @property string $id
  * @property integer $datenblatt_id
  * @property string $name
  * @property double $kaufvertrag_prozent
@@ -33,8 +33,8 @@ class Abschlag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'datenblatt_id'], 'required'],
-            [['id', 'datenblatt_id'], 'integer'],
+            [['datenblatt_id'], 'required'],
+            [['datenblatt_id'], 'integer'],
             [['kaufvertrag_prozent', 'sonderwunsch_prozent'], 'number'],
             [['kaufvertrag_angefordert', 'sonderwunsch_angefordert'], 'safe'],
             [['name'], 'string', 'max' => 255]

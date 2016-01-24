@@ -140,6 +140,11 @@ use app\models\Firma;
             'form' => $form,
             'modelDatenblatt' => $modelDatenblatt,
         ]) ?>
+    
+    <?= $this->render('_kaufpreisabrechnung', [
+            'form' => $form,
+            'modelDatenblatt' => $modelDatenblatt,
+        ]) ?>
 
     
     <div class="form-group" style="text-align: right;">

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jan 2016 um 21:42
+-- Erstellungszeit: 24. Jan 2016 um 23:12
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `abschlag` (
-  `id` int(11) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `kaufvertrag_prozent` float DEFAULT NULL,
@@ -35,6 +35,16 @@ CREATE TABLE `abschlag` (
   `sonderwunsch_prozent` float DEFAULT NULL,
   `sonderwunsch_angefordert` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `abschlag`
+--
+
+INSERT INTO `abschlag` (`id`, `datenblatt_id`, `name`, `kaufvertrag_prozent`, `kaufvertrag_angefordert`, `sonderwunsch_prozent`, `sonderwunsch_angefordert`) VALUES
+(1, 3, 'Abschlag 1', 8, '2016-05-02 00:00:00', NULL, NULL),
+(2, 3, NULL, NULL, NULL, NULL, NULL),
+(3, 1, 'z1', NULL, NULL, NULL, NULL),
+(5, 1, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -57,9 +67,9 @@ CREATE TABLE `datenblatt` (
 --
 
 INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`) VALUES
-(1, 2, 2, 1, 111, 5, NULL),
+(1, 2, 2, 1, 111, 5, ''),
 (2, NULL, NULL, NULL, 222, 6, NULL),
-(3, NULL, NULL, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj');
+(3, 1, 3, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj');
 
 -- --------------------------------------------------------
 
@@ -125,7 +135,9 @@ CREATE TABLE `haus` (
 --
 
 INSERT INTO `haus` (`id`, `projekt_id`, `plz`, `ort`, `strasse`, `hausnr`, `reserviert`, `verkauft`, `rechnung_vertrieb`) VALUES
-(1, 2, '611611', 'Musterstadt', 'Musterstr.', '21', 0, 0, 0);
+(1, 2, '611611', 'Musterstadt', 'Musterstr.', '21', 0, 0, 0),
+(2, 1, '989898', 'Frankfurt', 'blabla', '98', 0, 0, 0),
+(3, 1, '16161', 'Darmstadt', 'asdasd', '888', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -236,7 +248,9 @@ CREATE TABLE `sonderwunsch` (
 INSERT INTO `sonderwunsch` (`id`, `datenblatt_id`, `name`, `angebot_datum`, `angebot_betrag`, `beauftragt_datum`, `beauftragt_betrag`, `rechnungsstellung_datum`, `rechnungsstellung_betrag`, `rechnungsstellung_rg_nr`) VALUES
 (1, 3, 'Sond 1', '2016-11-14 00:00:00', 200, NULL, 100, NULL, 25, '112233'),
 (2, 3, 's2', '2016-09-08 00:00:00', 450, NULL, 150, NULL, 89, 'g34'),
-(5, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(17, 3, '', NULL, NULL, NULL, NULL, NULL, NULL, ''),
+(18, 1, '', NULL, NULL, NULL, NULL, NULL, NULL, ''),
+(19, 1, '', NULL, NULL, NULL, NULL, NULL, NULL, '');
 
 -- --------------------------------------------------------
 
@@ -413,6 +427,11 @@ ALTER TABLE `zahlung`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `abschlag`
+--
+ALTER TABLE `abschlag`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT für Tabelle `datenblatt`
 --
 ALTER TABLE `datenblatt`
@@ -431,7 +450,7 @@ ALTER TABLE `firma`
 -- AUTO_INCREMENT für Tabelle `haus`
 --
 ALTER TABLE `haus`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT für Tabelle `kaeufer`
 --
@@ -451,7 +470,7 @@ ALTER TABLE `projekt`
 -- AUTO_INCREMENT für Tabelle `sonderwunsch`
 --
 ALTER TABLE `sonderwunsch`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT für Tabelle `teileigentumseinheit`
 --

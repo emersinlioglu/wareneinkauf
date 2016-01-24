@@ -19,6 +19,7 @@ use app\models\Nachlass;
 use app\models\Zahlung;
 use app\models\Kaeufer;
 use app\models\Sonderwunsch;
+use app\models\Abschlag;
 
 /**
  * DatenblattController implements the CRUD actions for Datenblatt model.
@@ -194,6 +195,23 @@ class DatenblattController extends Controller
                 }
             }
             
+            // Abschläge
+            if ($modelsAbschlag = Abschlag::loadMultiple($modelDatenblatt->abschlags, $data)) {
+                foreach ($modelDatenblatt->abschlags as $item) {
+                    $datumFelder = ['kaufvertrag_angefordert', 'sonderwunsch_angefordert'];
+                    foreach($datumFelder as $feld) {
+                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+                        if ($datum) {
+                            $datum->setTime(0, 0, 0);
+                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+                        } else {
+                            $item->{$feld} = '';
+                        }
+                    }
+                    $item->save();
+                }
+            }
+            
             $this->redirect(['update', 'id' => $id]);
         }
 
@@ -211,6 +229,19 @@ class DatenblattController extends Controller
     public function actionAddsonderwunsch($datenblattId) {
         
         $new = new Sonderwunsch();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
+        
+        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Add new abschlag
+     * @param int $datenblattId
+     */
+    public function actionAddabschlag($datenblattId) {
+        
+        $new = new Abschlag();
         $new->datenblatt_id = $datenblattId;
         $new->save();
         
@@ -246,6 +277,22 @@ class DatenblattController extends Controller
 
         if ($modelSonderwunsch = Sonderwunsch::findOne($sonderwunschId)) {
             $modelSonderwunsch->delete();
+        }
+
+        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Deletes abschlag
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDeleteabschlag($datenblattId, $abschlagId)
+    {
+        $model = $this->findModel($datenblattId);
+
+        if ($modelAbschlag = Abschlag::findOne($abschlagId)) {
+            $modelAbschlag->delete();
         }
 
         return $this->redirect(['update', 'id' => $datenblattId]);
