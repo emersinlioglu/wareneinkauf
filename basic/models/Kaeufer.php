@@ -7,9 +7,30 @@ use Yii;
 /**
  * This is the model class for table "kaeufer".
  *
- * @property integer $id
+ * @property string $id
+ * @property string $debitor_nr
+ * @property string $beurkundung_am
+ * @property string $verbindliche_fertigstellung
+ * @property string $uebergang_bnl
+ * @property string $abnahme_se
+ * @property string $abnahme_ge
+ * @property integer $auflassung
+ * @property integer $anrede
+ * @property string $titel
+ * @property string $vorname
+ * @property string $nachname
+ * @property string $strasse
+ * @property string $hausnr
+ * @property string $plz
+ * @property string $ort
+ * @property string $festnetz
+ * @property string $handy
+ * @property string $email
+ * @property integer $anrede2
+ * @property string $titel2
+ * @property string $vorname2
+ * @property string $nachname2
  *
- * @property KaeuferHasDatenblatt[] $kaeuferHasDatenblatts
  * @property Datenblatt[] $datenblatts
  */
 class Kaeufer extends \yii\db\ActiveRecord
@@ -28,8 +49,9 @@ class Kaeufer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['id'], 'integer']
+            [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
+            [['auflassung', 'anrede', 'anrede2'], 'integer'],
+            [['debitor_nr', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
         ];
     }
 
@@ -40,15 +62,29 @@ class Kaeufer extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'debitor_nr' => Yii::t('app', 'Debitor Nr'),
+            'beurkundung_am' => Yii::t('app', 'Beurkundung Am'),
+            'verbindliche_fertigstellung' => Yii::t('app', 'Verbindliche Fertigstellung'),
+            'uebergang_bnl' => Yii::t('app', 'Uebergang Bnl'),
+            'abnahme_se' => Yii::t('app', 'Abnahme Se'),
+            'abnahme_ge' => Yii::t('app', 'Abnahme Ge'),
+            'auflassung' => Yii::t('app', 'Auflassung'),
+            'anrede' => Yii::t('app', 'Anrede'),
+            'titel' => Yii::t('app', 'Titel'),
+            'vorname' => Yii::t('app', 'Vorname'),
+            'nachname' => Yii::t('app', 'Nachname'),
+            'strasse' => Yii::t('app', 'Strasse'),
+            'hausnr' => Yii::t('app', 'Hausnr'),
+            'plz' => Yii::t('app', 'Plz'),
+            'ort' => Yii::t('app', 'Ort'),
+            'festnetz' => Yii::t('app', 'Festnetz'),
+            'handy' => Yii::t('app', 'Handy'),
+            'email' => Yii::t('app', 'Email'),
+            'anrede2' => Yii::t('app', 'Anrede2'),
+            'titel2' => Yii::t('app', 'Titel2'),
+            'vorname2' => Yii::t('app', 'Vorname2'),
+            'nachname2' => Yii::t('app', 'Nachname2'),
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getKaeuferHasDatenblatts()
-    {
-        return $this->hasMany(KaeuferHasDatenblatt::className(), ['kaeufer_id' => 'id']);
     }
 
     /**
@@ -56,6 +92,6 @@ class Kaeufer extends \yii\db\ActiveRecord
      */
     public function getDatenblatts()
     {
-        return $this->hasMany(Datenblatt::className(), ['id' => 'datenblatt_id'])->viaTable('kaeufer_has_datenblatt', ['kaeufer_id' => 'id']);
+        return $this->hasMany(Datenblatt::className(), ['kaeufer_id' => 'id']);
     }
 }

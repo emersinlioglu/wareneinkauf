@@ -59,23 +59,14 @@ use kartik\datetime\DateTimePicker;
                     ->dropDownList(ArrayHelper::map(Einheitstyp::find()->all(), 'id', 'name'), 
                             ['name' => "Teileigentumseinheiten[$key][einheitstyp_id]"]) ?>
             </td>
-
             <td><?= $form->field($modelTeilieigentum, 'te_nummer')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][te_nummer]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'gefoerdert')->dropDownList([1 => 'Ja', 0 => 'Nein'], ['name' => "Teileigentumseinheiten[$key][gefoerdert]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'geschoss')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][geschoss]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'zimmer')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][zimmer]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'me_anteil')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][me_anteil]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'wohnflaeche')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][wohnflaeche]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'kaufpreis')->textInput(['name' => "Teileigentumseinheiten[$key][kaufpreis]"]) ?></td>
-
             <td><?= $form->field($modelTeilieigentum, 'kp_einheit')->textInput(['name' => "Teileigentumseinheiten[$key][kp_einheit]"]) ?></td>
-            
             <td>
                 <label>&nbsp;</label>
                 <?= Html::a('<span class="fa fa-minus"></span>', 

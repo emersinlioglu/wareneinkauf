@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Firma;
-use yii\i18n\Formatter;
 ?>
 
 <div class="datenblatt-form">
@@ -120,40 +119,19 @@ use yii\i18n\Formatter;
         ?>
     </table>
         
-    <h3>Zählerangaben</h3>
     
-    <table class="table">
-        <tr>
-            <th>Medium-Nr.</th>
-            <th>Zählerstand</th>
-            <th>Datum</th>
-        </tr>
-        <?php 
-        /* @var $zaehlerstand app\models\Zaehlerstand */
-        if ($modelDatenblatt->haus):
-        foreach ($modelDatenblatt->haus->zaehlerstands as $zaehlerstand): ?>
-            <tr>
-                <td><?= $zaehlerstand->name ?></td>
-                <td><?= $zaehlerstand->stand ?></td>
-                <td><?php 
-                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $zaehlerstand->datum);
-                echo $datum->format('d.m.Y');
-                ?>
-                </td>
-            </tr>
-        <?php 
-        endforeach; 
-        endif;
-        ?>
-    </table>
-    
-    <?= $this->render('_zahlungen', [
+    <?= $this->render('_zaehlerangaben', [
             'form' => $form,
-            'modelsZahlung'  => $modelsZahlung,
+            'modelDatenblatt'  => $modelDatenblatt,
+        ]) ?>
+    
+    <?= $this->render('_kaeuferdaten', [
+            'form' => $form,
+            'modelKaeufer'  => $modelKaeufer,
         ]) ?>
 
     
-    <div class="form-group">
+    <div class="form-group" style="text-align: right;">
         <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
 

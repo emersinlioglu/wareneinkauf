@@ -22,6 +22,7 @@ $this->title = 'Create nested set';
         <div class="panel-body">
             <?= $this->render('_form', [
                 'modelDatenblatt' => $modelDatenblatt,
+                'modelKaeufer' => $modelKaeufer,
                 'modelsZahlung'  => $modelsZahlung,
                 'modelsNachlass'  => $modelsNachlass,
 //                'modelsPaymentLoads' => $modelsPaymentLoads,

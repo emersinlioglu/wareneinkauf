@@ -17,6 +17,7 @@ use app\models\DynamicForm;
 use app\models\Datenblatt;
 use app\models\Nachlass;
 use app\models\Zahlung;
+use app\models\Kaeufer;
 
 /**
  * DatenblattController implements the CRUD actions for Datenblatt model.
@@ -145,16 +146,42 @@ class DatenblattController extends Controller
     public function actionUpdate($id)
     {
         $modelDatenblatt = $this->findModel($id);
-        $modelsZahlungs = $modelDatenblatt->zahlungs;
-
+        
         if ($modelDatenblatt->load(Yii::$app->request->post()) && $modelDatenblatt->save()) {
-
             
+            $modelKaeufer = $modelDatenblatt->kaeufer;
+            if (!$modelKaeufer) {
+                $modelKaeufer = new Kaeufer();
+            }
+            
+            if ($modelKaeufer->load(Yii::$app->request->post())) {
+                
+                $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
+                foreach($datumFelder as $feld) {
+                    $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
+                    if ($datum) {
+                        $datum->setTime(0, 0, 0);
+                        $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
+                    } else {
+                        $modelKaeufer->{$feld} = '';
+                    }
+                }
+                
+                // save
+                $modelKaeufer->save();
+                
+                // assign käufer
+                $modelDatenblatt->kaeufer_id = $modelKaeufer->id;
+                $modelDatenblatt->save();
+            }
+            
+            $this->redirect(['update', 'id' => $id]);
         }
 
         return $this->render('update', [
             'modelDatenblatt' => $modelDatenblatt,
-            'modelsZahlungs' => $modelsZahlungs,
+            'modelsZahlungs' => $modelDatenblatt->zahlungs,
+            'modelKaeufer' => $modelDatenblatt->kaeufer ? $modelDatenblatt->kaeufer : new Kaeufer(),
         ]);
     }
 
