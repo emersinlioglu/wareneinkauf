@@ -129,6 +129,13 @@ use app\models\Firma;
             'form' => $form,
             'modelKaeufer'  => $modelKaeufer,
         ]) ?>
+    
+    
+    <div class="row">
+        <div class="col-sm-10">
+            <?= $form->field($modelDatenblatt, 'besondere_regelungen_kaufvertrag')->textarea(['rows' => '5']) ?>        
+        </div>
+    </div>
 
     
     <div class="form-group" style="text-align: right;">

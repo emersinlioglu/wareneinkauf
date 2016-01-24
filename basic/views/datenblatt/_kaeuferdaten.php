@@ -195,4 +195,4 @@ besondere Regelungen Kaufvertrag
         <?= $form->field($modelKaeufer, 'plz')->textInput([]) ?>
         <?= $form->field($modelKaeufer, 'ort')->textInput([]) ?>
     </div>
-</div>
+</div>    
