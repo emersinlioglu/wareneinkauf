@@ -21,17 +21,27 @@ use yii\helpers\Html;
 <table class="table table-bordered">   
     <tr>
         <th></th>
-        <th colspan="2" style="text-align: center;">Angebot</th>
+        <th colspan="2" >Angebot</th>
+        <th colspan="2" >beuaftragt</th>
+        <th colspan="3" >Rechnungsstellung</th>
+<!--        <th colspan="2" style="text-align: center;">Angebot</th>
         <th colspan="2" style="text-align: center;">beuaftragt</th>
-        <th colspan="2" style="text-align: center;">Rechnungsstellung</th>
+        <th colspan="3" style="text-align: center;">Rechnungsstellung</th>-->
     </tr>
     <tr>
         <th>Name</th>
-        <th>Angebot</th>
-        <th>beuaftragt</th>
-        <th>Rechnungsstellung</th>
+        <th>-Datum</th>
+        <th>-Betrag</th>
+        <th>-Datum</th>
+        <th>-Betrag</th>
+        <th>-Datum</th>
+        <th>-Betrag</th>
+        <th>-Rg.-Nr</th>
     </tr>
 <?php 
+
+$rechnungstellungBetrag = 0;
+
 foreach($modelDatenblatt->sonderwunsches as $key => $modelSonderwunsch): ?>
 <tr class="sonderwunsch">
     <td>
@@ -122,6 +132,7 @@ foreach($modelDatenblatt->sonderwunsches as $key => $modelSonderwunsch): ?>
         ?>
     </td>
     <td>
+        <?php $rechnungstellungBetrag += (float)$modelSonderwunsch->rechnungsstellung_betrag; ?>
         <?= $form->field($modelSonderwunsch, "[$key]rechnungsstellung_betrag")->textInput([]) ?>
     </td>
     <td>
@@ -134,5 +145,16 @@ foreach($modelDatenblatt->sonderwunsches as $key => $modelSonderwunsch): ?>
     </td>
 </tr>    
 <?php endforeach;  ?>
+<tr>
+    <td>Summe</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><?= $rechnungstellungBetrag ?></td>
+    <td></td>
+    <td></td>    
+</tr>
 
 </table>
