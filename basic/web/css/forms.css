@@ -1,5 +1,5 @@
-.sonderwunsch .input-group-addon {
-    /*display: none;*/
+.no-label label {
+    display: none;
 }
 .sonderwunsch label {
     display: none;

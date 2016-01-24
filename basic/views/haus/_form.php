@@ -44,7 +44,7 @@ use kartik\datetime\DateTimePicker;
         <?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
     <?php endif; ?>
 
-    <table class="table">
+    <table class="table no-label">
         <tr>
             <th>Typ</th>
             <th>TE-Nummer</th>
@@ -94,7 +94,7 @@ use kartik\datetime\DateTimePicker;
         <?= Html::submitButton('<span class="fa fa-plus"> Zählerstand hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnewZaehlerstand']) ?>
     <?php endif; ?>
     
-    <table class="table">
+    <table class="table no-label">
         <tr>
             <th>Medium-Nr.</th>
             <th>Zählerstand</th>
