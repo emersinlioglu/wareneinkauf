@@ -40,13 +40,23 @@ use kartik\datetime\DateTimePicker;
     </div>
     
     <h2>Teileigentumseinheiten</h2>
-    
     <?php if (!$model->isNewRecord): ?>
-    <?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
+        <?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?>
     <?php endif; ?>
-    
+
     <table class="table">
-    <?php foreach($modelsTeilieigentum as $key => $modelTeilieigentum): ?>
+        <tr>
+            <th>Typ</th>
+            <th>TE-Nummer</th>
+            <th>gefördert</th>
+            <th>geschoss</th>
+            <th>zimmer</th>
+            <th>ME-Anteil</th>
+            <th>Wohnfläche</th>
+            <th>Kaufpreis</th>
+            <th>KP-Einheit</th>
+        </tr>
+    <?php foreach($model->teileigentumseinheits as $key => $modelTeilieigentum): ?>
         <tr>
             <td>
                 <span class="hide">
@@ -77,6 +87,7 @@ use kartik\datetime\DateTimePicker;
     <?php endforeach; ?>
     </table>
 
+
     <h2>Zählerstand-Angaben:</h2>
     
     <?php if (!$model->isNewRecord): ?>
@@ -92,7 +103,6 @@ use kartik\datetime\DateTimePicker;
         </tr>
         <?php 
         /* @var $zaehlerstand app\models\Zaehlerstand */
-        if ($model):
         foreach ($model->zaehlerstands as $key => $zaehlerstand): ?>
             <tr>
                 <td>
@@ -136,7 +146,6 @@ use kartik\datetime\DateTimePicker;
             </tr>
         <?php 
         endforeach; 
-        endif;
         ?>
     </table>
     

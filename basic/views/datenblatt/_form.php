@@ -143,7 +143,7 @@ use app\models\Firma;
 
     
     <div class="form-group" style="text-align: right;">
-        <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
