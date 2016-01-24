@@ -128,14 +128,18 @@ use app\models\Firma;
     <?= $this->render('_kaeuferdaten', [
             'form' => $form,
             'modelKaeufer'  => $modelKaeufer,
-        ]) ?>
-    
+        ]) ?>    
     
     <div class="row">
         <div class="col-sm-10">
             <?= $form->field($modelDatenblatt, 'besondere_regelungen_kaufvertrag')->textarea(['rows' => '5']) ?>        
         </div>
     </div>
+    
+    <?= $this->render('_sonderwuensche', [
+            'form' => $form,
+            'modelDatenblatt' => $modelDatenblatt,
+        ]) ?>
 
     
     <div class="form-group" style="text-align: right;">

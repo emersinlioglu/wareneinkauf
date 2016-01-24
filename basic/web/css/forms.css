@@ -1,0 +1,12 @@
+.sonderwunsch .input-group-addon {
+    /*display: none;*/
+}
+.sonderwunsch label {
+    display: none;
+}
+.sonderwunsch [data-krajee-datetimepicker] {
+    width: 100px;
+}
+.sonderwunsch .input-group.date {
+    width: 200px;
+}

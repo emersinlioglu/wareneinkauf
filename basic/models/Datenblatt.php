@@ -12,7 +12,7 @@ use Yii;
  * @property string $projekt_id
  * @property string $haus_id
  * @property integer $nummer
- * @property integer $kaeufer_id
+ * @property string $kaeufer_id
  * @property string $besondere_regelungen_kaufvertrag
  *
  * @property Abschlag[] $abschlags
@@ -21,7 +21,7 @@ use Yii;
  * @property Kaeufer $kaeufer
  * @property Projekt $projekt
  * @property Nachlass[] $nachlasses
- * @property Sonderwunch[] $sonderwunches
+ * @property Sonderwunsch[] $sonderwunsches
  * @property Zahlung[] $zahlungs
  */
 class Datenblatt extends \yii\db\ActiveRecord
@@ -41,7 +41,6 @@ class Datenblatt extends \yii\db\ActiveRecord
     {
         return [
             [['firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
-            [['kaeufer_id'], 'required'],
             [['besondere_regelungen_kaufvertrag'], 'string']
         ];
     }
@@ -113,9 +112,9 @@ class Datenblatt extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSonderwunches()
+    public function getSonderwunsches()
     {
-        return $this->hasMany(Sonderwunch::className(), ['datenblatt_id' => 'id']);
+        return $this->hasMany(Sonderwunsch::className(), ['datenblatt_id' => 'id']);
     }
 
     /**

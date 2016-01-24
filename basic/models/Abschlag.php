@@ -9,10 +9,13 @@ use Yii;
  *
  * @property integer $id
  * @property integer $datenblatt_id
- * @property integer $sonderwunch_id
+ * @property string $name
+ * @property double $kaufvertrag_prozent
+ * @property string $kaufvertrag_angefordert
+ * @property double $sonderwunsch_prozent
+ * @property string $sonderwunsch_angefordert
  *
  * @property Datenblatt $datenblatt
- * @property Sonderwunch $sonderwunch
  */
 class Abschlag extends \yii\db\ActiveRecord
 {
@@ -30,8 +33,11 @@ class Abschlag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'datenblatt_id', 'sonderwunch_id'], 'required'],
-            [['id', 'datenblatt_id', 'sonderwunch_id'], 'integer']
+            [['id', 'datenblatt_id'], 'required'],
+            [['id', 'datenblatt_id'], 'integer'],
+            [['kaufvertrag_prozent', 'sonderwunsch_prozent'], 'number'],
+            [['kaufvertrag_angefordert', 'sonderwunsch_angefordert'], 'safe'],
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
@@ -43,7 +49,11 @@ class Abschlag extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'datenblatt_id' => Yii::t('app', 'Datenblatt ID'),
-            'sonderwunch_id' => Yii::t('app', 'Sonderwunch ID'),
+            'name' => Yii::t('app', 'Name'),
+            'kaufvertrag_prozent' => Yii::t('app', 'Kaufvertrag Prozent'),
+            'kaufvertrag_angefordert' => Yii::t('app', 'Kaufvertrag Angefordert'),
+            'sonderwunsch_prozent' => Yii::t('app', 'Sonderwunsch Prozent'),
+            'sonderwunsch_angefordert' => Yii::t('app', 'Sonderwunsch Angefordert'),
         ];
     }
 
@@ -53,13 +63,5 @@ class Abschlag extends \yii\db\ActiveRecord
     public function getDatenblatt()
     {
         return $this->hasOne(Datenblatt::className(), ['id' => 'datenblatt_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSonderwunch()
-    {
-        return $this->hasOne(Sonderwunch::className(), ['id' => 'sonderwunch_id']);
     }
 }

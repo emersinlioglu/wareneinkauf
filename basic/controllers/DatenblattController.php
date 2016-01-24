@@ -18,6 +18,7 @@ use app\models\Datenblatt;
 use app\models\Nachlass;
 use app\models\Zahlung;
 use app\models\Kaeufer;
+use app\models\Sonderwunsch;
 
 /**
  * DatenblattController implements the CRUD actions for Datenblatt model.
@@ -147,32 +148,57 @@ class DatenblattController extends Controller
     {
         $modelDatenblatt = $this->findModel($id);
         
-        if ($modelDatenblatt->load(Yii::$app->request->post()) && $modelDatenblatt->save()) {
+        $data = Yii::$app->request->post();
+        
+        if ($modelDatenblatt->load($data) && $modelDatenblatt->save()) {
             
-            $modelKaeufer = $modelDatenblatt->kaeufer;
-            if (!$modelKaeufer) {
-                $modelKaeufer = new Kaeufer();
-            }
-            
-            if ($modelKaeufer->load(Yii::$app->request->post())) {
-                
-                $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
-                foreach($datumFelder as $feld) {
-                    $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
-                    if ($datum) {
-                        $datum->setTime(0, 0, 0);
-                        $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
-                    } else {
-                        $modelKaeufer->{$feld} = '';
+            if (isset($data['addSonderwunsch'])) {
+                $new = new Sonderwunsch();
+                $new->datenblatt_id = $modelDatenblatt->id;
+                $new->save();
+                $this->redirect(['update', 'id' => $modelDatenblatt->id]);
+            } else {
+                // Käufer
+                $modelKaeufer = $modelDatenblatt->kaeufer;
+                if (!$modelKaeufer) {
+                    $modelKaeufer = new Kaeufer();
+                }
+                if ($modelKaeufer->load(Yii::$app->request->post())) {
+
+                    $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
+                    foreach($datumFelder as $feld) {
+                        $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
+                        if ($datum) {
+                            $datum->setTime(0, 0, 0);
+                            $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
+                        } else {
+                            $modelKaeufer->{$feld} = '';
+                        }
                     }
+                    // save
+                    $modelKaeufer->save();
+                    // assign käufer
+                    $modelDatenblatt->kaeufer_id = $modelKaeufer->id;
+                    $modelDatenblatt->save();
                 }
                 
-                // save
-                $modelKaeufer->save();
-                
-                // assign käufer
-                $modelDatenblatt->kaeufer_id = $modelKaeufer->id;
-                $modelDatenblatt->save();
+                // Sonderwünsche
+                if ($modelsSonderwunsch = Sonderwunsch::loadMultiple($modelDatenblatt->sonderwunsches, $data)) {
+                    foreach ($modelDatenblatt->sonderwunsches as $item) {
+                        $datumFelder = ['angebot_datum', 'beauftragt_datum', 'rechnungsstellung_datum'];
+                        foreach($datumFelder as $feld) {
+                            $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+                            if ($datum) {
+                                $datum->setTime(0, 0, 0);
+                                $item->{$feld} = $datum->format('Y-m-d H:i:s');
+                            } else {
+                                $item->{$feld} = '';
+                            }
+                        }
+                        
+                        $item->save();
+                    }
+                }
             }
             
             $this->redirect(['update', 'id' => $id]);
@@ -201,6 +227,22 @@ class DatenblattController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Deletes sonderwunsch
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDeletesonderwunsch($datenblattId, $sonderwunschId)
+    {
+        $model = $this->findModel($datenblattId);
+
+        if ($modelSonderwunsch = Sonderwunsch::findOne($sonderwunschId)) {
+            $modelSonderwunsch->delete();
+        }
+
+        return $this->redirect(['update', 'id' => $datenblattId]);
     }
      
     /**

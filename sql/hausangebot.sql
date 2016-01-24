@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jan 2016 um 16:57
+-- Erstellungszeit: 24. Jan 2016 um 21:42
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -29,7 +29,11 @@ SET time_zone = "+00:00";
 CREATE TABLE `abschlag` (
   `id` int(11) NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
-  `sonderwunch_id` int(11) NOT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `kaufvertrag_prozent` float DEFAULT NULL,
+  `kaufvertrag_angefordert` datetime DEFAULT NULL,
+  `sonderwunsch_prozent` float DEFAULT NULL,
+  `sonderwunsch_angefordert` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -55,7 +59,7 @@ CREATE TABLE `datenblatt` (
 INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`) VALUES
 (1, 2, 2, 1, 111, 5, NULL),
 (2, NULL, NULL, NULL, 222, 6, NULL),
-(3, NULL, NULL, NULL, 999, 0, NULL);
+(3, NULL, NULL, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj');
 
 -- --------------------------------------------------------
 
@@ -161,7 +165,8 @@ CREATE TABLE `kaeufer` (
 
 INSERT INTO `kaeufer` (`id`, `debitor_nr`, `beurkundung_am`, `verbindliche_fertigstellung`, `uebergang_bnl`, `abnahme_se`, `abnahme_ge`, `auflassung`, `anrede`, `titel`, `vorname`, `nachname`, `strasse`, `hausnr`, `plz`, `ort`, `festnetz`, `handy`, `email`, `anrede2`, `titel2`, `vorname2`, `nachname2`) VALUES
 (5, '', '2016-11-02 00:00:00', '2017-04-15 00:00:00', '2017-04-07 00:00:00', '2017-05-02 00:00:00', '2017-04-03 00:00:00', 1, 0, 'Dr.', 'Erdal', 'Mersinlioglu', 'Pupinweg ', '6', '1616616', 'Trabzon', NULL, NULL, NULL, 1, 'Dr.', 'Zeynep', 'Mersinlioglu'),
-(6, '', '2020-02-06 00:00:00', NULL, NULL, NULL, NULL, 0, 0, 'nnnn', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', '');
+(6, '', '2020-02-06 00:00:00', NULL, NULL, NULL, NULL, 0, 0, 'nnnn', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', ''),
+(7, '', NULL, NULL, NULL, NULL, NULL, 0, 0, 'ananana', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -208,13 +213,30 @@ INSERT INTO `projekt` (`id`, `name`, `firma_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `sonderwunch`
+-- Tabellenstruktur für Tabelle `sonderwunsch`
 --
 
-CREATE TABLE `sonderwunch` (
-  `id` int(11) NOT NULL,
-  `datenblatt_id` int(11) NOT NULL
+CREATE TABLE `sonderwunsch` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `datenblatt_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `angebot_datum` datetime DEFAULT NULL,
+  `angebot_betrag` double DEFAULT NULL,
+  `beauftragt_datum` datetime DEFAULT NULL,
+  `beauftragt_betrag` double DEFAULT NULL,
+  `rechnungsstellung_datum` datetime DEFAULT NULL,
+  `rechnungsstellung_betrag` double DEFAULT NULL,
+  `rechnungsstellung_rg_nr` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `sonderwunsch`
+--
+
+INSERT INTO `sonderwunsch` (`id`, `datenblatt_id`, `name`, `angebot_datum`, `angebot_betrag`, `beauftragt_datum`, `beauftragt_betrag`, `rechnungsstellung_datum`, `rechnungsstellung_betrag`, `rechnungsstellung_rg_nr`) VALUES
+(1, 3, 'Sond 1', '2016-11-14 00:00:00', 200, NULL, 100, NULL, 25, '112233'),
+(2, 3, 's2', '2016-09-08 00:00:00', 450, NULL, 150, NULL, 89, 'g34'),
+(5, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -305,8 +327,7 @@ INSERT INTO `zahlung` (`id`, `datenblatt_id`, `betrag`, `datum`) VALUES
 --
 ALTER TABLE `abschlag`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_abschlag_datenblatt1_idx` (`datenblatt_id`),
-  ADD KEY `fk_abschlag_sonderwunch1_idx` (`sonderwunch_id`);
+  ADD KEY `fk_abschlag_datenblatt1_idx` (`datenblatt_id`);
 
 --
 -- Indizes für die Tabelle `datenblatt`
@@ -359,9 +380,9 @@ ALTER TABLE `projekt`
   ADD KEY `fk_projekt_firma1_idx` (`firma_id`);
 
 --
--- Indizes für die Tabelle `sonderwunch`
+-- Indizes für die Tabelle `sonderwunsch`
 --
-ALTER TABLE `sonderwunch`
+ALTER TABLE `sonderwunsch`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_sonderwunch_datenblatt1_idx` (`datenblatt_id`);
 
@@ -415,7 +436,7 @@ ALTER TABLE `haus`
 -- AUTO_INCREMENT für Tabelle `kaeufer`
 --
 ALTER TABLE `kaeufer`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT für Tabelle `nachlass`
 --
@@ -426,6 +447,11 @@ ALTER TABLE `nachlass`
 --
 ALTER TABLE `projekt`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT für Tabelle `sonderwunsch`
+--
+ALTER TABLE `sonderwunsch`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `teileigentumseinheit`
 --
@@ -449,8 +475,7 @@ ALTER TABLE `zahlung`
 -- Constraints der Tabelle `abschlag`
 --
 ALTER TABLE `abschlag`
-  ADD CONSTRAINT `fk_abschlag_datenblatt1` FOREIGN KEY (`datenblatt_id`) REFERENCES `datenblatt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_abschlag_sonderwunch1` FOREIGN KEY (`sonderwunch_id`) REFERENCES `sonderwunch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_abschlag_datenblatt1` FOREIGN KEY (`datenblatt_id`) REFERENCES `datenblatt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints der Tabelle `datenblatt`
@@ -480,9 +505,9 @@ ALTER TABLE `projekt`
   ADD CONSTRAINT `fk_projekt_firma1` FOREIGN KEY (`firma_id`) REFERENCES `firma` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints der Tabelle `sonderwunch`
+-- Constraints der Tabelle `sonderwunsch`
 --
-ALTER TABLE `sonderwunch`
+ALTER TABLE `sonderwunsch`
   ADD CONSTRAINT `fk_sonderwunch_datenblatt1` FOREIGN KEY (`datenblatt_id`) REFERENCES `datenblatt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
