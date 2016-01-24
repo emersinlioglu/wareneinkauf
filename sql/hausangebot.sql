@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jan 2016 um 14:27
+-- Erstellungszeit: 24. Jan 2016 um 16:57
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -43,17 +43,19 @@ CREATE TABLE `datenblatt` (
   `firma_id` int(10) UNSIGNED DEFAULT NULL,
   `projekt_id` int(10) UNSIGNED DEFAULT NULL,
   `haus_id` int(10) UNSIGNED DEFAULT NULL,
-  `nummer` int(11) DEFAULT NULL
+  `nummer` int(11) DEFAULT NULL,
+  `kaeufer_id` int(10) UNSIGNED DEFAULT NULL,
+  `besondere_regelungen_kaufvertrag` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `datenblatt`
 --
 
-INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`) VALUES
-(1, 2, 2, 1, 111),
-(2, NULL, NULL, NULL, 222),
-(3, NULL, NULL, NULL, 999);
+INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`) VALUES
+(1, 2, 2, 1, 111, 5, NULL),
+(2, NULL, NULL, NULL, 222, 6, NULL),
+(3, NULL, NULL, NULL, 999, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -62,7 +64,7 @@ INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`) V
 --
 
 CREATE TABLE `einheitstyp` (
-  `id` int(11) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -128,19 +130,38 @@ INSERT INTO `haus` (`id`, `projekt_id`, `plz`, `ort`, `strasse`, `hausnr`, `rese
 --
 
 CREATE TABLE `kaeufer` (
-  `id` int(11) NOT NULL
+  `id` int(10) UNSIGNED NOT NULL,
+  `debitor_nr` varchar(255) DEFAULT NULL,
+  `beurkundung_am` datetime DEFAULT NULL,
+  `verbindliche_fertigstellung` datetime DEFAULT NULL,
+  `uebergang_bnl` datetime DEFAULT NULL,
+  `abnahme_se` datetime DEFAULT NULL,
+  `abnahme_ge` datetime DEFAULT NULL,
+  `auflassung` tinyint(1) DEFAULT '0',
+  `anrede` tinyint(1) DEFAULT '0',
+  `titel` varchar(255) DEFAULT NULL,
+  `vorname` varchar(255) DEFAULT NULL,
+  `nachname` varchar(255) DEFAULT NULL,
+  `strasse` varchar(255) DEFAULT NULL,
+  `hausnr` varchar(255) DEFAULT NULL,
+  `plz` varchar(255) DEFAULT NULL,
+  `ort` varchar(255) DEFAULT NULL,
+  `festnetz` varchar(255) DEFAULT NULL,
+  `handy` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `anrede2` tinyint(1) DEFAULT NULL,
+  `titel2` varchar(255) DEFAULT NULL,
+  `vorname2` varchar(255) DEFAULT NULL,
+  `nachname2` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Tabellenstruktur für Tabelle `kaeufer_has_datenblatt`
+-- Daten für Tabelle `kaeufer`
 --
 
-CREATE TABLE `kaeufer_has_datenblatt` (
-  `kaeufer_id` int(11) NOT NULL,
-  `datenblatt_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `kaeufer` (`id`, `debitor_nr`, `beurkundung_am`, `verbindliche_fertigstellung`, `uebergang_bnl`, `abnahme_se`, `abnahme_ge`, `auflassung`, `anrede`, `titel`, `vorname`, `nachname`, `strasse`, `hausnr`, `plz`, `ort`, `festnetz`, `handy`, `email`, `anrede2`, `titel2`, `vorname2`, `nachname2`) VALUES
+(5, '', '2016-11-02 00:00:00', '2017-04-15 00:00:00', '2017-04-07 00:00:00', '2017-05-02 00:00:00', '2017-04-03 00:00:00', 1, 0, 'Dr.', 'Erdal', 'Mersinlioglu', 'Pupinweg ', '6', '1616616', 'Trabzon', NULL, NULL, NULL, 1, 'Dr.', 'Zeynep', 'Mersinlioglu'),
+(6, '', '2020-02-06 00:00:00', NULL, NULL, NULL, NULL, 0, 0, 'nnnn', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -295,7 +316,8 @@ ALTER TABLE `datenblatt`
   ADD UNIQUE KEY `id_UNIQUE` (`id`),
   ADD KEY `fk_datenblatt_haus_idx` (`haus_id`),
   ADD KEY `fk_datenblatt_firma1_idx` (`firma_id`),
-  ADD KEY `fk_datenblatt_projekt1_idx` (`projekt_id`);
+  ADD KEY `fk_datenblatt_projekt1_idx` (`projekt_id`),
+  ADD KEY `fk_datenblatt_kaeufer1_idx` (`kaeufer_id`);
 
 --
 -- Indizes für die Tabelle `einheitstyp`
@@ -321,14 +343,6 @@ ALTER TABLE `haus`
 --
 ALTER TABLE `kaeufer`
   ADD PRIMARY KEY (`id`);
-
---
--- Indizes für die Tabelle `kaeufer_has_datenblatt`
---
-ALTER TABLE `kaeufer_has_datenblatt`
-  ADD PRIMARY KEY (`kaeufer_id`,`datenblatt_id`),
-  ADD KEY `fk_kaeufer_has_datenblatt_datenblatt1_idx` (`datenblatt_id`),
-  ADD KEY `fk_kaeufer_has_datenblatt_kaeufer1_idx` (`kaeufer_id`);
 
 --
 -- Indizes für die Tabelle `nachlass`
@@ -383,6 +397,11 @@ ALTER TABLE `zahlung`
 ALTER TABLE `datenblatt`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
+-- AUTO_INCREMENT für Tabelle `einheitstyp`
+--
+ALTER TABLE `einheitstyp`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT für Tabelle `firma`
 --
 ALTER TABLE `firma`
@@ -392,6 +411,11 @@ ALTER TABLE `firma`
 --
 ALTER TABLE `haus`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT für Tabelle `kaeufer`
+--
+ALTER TABLE `kaeufer`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `nachlass`
 --
@@ -434,6 +458,7 @@ ALTER TABLE `abschlag`
 ALTER TABLE `datenblatt`
   ADD CONSTRAINT `fk_datenblatt_firma1` FOREIGN KEY (`firma_id`) REFERENCES `firma` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_datenblatt_haus` FOREIGN KEY (`haus_id`) REFERENCES `haus` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_datenblatt_kaeufer1` FOREIGN KEY (`kaeufer_id`) REFERENCES `kaeufer` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_datenblatt_projekt1` FOREIGN KEY (`projekt_id`) REFERENCES `projekt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -441,13 +466,6 @@ ALTER TABLE `datenblatt`
 --
 ALTER TABLE `haus`
   ADD CONSTRAINT `fk_haus_projekt1` FOREIGN KEY (`projekt_id`) REFERENCES `projekt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints der Tabelle `kaeufer_has_datenblatt`
---
-ALTER TABLE `kaeufer_has_datenblatt`
-  ADD CONSTRAINT `fk_kaeufer_has_datenblatt_datenblatt1` FOREIGN KEY (`datenblatt_id`) REFERENCES `datenblatt` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_kaeufer_has_datenblatt_kaeufer1` FOREIGN KEY (`kaeufer_id`) REFERENCES `kaeufer` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints der Tabelle `nachlass`
@@ -471,6 +489,7 @@ ALTER TABLE `sonderwunch`
 -- Constraints der Tabelle `teileigentumseinheit`
 --
 ALTER TABLE `teileigentumseinheit`
+  ADD CONSTRAINT `fk_teileigentumseinheit_einheitstyp1` FOREIGN KEY (`einheitstyp_id`) REFERENCES `einheitstyp` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_teileigentumseinheit_haus1` FOREIGN KEY (`haus_id`) REFERENCES `haus` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
