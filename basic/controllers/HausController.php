@@ -123,18 +123,16 @@ class HausController extends Controller
                             $obj = Zaehlerstand::findOne($objData['id']);
                             $obj->load(['Zaehlerstand' => $objData]);
                             
-                            $date = \DateTime::createFromFormat('Y-m-d', $objData['datum']); 
+                            $date = \DateTime::createFromFormat('d.m.Y', $objData['datum']); 
                             if ($date) {
                                 $date->setTime(0, 0, 0);
                                 $obj->datum = $date->format('Y-m-d H:i:s');
-                                $obj->datum = $date;
-//                                echo $obj->datum . '<br>';
+                            } else {
+                                $obj->datum = '';
                             }
-                            $obj->datum = '2016-01-12 10:00:00';
                             $obj->save();
                         }
                     }
-//                    die;
                 }
 
                 return $this->redirect(['update', 'id' => $model->id]);
