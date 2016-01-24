@@ -152,52 +152,45 @@ class DatenblattController extends Controller
         
         if ($modelDatenblatt->load($data) && $modelDatenblatt->save()) {
             
-            if (isset($data['addSonderwunsch'])) {
-                $new = new Sonderwunsch();
-                $new->datenblatt_id = $modelDatenblatt->id;
-                $new->save();
-                $this->redirect(['update', 'id' => $modelDatenblatt->id]);
-            } else {
-                // Käufer
-                $modelKaeufer = $modelDatenblatt->kaeufer;
-                if (!$modelKaeufer) {
-                    $modelKaeufer = new Kaeufer();
-                }
-                if ($modelKaeufer->load(Yii::$app->request->post())) {
+            // Käufer
+            $modelKaeufer = $modelDatenblatt->kaeufer;
+            if (!$modelKaeufer) {
+                $modelKaeufer = new Kaeufer();
+            }
+            if ($modelKaeufer->load(Yii::$app->request->post())) {
 
-                    $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
+                $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
+                foreach($datumFelder as $feld) {
+                    $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
+                    if ($datum) {
+                        $datum->setTime(0, 0, 0);
+                        $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
+                    } else {
+                        $modelKaeufer->{$feld} = '';
+                    }
+                }
+                // save
+                $modelKaeufer->save();
+                // assign käufer
+                $modelDatenblatt->kaeufer_id = $modelKaeufer->id;
+                $modelDatenblatt->save();
+            }
+
+            // Sonderwünsche
+            if ($modelsSonderwunsch = Sonderwunsch::loadMultiple($modelDatenblatt->sonderwunsches, $data)) {
+                foreach ($modelDatenblatt->sonderwunsches as $item) {
+                    $datumFelder = ['angebot_datum', 'beauftragt_datum', 'rechnungsstellung_datum'];
                     foreach($datumFelder as $feld) {
-                        $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
+                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
                         if ($datum) {
                             $datum->setTime(0, 0, 0);
-                            $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
+                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
                         } else {
-                            $modelKaeufer->{$feld} = '';
+                            $item->{$feld} = '';
                         }
                     }
-                    // save
-                    $modelKaeufer->save();
-                    // assign käufer
-                    $modelDatenblatt->kaeufer_id = $modelKaeufer->id;
-                    $modelDatenblatt->save();
-                }
-                
-                // Sonderwünsche
-                if ($modelsSonderwunsch = Sonderwunsch::loadMultiple($modelDatenblatt->sonderwunsches, $data)) {
-                    foreach ($modelDatenblatt->sonderwunsches as $item) {
-                        $datumFelder = ['angebot_datum', 'beauftragt_datum', 'rechnungsstellung_datum'];
-                        foreach($datumFelder as $feld) {
-                            $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
-                            if ($datum) {
-                                $datum->setTime(0, 0, 0);
-                                $item->{$feld} = $datum->format('Y-m-d H:i:s');
-                            } else {
-                                $item->{$feld} = '';
-                            }
-                        }
-                        
-                        $item->save();
-                    }
+
+                    $item->save();
                 }
             }
             
@@ -209,6 +202,19 @@ class DatenblattController extends Controller
             'modelsZahlungs' => $modelDatenblatt->zahlungs,
             'modelKaeufer' => $modelDatenblatt->kaeufer ? $modelDatenblatt->kaeufer : new Kaeufer(),
         ]);
+    }
+    
+    /**
+     * Add new datenblatt
+     * @param int $datenblattId
+     */
+    public function actionAddsonderwunsch($datenblattId) {
+        
+        $new = new Sonderwunsch();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
+        
+        $this->redirect(['update', 'id' => $datenblattId]);
     }
 
     /**
