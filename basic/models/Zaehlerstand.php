@@ -45,7 +45,7 @@ class Zaehlerstand extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'stand' => Yii::t('app', 'Stand'),
-            'haus_id' => Yii::t('app', 'Haus ID'),
+            'haus_id' => Yii::t('app', 'Haus'),
         ];
     }
 

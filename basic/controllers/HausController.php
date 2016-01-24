@@ -175,7 +175,21 @@ class HausController extends Controller
         
         return $this->redirect(['update', 'id' => $hausId]);
     }
-
+    /**
+     * Deletes an existing Teileigentumseinheit model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionDeletezaehlerstand($hausId, $zaehlerstandId)
+    {
+        $zaehlerstand = Zaehlerstand::findOne($zaehlerstandId);
+        if ($zaehlerstand) {
+            $zaehlerstand->delete();
+        }
+        
+        return $this->redirect(['update', 'id' => $hausId]);
+    }
     /**
      * Finds the Haus model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
