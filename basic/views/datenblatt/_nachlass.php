@@ -7,7 +7,20 @@ use yii\helpers\Html;
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
 
-<h3>Minderungen/Nachlass:</h3>
+
+<div class="row">
+    <div class="col-sm-8">
+        <h3>Minderungen/Nachlass:</h3>
+    </div>
+    <div class="col-sm-3">
+        <?php 
+        $total = 0;
+        foreach($modelDatenblatt->nachlasses as $item) {
+            $total += $item->betrag;
+        } ?>
+        <h3>Summe: <?= Yii::$app->formatter->asCurrency($total) ?></h3>
+    </div>
+</div>
  
 <div class="row">
     <div class="col-sm-3">

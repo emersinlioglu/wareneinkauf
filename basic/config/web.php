@@ -7,6 +7,12 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'formatter' => [ 
+            'dateFormat' => 'dd.mm.yyyy', 
+            'decimalSeparator' => ',', 
+            'thousandSeparator' => '.', 
+            'currencyCode' => 'EUR', 
+        ],
 
 //        'assetManager' => [
 //            'bundles' => [

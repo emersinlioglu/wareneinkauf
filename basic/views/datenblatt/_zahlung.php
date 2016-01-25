@@ -7,10 +7,22 @@ use yii\helpers\Html;
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
 
-<h3>Zahlungen:</h3>
+<div class="row">
+    <div class="col-sm-8">
+        <h3>Zahlungen:</h3>
+    </div>
+    <div class="col-sm-3">
+        <?php 
+        $total = 0;
+        foreach($modelDatenblatt->zahlungs as $key => $modelZahlung) {
+            $total += $modelZahlung->betrag;
+        } ?>
+        <h3>Summe: <?= Yii::$app->formatter->asCurrency($total) ?></h3>
+    </div>
+</div>
  
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-9">
         <?= Html::a('<span class="fa fa-plus"> Zahlung hinzufügen</span>',
             Yii::$app->urlManager->createUrl(["datenblatt/addzahlung", 'datenblattId' => $modelDatenblatt->id]), 
             ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
