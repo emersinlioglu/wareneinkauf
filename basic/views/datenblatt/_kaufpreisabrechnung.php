@@ -137,8 +137,8 @@ foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
     <td><?= $sonderwunschProzentTotal ?> %</td>
     <td><?= $sonderwunschBetragTotal ?> EUR</td>
     <td></td>
+    <td><?= $kaufvertragBetragTotal + $sonderwunschBetragTotal ?> EUR</td>
     <td></td>
-    <td><?= $kaufvertragBetragTotal + $sonderwunschBetragTotal ?></td>
 </tr>
 
 </table>

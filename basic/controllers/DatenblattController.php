@@ -212,8 +212,28 @@ class DatenblattController extends Controller
                 }
             }
             
+            // Nachlass
+            if (Nachlass::loadMultiple($modelDatenblatt->nachlasses, $data)) {
+                foreach ($modelDatenblatt->nachlasses as $item) {
+                    $datumFelder = ['schreiben_vom'];
+                    foreach($datumFelder as $feld) {
+                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+                        if ($datum) {
+                            $datum->setTime(0, 0, 0);
+                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+                        } else {
+                            $item->{$feld} = '';
+                        }
+                    }
+                    $item->save();
+                }
+            }
+            
             $this->redirect(['update', 'id' => $id]);
         }
+        
+        
+        
         
         // kaufpreis
         $kaufpreisTotal = 0;
@@ -223,6 +243,7 @@ class DatenblattController extends Controller
                 $kaufpreisTotal += (float)$item->kaufpreis;
             }
         }
+        
         // sonderwünche
         $sonderwuenscheTotal = 0;
         /* @var $item app\models\Sonderwunsch */
@@ -264,6 +285,19 @@ class DatenblattController extends Controller
     public function actionAddabschlag($datenblattId) {
         
         $new = new Abschlag();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
+        
+        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Add new nachlass
+     * @param int $datenblattId
+     */
+    public function actionAddnachlass($datenblattId) {
+        
+        $new = new Nachlass();
         $new->datenblatt_id = $datenblattId;
         $new->save();
         
@@ -315,6 +349,24 @@ class DatenblattController extends Controller
 
         if ($modelAbschlag = Abschlag::findOne($abschlagId)) {
             $modelAbschlag->delete();
+        }
+
+        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Deletes nachlass
+     * 
+     * @param int $datenblattId
+     * @param int $nachlassId
+     * @return void
+     */
+    public function actionDeletenachlass($datenblattId, $nachlassId)
+    {
+        $model = $this->findModel($datenblattId);
+
+        if ($modelNachlass = Nachlass::findOne($nachlassId)) {
+            $modelNachlass->delete();
         }
 
         return $this->redirect(['update', 'id' => $datenblattId]);

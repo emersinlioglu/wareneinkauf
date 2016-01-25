@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jan 2016 um 21:50
+-- Erstellungszeit: 25. Jan 2016 um 22:23
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -202,7 +202,7 @@ CREATE TABLE `nachlass` (
 --
 
 INSERT INTO `nachlass` (`id`, `datenblatt_id`, `schreiben_vom`, `betrag`, `bemerkung`) VALUES
-(1, 1, NULL, NULL, NULL),
+(1, 1, '2017-06-01 00:00:00', 100, 'blablablablabla'),
 (2, 2, NULL, NULL, NULL),
 (3, 3, NULL, NULL, NULL);
 
@@ -465,7 +465,7 @@ ALTER TABLE `kaeufer`
 -- AUTO_INCREMENT für Tabelle `nachlass`
 --
 ALTER TABLE `nachlass`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT für Tabelle `projekt`
 --
