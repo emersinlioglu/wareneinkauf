@@ -20,20 +20,17 @@ use yii\helpers\Html;
         <h3>Summe: <?= Yii::$app->formatter->asCurrency($total) ?></h3>
     </div>
 </div>
- 
-<div class="row">
-    <div class="col-sm-9">
-        <?= Html::a('<span class="fa fa-plus"> Zahlung hinzufügen</span>',
-            Yii::$app->urlManager->createUrl(["datenblatt/addzahlung", 'datenblattId' => $modelDatenblatt->id]), 
-            ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
-    </div>
-</div>
 
 <table class="table table-bordered">
     <tr>
         <th>Datum</th>
         <th>Betrag</th>
         <th>Bemerkung</th>
+        <th>
+            <?= Html::a('<span class="fa fa-plus"> </span>',
+            Yii::$app->urlManager->createUrl(["datenblatt/addzahlung", 'datenblattId' => $modelDatenblatt->id]), 
+            ['class' => 'add-zahlung btn btn-success btn-xl']) ?>
+        </th>
     </tr>
 <?php 
 

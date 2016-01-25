@@ -7,16 +7,6 @@ use yii\helpers\Html;
 ?>
 
 <h3>Sonderwünsche:</h3>
- 
-<div class="row">
-    <div class="col-sm-3">
-        <!--?= Html::submitButton('<span class="fa fa-plus"> Sonderwunsch hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addSonderwunsch']) ?-->
-        <?= Html::a('<span class="fa fa-plus"> Sonderwunsch hinzufügen</span>',
-            Yii::$app->urlManager->createUrl(["datenblatt/addsonderwunsch", 'datenblattId' => $modelDatenblatt->id]), 
-            ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
-    </div>
-</div>
-
 
 <table class="table table-bordered">   
     <tr>
@@ -37,6 +27,11 @@ use yii\helpers\Html;
         <th>-Datum</th>
         <th>-Betrag</th>
         <th>-Rg.-Nr</th>
+        <th>
+            <?= Html::a('<span class="fa fa-plus"> </span>',
+            Yii::$app->urlManager->createUrl(["datenblatt/addsonderwunsch", 'datenblattId' => $modelDatenblatt->id]), 
+            ['class' => 'add-zahlung btn btn-success btn-xl']) ?>
+        </th>
     </tr>
 <?php 
 

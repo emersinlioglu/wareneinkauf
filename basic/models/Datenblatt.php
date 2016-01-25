@@ -14,6 +14,7 @@ use Yii;
  * @property integer $nummer
  * @property string $kaeufer_id
  * @property string $besondere_regelungen_kaufvertrag
+ * @property string $sonstige_anmerkungen
  *
  * @property Abschlag[] $abschlags
  * @property Firma $firma
@@ -41,7 +42,7 @@ class Datenblatt extends \yii\db\ActiveRecord
     {
         return [
             [['firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
-            [['besondere_regelungen_kaufvertrag'], 'string']
+            [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'string']
         ];
     }
 
@@ -58,6 +59,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             'nummer' => Yii::t('app', 'Nummer'),
             'kaeufer_id' => Yii::t('app', 'Kaeufer ID'),
             'besondere_regelungen_kaufvertrag' => Yii::t('app', 'Besondere Regelungen Kaufvertrag'),
+            'sonstige_anmerkungen' => Yii::t('app', 'Sonstige Anmerkungen'),
         ];
     }
 

@@ -25,9 +25,7 @@ use yii\helpers\Html;
 <div class="row">
     <div class="col-sm-3">
         <!--?= Html::submitButton('<span class="fa fa-plus"> Sonderwunsch hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addSonderwunsch']) ?-->
-        <?= Html::a('<span class="fa fa-plus"> Nachlass hinzufügen</span>',
-            Yii::$app->urlManager->createUrl(["datenblatt/addnachlass", 'datenblattId' => $modelDatenblatt->id]), 
-            ['class' => 'add-zahlung btn btn-danger btn-xl']) ?>
+        
     </div>
 </div>
 
@@ -36,6 +34,9 @@ use yii\helpers\Html;
         <th>Schreiben vom</th>
         <th>Betrag</th>
         <th>Bemerkung</th>
+        <th><?= Html::a('<span class="fa fa-plus"> </span>',
+            Yii::$app->urlManager->createUrl(["datenblatt/addnachlass", 'datenblattId' => $modelDatenblatt->id]), 
+            ['class' => 'add-zahlung btn btn-success btn-xl']) ?></th>
     </tr>
 <?php 
 

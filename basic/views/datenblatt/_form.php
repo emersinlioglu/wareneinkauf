@@ -157,6 +157,12 @@ use app\models\Firma;
         ]) ?>
 
     
+    <div class="row">
+        <div class="col-sm-10">
+            <?= $form->field($modelDatenblatt, 'sonstige_anmerkungen')->textarea(['rows' => '5']) ?>
+        </div>
+    </div>
+    
     <div class="form-group" style="text-align: right;">
         <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
     </div>

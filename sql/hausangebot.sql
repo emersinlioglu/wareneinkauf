@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jan 2016 um 22:35
+-- Erstellungszeit: 25. Jan 2016 um 23:06
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -62,17 +62,18 @@ CREATE TABLE `datenblatt` (
   `haus_id` int(10) UNSIGNED DEFAULT NULL,
   `nummer` int(11) DEFAULT NULL,
   `kaeufer_id` int(10) UNSIGNED DEFAULT NULL,
-  `besondere_regelungen_kaufvertrag` text
+  `besondere_regelungen_kaufvertrag` text,
+  `sonstige_anmerkungen` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `datenblatt`
 --
 
-INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`) VALUES
-(1, 2, 2, 1, 111, 5, ''),
-(2, NULL, NULL, NULL, 222, 6, NULL),
-(3, 1, 3, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj');
+INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`, `sonstige_anmerkungen`) VALUES
+(1, 2, 2, 1, 111, 5, '', NULL),
+(2, NULL, NULL, NULL, 222, 6, NULL, NULL),
+(3, 1, 3, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj', NULL);
 
 -- --------------------------------------------------------
 
