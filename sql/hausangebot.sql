@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jan 2016 um 22:23
+-- Erstellungszeit: 25. Jan 2016 um 22:35
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -315,27 +315,27 @@ INSERT INTO `zaehlerstand` (`id`, `name`, `stand`, `datum`, `haus_id`) VALUES
 CREATE TABLE `zahlung` (
   `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
-  `betrag` float NOT NULL DEFAULT '0',
-  `datum` datetime NOT NULL
+  `datum` datetime DEFAULT NULL,
+  `betrag` float DEFAULT '0',
+  `bemerkung` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `zahlung`
 --
 
-INSERT INTO `zahlung` (`id`, `datenblatt_id`, `betrag`, `datum`) VALUES
-(1, 1, 100, '0000-00-00 00:00:00'),
-(2, 1, 200, '0000-00-00 00:00:00'),
-(3, 2, 11, '0000-00-00 00:00:00'),
-(4, 2, 22, '0000-00-00 00:00:00'),
-(5, 2, 33, '0000-00-00 00:00:00'),
-(6, 2, 44, '0000-00-00 00:00:00'),
-(9, 1, 888, '0000-00-00 00:00:00'),
-(10, 1, 9999, '0000-00-00 00:00:00'),
-(11, 3, 9, '0000-00-00 00:00:00'),
-(12, 3, 8, '0000-00-00 00:00:00'),
-(14, 3, 855, '0000-00-00 00:00:00'),
-(15, 3, 955, '0000-00-00 00:00:00');
+INSERT INTO `zahlung` (`id`, `datenblatt_id`, `datum`, `betrag`, `bemerkung`) VALUES
+(1, 1, '2018-09-09 00:00:00', 111, 'aaa'),
+(2, 1, '2018-08-02 00:00:00', 222, 'sss'),
+(3, 2, '0000-00-00 00:00:00', 11, NULL),
+(4, 2, '0000-00-00 00:00:00', 22, NULL),
+(5, 2, '0000-00-00 00:00:00', 33, NULL),
+(6, 2, '0000-00-00 00:00:00', 44, NULL),
+(9, 1, NULL, 3333, 'ddd'),
+(11, 3, '0000-00-00 00:00:00', 9, NULL),
+(12, 3, '0000-00-00 00:00:00', 8, NULL),
+(14, 3, '0000-00-00 00:00:00', 855, NULL),
+(15, 3, '0000-00-00 00:00:00', 955, NULL);
 
 --
 -- Indizes der exportierten Tabellen

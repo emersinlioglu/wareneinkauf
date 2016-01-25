@@ -229,6 +229,23 @@ class DatenblattController extends Controller
                 }
             }
             
+            // Zahlung
+            if (Zahlung::loadMultiple($modelDatenblatt->zahlungs, $data)) {
+                foreach ($modelDatenblatt->zahlungs as $item) {
+                    $datumFelder = ['datum'];
+                    foreach($datumFelder as $feld) {
+                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+                        if ($datum) {
+                            $datum->setTime(0, 0, 0);
+                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+                        } else {
+                            $item->{$feld} = '';
+                        }
+                    }
+                    $item->save();
+                }
+            }
+            
             $this->redirect(['update', 'id' => $id]);
         }
         
@@ -285,6 +302,19 @@ class DatenblattController extends Controller
     public function actionAddabschlag($datenblattId) {
         
         $new = new Abschlag();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
+        
+        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Add new zahlung
+     * @param int $datenblattId
+     */
+    public function actionAddzahlung($datenblattId) {
+        
+        $new = new Zahlung();
         $new->datenblatt_id = $datenblattId;
         $new->save();
         
@@ -367,6 +397,23 @@ class DatenblattController extends Controller
 
         if ($modelNachlass = Nachlass::findOne($nachlassId)) {
             $modelNachlass->delete();
+        }
+
+        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+    
+    /**
+     * Deletes zahlung
+     * @param int $datenblattId
+     * @param int $zahlungId
+     * @return void
+     */
+    public function actionDeletezahlung($datenblattId, $zahlungId)
+    {
+        $model = $this->findModel($datenblattId);
+
+        if ($item = Zahlung::findOne($zahlungId)) {
+            $item->delete();
         }
 
         return $this->redirect(['update', 'id' => $datenblattId]);

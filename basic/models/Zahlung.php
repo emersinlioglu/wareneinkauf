@@ -9,8 +9,9 @@ use Yii;
  *
  * @property string $id
  * @property integer $datenblatt_id
- * @property double $betrag
  * @property string $datum
+ * @property double $betrag
+ * @property string $bemerkung
  *
  * @property Datenblatt $datenblatt
  */
@@ -30,11 +31,11 @@ class Zahlung extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['datenblatt_id', 'datum'], 'required'],
             [['datenblatt_id'], 'required'],
             [['datenblatt_id'], 'integer'],
+            [['datum'], 'safe'],
             [['betrag'], 'number'],
-            [['datum'], 'safe']
+            [['bemerkung'], 'string', 'max' => 255]
         ];
     }
 
@@ -46,8 +47,9 @@ class Zahlung extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'datenblatt_id' => Yii::t('app', 'Datenblatt ID'),
-            'betrag' => Yii::t('app', 'Betrag'),
             'datum' => Yii::t('app', 'Datum'),
+            'betrag' => Yii::t('app', 'Betrag'),
+            'bemerkung' => Yii::t('app', 'Bemerkung'),
         ];
     }
 

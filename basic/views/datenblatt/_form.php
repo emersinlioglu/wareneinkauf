@@ -150,6 +150,11 @@ use app\models\Firma;
             'form' => $form,
             'modelDatenblatt' => $modelDatenblatt,
         ]) ?>
+    
+    <?= $this->render('_zahlung', [
+            'form' => $form,
+            'modelDatenblatt' => $modelDatenblatt,
+        ]) ?>
 
     
     <div class="form-group" style="text-align: right;">
