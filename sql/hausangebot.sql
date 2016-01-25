@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jan 2016 um 23:12
+-- Erstellungszeit: 25. Jan 2016 um 21:50
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -31,20 +31,23 @@ CREATE TABLE `abschlag` (
   `datenblatt_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `kaufvertrag_prozent` float DEFAULT NULL,
+  `kaufvertrag_betrag` varchar(255) DEFAULT NULL,
   `kaufvertrag_angefordert` datetime DEFAULT NULL,
   `sonderwunsch_prozent` float DEFAULT NULL,
-  `sonderwunsch_angefordert` datetime DEFAULT NULL
+  `sonderwunsch_betrag` varchar(255) DEFAULT NULL,
+  `sonderwunsch_angefordert` datetime DEFAULT NULL,
+  `summe` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `abschlag`
 --
 
-INSERT INTO `abschlag` (`id`, `datenblatt_id`, `name`, `kaufvertrag_prozent`, `kaufvertrag_angefordert`, `sonderwunsch_prozent`, `sonderwunsch_angefordert`) VALUES
-(1, 3, 'Abschlag 1', 8, '2016-05-02 00:00:00', NULL, NULL),
-(2, 3, NULL, NULL, NULL, NULL, NULL),
-(3, 1, 'z1', NULL, NULL, NULL, NULL),
-(5, 1, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `abschlag` (`id`, `datenblatt_id`, `name`, `kaufvertrag_prozent`, `kaufvertrag_betrag`, `kaufvertrag_angefordert`, `sonderwunsch_prozent`, `sonderwunsch_betrag`, `sonderwunsch_angefordert`, `summe`) VALUES
+(1, 3, 'Abschlag 1', 8, NULL, '2016-05-02 00:00:00', NULL, NULL, NULL, NULL),
+(2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 1, 'z1', 20, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 1, '', 50, NULL, NULL, 50, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -189,17 +192,19 @@ INSERT INTO `kaeufer` (`id`, `debitor_nr`, `beurkundung_am`, `verbindliche_ferti
 CREATE TABLE `nachlass` (
   `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
-  `preis` int(11) DEFAULT NULL
+  `schreiben_vom` datetime DEFAULT NULL,
+  `betrag` double DEFAULT NULL,
+  `bemerkung` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `nachlass`
 --
 
-INSERT INTO `nachlass` (`id`, `datenblatt_id`, `preis`) VALUES
-(1, 1, NULL),
-(2, 2, NULL),
-(3, 3, NULL);
+INSERT INTO `nachlass` (`id`, `datenblatt_id`, `schreiben_vom`, `betrag`, `bemerkung`) VALUES
+(1, 1, NULL, NULL, NULL),
+(2, 2, NULL, NULL, NULL),
+(3, 3, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -249,8 +254,8 @@ INSERT INTO `sonderwunsch` (`id`, `datenblatt_id`, `name`, `angebot_datum`, `ang
 (1, 3, 'Sond 1', '2016-11-14 00:00:00', 200, NULL, 100, NULL, 25, '112233'),
 (2, 3, 's2', '2016-09-08 00:00:00', 450, NULL, 150, NULL, 89, 'g34'),
 (17, 3, '', NULL, NULL, NULL, NULL, NULL, NULL, ''),
-(18, 1, '', NULL, NULL, NULL, NULL, NULL, NULL, ''),
-(19, 1, '', NULL, NULL, NULL, NULL, NULL, NULL, '');
+(18, 1, '', NULL, NULL, NULL, 1000, NULL, 2000, ''),
+(19, 1, '', NULL, NULL, NULL, NULL, NULL, 1000, '');
 
 -- --------------------------------------------------------
 

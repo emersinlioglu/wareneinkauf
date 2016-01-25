@@ -9,6 +9,9 @@ use Yii;
  *
  * @property string $id
  * @property integer $datenblatt_id
+ * @property string $schreiben_vom
+ * @property double $betrag
+ * @property string $bemerkung
  *
  * @property Datenblatt $datenblatt
  */
@@ -29,7 +32,10 @@ class Nachlass extends \yii\db\ActiveRecord
     {
         return [
             [['datenblatt_id'], 'required'],
-            [['datenblatt_id'], 'integer']
+            [['datenblatt_id'], 'integer'],
+            [['schreiben_vom'], 'safe'],
+            [['betrag'], 'number'],
+            [['bemerkung'], 'string', 'max' => 255]
         ];
     }
 
@@ -41,6 +47,9 @@ class Nachlass extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'datenblatt_id' => Yii::t('app', 'Datenblatt ID'),
+            'schreiben_vom' => Yii::t('app', 'Schreiben Vom'),
+            'betrag' => Yii::t('app', 'Betrag'),
+            'bemerkung' => Yii::t('app', 'Bemerkung'),
         ];
     }
 
