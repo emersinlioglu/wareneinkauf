@@ -40,7 +40,10 @@ use yii\helpers\Html;
     </tr>
 <?php 
 
-$rechnungstellungBetrag = 0;
+$kaufvertragProzentTotal  = 0;
+$kaufvertragBetragTotal   = 0;
+$sonderwunschProzentTotal = 0;
+$sonderwunschBetragTotal  = 0;
 
 foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
 <tr class="sonderwunsch">
@@ -52,9 +55,11 @@ foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
     </td>
     <td>
         <?= $form->field($modelAbschlag, "[$key]kaufvertrag_prozent")->textInput([]) ?>
+        <?php $kaufvertragProzentTotal += $modelAbschlag->kaufvertrag_prozent ?>
     </td>
     <td>
-        Betrag
+        <?= $form->field($modelAbschlag, "[$key]kaufvertrag_betrag")->textInput(['disabled' => 'disabled']) ?>
+        <?php $kaufvertragBetragTotal += $modelAbschlag->kaufvertrag_betrag ?>
     </td>
     <td>
         <?php
@@ -83,9 +88,11 @@ foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
     </td>
     <td>
         <?= $form->field($modelAbschlag, "[$key]sonderwunsch_prozent")->textInput([]) ?>
+        <?php $sonderwunschProzentTotal += $modelAbschlag->sonderwunsch_prozent ?>
     </td>
     <td>
-        Betrag
+        <?= $form->field($modelAbschlag, "[$key]sonderwunsch_betrag")->textInput(['disabled' => 'disabled']) ?>
+        <?php $sonderwunschBetragTotal += $modelAbschlag->sonderwunsch_betrag ?>
     </td>
     <td>
         <?php
@@ -113,7 +120,7 @@ foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
         ?>
     </td>
     <td>
-        Summe
+        <?= $form->field($modelAbschlag, "[$key]summe")->textInput(['disabled' => 'disabled']) ?>
     </td>
     <td>
         <?= Html::a('<span class="fa fa-minus"></span>', 
@@ -123,13 +130,17 @@ foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
 </tr>    
 <?php endforeach;  ?>
 <tr>
+<!--    $kaufvertragProzentTotal  = 0;
+$kaufvertragBetragTotal   = 0;
+$sonderwunschProzentTotal = 0;
+$sonderwunschBetragTotal  = 0;-->
     <td>Summe</td>
+    <td><?= $kaufvertragProzentTotal ?> %</td>
+    <td><?= $kaufvertragBetragTotal ?> EUR</td>
     <td></td>
+    <td><?= $sonderwunschProzentTotal ?> %</td>
+    <td><?= $sonderwunschBetragTotal ?> EUR</td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td><?= $rechnungstellungBetrag ?></td>
     <td></td>
     <td></td>    
 </tr>

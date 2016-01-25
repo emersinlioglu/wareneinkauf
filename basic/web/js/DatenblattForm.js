@@ -6,10 +6,7 @@ var datenblattForm = new function DatenblattForm() {
     _selectedProjekt    = null;
     _selectedHaus       = null;
     
-    _.init = function() {
-        _form = $('.datenblatt-form');
-        
-        if(!_form) return;
+    _.initFirmaProjektHausDropdown = function() {
         
         _form.find('[name="Datenblatt[firma_id]"]').on('focus', function () {
             _selectedFirma = this.value;
@@ -20,7 +17,7 @@ var datenblattForm = new function DatenblattForm() {
                 _form.submit();
             }
         });
-        
+
         _form.find('[name="Datenblatt[projekt_id]"]').on('focus', function () {
             _selectedProjekt = this.value;
         }).change(function() {
@@ -29,7 +26,7 @@ var datenblattForm = new function DatenblattForm() {
                 _form.submit();
             }
         });
-        
+
         _form.find('[name="Datenblatt[haus_id]"]').on('focus', function () {
             _selectedHaus = this.value;
         }).change(function() {
@@ -37,6 +34,14 @@ var datenblattForm = new function DatenblattForm() {
                 _form.submit();
             }
         });
+    }
+    
+    _.init = function() {
+        _form = $('.datenblatt-form');
+        
+        if(!_form) return;
+        
+        _.initFirmaProjektHausDropdown();
     }
     
     _.init();

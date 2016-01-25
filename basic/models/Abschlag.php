@@ -11,9 +11,12 @@ use Yii;
  * @property integer $datenblatt_id
  * @property string $name
  * @property double $kaufvertrag_prozent
+ * @property string $kaufvertrag_betrag
  * @property string $kaufvertrag_angefordert
  * @property double $sonderwunsch_prozent
+ * @property string $sonderwunsch_betrag
  * @property string $sonderwunsch_angefordert
+ * @property string $summe
  *
  * @property Datenblatt $datenblatt
  */
@@ -37,7 +40,7 @@ class Abschlag extends \yii\db\ActiveRecord
             [['datenblatt_id'], 'integer'],
             [['kaufvertrag_prozent', 'sonderwunsch_prozent'], 'number'],
             [['kaufvertrag_angefordert', 'sonderwunsch_angefordert'], 'safe'],
-            [['name'], 'string', 'max' => 255]
+            [['name', 'kaufvertrag_betrag', 'sonderwunsch_betrag', 'summe'], 'string', 'max' => 255]
         ];
     }
 
@@ -51,9 +54,12 @@ class Abschlag extends \yii\db\ActiveRecord
             'datenblatt_id' => Yii::t('app', 'Datenblatt ID'),
             'name' => Yii::t('app', 'Name'),
             'kaufvertrag_prozent' => Yii::t('app', 'Kaufvertrag Prozent'),
+            'kaufvertrag_betrag' => Yii::t('app', 'Kaufvertrag Betrag'),
             'kaufvertrag_angefordert' => Yii::t('app', 'Kaufvertrag Angefordert'),
             'sonderwunsch_prozent' => Yii::t('app', 'Sonderwunsch Prozent'),
+            'sonderwunsch_betrag' => Yii::t('app', 'Sonderwunsch Betrag'),
             'sonderwunsch_angefordert' => Yii::t('app', 'Sonderwunsch Angefordert'),
+            'summe' => Yii::t('app', 'Summe'),
         ];
     }
 

@@ -214,6 +214,28 @@ class DatenblattController extends Controller
             
             $this->redirect(['update', 'id' => $id]);
         }
+        
+        // kaufpreis
+        $kaufpreisTotal = 0;
+        /* @var $teileh app\models\Teileigentumseinheit */
+        if ($modelDatenblatt->haus) {
+            foreach ($modelDatenblatt->haus->teileigentumseinheits as $item) {
+                $kaufpreisTotal += (float)$item->kaufpreis;
+            }
+        }
+        // sonderwünche
+        $sonderwuenscheTotal = 0;
+        /* @var $item app\models\Sonderwunsch */
+        foreach ($modelDatenblatt->sonderwunsches as $item) {
+            $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
+        }
+        
+        /* @var $item app\models\Abschlag */
+        foreach ($modelDatenblatt->abschlags as $item) {
+            $item->kaufvertrag_betrag = (string)((float)$item->kaufvertrag_prozent * $kaufpreisTotal / 100);
+            $item->sonderwunsch_betrag = (string)((float)$item->sonderwunsch_prozent * $sonderwuenscheTotal / 100);
+            $item->summe = $item->kaufvertrag_betrag + $item->sonderwunsch_betrag;
+        }
 
         return $this->render('update', [
             'modelDatenblatt' => $modelDatenblatt,
