@@ -38,87 +38,71 @@ use app\models\Firma;
         </div>
     </div>
     
-    <h3>Hause Details</h3>
     
-    <div class="row">
-        <div class="col-sm-3">
-            Anschrift:
+    <div class="box-group" id="accordion">
+    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-hausdetails" aria-expanded="true" class="">
+                    Hause Details:
+                </a>
+            </h4>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            Straße + Hausnummer: 
-        </div>
-        <div class="col-sm-3">
-            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->strasse : '' ?>
-            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->hausnr : '' ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            PLZ/Ort: 
-        </div>
-        <div class="col-sm-3">
-            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->plz : '' ?>
-            <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->ort : '' ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-1">
-            reserviert: 
-        </div>
-        <div class="col-sm-1">
-            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->reserviert ? 'ja' : 'nein') : '' ?><br>
-        </div>
-        <div class="col-sm-1">
-            verkauft:
-        </div>
-        <div class="col-sm-1">
-            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->verkauft ? 'ja' : 'nein') : '' ?>
-        </div>
-        <div class="col-sm-2">
-            Rechnung/Vertrieb:
-        </div>
-        <div class="col-sm-1">
-            <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->rechnung_vertrieb ? 'ja' : 'nein') : '' ?>
+        <div id="collapse-hausdetails" class="panel-collapse collapse in" aria-expanded="false">
+            <div class="box-body">
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        Anschrift:
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Straße + Hausnummer: 
+                    </div>
+                    <div class="col-sm-3">
+                        <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->strasse : '' ?>
+                        <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->hausnr : '' ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        PLZ/Ort: 
+                    </div>
+                    <div class="col-sm-3">
+                        <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->plz : '' ?>
+                        <?= $modelDatenblatt->haus ? $modelDatenblatt->haus->ort : '' ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-1">
+                        reserviert: 
+                    </div>
+                    <div class="col-sm-1">
+                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->reserviert ? 'ja' : 'nein') : '' ?><br>
+                    </div>
+                    <div class="col-sm-1">
+                        verkauft:
+                    </div>
+                    <div class="col-sm-1">
+                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->verkauft ? 'ja' : 'nein') : '' ?>
+                    </div>
+                    <div class="col-sm-2">
+                        Rechnung/Vertrieb:
+                    </div>
+                    <div class="col-sm-1">
+                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->rechnung_vertrieb ? 'ja' : 'nein') : '' ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
-    <h3>Beschreibung Teileigentumseinheit</h3>
-    
-    <table class="table">
-        <tr>
-            <th></th>
-            <th>TE</th>
-            <th>gefördert</th>
-            <th>Geschoss</th>
-            <th>Zimmer</th>
-            <th>ME-Anteil</th>
-            <th>Wohnfläche</th>
-            <th>Kaufpreis</th>
-            <th>KP/Einheit</th>
-        </tr>
-        <?php 
-        /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
-        if ($modelDatenblatt->haus):
-        foreach ($modelDatenblatt->haus->teileigentumseinheits as $teileigentumseinheit): ?>
-            <tr>
-                <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
-                <td><?= $teileigentumseinheit->te_nummer ?></td>
-                <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
-                <td><?= $teileigentumseinheit->geschoss ?></td>
-                <td><?= $teileigentumseinheit->zimmer ?></td>
-                <td><?= $teileigentumseinheit->me_anteil ?></td>
-                <td><?= $teileigentumseinheit->wohnflaeche ?></td>
-                <td>€ <?= number_format ((float)$teileigentumseinheit->kaufpreis, 2); ?></td>
-                <td>€ <?= number_format ((float)$teileigentumseinheit->kp_einheit, 2); ?></td>
-            </tr>
-        <?php 
-        endforeach; 
-        endif;
-        ?>
-    </table>
-        
+    <?= $this->render('_teileigentumseinheiten', [
+            'form' => $form,
+            'modelDatenblatt'  => $modelDatenblatt,
+        ]) ?>
     
     <?= $this->render('_zaehlerangaben', [
             'form' => $form,
