@@ -123,7 +123,7 @@ class DatenblattController extends Controller
 
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $modelDatenblatt->id]);
+                        return $this->redirect(['update', 'id' => $modelDatenblatt->id]);
                     } else {
                         $transaction->rollBack();
                     }
