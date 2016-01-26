@@ -178,19 +178,19 @@ class DatenblattController extends Controller
             }
 
             // Sonderwünsche
-            if ($modelsSonderwunsch = Sonderwunsch::loadMultiple($modelDatenblatt->sonderwunsches, $data)) {
+            if (Sonderwunsch::loadMultiple($modelDatenblatt->sonderwunsches, $data)) {
                 foreach ($modelDatenblatt->sonderwunsches as $item) {
-                    $datumFelder = ['angebot_datum', 'beauftragt_datum', 'rechnungsstellung_datum'];
-                    foreach($datumFelder as $feld) {
-                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
-                        if ($datum) {
-                            $datum->setTime(0, 0, 0);
-                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
-                        } else {
-                            $item->{$feld} = '';
-                        }
-                    }
-
+//                    $datumFelder = ['angebot_datum', 'beauftragt_datum', 'rechnungsstellung_datum'];
+//                    foreach($datumFelder as $feld) {
+//                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+//                        if ($datum) {
+//                            $datum->setTime(0, 0, 0);
+//                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+//                        } else {
+//                            $item->{$feld} = '';
+//                        }
+//                    }
+                    
                     $item->save();
                 }
             }
