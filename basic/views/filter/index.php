@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
+/* @var $searchModel app\models\DatenblattSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Datenblatts');
@@ -12,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="datenblatt-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Datenblatt'), ['create'], ['class' => 'btn btn-success']) ?>
@@ -26,27 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'firma_id',
             'projekt_id',
-//            'haus_id',
-//            [
-//                'attribute' => 'haus.strasse',
-//                'format' => 'raw',
-//            ],
-                
-            [
-                'attribute' => 'haus',
-//                'format' => 'raw',
-                'value' => function ($model) {                      
-                    $str = '';
-                    if ($model->haus) {
-                        $haus = $model->haus;
-                        $str = $haus->strasse . ' ' . $haus->hausnr . ' ' . $haus->plz . ' ' . $haus->ort ;
-                    }
-                        
-                    return $str;
-                },
-                'label' => 'Hause-Adresse'
-            ],
+            'haus_id',
             'nummer',
+            // 'kaeufer_id',
+            // 'besondere_regelungen_kaufvertrag:ntext',
+            // 'sonstige_anmerkungen:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

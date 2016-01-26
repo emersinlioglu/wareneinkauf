@@ -20,6 +20,7 @@ use app\models\Zahlung;
 use app\models\Kaeufer;
 use app\models\Sonderwunsch;
 use app\models\Abschlag;
+use app\models\DatenblattSearch;
 
 /**
  * DatenblattController implements the CRUD actions for Datenblatt model.
@@ -442,6 +443,7 @@ class DatenblattController extends Controller
         ]);
 
         return $this->render('index', [
+            'searchModel' => new DatenblattSearch(),
             'dataProvider' => $dataProvider,
         ]);
     }
