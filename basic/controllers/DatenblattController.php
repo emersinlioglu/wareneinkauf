@@ -440,12 +440,16 @@ class DatenblattController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Datenblatt::find(),
-        ]);
+        
+        $searchModel = new DatenblattSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => Datenblatt::find(),
+//        ]);
 
         return $this->render('index', [
-            'searchModel' => new DatenblattSearch(),
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
