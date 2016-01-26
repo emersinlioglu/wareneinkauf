@@ -1,6 +1,8 @@
 <?php
-use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
+//use kartik\datetime\DateTimePicker;
+use kartik\datecontrol\DateControl;
+
 
 /* @var $modelDatenblatt app\models\Datenblatt */
 /* @var $modelNachlass app\models\Nachlass */
@@ -46,25 +48,34 @@ use yii\helpers\Html;
                             <?= $form->field($modelNachlass, "[$key]id")->textInput() ?>
                         </div>
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelNachlass->schreiben_vom);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            //echo '<label>Übergang BNL:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Nachlass[$key][schreiben_vom]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelNachlass->schreiben_vom);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            //echo '<label>Übergang BNL:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Nachlass[$key][schreiben_vom]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            
+                            echo $form->field($modelNachlass, "[$key]schreiben_vom")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>

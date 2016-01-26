@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jan 2016 um 23:06
+-- Erstellungszeit: 26. Jan 2016 um 22:08
 -- Server-Version: 10.1.8-MariaDB
 -- PHP-Version: 5.5.30
 
@@ -32,10 +32,10 @@ CREATE TABLE `abschlag` (
   `name` varchar(255) DEFAULT NULL,
   `kaufvertrag_prozent` float DEFAULT NULL,
   `kaufvertrag_betrag` varchar(255) DEFAULT NULL,
-  `kaufvertrag_angefordert` datetime DEFAULT NULL,
+  `kaufvertrag_angefordert` date DEFAULT NULL,
   `sonderwunsch_prozent` float DEFAULT NULL,
   `sonderwunsch_betrag` varchar(255) DEFAULT NULL,
-  `sonderwunsch_angefordert` datetime DEFAULT NULL,
+  `sonderwunsch_angefordert` date DEFAULT NULL,
   `summe` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -44,10 +44,10 @@ CREATE TABLE `abschlag` (
 --
 
 INSERT INTO `abschlag` (`id`, `datenblatt_id`, `name`, `kaufvertrag_prozent`, `kaufvertrag_betrag`, `kaufvertrag_angefordert`, `sonderwunsch_prozent`, `sonderwunsch_betrag`, `sonderwunsch_angefordert`, `summe`) VALUES
-(1, 3, 'Abschlag 1', 8, NULL, '2016-05-02 00:00:00', NULL, NULL, NULL, NULL),
+(1, 3, 'Abschlag 1', 8, NULL, '2016-05-02', NULL, NULL, NULL, NULL),
 (2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 1, 'z1', 20, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 1, '', 50, NULL, NULL, 50, NULL, NULL, NULL);
+(3, 1, 'z1', 20, NULL, '2016-01-28', NULL, NULL, '2016-01-30', NULL),
+(5, 1, '', 50, NULL, '2016-01-29', 50, NULL, '2016-01-31', NULL);
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,7 @@ CREATE TABLE `datenblatt` (
 --
 
 INSERT INTO `datenblatt` (`id`, `firma_id`, `projekt_id`, `haus_id`, `nummer`, `kaeufer_id`, `besondere_regelungen_kaufvertrag`, `sonstige_anmerkungen`) VALUES
-(1, 2, 2, 1, 111, 5, '', NULL),
+(1, 2, 2, 1, 111, 5, '', ''),
 (2, NULL, NULL, NULL, 222, 6, NULL, NULL),
 (3, 1, 3, NULL, 999, 7, 'blsdkfjasldflskf\r\nsdflaksdjflaskjdf\r\nsadflskadfjasd\r\nfsadlfkj', NULL);
 
@@ -152,11 +152,11 @@ INSERT INTO `haus` (`id`, `projekt_id`, `plz`, `ort`, `strasse`, `hausnr`, `rese
 CREATE TABLE `kaeufer` (
   `id` int(10) UNSIGNED NOT NULL,
   `debitor_nr` varchar(255) DEFAULT NULL,
-  `beurkundung_am` datetime DEFAULT NULL,
-  `verbindliche_fertigstellung` datetime DEFAULT NULL,
-  `uebergang_bnl` datetime DEFAULT NULL,
-  `abnahme_se` datetime DEFAULT NULL,
-  `abnahme_ge` datetime DEFAULT NULL,
+  `beurkundung_am` date DEFAULT NULL,
+  `verbindliche_fertigstellung` date DEFAULT NULL,
+  `uebergang_bnl` date DEFAULT NULL,
+  `abnahme_se` date DEFAULT NULL,
+  `abnahme_ge` date DEFAULT NULL,
   `auflassung` tinyint(1) DEFAULT '0',
   `anrede` tinyint(1) DEFAULT '0',
   `titel` varchar(255) DEFAULT NULL,
@@ -180,8 +180,8 @@ CREATE TABLE `kaeufer` (
 --
 
 INSERT INTO `kaeufer` (`id`, `debitor_nr`, `beurkundung_am`, `verbindliche_fertigstellung`, `uebergang_bnl`, `abnahme_se`, `abnahme_ge`, `auflassung`, `anrede`, `titel`, `vorname`, `nachname`, `strasse`, `hausnr`, `plz`, `ort`, `festnetz`, `handy`, `email`, `anrede2`, `titel2`, `vorname2`, `nachname2`) VALUES
-(5, '', '2016-11-02 00:00:00', '2017-04-15 00:00:00', '2017-04-07 00:00:00', '2017-05-02 00:00:00', '2017-04-03 00:00:00', 1, 0, 'Dr.', 'Erdal', 'Mersinlioglu', 'Pupinweg ', '6', '1616616', 'Trabzon', NULL, NULL, NULL, 1, 'Dr.', 'Zeynep', 'Mersinlioglu'),
-(6, '', '2020-02-06 00:00:00', NULL, NULL, NULL, NULL, 0, 0, 'nnnn', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', ''),
+(5, '', '2016-01-04', '2016-01-05', '2016-01-07', '2016-01-06', '2016-01-08', 1, 0, 'Dr.', 'Erdal', 'Mersinlioglu', 'Pupinweg ', '6', '1616616', 'Trabzon', NULL, NULL, NULL, 1, 'Dr.', 'Zeynep', 'Mersinlioglu'),
+(6, '', '2020-02-06', NULL, NULL, NULL, NULL, 0, 0, 'nnnn', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', ''),
 (7, '', NULL, NULL, NULL, NULL, NULL, 0, 0, 'ananana', '', '', '', '', '', '', NULL, NULL, NULL, 0, '', '', '');
 
 -- --------------------------------------------------------
@@ -193,7 +193,7 @@ INSERT INTO `kaeufer` (`id`, `debitor_nr`, `beurkundung_am`, `verbindliche_ferti
 CREATE TABLE `nachlass` (
   `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
-  `schreiben_vom` datetime DEFAULT NULL,
+  `schreiben_vom` date DEFAULT NULL,
   `betrag` double DEFAULT NULL,
   `bemerkung` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -203,7 +203,7 @@ CREATE TABLE `nachlass` (
 --
 
 INSERT INTO `nachlass` (`id`, `datenblatt_id`, `schreiben_vom`, `betrag`, `bemerkung`) VALUES
-(1, 1, '2017-06-01 00:00:00', 100, 'blablablablabla'),
+(1, 1, '2016-01-11', 100, 'blablablablabla'),
 (2, 2, NULL, NULL, NULL),
 (3, 3, NULL, NULL, NULL);
 
@@ -238,11 +238,11 @@ CREATE TABLE `sonderwunsch` (
   `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `angebot_datum` datetime DEFAULT NULL,
+  `angebot_datum` date DEFAULT NULL,
   `angebot_betrag` double DEFAULT NULL,
-  `beauftragt_datum` datetime DEFAULT NULL,
+  `beauftragt_datum` date DEFAULT NULL,
   `beauftragt_betrag` double DEFAULT NULL,
-  `rechnungsstellung_datum` datetime DEFAULT NULL,
+  `rechnungsstellung_datum` date DEFAULT NULL,
   `rechnungsstellung_betrag` double DEFAULT NULL,
   `rechnungsstellung_rg_nr` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -252,11 +252,11 @@ CREATE TABLE `sonderwunsch` (
 --
 
 INSERT INTO `sonderwunsch` (`id`, `datenblatt_id`, `name`, `angebot_datum`, `angebot_betrag`, `beauftragt_datum`, `beauftragt_betrag`, `rechnungsstellung_datum`, `rechnungsstellung_betrag`, `rechnungsstellung_rg_nr`) VALUES
-(1, 3, 'Sond 1', '2016-11-14 00:00:00', 200, NULL, 100, NULL, 25, '112233'),
-(2, 3, 's2', '2016-09-08 00:00:00', 450, NULL, 150, NULL, 89, 'g34'),
+(1, 3, 'Sond 1', '2016-11-14', 200, NULL, 100, NULL, 25, '112233'),
+(2, 3, 's2', '2016-09-08', 450, NULL, 150, NULL, 89, 'g34'),
 (17, 3, '', NULL, NULL, NULL, NULL, NULL, NULL, ''),
-(18, 1, '', NULL, NULL, NULL, 1000, NULL, 2000, ''),
-(19, 1, '', NULL, NULL, NULL, NULL, NULL, 1000, '');
+(18, 1, 'aaa', '2016-01-31', NULL, '2016-01-30', 1000, '2016-01-29', 2000, ''),
+(19, 1, 'sss', '2016-01-13', NULL, '2016-01-14', NULL, '2016-01-15', 1000, '');
 
 -- --------------------------------------------------------
 
@@ -296,7 +296,7 @@ CREATE TABLE `zaehlerstand` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `stand` varchar(45) DEFAULT NULL,
-  `datum` datetime DEFAULT NULL,
+  `datum` date DEFAULT NULL,
   `haus_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -305,7 +305,7 @@ CREATE TABLE `zaehlerstand` (
 --
 
 INSERT INTO `zaehlerstand` (`id`, `name`, `stand`, `datum`, `haus_id`) VALUES
-(1, 'Wasser', '5600', '2017-01-26 00:00:00', 1);
+(1, 'Wasser', '5600', '2016-01-30', 1);
 
 -- --------------------------------------------------------
 
@@ -316,7 +316,7 @@ INSERT INTO `zaehlerstand` (`id`, `name`, `stand`, `datum`, `haus_id`) VALUES
 CREATE TABLE `zahlung` (
   `id` int(10) UNSIGNED NOT NULL,
   `datenblatt_id` int(11) NOT NULL,
-  `datum` datetime DEFAULT NULL,
+  `datum` date DEFAULT NULL,
   `betrag` float DEFAULT '0',
   `bemerkung` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -326,17 +326,17 @@ CREATE TABLE `zahlung` (
 --
 
 INSERT INTO `zahlung` (`id`, `datenblatt_id`, `datum`, `betrag`, `bemerkung`) VALUES
-(1, 1, '2018-09-09 00:00:00', 111, 'aaa'),
-(2, 1, '2018-08-02 00:00:00', 222, 'sss'),
-(3, 2, '0000-00-00 00:00:00', 11, NULL),
-(4, 2, '0000-00-00 00:00:00', 22, NULL),
-(5, 2, '0000-00-00 00:00:00', 33, NULL),
-(6, 2, '0000-00-00 00:00:00', 44, NULL),
-(9, 1, NULL, 3333, 'ddd'),
-(11, 3, '0000-00-00 00:00:00', 9, NULL),
-(12, 3, '0000-00-00 00:00:00', 8, NULL),
-(14, 3, '0000-00-00 00:00:00', 855, NULL),
-(15, 3, '0000-00-00 00:00:00', 955, NULL);
+(1, 1, '2016-01-20', 111, 'aaa'),
+(2, 1, '2016-01-24', 222, 'sss'),
+(3, 2, '0000-00-00', 11, NULL),
+(4, 2, '0000-00-00', 22, NULL),
+(5, 2, '0000-00-00', 33, NULL),
+(6, 2, '0000-00-00', 44, NULL),
+(9, 1, '2016-01-29', 3333, 'ddd'),
+(11, 3, '0000-00-00', 9, NULL),
+(12, 3, '0000-00-00', 8, NULL),
+(14, 3, '0000-00-00', 855, NULL),
+(15, 3, '0000-00-00', 955, NULL);
 
 --
 -- Indizes der exportierten Tabellen

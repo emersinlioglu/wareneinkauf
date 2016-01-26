@@ -1,6 +1,7 @@
 <?php
-use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
+//use kartik\datetime\DateTimePicker;
+use kartik\datecontrol\DateControl;
 
 /* @var $modelDatenblatt app\models\Datenblatt */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -71,25 +72,33 @@ use yii\helpers\Html;
                         </td>
                         <td>
                             <?php
-                                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelAbschlag->kaufvertrag_angefordert);
-                                if ($datum) {
-                                    $datum = $datum->format('d.m.Y');
-                                } else {
-                                    $datum = '';
-                                }
-                                //echo '<label>Übergang BNL:</label>';
-                                echo DateTimePicker::widget([
-                                    'name' => "Abschlag[$key][kaufvertrag_angefordert]",
-                                    'options' => ['placeholder' => 'Datum auswählen'],
-                                    'convertFormat' => true,
-                                    'value' => $datum,
-                                    'pluginOptions' => [
-                                        'minView' => 'month',
-                                        'maxView' => 'month',
-                                        'viewSelect' => 'month',
-                                        'format' => 'dd.mm.yyyy',
-                                        'autoclose' => true,
-                                        'todayHighlight' => true
+//                                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelAbschlag->kaufvertrag_angefordert);
+//                                if ($datum) {
+//                                    $datum = $datum->format('d.m.Y');
+//                                } else {
+//                                    $datum = '';
+//                                }
+//                                //echo '<label>Übergang BNL:</label>';
+//                                echo DateTimePicker::widget([
+//                                    'name' => "Abschlag[$key][kaufvertrag_angefordert]",
+//                                    'options' => ['placeholder' => 'Datum auswählen'],
+//                                    'convertFormat' => true,
+//                                    'value' => $datum,
+//                                    'pluginOptions' => [
+//                                        'minView' => 'month',
+//                                        'maxView' => 'month',
+//                                        'viewSelect' => 'month',
+//                                        'format' => 'dd.mm.yyyy',
+//                                        'autoclose' => true,
+//                                        'todayHighlight' => true
+//                                    ]
+//                                ]);
+                                echo $form->field($modelAbschlag, "[$key]kaufvertrag_angefordert")->widget(DateControl::classname(), [
+                                    'type' => DateControl::FORMAT_DATE,
+                                    'options' => [
+                                        'pluginOptions' => [
+                                            //'autoclose' => true
+                                        ]
                                     ]
                                 ]);
                             ?>
@@ -104,25 +113,33 @@ use yii\helpers\Html;
                         </td>
                         <td>
                             <?php
-                                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelAbschlag->sonderwunsch_angefordert);
-                                if ($datum) {
-                                    $datum = $datum->format('d.m.Y');
-                                } else {
-                                    $datum = '';
-                                }
-                                //echo '<label>Übergang BNL:</label>';
-                                echo DateTimePicker::widget([
-                                    'name' => "Abschlag[$key][sonderwunsch_angefordert]",
-                                    'options' => ['placeholder' => 'Datum auswählen'],
-                                    'convertFormat' => true,
-                                    'value' => $datum,
-                                    'pluginOptions' => [
-                                        'minView' => 'month',
-                                        'maxView' => 'month',
-                                        'viewSelect' => 'month',
-                                        'format' => 'dd.mm.yyyy',
-                                        'autoclose' => true,
-                                        'todayHighlight' => true
+//                                $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelAbschlag->sonderwunsch_angefordert);
+//                                if ($datum) {
+//                                    $datum = $datum->format('d.m.Y');
+//                                } else {
+//                                    $datum = '';
+//                                }
+//                                //echo '<label>Übergang BNL:</label>';
+//                                echo DateTimePicker::widget([
+//                                    'name' => "Abschlag[$key][sonderwunsch_angefordert]",
+//                                    'options' => ['placeholder' => 'Datum auswählen'],
+//                                    'convertFormat' => true,
+//                                    'value' => $datum,
+//                                    'pluginOptions' => [
+//                                        'minView' => 'month',
+//                                        'maxView' => 'month',
+//                                        'viewSelect' => 'month',
+//                                        'format' => 'dd.mm.yyyy',
+//                                        'autoclose' => true,
+//                                        'todayHighlight' => true
+//                                    ]
+//                                ]);
+                                echo $form->field($modelAbschlag, "[$key]sonderwunsch_angefordert")->widget(DateControl::classname(), [
+                                    'type' => DateControl::FORMAT_DATE,
+                                    'options' => [
+                                        'pluginOptions' => [
+                                            //'autoclose' => true
+                                        ]
                                     ]
                                 ]);
                             ?>

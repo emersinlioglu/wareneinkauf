@@ -198,16 +198,16 @@ class DatenblattController extends Controller
             // Abschläge
             if ($modelsAbschlag = Abschlag::loadMultiple($modelDatenblatt->abschlags, $data)) {
                 foreach ($modelDatenblatt->abschlags as $item) {
-                    $datumFelder = ['kaufvertrag_angefordert', 'sonderwunsch_angefordert'];
-                    foreach($datumFelder as $feld) {
-                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
-                        if ($datum) {
-                            $datum->setTime(0, 0, 0);
-                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
-                        } else {
-                            $item->{$feld} = '';
-                        }
-                    }
+//                    $datumFelder = ['kaufvertrag_angefordert', 'sonderwunsch_angefordert'];
+//                    foreach($datumFelder as $feld) {
+//                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+//                        if ($datum) {
+//                            $datum->setTime(0, 0, 0);
+//                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+//                        } else {
+//                            $item->{$feld} = '';
+//                        }
+//                    }
                     $item->save();
                 }
             }
@@ -215,16 +215,16 @@ class DatenblattController extends Controller
             // Nachlass
             if (Nachlass::loadMultiple($modelDatenblatt->nachlasses, $data)) {
                 foreach ($modelDatenblatt->nachlasses as $item) {
-                    $datumFelder = ['schreiben_vom'];
-                    foreach($datumFelder as $feld) {
-                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
-                        if ($datum) {
-                            $datum->setTime(0, 0, 0);
-                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
-                        } else {
-                            $item->{$feld} = '';
-                        }
-                    }
+//                    $datumFelder = ['schreiben_vom'];
+//                    foreach($datumFelder as $feld) {
+//                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+//                        if ($datum) {
+//                            $datum->setTime(0, 0, 0);
+//                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+//                        } else {
+//                            $item->{$feld} = '';
+//                        }
+//                    }
                     $item->save();
                 }
             }
@@ -232,16 +232,16 @@ class DatenblattController extends Controller
             // Zahlung
             if (Zahlung::loadMultiple($modelDatenblatt->zahlungs, $data)) {
                 foreach ($modelDatenblatt->zahlungs as $item) {
-                    $datumFelder = ['datum'];
-                    foreach($datumFelder as $feld) {
-                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
-                        if ($datum) {
-                            $datum->setTime(0, 0, 0);
-                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
-                        } else {
-                            $item->{$feld} = '';
-                        }
-                    }
+//                    $datumFelder = ['datum'];
+//                    foreach($datumFelder as $feld) {
+//                        $datum = \DateTime::createFromFormat('d.m.Y', $item->{$feld}); 
+//                        if ($datum) {
+//                            $datum->setTime(0, 0, 0);
+//                            $item->{$feld} = $datum->format('Y-m-d H:i:s');
+//                        } else {
+//                            $item->{$feld} = '';
+//                        }
+//                    }
                     $item->save();
                 }
             }
