@@ -117,24 +117,30 @@ class HausController extends Controller
                     }
                 }
                 
-                if (isset($data['Zaehlerstaende'])) {
-                    foreach ($data['Zaehlerstaende'] as $objData) {
-                        if (isset($objData['id']) && $objData['id'] > 0) {
-                            $obj = Zaehlerstand::findOne($objData['id']);
-                            $obj->load(['Zaehlerstand' => $objData]);
-                            
-                            $date = \DateTime::createFromFormat('d.m.Y', $objData['datum']); 
-                            if ($date) {
-                                $date->setTime(0, 0, 0);
-                                $obj->datum = $date->format('Y-m-d H:i:s');
-                            } else {
-                                $obj->datum = '';
-                            }
-                            $obj->save();
+//                if (isset($data['Zaehlerstaende'])) {
+//                    foreach ($data['Zaehlerstaende'] as $objData) {
+//                        if (isset($objData['id']) && $objData['id'] > 0) {
+//                            $obj = Zaehlerstand::findOne($objData['id']);
+//                            $obj->load(['Zaehlerstand' => $objData]);
+//                            
+//                            $date = \DateTime::createFromFormat('d.m.Y', $objData['datum']); 
+//                            if ($date) {
+//                                $date->setTime(0, 0, 0);
+//                                $obj->datum = $date->format('Y-m-d H:i:s');
+//                            } else {
+//                                $obj->datum = '';
+//                            }
+//                            $obj->save();
+//                        }
+//                    }
+//                }
+                
+                    if (Zaehlerstand::loadMultiple($model->zaehlerstands, $data)) {
+                        foreach ($model->zaehlerstands as $item) {
+                            $item->save();
                         }
                     }
-                }
-
+                
                 return $this->redirect(['update', 'id' => $model->id]);
             }
             

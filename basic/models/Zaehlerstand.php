@@ -10,7 +10,8 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property string $stand
- * @property integer $haus_id
+ * @property string $datum
+ * @property string $haus_id
  *
  * @property Haus $haus
  */
@@ -30,6 +31,7 @@ class Zaehlerstand extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['datum'], 'safe'],
             [['haus_id'], 'required'],
             [['haus_id'], 'integer'],
             [['name', 'stand'], 'string', 'max' => 45]
@@ -45,7 +47,8 @@ class Zaehlerstand extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'stand' => Yii::t('app', 'Stand'),
-            'haus_id' => Yii::t('app', 'Haus'),
+            'datum' => Yii::t('app', 'Datum'),
+            'haus_id' => Yii::t('app', 'Haus ID'),
         ];
     }
 

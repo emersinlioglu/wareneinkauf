@@ -20,7 +20,9 @@
         "yiisoft/yii2-swiftmailer": "*",
         "wbraganca/yii2-dynamicform": "dev-master",
         "dmstr/yii2-adminlte-asset": "2.*",
-        "kartik-v/yii2-widget-datetimepicker": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kartik-v/yii2-widgets": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

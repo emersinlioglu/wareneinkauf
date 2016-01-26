@@ -1,3 +1,7 @@
+.input-group-addon.kv-date-remove {
+    display: none;
+}
+
 html,
 body {
     height: 100%;

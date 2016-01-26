@@ -5,7 +5,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Projekt;
 use app\models\Einheitstyp;
-use kartik\datetime\DateTimePicker;
+//use kartik\datetime\DateTimePicker;
+use kartik\datecontrol\DateControl;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Haus */
@@ -113,26 +114,15 @@ use kartik\datetime\DateTimePicker;
                 </td>
                 <td><?= $form->field($zaehlerstand, 'stand')->textInput(['name' => "Zaehlerstaende[$key][stand]"]) ?></td>
                 <td>
-                    <?php              
-                        $datum = DateTime::createFromFormat('Y-m-d H:i:s', $zaehlerstand->datum);
-                        if ($datum) {
-                            $datum = $datum->format('d.m.Y');
-                        } else {
-                            $datum = (new DateTime())->format('d.m.Y');
-                        }
+                    <?php 
                         echo '<label>Datum</label>';
-                        echo DateTimePicker::widget([
-                            'name' => "Zaehlerstaende[$key][datum]",
-                            'options' => ['placeholder' => 'Datum auswählen'],
-                            'convertFormat' => true,
-                            'value' => $datum,
-                            'pluginOptions' => [
-                                'minView' => 'month',
-                                'maxView' => 'month',
-                                'viewSelect' => 'month',
-                                'format' => 'dd.mm.yyyy',
-                                'autoclose' => true,
-                                'todayHighlight' => true
+                        echo $form->field($zaehlerstand, "[$key]datum")->widget(DateControl::classname(), [
+                            'type' => DateControl::FORMAT_DATE,
+                            'options' => [
+                                'pluginOptions' => [
+                                    'removeButton' => false,
+                                    'autoclose' => true
+                                ]
                             ]
                         ]);
                     ?>
