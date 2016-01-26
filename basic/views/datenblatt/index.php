@@ -25,23 +25,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'firma_id',
-            'projekt_id',
-//            'haus_id',
-//            [
-//                'attribute' => 'haus.strasse',
-//                'format' => 'raw',
-//            ],
+//            'projekt_id',
+//            'projekt.name',
+
+            [
+                'attribute' => 'projekt.name',
+                'format' => 'raw',
+                'filter'=> Html::textInput('DatenblattSearch[projektname]')
+//                'value' => function ($model) {                      
+//                    $str = '';
+//                    if ($model->haus) {
+//                        $haus = $model->haus;
+//                        $str = $haus->strasse . ' ' . $haus->hausnr . ' ' . $haus->plz . ' ' . $haus->ort ;
+//                    }
+//                    return $str;
+//                },
+//                'label' => 'Hause-Adresse'
+            ],
                 
             [
                 'attribute' => 'haus',
-//                'format' => 'raw',
+                'format' => 'raw',
                 'value' => function ($model) {                      
                     $str = '';
                     if ($model->haus) {
                         $haus = $model->haus;
                         $str = $haus->strasse . ' ' . $haus->hausnr . ' ' . $haus->plz . ' ' . $haus->ort ;
                     }
-                        
                     return $str;
                 },
                 'label' => 'Hause-Adresse'

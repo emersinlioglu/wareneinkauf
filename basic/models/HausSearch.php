@@ -5,23 +5,21 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Datenblatt;
+use app\models\Haus;
 
 /**
- * DatenblattSearch represents the model behind the search form about `app\models\Datenblatt`.
+ * HausSearch represents the model behind the search form about `app\models\Haus`.
  */
-class DatenblattSearch extends Datenblatt
+class HausSearch extends Haus
 {
-    public $projektname = '';
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
-            [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen', 'projektname'], 'safe'],
-//            [[''], 'default'],
+            [['id', 'projekt_id', 'reserviert', 'verkauft', 'rechnung_vertrieb'], 'integer'],
+            [['plz', 'ort', 'strasse', 'hausnr'], 'safe'],
         ];
     }
 
@@ -43,7 +41,7 @@ class DatenblattSearch extends Datenblatt
      */
     public function search($params)
     {
-        $query = Datenblatt::find();
+        $query = Haus::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,21 +54,19 @@ class DatenblattSearch extends Datenblatt
             // $query->where('0=1');
             return $dataProvider;
         }
-//var_dump($this->projektname);
-        $query
-//                ->with(['projekt'])
-                ->andFilterWhere([
+
+        $query->andFilterWhere([
             'id' => $this->id,
-            'firma_id' => $this->firma_id,
             'projekt_id' => $this->projekt_id,
-            'haus_id' => $this->haus_id,
-            'nummer' => $this->nummer,
-            'kaeufer_id' => $this->kaeufer_id,
-//            'projekt.name' => $this->projektname
+            'reserviert' => $this->reserviert,
+            'verkauft' => $this->verkauft,
+            'rechnung_vertrieb' => $this->rechnung_vertrieb,
         ]);
 
-        $query->andFilterWhere(['like', 'besondere_regelungen_kaufvertrag', $this->besondere_regelungen_kaufvertrag])
-            ->andFilterWhere(['like', 'sonstige_anmerkungen', $this->sonstige_anmerkungen]);
+        $query->andFilterWhere(['like', 'plz', $this->plz])
+            ->andFilterWhere(['like', 'ort', $this->ort])
+            ->andFilterWhere(['like', 'strasse', $this->strasse])
+            ->andFilterWhere(['like', 'hausnr', $this->hausnr]);
 
         return $dataProvider;
     }

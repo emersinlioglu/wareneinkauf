@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Haus;
+use app\models\HausSearch;
 use app\models\Teileigentumseinheit;
 use app\models\Zaehlerstand;
 use yii\data\ActiveDataProvider;
@@ -34,11 +35,11 @@ class HausController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Haus::find(),
-        ]);
+        $searchModel = new HausSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
