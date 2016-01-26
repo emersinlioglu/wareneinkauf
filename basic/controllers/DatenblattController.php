@@ -47,6 +47,7 @@ class DatenblattController extends Controller
     public function actionCreate()
     {
         $modelDatenblatt = new Datenblatt;
+//        $modelsKaeufer = $modelDatenblatt->kaeufer;
         $modelsNachlass = [new Nachlass];
         $modelsZahlung = [new Zahlung];
 //        $modelsRoom = [[new Zahlung]];
@@ -136,6 +137,7 @@ class DatenblattController extends Controller
             'modelDatenblatt' => $modelDatenblatt,
             'modelsZahlung' => (empty($modelsZahlung)) ? [new Zahlung] : $modelsZahlung,
             'modelsNachlass' => (empty($modelsNachlass)) ? [new Nachlass] : $modelsNachlass,
+//            'modelKaeufer' => (empty($modelsNachlass)) ? [new Kaeufer()] : $modelsKaeufer,
 //            'modelsRoom' => (empty($modelsRoom)) ? [[new Room]] : $modelsRoom,
         ]);
     }

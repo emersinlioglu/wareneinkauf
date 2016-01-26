@@ -20,6 +20,7 @@ use app\models\Firma;
         </div>
     </div>
     
+    <?php if ($modelDatenblatt->id): ?>
     <div class="row">
         <div class="col-sm-2">
             <?= $form->field($modelDatenblatt, 'firma_id')->dropDownList(ArrayHelper::map(Firma::find()->all(), 'id', 'name'), ['prompt'=>'Firma auswählen']) ?>
@@ -37,7 +38,6 @@ use app\models\Firma;
             ?>
         </div>
     </div>
-    
     
     <div class="box-group" id="accordion">
     <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
@@ -109,10 +109,12 @@ use app\models\Firma;
             'modelDatenblatt'  => $modelDatenblatt,
         ]) ?>
     
+    <?php if($modelDatenblatt->kaeufer): ?>
     <?= $this->render('_kaeuferdaten', [
             'form' => $form,
-            'modelKaeufer'  => $modelKaeufer,
+            'modelKaeufer'  => $modelDatenblatt->kaeufer,
         ]) ?>    
+    <?php endif; ?>
     
     <div class="row">
         <div class="col-sm-10">
@@ -146,7 +148,8 @@ use app\models\Firma;
             <?= $form->field($modelDatenblatt, 'sonstige_anmerkungen')->textarea(['rows' => '5']) ?>
         </div>
     </div>
-    
+    <?php endif; ?>
+
     <div class="form-group" style="text-align: right;">
         <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
     </div>
