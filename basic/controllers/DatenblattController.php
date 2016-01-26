@@ -160,16 +160,16 @@ class DatenblattController extends Controller
             }
             if ($modelKaeufer->load(Yii::$app->request->post())) {
 
-                $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
-                foreach($datumFelder as $feld) {
-                    $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
-                    if ($datum) {
-                        $datum->setTime(0, 0, 0);
-                        $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
-                    } else {
-                        $modelKaeufer->{$feld} = '';
-                    }
-                }
+//                $datumFelder = ['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'];
+//                foreach($datumFelder as $feld) {
+//                    $datum = \DateTime::createFromFormat('d.m.Y', $modelKaeufer->{$feld}); 
+//                    if ($datum) {
+//                        $datum->setTime(0, 0, 0);
+//                        $modelKaeufer->{$feld} = $datum->format('Y-m-d H:i:s');
+//                    } else {
+//                        $modelKaeufer->{$feld} = '';
+//                    }
+//                }
                 // save
                 $modelKaeufer->save();
                 // assign käufer

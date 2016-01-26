@@ -1,5 +1,6 @@
 <?php 
-use kartik\datetime\DateTimePicker;
+//use kartik\datetime\DateTimePicker;
+use kartik\datecontrol\DateControl;
 
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
@@ -18,7 +19,7 @@ use kartik\datetime\DateTimePicker;
             <div class="box-body">
                 
                 
-    <!--<h3>Käuferdaten</h3>-->
+                <!--<h3>Käuferdaten</h3>-->
 
 		
                 <div class="row">
@@ -29,121 +30,161 @@ use kartik\datetime\DateTimePicker;
                 <div class="row">
                     <div class="col-sm-3">
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->beurkundung_am);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            echo '<label>Beurkundung am:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Kaeufer[beurkundung_am]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->beurkundung_am);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            echo '<label>Beurkundung am:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Kaeufer[beurkundung_am]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            echo $form->field($modelKaeufer, "beurkundung_am")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>
                     </div>
                     <div class="col-sm-3">
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->verbindliche_fertigstellung);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            echo '<label>verbindliche Fertigstellung:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Kaeufer[verbindliche_fertigstellung]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->verbindliche_fertigstellung);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            echo '<label>verbindliche Fertigstellung:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Kaeufer[verbindliche_fertigstellung]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            echo $form->field($modelKaeufer, "verbindliche_fertigstellung")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->uebergang_bnl);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            echo '<label>Übergang BNL:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Kaeufer[uebergang_bnl]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->uebergang_bnl);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            echo '<label>Übergang BNL:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Kaeufer[uebergang_bnl]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            echo $form->field($modelKaeufer, "uebergang_bnl")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>
                     </div>
                     <div class="col-sm-3">
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->abnahme_se);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            echo '<label>Abnahme SE:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Kaeufer[abnahme_se]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->abnahme_se);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            echo '<label>Abnahme SE:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Kaeufer[abnahme_se]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            echo $form->field($modelKaeufer, "abnahme_se")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>
                         <?php
-                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->abnahme_ge);
-                            if ($datum) {
-                                $datum = $datum->format('d.m.Y');
-                            } else {
-                                $datum = '';
-                            }
-                            echo '<label>Abnahme GE:</label>';
-                            echo DateTimePicker::widget([
-                                'name' => "Kaeufer[abnahme_ge]",
-                                'options' => ['placeholder' => 'Datum auswählen'],
-                                'convertFormat' => true,
-                                'value' => $datum,
-                                'pluginOptions' => [
-                                    'minView' => 'month',
-                                    'maxView' => 'month',
-                                    'viewSelect' => 'month',
-                                    'format' => 'dd.mm.yyyy',
-                                    'autoclose' => true,
-                                    'todayHighlight' => true
+//                            $datum = DateTime::createFromFormat('Y-m-d H:i:s', $modelKaeufer->abnahme_ge);
+//                            if ($datum) {
+//                                $datum = $datum->format('d.m.Y');
+//                            } else {
+//                                $datum = '';
+//                            }
+//                            echo '<label>Abnahme GE:</label>';
+//                            echo DateTimePicker::widget([
+//                                'name' => "Kaeufer[abnahme_ge]",
+//                                'options' => ['placeholder' => 'Datum auswählen'],
+//                                'convertFormat' => true,
+//                                'value' => $datum,
+//                                'pluginOptions' => [
+//                                    'minView' => 'month',
+//                                    'maxView' => 'month',
+//                                    'viewSelect' => 'month',
+//                                    'format' => 'dd.mm.yyyy',
+//                                    'autoclose' => true,
+//                                    'todayHighlight' => true
+//                                ]
+//                            ]);
+                            echo $form->field($modelKaeufer, "abnahme_ge")->widget(DateControl::classname(), [
+                                'type' => DateControl::FORMAT_DATE,
+                                'options' => [
+                                    'pluginOptions' => [
+                                        //'autoclose' => true
+                                    ]
                                 ]
                             ]);
                         ?>
