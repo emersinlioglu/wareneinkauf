@@ -8,62 +8,108 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+<!--                <p>ABG Projekt Manager</p>-->
+                <p><?php echo Yii::$app->user->username; ?></p>
+                <span><?php
 
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                if (Yii::$app->user->identity) {
+                    $roles = Yii::$app->user->identity->getRoles()->all();
+
+                    echo "Rollen: ";
+                    foreach ($roles as $key => $role) {
+                        echo $role->name . (count($roles) != ($key+1) ? ',' : ''); 
+                    }
+                }
+
+                ?></span>
+
             </div>
         </div>
 
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search..."/>
-              <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-            </div>
-        </form>
+
+        <?php
+        use webvimark\modules\UserManagement\components\GhostMenu;
+        use webvimark\modules\UserManagement\UserManagementModule;
+        use webvimark\modules\UserManagement\models\User;
+        /*
+
+        echo GhostMenu::widget([
+            'encodeLabels'=>false,
+            'activateParents'=>true,
+            'items' => [
+                [
+                    'label' => 'Backend routes',
+                    'items'=>UserManagementModule::menuItems()
+                ],
+                [
+                    'label' => 'Frontend routes',
+                    'items'=>[
+                        ['label'=>'Login', 'url'=>['/user-management/auth/login']],
+                        ['label'=>'Logout', 'url'=>['/user-management/auth/logout']],
+                        ['label'=>'Registration', 'url'=>['/user-management/auth/registration']],
+                        ['label'=>'Change own password', 'url'=>['/user-management/auth/change-own-password']],
+                        ['label'=>'Password recovery', 'url'=>['/user-management/auth/password-recovery']],
+                        ['label'=>'E-mail confirmation', 'url'=>['/user-management/auth/confirm-email']],
+                    ],
+                ],
+            ],
+        ]);
+        */
+        ?>
+        
         <!-- /.search form -->
 
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
-                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+
+                    //['label'=>'Login', 'url'=>['/user-management/auth/login']],
+                    //['label'=>'Logout', 'url'=>['/user-management/auth/logout']],
                     [
-                        'label' => 'Same tools',
+                        'label' => 'Benutzer Verwaltung',
+                        'icon' => 'fa fa-users',
+                        'url' => '#',
+                        'visible' => User::canRoute('/user-management/user/index', true),
+                        'items'=>UserManagementModule::menuItems(),
+                        'items' => [
+                            ['label' => 'Benutzer', 'icon' => 'fa fa-angle-double-right', 'url' => ['/user-management/user/index']],
+                            ['label' => 'Rollen', 'icon' => 'fa fa-angle-double-right', 'url' => ['/user-management/role/index']],
+                            ['label' => 'Berechtigungen', 'icon' => 'fa fa-angle-double-right', 'url' => ['/user-management/permission/index']],
+                            ['label' => 'Berechtigungsgruppen', 'icon' => 'fa fa-angle-double-right', 'url' => ['/user-management/auth-item-group/index']],
+                            ['label' => 'Besucher-Log', 'icon' => 'fa fa-angle-double-right', 'url' => ['/user-management/user-visit-log/index']],
+                        ]
+                    ],
+                    [
+                        'label' => 'Benutzer Profile',
+                        'icon' => 'fa fa-user',
+                        'url' => '#',
+                        'items' => [
+                            //['label'=>'Registration', 'url'=>['/user-management/auth/registration']],
+                            ['label'=>'Passwort ändern', 'url'=>['/user-management/auth/change-own-password']],
+                            //['label'=>'Passwort zurücksetzen', 'url'=>['/user-management/auth/password-recovery']],
+                            //['label'=>'E-Mail Bestätigung', 'url'=>['/user-management/auth/confirm-email']],
+                        ],
+                    ],
+
+                    
+                    ['label' => 'Firmen', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
+                    ['label' => 'Projekte', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
+                    ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
+                    ['label' => 'Datenblätter', 'icon' => 'fa fa-file-text text-blue','url' => ['/datenblatt/index']],
+                   
+                    [
+                        'label' => 'Einstellungen',
                         'icon' => 'fa fa-share',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
+                            ['label' => 'Einheitstypenverwaltung', 'icon' => 'fa fa-file-code-o', 'url' => ['/einheitstyp/index'],],
+                            
+                            
                         ],
                     ],
-                    ['label' => 'Firmen', 'url' => ['firma/index']],
-                    ['label' => 'Projekte', 'url' => ['projekt/index']],
-                    ['label' => 'Häuser', 'url' => ['haus/index']],
-                    ['label' => 'Datenblätter', 'url' => ['datenblatt/index']],
                 ],
             ]
         ) ?>

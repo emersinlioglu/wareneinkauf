@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "haus".
@@ -16,6 +17,7 @@ use Yii;
  * @property integer $reserviert
  * @property integer $verkauft
  * @property integer $rechnung_vertrieb
+ * @property integer $creator_user_id
  *
  * @property Datenblatt[] $datenblatts
  * @property Projekt $projekt
@@ -38,8 +40,8 @@ class Haus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projekt_id'], 'required'],
-            [['projekt_id', 'reserviert', 'verkauft', 'rechnung_vertrieb'], 'integer'],
+            [['creator_user_id'], 'required'],
+            [['projekt_id', 'firma_id', 'reserviert', 'verkauft', 'rechnung_vertrieb', 'creator_user_id'], 'integer'],
             [['plz', 'ort', 'strasse'], 'string', 'max' => 255],
             [['hausnr'], 'string', 'max' => 45]
         ];
@@ -53,6 +55,7 @@ class Haus extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'projekt_id' => Yii::t('app', 'Projekt ID'),
+            'firma_id' => Yii::t('app', 'Firma ID'),
             'plz' => Yii::t('app', 'Plz'),
             'ort' => Yii::t('app', 'Ort'),
             'strasse' => Yii::t('app', 'Strasse'),
@@ -60,6 +63,7 @@ class Haus extends \yii\db\ActiveRecord
             'reserviert' => Yii::t('app', 'Reserviert'),
             'verkauft' => Yii::t('app', 'Verkauft'),
             'rechnung_vertrieb' => Yii::t('app', 'Rechnung Vertrieb'),
+            'creator_user_id' => Yii::t('app', 'Ersteller ID'),
         ];
     }
 
@@ -79,6 +83,14 @@ class Haus extends \yii\db\ActiveRecord
         return $this->hasOne(Projekt::className(), ['id' => 'projekt_id']);
     }
 
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFirma()
+    {
+        return $this->hasOne(Firma::className(), ['id' => 'firma_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -93,5 +105,30 @@ class Haus extends \yii\db\ActiveRecord
     public function getZaehlerstands()
     {
         return $this->hasMany(Zaehlerstand::className(), ['haus_id' => 'id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTenummerHtml() {
+
+        $wohnungsTenummer = array();
+        $teNummers = array();
+        foreach ($this->teileigentumseinheits as $te) {
+            $teNummers[] = $te->te_nummer;
+            if ($te->einheitstyp_id == 1) {
+                $wohnungsTenummer[] = $te->te_nummer;
+            }
+        }
+        asort($teNummers);
+
+        foreach($teNummers as $key => $tenummer) {
+            if (in_array($tenummer, $wohnungsTenummer)) {
+                $teNummers[$key] = '<strong>' . $tenummer . '</strong>';
+            } else {
+                $teNummers[$key] = '<small>' . $tenummer . '</small>';
+            }
+        }
+        return implode('/ ', $teNummers);
     }
 }

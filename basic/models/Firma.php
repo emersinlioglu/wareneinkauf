@@ -50,6 +50,18 @@ class Firma extends \yii\db\ActiveRecord
      */
     public function getProjekts()
     {
-        return $this->hasMany(Projekt::className(), ['firma_id' => 'id']);
+        $query = $this->hasMany(Projekt::className(), ['firma_id' => 'id']);
+
+        // filter by creator_user_id or projekt_user assignments
+        if (!Yii::$app->user->isSuperadmin) {
+            $query->leftJoin('projekt_user pu', 'pu.projekt_id = projekt.id');
+            $query->andFilterWhere(['or',
+                ['projekt.creator_user_id' => Yii::$app->user->identity->getId()],
+                ['pu.user_id' => Yii::$app->user->identity->getId()],
+                ['projekt.creator_user_id' => Yii::$app->user->identity->getId()],
+            ]);
+        }
+
+        return $query;
     }
 }
