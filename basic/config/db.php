@@ -1,24 +1,26 @@
 <?php
 
-//if (getenv('YII_ENV') == 'development') {
+$dbConfig = [];
 
-    // development
-    return [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=localhost;dbname=abgproject',
-        'username' => 'root',
-        'password' => 'Sicher4uns',
-        'charset' => 'utf8',
-    ];
+switch (getenv('APPLICATION_ENV')) {
+    case 'development':
+        $dbConfig = [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=abgproject',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ];
+        break;
+    default:
+        $dbConfig = [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=abgproject',
+            'username' => 'root',
+            'password' => 'Sicher4uns',
+            'charset' => 'utf8',
+        ];
+        break;
+}
 
-//} else {
-//
-//    // default
-//    return [
-//        'class' => 'yii\db\Connection',
-//        'dsn' => 'mysql:host=localhost;dbname=hausangebot',
-//        'username' => 'root',
-//        'password' => 'Sri6lanka',
-//        'charset' => 'utf8',
-//    ];
-//}
+return $dbConfig;
