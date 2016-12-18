@@ -12,6 +12,16 @@ use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
 /* @var $model app\models\Haus */
 /* @var $form yii\widgets\ActiveForm */
+
+
+// This is required to include the widget.
+MaskMoney::widget([
+    'name' => 'currency',
+    'value' => 122423.18,
+    'pluginOptions' => [
+        'prefix' => '$ ',
+    ],
+]);
 ?>
 
 <?php
