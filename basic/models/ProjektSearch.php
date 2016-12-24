@@ -24,7 +24,7 @@ public $firma_nr;
         return [
             [['id', 'firma_id'], 'integer'],
             [['name'], 'safe'],
-            [['firma', 'firma_name','firma_nr'], 'safe'],
+            [['firma', 'firma_name','firma_nr', 'strasse', 'hausnr', 'plz', 'ort'], 'safe'],
         ];
     }
 
@@ -90,11 +90,14 @@ public $firma_nr;
             ]);
         }
 
-        $query->andFilterWhere(['like', 'projekt.name', $this->name])
+        $query
+            ->andFilterWhere(['like', 'projekt.strasse', $this->strasse])
+            ->andFilterWhere(['like', 'projekt.hausnr', $this->hausnr])
+            ->andFilterWhere(['like', 'projekt.plz', $this->plz])
+            ->andFilterWhere(['like', 'projekt.ort', $this->ort])
+            ->andFilterWhere(['like', 'projekt.name', $this->name])
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
             ->andFilterWhere(['like', 'firma.nr', $this->firma_nr]);
-
-        //error_log($query->createCommand()->getRawSql());
 
         return $dataProvider;
     }

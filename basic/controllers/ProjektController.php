@@ -87,13 +87,21 @@ class ProjektController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && !$model->isProjektExistingForFirma() && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionProjektattributes($id) {
+
+        $model = $this->findModel($id);
+
+        \Yii::$app->response->format = 'json';
+        return $model->attributes;
     }
 
     /**

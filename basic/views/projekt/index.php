@@ -41,7 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'firma.nr',
                 'label' => 'Firmen Nr.'
             ],
-
+            'strasse',
+            'hausnr',
+            'plz',
+            'ort',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [

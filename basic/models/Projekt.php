@@ -12,6 +12,10 @@ use Yii;
  * @property string $name
  * @property string $firma_id
  * @property string $creator_user_id
+ * @property string $plz
+ * @property string $ort
+ * @property string $strasse
+ * @property string $hausnr
  *
  * @property Haus[] $hauses
  * @property Firma $firma
@@ -35,6 +39,8 @@ class Projekt extends \yii\db\ActiveRecord
             [['firma_id', 'creator_user_id'], 'required'],
             [['firma_id', 'creator_user_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['plz', 'ort', 'strasse'], 'string', 'max' => 255],
+            [['hausnr'], 'string', 'max' => 45]
         ];
     }
 
@@ -48,6 +54,10 @@ class Projekt extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Projektname'),
             'firma_id' => Yii::t('app', 'Firma ID'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
+            'plz' => Yii::t('app', 'Plz'),
+            'ort' => Yii::t('app', 'Ort'),
+            'strasse' => Yii::t('app', 'Strasse'),
+            'hausnr' => Yii::t('app', 'Hausnr'),
         ];
     }
 

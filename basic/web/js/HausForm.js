@@ -31,6 +31,22 @@ var HausForm = function () {
             //}
         });
         _form.find('[name="Haus[projekt_id]"]').change(function () {
+
+            var url = '?r=projekt%2Fprojektattributes&id=' + _form.find('[name="Haus[projekt_id]"] option:selected').val();
+            $.get(
+                url,
+                function (data) {
+
+                    if (!$('#haus-strasse').val() && !$('#haus-hausnr').val() && !$('#haus-plz').val() && !$('#haus-ort').val()) {
+
+                        $('#haus-strasse').val(data.strasse);
+                        $('#haus-hausnr').val(data.hausnr);
+                        $('#haus-plz').val(data.plz);
+                        $('#haus-ort').val(data.ort);
+                    }
+                }
+            );
+
             _form.find('[name="chooseFirma"]').click();
 
         });

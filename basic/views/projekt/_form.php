@@ -30,8 +30,23 @@ $this->registerJs('
 
 	<?= $form->errorSummary($model); ?>
 
-	<?= $form->field($model, 'firma_id')->dropDownList(ArrayHelper::map(Firma::find()->all(), 'id', 'name'))->label('Firma') ?>
- 	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+	<div class="row">
+		<div class="col-sm-6">
+			<?= $form->field($model, 'firma_id')->dropDownList(ArrayHelper::map(Firma::find()->all(), 'id', 'name'))->label('Firma') ?>
+			<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-3">
+			<?= $form->field($model, 'strasse')->textInput(['tabindex' => 10]) ?>
+			<?= $form->field($model, 'plz')->textInput(['tabindex' => 12]) ?>
+		</div>
+		<div class="col-sm-3">
+			<?= $form->field($model, 'hausnr')->textInput(['tabindex' => 11]) ?>
+			<?= $form->field($model, 'ort')->textInput(['tabindex' => 13]) ?>
+		</div>
+	</div>
 
 	
 	<?php 
@@ -56,7 +71,10 @@ $this->registerJs('
 
 
     <?php if($model->id): ?>
-	    <div class="col-md-6">
+	<!-- row -->
+	<div class="row">
+
+		<div class="col-md-6">
 			<div class="box-group" id="accordion">
 			    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
 			    <div class="panel box box-primary">
@@ -72,17 +90,17 @@ $this->registerJs('
 			            <div class="box-body">
 
 			            	<label for="projekt-users">Suche: </label>
-	  						<input id="projekt-users" 
+	  						<input id="projekt-users"
 	  							data-search-url="<?= \yii\helpers\Url::to(['projekt/searchusers', ]);?>"
 	  							data-add-user-assignment="<?= \yii\helpers\Url::to(['projekt/adduserassignment', 'id' => $model->id]);?>"
 	  							>
-			                
+
 			                <table class="assigned-users">
 			                <?php foreach($model->users as $key => $user): ?>
 			                	<tr>
 			                		<td>
 				                		<?php
-				                			$url = \yii\helpers\Url::to(['projekt/removeuserassignment', 
+				                			$url = \yii\helpers\Url::to(['projekt/removeuserassignment',
 				                				'projektId' => $model->id,
 				                				'userId' => $user->id,
 			                				]);
@@ -90,7 +108,7 @@ $this->registerJs('
 				                		?>
 			                		</td>
 			                		<td><?= $user->username ?></td>
-			                	</tr>	 
+			                	</tr>
 			                <?php endforeach;  ?>
 			                </table>
 
@@ -99,6 +117,9 @@ $this->registerJs('
 			    </div>
 			</div>
 		</div>
+
+	</div>
+	<!-- /row -->
 	<?php endif; ?>
 
 </div>
