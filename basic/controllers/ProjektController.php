@@ -68,7 +68,7 @@ class ProjektController extends Controller
         $model->creator_user_id = Yii::$app->user->getId();
         $data = Yii::$app->request->post();
 
-        if ($model->load($data) && $model->save()) {
+        if ($model->load($data) && !$model->isProjektExistingForFirma() && $model->save()) {
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -87,7 +87,7 @@ class ProjektController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && !$model->isProjektExistingForFirma() && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

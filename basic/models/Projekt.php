@@ -74,4 +74,20 @@ class Projekt extends \yii\db\ActiveRecord
         return $this->hasMany(User::className(), ['id' => 'user_id'])
           ->viaTable('projekt_user', ['projekt_id' => 'id']);
     }
+
+    /**
+     * Checks if projekt is existing for the firma
+     * @return bool
+     */
+    public function isProjektExistingForFirma() {
+
+        $count = self::find()->where(array('name' => $this->name, 'firma_id' => $this->firma_id))->count();
+        if ($count > 0) {
+            $this->addError('name', 'Die Firma hat bereits ein Projekt unter dem Namen.');
+            return true;
+        }
+
+        return false;
+    }
+
 }
