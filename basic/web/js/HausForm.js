@@ -19,12 +19,21 @@ var HausForm = function () {
                 url: url,
                 success: function (options) {
                     projectSelect.empty();
+
+                    // $option = $("<option>")
+                    //     .attr("value", '')
+                    //     .text('Bitte wählen');
+                    // projectSelect.append($option);
                     $.each(options, function (index, option) {
                         $option = $("<option></option>")
                             .attr("value", option.value)
                             .text(option.text);
                         projectSelect.append($option);
                     });
+
+                    projectSelect.find('option').eq(0).prop('selected', 'selected');
+                    projectSelect.trigger('change');
+
                 }
             });
 
