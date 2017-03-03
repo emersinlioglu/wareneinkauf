@@ -25,6 +25,8 @@ class DatenblattSearch extends Datenblatt
     public $kaeufer_debitornr;
     public $kaeufer_nachname;
     public $kaeufer_vorname;
+    public $kaeufer_nachname2;
+    public $kaeufer_vorname2;
     public $projekt;
     public $projekt_name;
     public $firma;
@@ -38,7 +40,7 @@ class DatenblattSearch extends Datenblatt
             [['id', 'firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
             [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'safe'],
             [['haus', 'haus_strasse', 'haus_plz', 'haus_ort', 'haus_hausnr', 'te_nummer'], 'safe'],
-            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_nachname', 'kaeufer_vorname'], 'safe'],
+            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr'], 'safe'],
         ];
     }
@@ -95,8 +97,6 @@ class DatenblattSearch extends Datenblatt
         //return $dataProvider
 
         $dataProvider->sort->attributes['haus_strasse'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['haus.strasse' => SORT_ASC],
             'desc' => ['haus.strasse' => SORT_DESC],
         ];
@@ -112,38 +112,33 @@ class DatenblattSearch extends Datenblatt
             'asc' => ['haus.plz' => SORT_ASC],
             'desc' => ['haus.plz' => SORT_DESC],
         ];
-
         $dataProvider->sort->attributes['kaeufer_nachname'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['kaeufer.nachname' => SORT_ASC],
             'desc' => ['kaeufer.nachname' => SORT_DESC],
         ];
-
         $dataProvider->sort->attributes['kaeufer_vorname'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['kaeufer.vorname' => SORT_ASC],
             'desc' => ['kaeufer.vorname' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['kaeufer_nachname2'] = [
+            'asc' => ['kaeufer.nachname2' => SORT_ASC],
+            'desc' => ['kaeufer.nachname2' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_vorname2'] = [
+            'asc' => ['kaeufer.vorname2' => SORT_ASC],
+            'desc' => ['kaeufer.vorname2' => SORT_DESC],
+        ];
+
         $dataProvider->sort->attributes['kaeufer_debitornr'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['kaeufer.debitor_nr' => SORT_ASC],
             'desc' => ['kaeufer.debitor_nr' => SORT_DESC],
         ];
-
         $dataProvider->sort->attributes['projekt_name'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['projekt.name' => SORT_ASC],
             'desc' => ['projekt.name' => SORT_DESC],
         ];
-
         $dataProvider->sort->attributes['firma_name'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['firma.name' => SORT_ASC],
             'desc' => ['firma.name' => SORT_DESC],
         ];
@@ -186,6 +181,8 @@ class DatenblattSearch extends Datenblatt
             ->andFilterWhere(['like', 'kaeufer.debitor_nr', $this->kaeufer_debitornr])
             ->andFilterWhere(['like', 'kaeufer.nachname', $this->kaeufer_nachname])
             ->andFilterWhere(['like', 'kaeufer.vorname', $this->kaeufer_vorname])
+            ->andFilterWhere(['like', 'kaeufer.nachname2', $this->kaeufer_nachname2])
+            ->andFilterWhere(['like', 'kaeufer.vorname2', $this->kaeufer_vorname2])
             ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
             ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
