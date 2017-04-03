@@ -66,6 +66,9 @@ use kartik\money\MaskMoney;
                                 'options' => [
                                     'id' => $key . '-betrag-id',
                                 ],
+                                'pluginOptions' => [
+                                    'allowNegative' => true
+                                ]
                             ])
                         ?>
                     </td>

@@ -78,7 +78,11 @@ var DatenblattForm = function () {
 
             var inputDisplay = $(elm);
             var input = inputDisplay.next();
-            var maskMoneyConfig = {"decimal":",","thousands":"."};
+            var maskMoneyConfig = {
+                decimal: ",",
+                thousands: ".",
+                allowNegative: true
+            };
 
             inputDisplay.maskMoney(maskMoneyConfig);
             var val = parseFloat(input.val());

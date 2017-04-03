@@ -63,4 +63,5 @@ return array(
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'anmaslov\\autocomplete\\' => array($vendorDir . '/anmaslov/yii2-autocomplete-widget/src'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
+    'miloschuman\\highcharts\\' => array($vendorDir . '/miloschuman/yii2-highcharts-widget/src'),
 );

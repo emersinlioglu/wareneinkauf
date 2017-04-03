@@ -100,4 +100,59 @@ class Projekt extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * Gesamt wohnfläche eines Projektes
+     *
+     * @param null $projektId
+     * @return array
+     */
+    public function getWohnflaechenData($projektId = null) {
+
+        $sql = '
+            SELECT
+              et.name as projektName,
+              SUM(te.wohnflaeche) as summeWohnflaeche,
+              p.id as projektId,
+              et.id as einheitstypId
+            FROM
+              einheitstyp et
+            LEFT JOIN teileigentumseinheit te on te.einheitstyp_id = et.id
+            LEFT JOIN haus h on h.id = te.haus_id
+            LEFT JOIN projekt p on p.id = h.projekt_id
+            WHERE
+              p.id = :projektId
+            GROUP BY et.id
+        ';
+        $rows = Yii::$app->getDb()->createCommand($sql, [':projektId' => $projektId])->queryAll();
+
+        return $rows;
+    }
+
+    /**
+     * Gesamt wohnfläche von allen Projekten
+     *
+     * @return array
+     */
+    public function getWohnflaeschenDataFuerAlleProjekte() {
+        $sql = '
+            SELECT
+              p.id as projektId,
+              p.name as name,
+              (
+                SELECT 
+                  SUM(te.wohnflaeche)
+                FROM 
+                  teileigentumseinheit te
+                LEFT JOIN haus h on h.id = te.haus_id
+                WHERE 
+                  h.projekt_id = p.id
+              ) as summeWohnflaeche
+            FROM
+              projekt p
+        ';
+        $rows = Yii::$app->getDb()->createCommand($sql)->queryAll();
+
+        return $rows;
+    }
+
 }

@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Einheitstyp;
+use app\models\Projekt;
+use app\models\TeileigentumseinheitSearch;
+use miloschuman\highcharts\Highcharts;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -54,7 +58,31 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $einheitstypModel = new Einheitstyp();
+        $projektModel     = new Projekt();
+
+        $verkaufsentwicklungData = [];
+        $verkaufsentwicklungDataProProjekt = [];
+
+        foreach ($projektModel->getWohnflaeschenDataFuerAlleProjekte() as $key => $row) {
+            $verkaufsentwicklungData[] = [
+                'name'      => $row['name'],
+                'y'         => (float) $row['summeWohnflaeche'],
+            ];
+
+            $projektData = $einheitstypModel->getProjektVerkaufsentwicklungData($row['projektId']);
+            foreach ($projektData as $pKey => $pData) {
+                $verkaufsentwicklungDataProProjekt[] = [
+                    'name'      => $pData['projektName'],
+                    'y'         => (float) $pData['summeWohnflaeche'],
+                ];
+            }
+        }
+
+        return $this->render('index', [
+            'verkaufsentwicklungData'           => $verkaufsentwicklungData,
+            'verkaufsentwicklungDataProProjekt' => $verkaufsentwicklungDataProProjekt
+        ]);
     }
 
     public function actionLogin()
