@@ -5,6 +5,8 @@ use kartik\dynagrid\DynaGrid;
 use kartik\grid\GridView;
 use webvimark\modules\UserManagement\models\User;
 use kartik\dynagrid\Module;
+use yii\widgets\ActiveForm;
+
 
 $gridColumns = [
     //['class' => 'yii\grid\SerialColumn'],
@@ -356,30 +358,79 @@ echo DynaGrid::widget([
         'id'=>'DatenblattSearch',
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
-            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} <a href="#">Serienbrief</a>'
+            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
+            . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+//            'after' => '<a href="#">AAAAA</a>',
         ],
-	'autoXlFormat'=>true,
-        'export'=>[
-            //'fontAwesome'=>true,
-            'showConfirmAlert'=>false,
-            'target'=>'_BLANK'
+//        'toolbar' =>  [
+//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} <a href="#">AAAAA</a>',
+//            ['content'=>'{dynagridFilter}{dynagridSort}{dynagrid}'],
+//            ['content'=>'<a href="#">AAAAA</a>'],
+//            '{export}',
+//            '{togall}',
+//        ],
+        'autoXlFormat'=>true,
+            'export'=>[
+                //'fontAwesome'=>true,
+                'showConfirmAlert'=>false,
+                'target'=>'_BLANK'
+            ],
+            /*
+            'toolbar' =>  [
+                [
+                    'content'=> Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['datenblatt/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Zurücksetzen'])
+                ],
+                [
+                    'content'=>'{dynagridFilter}{dynagridSort}{dynagrid}'
+                ],
+                '{export}',
+            ]
+            */
         ],
-        /*
-        'toolbar' =>  [
-            [
-                'content'=> Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['datenblatt/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Zurücksetzen'])
-            ],
-            [
-                'content'=>'{dynagridFilter}{dynagridSort}{dynagrid}'
-            ],
-            '{export}',
-        ]
-        */
-    ],
-    'options'=>[
-        'id' => 'dynagrid-datenblatt',
-        'class' => User::hasPermission('export') ? '' : 'no-export'
+        'options'=>[
+            'id' => 'dynagrid-datenblatt',
+            'class' => User::hasPermission('export') ? '' : 'no-export'
 
-        //'defaultPageSize' => 0,
-	] // a unique identifier is important
-]);
+            //'defaultPageSize' => 0,
+        ] // a unique identifier is important
+    ]
+);
+
+?>
+
+
+
+<?php $form = ActiveForm::begin([
+    'action' => ['abschlag/serienbrief'],
+    'method' => 'post',
+    'options' => array(
+        'class' => 'datenblatt-selection-form',
+    )
+]); ?>
+    <?= Html::submitButton('submit', ['name' => 'submit', 'value' => 'selection']) ?>
+<?php ActiveForm::end(); ?>
+
+<?php
+$this->registerJs(
+    "
+    $(function() {
+        $('.serienbrief').click(function() {
+            
+            $('#DatenblattSearch-container [name=\"selection[]\"]').each(function(i, elm) {
+                
+                var input = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'datenblatts[]')
+                    .val(elm.value);
+                    
+                $('.datenblatt-selection-form').prepend(input);
+            });
+            
+            $('.datenblatt-selection-form button').click();
+        })
+    });
+    "
+);
+?>

@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
         'js/DatenblattForm.js',
         'js/HausForm.js',
         'js/ProjektForm.js',
+        'js/Serienbrief.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

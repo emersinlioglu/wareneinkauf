@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Datenblatt;
 use Yii;
 use app\models\Abschlag;
 use app\models\AbschlagSearch;
@@ -25,6 +26,116 @@ class AbschlagController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionSerienbrief()
+    {
+        $datenblattIds = [];
+        $maxCountAbschlags = null;
+
+        $data = array();
+        if (Yii::$app->request->isPost) {
+
+            $submit = Yii::$app->request->post('submit', null);
+            $datenblattIds = Yii::$app->request->post('datenblatts', []);
+
+            switch ($submit) {
+                case 'selection':
+                    foreach ($datenblattIds as $datenblattId) {
+                        /** @var $model Datenblatt */
+                        if (($model = Datenblatt::findOne($datenblattId)) !== null) {
+                            if (is_null($maxCountAbschlags)) {
+                                $maxCountAbschlags = count($model->abschlags);
+                            } else {
+                                $maxCountAbschlags = max($maxCountAbschlags, count($model->abschlags));
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $abschlagOptions = [];
+        for($i=1; $i <= $maxCountAbschlags; $i++) {
+            $abschlagOptions[$i] = 'Abschlag ' . $i;
+        }
+
+        return $this->render('serienbrief', [
+            'abschlagOptions' => $abschlagOptions,
+            'datenblattIds' => $datenblattIds,
+        ]);
+    }
+
+    public function actionUpdateAbschlagDatum()
+    {
+        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
+        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        if (!$abschlagNr) {
+            echo "Bitte wählen Sie einen Abschlag";
+            return;
+        }
+
+        $data = [];
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+
+            /** @var Abschlag $abschlag */
+            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
+
+                $abschlag->mail_datum = date('Y-m-d');
+                if ($abschlag->save()) {
+                    $data['success'][] = $datenblatt->id;
+                } else {
+                    $data['error'][] = $datenblatt->id;
+                }
+            } else {
+                $data['missing'][] = $datenblatt->id;
+            }
+        }
+
+        return $this->renderPartial('updateAbschlagDatum', [
+            'data' => $data,
+        ]);
+    }
+
+    public function actionSendAbschlagMails()
+    {
+//        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
+//        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+//        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+//
+//        if (!$abschlagNr) {
+//            echo "Bitte wählen Sie einen Abschlag";
+//            return;
+//        }
+//
+//        $data = [];
+//        /** @var Datenblatt $datenblatt */
+//        foreach ($datenblatts as $datenblatt) {
+//
+//            /** @var Abschlag $abschlag */
+//            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
+//                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
+//
+//                $abschlag->mail_datum = date('Y-m-d');
+//                if ($abschlag->save()) {
+//                    $data['success'][] = $datenblatt->id;
+//                } else {
+//                    $data['error'][] = $datenblatt->id;
+//                }
+//            } else {
+//                $data['missing'][] = $datenblatt->id;
+//            }
+//        }
+
+        return $this->renderPartial('sendAbschlagMails', [
+            'data' => $data,
+        ]);
     }
 
     /**
