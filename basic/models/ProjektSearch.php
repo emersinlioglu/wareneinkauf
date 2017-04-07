@@ -24,7 +24,7 @@ public $firma_nr;
         return [
             [['id', 'firma_id'], 'integer'],
             [['name'], 'safe'],
-            [['firma', 'firma_name','firma_nr', 'strasse', 'hausnr', 'plz', 'ort'], 'safe'],
+            [['firma', 'firma_name','firma_nr', 'strasse', 'hausnr', 'plz', 'ort', 'mail_header', 'mail_footer'], 'safe'],
         ];
     }
 
@@ -97,7 +97,10 @@ public $firma_nr;
             ->andFilterWhere(['like', 'projekt.ort', $this->ort])
             ->andFilterWhere(['like', 'projekt.name', $this->name])
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
-            ->andFilterWhere(['like', 'firma.nr', $this->firma_nr]);
+            ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
+            ->andFilterWhere(['like', 'projekt.mail_header', $this->mail_header])
+            ->andFilterWhere(['like', 'projekt.mail_footer', $this->mail_footer])
+        ;
 
         return $dataProvider;
     }

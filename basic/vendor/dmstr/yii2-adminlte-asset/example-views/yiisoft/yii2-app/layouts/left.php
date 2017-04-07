@@ -106,7 +106,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Einheitstypenverwaltung', 'icon' => 'fa fa-file-code-o', 'url' => ['/einheitstyp/index'],],
-                            ['label' => 'Mail-Vorlagen', 'icon' => 'fa fa-file-code-o', 'url' => ['/mail-vorlage/index'],],
+                            ['label' => 'Vorlagen', 'icon' => 'fa fa-file-code-o', 'url' => ['/vorlage/index'],],
 
                             
                         ],

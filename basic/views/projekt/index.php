@@ -45,6 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'hausnr',
             'plz',
             'ort',
+            'mail_header',
+            'mail_footer',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [

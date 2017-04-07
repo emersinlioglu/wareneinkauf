@@ -2,7 +2,7 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use app\models\MailVorlage;
+use app\models\Vorlage;
 $this->title = 'Serienbriefe';
 ?>
 
@@ -50,7 +50,7 @@ $this->registerJs('
                     'action' => ['abschlag/update-abschlag-datum'],
                     'method' => 'post',
                     'options' => array(
-                        'class' => 'sendAbschlagMailsForm',
+                        'class' => 'updateAbschlagDatumForm',
                     )
                 ]);
                 ?>
@@ -99,10 +99,11 @@ $this->registerJs('
 
                 <?php
                 $form = ActiveForm::begin([
-                    'action' => ['abschlag/mailselected'],
-                    'method' => 'post',
+                    'action' => ['abschlag/download-als-pdf'],
+                    'method' => 'get',
                     'options' => array(
-                        'class' => '',
+                        'class' => 'downloadAlsPdfForm',
+                        'target'=>'_blank'
                     )
                 ]);
                 ?>
@@ -117,8 +118,9 @@ $this->registerJs('
                         <div class="form-group">
                             <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                             <?= Html::dropDownList(
-                                'abschlag', null,
-                                ArrayHelper::map(MailVorlage::findAll('1'), 'id', 'name'),
+                                'vorlage',
+                                null,
+                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
                                 [
                                     'class' => 'form-control',
                                     'prompt'=>'Vorlage auswählen'
@@ -164,10 +166,10 @@ $this->registerJs('
 
                 <?php
                 $form = ActiveForm::begin([
-                    'action' => ['abschlag/mailselected'],
+                    'action' => ['abschlag/send-abschlag-mails'],
                     'method' => 'post',
                     'options' => array(
-                        'class' => '',
+                        'class' => 'sendAbschlagMailsForm',
                     )
                 ]);
                 ?>
@@ -183,7 +185,7 @@ $this->registerJs('
                             <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                             <?= Html::dropDownList(
                                 'abschlag', null,
-                                ArrayHelper::map(MailVorlage::findAll('1'), 'id', 'name'),
+                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
                                 [
                                     'class' => 'form-control',
                                     'prompt'=>'Vorlage auswählen'
@@ -215,7 +217,7 @@ $this->registerJs('
 </div>
 
 
-<button type="button" class="open-modal-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal">Open modal</button>
+<button type="button" class="open-modal-btn btn btn-primary hide" data-toggle="modal" data-target="#exampleModal">Open modal</button>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">

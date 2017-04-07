@@ -34,6 +34,7 @@ class AppAsset extends AssetBundle
         'js/HausForm.js',
         'js/ProjektForm.js',
         'js/Serienbrief.js',
+        'js/tinymce/tinymce.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Firma;
+//use modernkernel\tinymce\TinyMce;
 
 use webvimark\modules\UserManagement\models\User;
 use webvimark\modules\UserManagement\models\rbacDB\Role;
@@ -16,11 +17,17 @@ use webvimark\modules\UserManagement\models\rbacDB\Role;
 <?php
 $this->registerJs('
     $(function(){
-
         new ProjektForm();
-
-    });'
-);
+    });
+    
+    tinymce.init({ 
+    	selector:".tinymce",
+		menubar:false,
+		statusbar: false,
+        plugins: "table",
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect"
+	});
+');
 ?>
 
 <div class="projekt-form">
@@ -45,6 +52,16 @@ $this->registerJs('
 		<div class="col-sm-3">
 			<?= $form->field($model, 'hausnr')->textInput(['tabindex' => 11]) ?>
 			<?= $form->field($model, 'ort')->textInput(['tabindex' => 13]) ?>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			<?= $form->field($model, 'mail_header')
+				->textarea(['tabindex' => 14, 'class' => 'tinymce', 'rows' => 6])
+			?>
+			<?= $form->field($model, 'mail_footer')
+				->textarea(['tabindex' => 15, 'class' => 'tinymce', 'rows' => 6]) ?>
 		</div>
 	</div>
 

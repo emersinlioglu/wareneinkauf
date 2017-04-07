@@ -10,6 +10,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
+
 
 /**
  * AbschlagController implements the CRUD actions for Abschlag model.
@@ -87,7 +89,7 @@ class AbschlagController extends Controller
             if (isset($datenblatt->abschlags[$abschlagNr-1])) {
                 $abschlag = $datenblatt->abschlags[$abschlagNr-1];
 
-                $abschlag->mail_datum = date('Y-m-d');
+                $abschlag->erstell_datum = date('Y-m-d');
                 if ($abschlag->save()) {
                     $data['success'][] = $datenblatt->id;
                 } else {
@@ -105,16 +107,21 @@ class AbschlagController extends Controller
 
     public function actionSendAbschlagMails()
     {
-//        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
-//        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
-//        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
-//
-//        if (!$abschlagNr) {
-//            echo "Bitte wählen Sie einen Abschlag";
-//            return;
-//        }
-//
-//        $data = [];
+        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
+        $vorlageId = Yii::$app->request->getQueryParam('vorlage', null);
+        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        if (!$abschlagNr) {
+            echo "Bitte wählen Sie einen Abschlag";
+            return;
+        }
+        if (!$vorlageId) {
+            echo "Bitte wählen Sie eine Vorlage";
+            return;
+        }
+
+        $data = [];
 //        /** @var Datenblatt $datenblatt */
 //        foreach ($datenblatts as $datenblatt) {
 //
@@ -122,7 +129,7 @@ class AbschlagController extends Controller
 //            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
 //                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
 //
-//                $abschlag->mail_datum = date('Y-m-d');
+//                $abschlag->erstell_datum = date('Y-m-d');
 //                if ($abschlag->save()) {
 //                    $data['success'][] = $datenblatt->id;
 //                } else {
@@ -136,6 +143,72 @@ class AbschlagController extends Controller
         return $this->renderPartial('sendAbschlagMails', [
             'data' => $data,
         ]);
+    }
+
+    public function actionDownloadAlsPdf()
+    {
+        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
+        $vorlageId = Yii::$app->request->getQueryParam('vorlage', null);
+        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        if (!$abschlagNr) {
+            echo "Bitte wählen Sie einen Abschlag";
+            return;
+        }
+        if (!$vorlageId) {
+            echo "Bitte wählen Sie eine Vorlage";
+            return;
+        }
+
+        $pdfContents = [];
+        /** @var Datenblatt $datenblatt */
+        foreach($datenblatts as $datenblatt) {
+
+            if (isset($datenblatt->abschlags[$abschlagNr])) {
+
+                $abschlag = $datenblatt->abschlags[$abschlagNr];
+
+                $abschlag->vorlage_id = $vorlageId;
+                $abschlag->save();
+
+                $pdfContents[] = $this->renderPartial('pdf', [
+                    'abschlag' => $abschlag,
+                ]);
+            }
+        }
+
+        $content = implode(
+            '<div class="wrapper" style="page-break-before:always;"></div>',
+            $pdfContents
+        );
+
+        //$headerHtml = $this->renderPartial('_pdf_header', ['model' => $modelDatenblatt, 'pdfLogo' => $pdfLogo]);
+
+        //get your html raw content without layouts
+        // $content = $this->renderPartial('view');
+        //set up the kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            'content' => $content,
+
+            //'mode'=> Pdf::MODE_CORE,
+            'mode' => Pdf::MODE_BLANK,
+            'format' => Pdf::FORMAT_A4,
+            'defaultFontSize' => 10.0,
+            'orientation' => Pdf::FORMAT_A4,
+            'destination' => Pdf::DEST_BROWSER,
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssInline' => ' tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}',
+            //'options'=> ['title'=> 'Datenblatt'],
+            //'marginTop' => '40',
+            'methods' => [
+                //'setHeader' => ['Erstellt am: ' . date("d.m.Y")],
+                //'setHeader' => [$headerHtml],
+                //'setFooter' => ['Erstellt am :' . date("d.m.Y") . '| |' . 'Seite {PAGENO} / {nb}'],
+            ]
+        ]);
+
+        return $pdf->render();
     }
 
     /**

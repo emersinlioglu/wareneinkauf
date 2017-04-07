@@ -1,10 +1,10 @@
 <?php
 if (isset($data['success'])) {
-    echo "<h4>Erfolgreich</h4>";
+    echo "<h4>Erfolgreich aktualisiert:</h4>";
     echo implode(', ', $data['success']);
 }
 if (isset($data['error'])) {
-    echo "<h4>Fehlerhaft</h4>";
+    echo "<h4>Fehlerhaft:</h4>";
     echo implode(', ', $data['error']);
 }
 if (isset($data['missing'])) {
