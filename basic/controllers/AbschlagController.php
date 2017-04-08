@@ -137,7 +137,7 @@ class AbschlagController extends Controller
             /** @var Abschlag $abschlag */
             if (isset($datenblatt->abschlags[$abschlagNr])) {
                 $abschlag = $datenblatt->abschlags[$abschlagNr];
-var_dump($abschlag->id);
+
                 if (is_null($abschlag->mail_gesendet)) {
 
                     $abschlag->vorlage_id = $vorlageId;
