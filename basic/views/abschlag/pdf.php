@@ -6,12 +6,6 @@
     <?= $abschlag->getPdfHeader() ?>
 </div>
 
-<div class="date" style="text-align: right;">
-    <?= Yii::$app->formatter->asDate($abschlag->erstell_datum) ?>
-    <br />
-    <br />
-</div>
-
 <div class="content">
     <?= $abschlag->getPdfContent() ?>
 </div>

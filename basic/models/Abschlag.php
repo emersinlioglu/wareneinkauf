@@ -102,6 +102,14 @@ class Abschlag extends \yii\db\ActiveRecord
         $datenblatt = $this->datenblatt;
         $projekt = $datenblatt->projekt;
 
+        $abschlagNr = 0;
+        foreach($datenblatt->abschlags as $abschlag) {
+            $abschlagNr++;
+            if($abschlag->id == $this->id) {
+                break;
+            }
+        }
+
         $replaceData = [
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
@@ -109,6 +117,9 @@ class Abschlag extends \yii\db\ActiveRecord
             '[wohnung-nr]' => $datenblatt->haus->hausnr,
             '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => $this->kaufvertrag_prozent,
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
+            '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum),
+            '[abschlag-nr]' => $abschlagNr,
+            '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
         ];
