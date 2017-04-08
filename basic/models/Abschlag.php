@@ -19,6 +19,7 @@ use Yii;
  * @property string $summe
  * @property integer $vorlage_id
  * @property string $erstell_datum
+ * @property string $mail_gesendet
  *
  * @property Datenblatt $datenblatt
  * @property Vorlage $vorlage
@@ -42,7 +43,7 @@ class Abschlag extends \yii\db\ActiveRecord
             [['datenblatt_id'], 'required'],
             [['datenblatt_id', 'vorlage_id'], 'integer'],
             [['kaufvertrag_prozent', 'sonderwunsch_prozent'], 'number'],
-            [['kaufvertrag_angefordert', 'sonderwunsch_angefordert', 'erstell_datum'], 'safe'],
+            [['kaufvertrag_angefordert', 'sonderwunsch_angefordert', 'erstell_datum', 'mail_gesendet'], 'safe'],
             [['name', 'kaufvertrag_betrag', 'sonderwunsch_betrag', 'summe'], 'string', 'max' => 255]
         ];
     }
@@ -64,6 +65,7 @@ class Abschlag extends \yii\db\ActiveRecord
             'sonderwunsch_angefordert' => Yii::t('app', 'Sonderwunsch Angefordert'),
             'summe' => Yii::t('app', 'Summe'),
             'vorlage_id' => Yii::t('app', 'Vorlage-Id'),
+            'mail_gesendet' => Yii::t('app', 'Mail gesendet am'),
         ];
     }
 
@@ -120,11 +122,25 @@ class Abschlag extends \yii\db\ActiveRecord
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum),
             '[abschlag-nr]' => $abschlagNr,
             '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
+            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herr',
+            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
+            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
+            '[kaeufer-strasse]' => $datenblatt->kaeufer->strasse,
+            '[kaeufer-strassen-nr]' => $datenblatt->kaeufer->hausnr,
+            '[kaeufer-plz]' => $datenblatt->kaeufer->plz,
+            '[kaeufer-ort]' => $datenblatt->kaeufer->ort,
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
         ];
 
-        return strtr($text, $replaceData);
+        $content = $projekt->mail_header;
+        $content .= strtr($text, $replaceData);
+        $content .=
+            '<div class="footer" style="font-size: 9px; text-align: center; position: absolute; bottom: 40px; width: 85%;">'
+            . $abschlag->getPdfFooter()
+            . '</div>';
+
+        return $content;
     }
 
 }

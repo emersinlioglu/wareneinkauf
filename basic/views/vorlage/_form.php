@@ -35,6 +35,13 @@ $this->registerJs('
                     { text: "[erstell-datum]", value: "[erstell-datum]" },
                     { text: "[abschlag-nr]", value: "[abschlag-nr]" },
                     { text: "[debitor-nr]", value: "[debitor-nr]" },
+                    { text: "[kaeufer-anrede]", value: "[kaeufer-anrede]" },
+                    { text: "[kaeufer-vorname]", value: "[kaeufer-vorname]" },
+                    { text: "[kaeufer-nachname]", value: "[kaeufer-nachname]" },
+                    { text: "[kaeufer-strasse]", value: "[kaeufer-strasse]" },
+                    { text: "[kaeufer-strassen-nr]", value: "[kaeufer-strassen-nr]" },
+                    { text: "[kaeufer-plz]", value: "[kaeufer-plz]" },
+                    { text: "[kaeufer-ort]", value: "[kaeufer-ort]" },
                 ]
             });
         },

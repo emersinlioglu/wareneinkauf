@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Datenblatt;
+use app\models\Vorlage;
 use Yii;
 use app\models\Abschlag;
 use app\models\AbschlagSearch;
@@ -116,29 +117,49 @@ class AbschlagController extends Controller
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }
-        if (!$vorlageId) {
+        if (($vorlage = Vorlage::findOne($vorlageId)) == null) {
             echo "Bitte wählen Sie eine Vorlage";
             return;
         }
 
         $data = [];
-//        /** @var Datenblatt $datenblatt */
-//        foreach ($datenblatts as $datenblatt) {
-//
-//            /** @var Abschlag $abschlag */
-//            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
-//                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
-//
-//                $abschlag->erstell_datum = date('Y-m-d');
-//                if ($abschlag->save()) {
-//                    $data['success'][] = $datenblatt->id;
-//                } else {
-//                    $data['error'][] = $datenblatt->id;
-//                }
-//            } else {
-//                $data['missing'][] = $datenblatt->id;
-//            }
-//        }
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+
+            /** @var Abschlag $abschlag */
+            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
+
+                if (is_null($abschlag->mail_gesendet)) {
+
+                    $abschlag->vorlage_id = $vorlageId;
+                    $abschlag->mail_gesendet = date('Y-m-d H:i:s');
+
+                    //send mail
+                    $pdfFileContent = $this->_createPdf($abschlag->getPdfContent(), Pdf::DEST_STRING);
+
+                    Yii::$app->mailer->compose('abschlag')
+                        //->setFrom('from@domain.com')
+                        //->setTo('email@gmail.com')
+                        ->setTo($datenblatt->kaeufer->email)
+                        ->setSubject($vorlage->betreff)
+                        ->attachContent($pdfFileContent, ['fileName' => "Abschlag-$abschlagNr.pdf", 'contentType' => 'application/pdf'])
+                        ->send();
+
+                    if ($abschlag->save()) {
+                        $data['success'][] = $datenblatt->id;
+                    } else {
+                        $data['error'][] = $datenblatt->id;
+                    }
+
+                } else {
+                    $data['already_sent'][] = $datenblatt->id;
+                }
+
+            } else {
+                $data['missing'][] = $datenblatt->id;
+            }
+        }
 
         return $this->renderPartial('sendAbschlagMails', [
             'data' => $data,
@@ -172,17 +193,25 @@ class AbschlagController extends Controller
                 $abschlag->vorlage_id = $vorlageId;
                 $abschlag->save();
 
-                $pdfContents[] = $this->renderPartial('pdf', [
-                    'abschlag' => $abschlag,
-                ]);
+                $pdfContents[] = $abschlag->getPdfContent();
             }
         }
 
-        $content = implode(
+        $html = implode(
             '<div class="wrapper" style="page-break-before:always;"></div>',
             $pdfContents
         );
 
+        return $this->_createPdf($html);
+    }
+
+    /**
+     * @param $content
+     *
+     * @return Pdf
+     */
+    private function _createPdf($content, $destination = Pdf::DEST_BROWSER)
+    {
         //$headerHtml = $this->renderPartial('_pdf_header', ['model' => $modelDatenblatt, 'pdfLogo' => $pdfLogo]);
 
         //get your html raw content without layouts
@@ -196,7 +225,7 @@ class AbschlagController extends Controller
             'format' => Pdf::FORMAT_A4,
             'defaultFontSize' => 10.0,
             'orientation' => Pdf::FORMAT_A4,
-            'destination' => Pdf::DEST_BROWSER,
+            'destination' => $destination,
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
             'cssInline' => ' tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}',
             //'options'=> ['title'=> 'Datenblatt'],

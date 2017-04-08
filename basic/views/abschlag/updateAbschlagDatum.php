@@ -4,7 +4,7 @@ if (isset($data['success'])) {
     echo implode(', ', $data['success']);
 }
 if (isset($data['error'])) {
-    echo "<h4>Fehlerhaft:</h4>";
+    echo "<h4>Error:</h4>";
     echo implode(', ', $data['error']);
 }
 if (isset($data['missing'])) {

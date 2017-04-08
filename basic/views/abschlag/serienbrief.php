@@ -184,7 +184,7 @@ $this->registerJs('
                         <div class="form-group">
                             <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                             <?= Html::dropDownList(
-                                'abschlag', null,
+                                'vorlage', null,
                                 ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
                                 [
                                     'class' => 'form-control',
