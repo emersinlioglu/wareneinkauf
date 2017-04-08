@@ -12,10 +12,32 @@ use yii\widgets\ActiveForm;
 $this->registerJs('
     tinymce.init({ 
     	selector:".tinymce",
-		menubar:false,
+		menubar:true,
 		statusbar: false,
         plugins: "table",
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect"
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | platzhalter",
+        
+        setup: function (editor) {
+            editor.addButton(\'platzhalter\', {
+                type: \'listbox\',
+                text: \'Platzhalter\',
+                icon: false,
+                onselect: function (e) {
+                    editor.insertContent(this.value());
+                },
+                values: [
+                    { text: "[projekt-name]", value: "[projekt-name]" },
+                    { text: "[projekt-strasse]", value: "[projekt-strasse]" },
+                    { text: "[projekt-ort]", value: "[projekt-ort]" },
+                    { text: "[wohnung-nr]", value: "[wohnung-nr]" },
+                    { text: "[kaufpreisabrechnung-kaufvertrag-in-prozent]", value: "[kaufpreisabrechnung-kaufvertrag-in-prozent]" },
+                    { text: "[kaufpreisabrechnung-kaufvertrag-betrag]", value: "[kaufpreisabrechnung-kaufvertrag-betrag]" },
+                    { text: "[erstell-datum]", value: "[erstell-datum]" },
+                    { text: "[abschlag-nr]", value: "[abschlag-nr]" },
+                    { text: "[debitor-nr]", value: "[debitor-nr]" },
+                ]
+            });
+        },
 	});
 ');
 ?>
