@@ -40,7 +40,7 @@ class AbschlagController extends Controller
         if (Yii::$app->request->isPost) {
 
             $submit = Yii::$app->request->post('submit', null);
-            $datenblattIds = Yii::$app->request->post('datenblatts', []);
+            $datenblattIds = array_unique(Yii::$app->request->post('datenblatts', []));
 
             switch ($submit) {
                 case 'selection':

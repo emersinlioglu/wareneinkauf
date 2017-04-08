@@ -418,7 +418,7 @@ $this->registerJs(
     $(function() {
         $('.serienbrief').click(function() {
             
-            $('#DatenblattSearch-container [name=\"selection[]\"]').each(function(i, elm) {
+            $('#DatenblattSearch-container [name=\"selection[]\"]:checked').each(function(i, elm) {
                 
                 var input = $('<input>')
                     .attr('type', 'hidden')
