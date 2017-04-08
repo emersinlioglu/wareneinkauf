@@ -187,7 +187,7 @@ $this->registerJs('
         </div>
     </div>
 
-
+    <div style="clear: both;"></div>
 <?php endif; ?>
 
 <div class="form-group" style="text-align: right;">
@@ -196,3 +196,9 @@ $this->registerJs('
 
 <?php ActiveForm::end(); ?>
 <?php //yii\widgets\Pjax::end() ?>
+
+<?= $this->render('_abschlag_mails', [
+    'modelDatenblatt' => $modelDatenblatt,
+]) ?>
+
+<div style="clear: both;"></div>
