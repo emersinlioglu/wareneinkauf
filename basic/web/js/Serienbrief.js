@@ -11,7 +11,7 @@ var Serienbrief = function ()
             $('#exampleModal').modal({show: true});
 
             var data = {};
-            $( ".modal-body .message" ).load(
+            $( ".modal-body .message" ).empty().load(
                 "index.php?r=abschlag/update-abschlag-datum",
                 $('.updateAbschlagDatumForm').serialize(),
                 function( response, status, xhr ) {
@@ -65,7 +65,7 @@ var Serienbrief = function ()
             $('#exampleModal').modal({show: true});
 
             var data = {};
-            $( ".modal-body .message" ).load(
+            $( ".modal-body .message" ).empty().load(
                 "index.php?r=abschlag/send-abschlag-mails",
                 $('.sendAbschlagMailsForm').serialize(),
                 function( response, status, xhr ) {

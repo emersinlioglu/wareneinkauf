@@ -277,6 +277,44 @@ var DatenblattForm = function () {
             //}
         });
     }
+
+    _.initUpdateAbschlagDatum = function() {
+
+        $('.update-erstelldatum').click(function(e) {
+            e.preventDefault();
+            var elm = $(this);
+
+            var ladeIcon = $( ".modal-body .lade-icon" );
+            ladeIcon.show();
+            $('#exampleModal').modal({show: true});
+
+            var data = {};
+            $( ".modal-body .message" ).empty().load(
+                elm.attr('href'),
+                // $('.updateAbschlagDatumForm').serialize(),
+                function( response, status, xhr ) {
+
+                    ladeIcon.hide();
+
+                    if ( status == "error" ) {
+                        var msg = "Sorry but there was an error: ";
+                        $( ".modal-body .message" ).html( msg + xhr.status + " " + xhr.statusText );
+                    } else {
+
+                        var today = new Date();
+                        console.log(today);
+                        var dd = today.getDate();
+                        var mm = today.getMonth()+1; //January is 0!
+                        var yy = today.getFullYear();
+                        if (dd < 10) { dd = '0' + dd; }
+                        if (mm < 10) { mm = '0' + mm; }
+                        elm.closest('tr').find('.erstell-datum').html(dd + '.' + mm + '.' + yy);
+                    }
+                }
+            );
+
+        });
+    }
     
     _.init = function() {
         _form = $('#datenblatt-form');
@@ -287,6 +325,8 @@ var DatenblattForm = function () {
         _.initAutocompleteKunden();
 
         _.initPlusMinusIcons();
+
+        _.initUpdateAbschlagDatum();
     }
     
     _.init();
