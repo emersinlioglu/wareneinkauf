@@ -1,6 +1,6 @@
 <?php
 if (isset($data['success'])) {
-    echo "<h4>Erfolgreich aktualisiert:</h4>";
+    echo "<h4>Erfolgreich versendet:</h4>";
     echo implode(', ', $data['success']);
 }
 if (isset($data['already_sent'])) {

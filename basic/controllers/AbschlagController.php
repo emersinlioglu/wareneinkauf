@@ -135,9 +135,9 @@ class AbschlagController extends Controller
         foreach ($datenblatts as $datenblatt) {
 
             /** @var Abschlag $abschlag */
-            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
-                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
-
+            if (isset($datenblatt->abschlags[$abschlagNr])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr];
+var_dump($abschlag->id);
                 if (is_null($abschlag->mail_gesendet)) {
 
                     $abschlag->vorlage_id = $vorlageId;
@@ -246,6 +246,26 @@ class AbschlagController extends Controller
         ]);
 
         return $pdf->render();
+    }
+
+    public function actionAbschlagMailVorlageForm($id)
+    {
+        $model = $this->findModel($id);
+
+        $datenblatt = $model->datenblatt;
+
+        $abschlagNr = 0;
+        foreach ($datenblatt->abschlags as $abschlag) {
+            if ($abschlag->id == $model->id) {
+                break;
+            }
+            $abschlagNr++;
+        }
+
+        return $this->renderPartial('abschlagMailVorlageForm', [
+            'model' => $model,
+            'abschlagNr' => $abschlagNr,
+        ]);
     }
 
     /**

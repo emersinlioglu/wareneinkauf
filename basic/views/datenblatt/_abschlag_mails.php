@@ -62,11 +62,23 @@ use yii\bootstrap\ActiveForm;
                                     <?php
                                         if (is_null($abschlag->mail_gesendet)) {
                                             $url = \yii\helpers\Url::to(['abschlag/update-abschlag-datum',
-                                                'abschlag' => $key+1,
+                                                'abschlag' => $key,
                                                 'vorlage' => $abschlag->vorlage_id,
                                                 'datenblatt[]' => $modelDatenblatt->id,
                                             ]);
                                             echo Html::a('Update Erstelldatum', $url, ['target' => '_blank', 'class' => 'update-erstelldatum btn btn-primary']);
+                                        }
+                                    ?>
+                                </td>
+                                <td class="text-center" style="width: 90px;">
+                                    <?php
+                                        if (is_null($abschlag->mail_gesendet)) {
+//http://abg-projekt-manager.local/index.php?r=abschlag/send-abschlag-mails&abschlag=0&vorlage=1&datenblatt%5B%5D=35&datenblatt%5B%5D=34&datenblatt%5B%5D=33&datenblatt%5B%5D=31&datenblatt%5B%5D=30&datenblatt%5B%5D=29&datenblatt%5B%5D=28&datenblatt%5B%5D=27&datenblatt%5B%5D=26&datenblatt%5B%5D=12&datenblatt%5B%5D=35&datenblatt%5B%5D=34&datenblatt%5B%5D=33&datenblatt%5B%5D=31&datenblatt%5B%5D=30&datenblatt%5B%5D=29&datenblatt%5B%5D=28&datenblatt%5B%5D=27&datenblatt%5B%5D=26&datenblatt%5B%5D=12
+
+                                            $url = \yii\helpers\Url::to(['abschlag/abschlag-mail-vorlage-form',
+                                                'id' => $abschlag->id,
+                                            ]);
+                                            echo Html::a('Email senden', $url, ['target' => '_blank', 'class' => 'einzel-abschlag-email-senden btn btn-primary']);
                                         }
                                     ?>
                                 </td>

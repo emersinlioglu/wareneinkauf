@@ -315,7 +315,69 @@ var DatenblattForm = function () {
 
         });
     }
-    
+
+    _.initAbschlagMailVorlageForm = function() {
+
+        $('.sendEinzelAbschlagMailForm').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+
+            console.log(form.attr('action'));
+            console.log(form.serialize());
+
+            $( ".sendEinzelAbschlagMailForm .submit-message" ).empty().load(
+                form.attr('action'),
+                form.serialize(),
+                function( response, status, xhr ) {
+
+                    if ( status == "error" ) {
+                        var msg = "Sorry but there was an error: ";
+                        $( ".modal-body .message" ).html( msg + xhr.status + " " + xhr.statusText );
+                    } else {
+
+                        $('#exampleModal').on('hidden.bs.modal', function () {
+                            location.reload();
+                        })
+                    }
+
+                }
+            );
+
+        });
+    }
+
+    _.initSendEinzelAbschlagMailBtn = function() {
+
+        $('.einzel-abschlag-email-senden').click(function(e) {
+            e.preventDefault();
+            var elm = $(this);
+
+            var ladeIcon = $( ".modal-body .lade-icon" );
+            ladeIcon.show();
+            $('#exampleModal').modal({show: true});
+
+            var data = {};
+            $( ".modal-content .modal-title" ).html('Vorlage auswählen');
+            $( ".modal-body .message" ).empty().load(
+                elm.attr('href'),
+                // $('.updateAbschlagDatumForm').serialize(),
+                function( response, status, xhr ) {
+
+                    ladeIcon.hide();
+
+                    if ( status == "error" ) {
+                        var msg = "Sorry but there was an error: ";
+                        $( ".modal-body .message" ).html( msg + xhr.status + " " + xhr.statusText );
+                    }
+
+                    _.initAbschlagMailVorlageForm();
+                }
+            );
+
+        });
+    }
+
     _.init = function() {
         _form = $('#datenblatt-form');
         
@@ -323,10 +385,10 @@ var DatenblattForm = function () {
         
         _.initFirmaProjektHausDropdown();
         _.initAutocompleteKunden();
-
         _.initPlusMinusIcons();
 
         _.initUpdateAbschlagDatum();
+        _.initSendEinzelAbschlagMailBtn();
     }
     
     _.init();
