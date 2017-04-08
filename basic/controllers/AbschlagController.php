@@ -90,12 +90,20 @@ class AbschlagController extends Controller
             if (isset($datenblatt->abschlags[$abschlagNr-1])) {
                 $abschlag = $datenblatt->abschlags[$abschlagNr-1];
 
-                $abschlag->erstell_datum = date('Y-m-d');
-                if ($abschlag->save()) {
-                    $data['success'][] = $datenblatt->id;
+                if (is_null($abschlag->mail_gesendet)) {
+
+                    $abschlag->erstell_datum = date('Y-m-d');
+                    if ($abschlag->save()) {
+                        $data['success'][] = $datenblatt->id;
+                    } else {
+                        $data['error'][] = $datenblatt->id;
+                    }
+
                 } else {
-                    $data['error'][] = $datenblatt->id;
+
+                    $data['mail_gesendet'][] = $datenblatt->id;
                 }
+
             } else {
                 $data['missing'][] = $datenblatt->id;
             }
