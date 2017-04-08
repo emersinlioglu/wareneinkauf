@@ -87,8 +87,8 @@ class AbschlagController extends Controller
         foreach ($datenblatts as $datenblatt) {
 
             /** @var Abschlag $abschlag */
-            if (isset($datenblatt->abschlags[$abschlagNr-1])) {
-                $abschlag = $datenblatt->abschlags[$abschlagNr-1];
+            if (isset($datenblatt->abschlags[$abschlagNr])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr];
 
                 if (is_null($abschlag->mail_gesendet)) {
 
