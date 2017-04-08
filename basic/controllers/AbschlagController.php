@@ -61,8 +61,8 @@ class AbschlagController extends Controller
         }
 
         $abschlagOptions = [];
-        for($i=1; $i <= $maxCountAbschlags; $i++) {
-            $abschlagOptions[$i] = 'Abschlag ' . $i;
+        for($i=0; $i < $maxCountAbschlags; $i++) {
+            $abschlagOptions[$i] = 'Abschlag ' . ($i+1);
         }
 
         return $this->render('serienbrief', [
@@ -77,7 +77,7 @@ class AbschlagController extends Controller
         $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
         $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
-        if (!$abschlagNr) {
+        if (is_null($abschlagNr)) {
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }
@@ -121,7 +121,7 @@ class AbschlagController extends Controller
         $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
         $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
-        if (!$abschlagNr) {
+        if (is_null($abschlagNr)) {
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }
@@ -181,7 +181,7 @@ class AbschlagController extends Controller
         $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
         $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
-        if (!$abschlagNr) {
+        if (is_null($abschlagNr)) {
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }

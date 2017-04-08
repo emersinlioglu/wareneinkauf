@@ -38,7 +38,7 @@ use yii\bootstrap\ActiveForm;
                                     <?php echo $abschlag->id; ?>
                                 </td>
                                 <td class="vcenter">
-                                    Abschlag <?php echo $key+1; ?>
+                                    <?php echo $abschlag->name; ?>
                                 </td>
                                 <td class="vcenter erstell-datum">
                                     <?php echo Yii::$app->formatter->asDate($abschlag->erstell_datum, 'medium'); ?>
@@ -50,7 +50,7 @@ use yii\bootstrap\ActiveForm;
                                     <?php
                                         if ($abschlag->vorlage_id) {
                                             $url = \yii\helpers\Url::to(['abschlag/download-als-pdf',
-                                                'abschlag' => $key+1,
+                                                'abschlag' => $key,
                                                 'vorlage' => $abschlag->vorlage_id,
                                                 'datenblatt[]' => $modelDatenblatt->id,
                                             ]);
@@ -61,8 +61,6 @@ use yii\bootstrap\ActiveForm;
                                 <td class="text-center vcenter" style="width: 90px;">
                                     <?php
                                         if (is_null($abschlag->mail_gesendet)) {
-//http://abg-projekt-manager.local/index.php?r=abschlag/update-abschlag-datum&abschlag=1&datenblatt%5B%5D=35&datenblatt%5B%5D=34&datenblatt%5B%5D=33&datenblatt%5B%5D=31&datenblatt%5B%5D=30&datenblatt%5B%5D=29&datenblatt%5B%5D=28&datenblatt%5B%5D=27&datenblatt%5B%5D=26&datenblatt%5B%5D=12&datenblatt%5B%5D=35&datenblatt%5B%5D=34&datenblatt%5B%5D=33&datenblatt%5B%5D=31&datenblatt%5B%5D=30&datenblatt%5B%5D=29&datenblatt%5B%5D=28&datenblatt%5B%5D=27&datenblatt%5B%5D=26&datenblatt%5B%5D=12&submit=selection
-
                                             $url = \yii\helpers\Url::to(['abschlag/update-abschlag-datum',
                                                 'abschlag' => $key+1,
                                                 'vorlage' => $abschlag->vorlage_id,
