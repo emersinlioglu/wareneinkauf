@@ -108,10 +108,10 @@ $this->registerJs('
                         //echo 'hid: ' . $haus->id . "<br>";
                         foreach ($haus->teileigentumseinheits as $te) {
                             //echo 'te-id: ' . $te->id . "<br>";
-                            if ($te->einheitstyp_id == \app\models\Einheitstyp::TYPE_HAUS) {
+                            //if ($te->einheitstyp_id == \app\models\Einheitstyp::TYPE_HAUS) {
                                 $haeuserOptions[$haus->id] = ($te->te_nummer ? $te->te_nummer : "Keine TE-Nr (id: $te->id)");
                                 break;
-                            }
+                            //}
                         }
                     }
                 }
