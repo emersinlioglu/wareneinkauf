@@ -180,6 +180,12 @@ class AbschlagController extends Controller
                         $abschlag->erstell_datum = date('Y-m-d');
                     }
 
+                    if ($abschlag->save()) {
+                        $data['success'][] = $datenblatt->id;
+                    } else {
+                        $data['error'][] = $datenblatt->id;
+                    }
+
                     //send mail
                     $pdfFileContent = $this->_createPdf($abschlag->getPdfContent(), Pdf::DEST_STRING);
 
@@ -190,12 +196,6 @@ class AbschlagController extends Controller
                         ->setSubject($vorlage->betreff)
                         ->attachContent($pdfFileContent, ['fileName' => "Abschlag-$abschlagNr.pdf", 'contentType' => 'application/pdf'])
                         ->send();
-
-                    if ($abschlag->save()) {
-                        $data['success'][] = $datenblatt->id;
-                    } else {
-                        $data['error'][] = $datenblatt->id;
-                    }
 
                 } else {
                     $data['already_sent'][] = $datenblatt->id;
