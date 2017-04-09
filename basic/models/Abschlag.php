@@ -64,7 +64,7 @@ class Abschlag extends \yii\db\ActiveRecord
             'sonderwunsch_betrag' => Yii::t('app', 'Sonderwunsch Betrag'),
             'sonderwunsch_angefordert' => Yii::t('app', 'Sonderwunsch Angefordert'),
             'summe' => Yii::t('app', 'Summe'),
-            'vorlage_id' => Yii::t('app', 'Vorlage-Id'),
+            'vorlage_id' => Yii::t('app', 'Vorlage'),
             'mail_gesendet' => Yii::t('app', 'Mail gesendet am'),
         ];
     }

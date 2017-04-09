@@ -35,6 +35,11 @@ class AbschlagController extends Controller
     {
         $datenblattIds = [];
         $maxCountAbschlags = null;
+        $abschlagModel = new Abschlag(
+            [
+                'erstell_datum' => date('Y-m-d H:i:s')
+            ]
+        );
 
         $data = array();
         if (Yii::$app->request->isPost) {
@@ -68,17 +73,25 @@ class AbschlagController extends Controller
         return $this->render('serienbrief', [
             'abschlagOptions' => $abschlagOptions,
             'datenblattIds' => $datenblattIds,
+            'abschlagModel' => $abschlagModel,
         ]);
     }
 
     public function actionUpdateAbschlagDatum()
     {
-        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
-        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
-        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+        $abschlagNr     = Yii::$app->request->getQueryParam('abschlag', null);
+        $vorlageId      = Yii::$app->request->queryParams['Abschlag']['vorlage_id'];
+        $datenblattIds  = Yii::$app->request->getQueryParam('datenblatt', []);
+        $datenblatts    = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
         if (is_null($abschlagNr)) {
             echo "Bitte wählen Sie einen Abschlag";
+            return;
+        }
+
+        if (($vorlage = Vorlage::findOne($vorlageId)) == null) {
+
+            echo "Bitte wählen Sie eine Vorlage";
             return;
         }
 
@@ -92,7 +105,8 @@ class AbschlagController extends Controller
 
                 if (is_null($abschlag->mail_gesendet)) {
 
-                    $abschlag->erstell_datum = date('Y-m-d');
+                    $abschlag->load(Yii::$app->request->get());
+
                     if ($abschlag->save()) {
                         $data['success'][] = $datenblatt->id;
                     } else {
@@ -111,6 +125,26 @@ class AbschlagController extends Controller
 
         return $this->renderPartial('updateAbschlagDatum', [
             'data' => $data,
+        ]);
+    }
+
+    public function actionUpdateErstelldatumVorlageForm($id)
+    {
+        $model = $this->findModel($id);
+
+        $datenblatt = $model->datenblatt;
+
+        $abschlagNr = 0;
+        foreach ($datenblatt->abschlags as $abschlag) {
+            if ($abschlag->id == $model->id) {
+                break;
+            }
+            $abschlagNr++;
+        }
+
+        return $this->renderPartial('updateErstelldatumVorlageForm', [
+            'model' => $model,
+            'abschlagNr' => $abschlagNr,
         ]);
     }
 

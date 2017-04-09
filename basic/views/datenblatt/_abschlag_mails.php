@@ -61,12 +61,11 @@ use yii\bootstrap\ActiveForm;
                                 <td class="text-center vcenter" style="width: 90px;">
                                     <?php
                                         if (is_null($abschlag->mail_gesendet)) {
-                                            $url = \yii\helpers\Url::to(['abschlag/update-abschlag-datum',
-                                                'abschlag' => $key,
-                                                'vorlage' => $abschlag->vorlage_id,
-                                                'datenblatt[]' => $modelDatenblatt->id,
+//                                            $url = \yii\helpers\Url::to(['abschlag/update-abschlag-datum',
+                                            $url = \yii\helpers\Url::to(['abschlag/update-erstelldatum-vorlage-form',
+                                                'id' => $abschlag->id,
                                             ]);
-                                            echo Html::a('Update Erstelldatum', $url, ['target' => '_blank', 'class' => 'update-erstelldatum btn btn-primary']);
+                                            echo Html::a('Aktualisieren', $url, ['target' => '_blank', 'class' => 'update-erstelldatum btn btn-primary']);
                                         }
                                     ?>
                                 </td>

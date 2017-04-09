@@ -35,38 +35,42 @@ var DatenblattForm = function () {
      * Init datepickers
      * @param panelId
      */
-    _.initDatepickers = function(panelId) {
+    _.initDatepickers = function(container, panelId) {
         // init datepickers
         _form.find('#' + panelId + ' .box-body').find('.input-group.date').each(function(index, value) {
 
-            var inputGroup = $(value);
-            var datecontrol_options = {
-                "idSave": "", //"sonderwunsch-0-angebot_datum"
-                "url":"\/index.php?r=datecontrol%2Fparse%2Fconvert",
-                "type":"date",
-                "saveFormat":"Y-m-d",
-                "dispFormat":"d.m.Y",
-                "saveTimezone":"Europe\/Berlin",
-                "dispTimezone":"Europe\/Berlin",
-                "asyncRequest":true,
-                "language":"de",
-                "dateSettings":{"days":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"],
-                    "daysShort":["Son","Mon","Die","Mit","Don","Fre","Sam","Son"],
-                    "months":["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
-                    "monthsShort":["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],
-                    "meridiem":["Vorm.","Nachm."]}
-            };
-            var kvDatepicker_options = {"autoclose":true,"format":"dd.mm.yyyy","language":"de"};
-            var dateId = inputGroup.next('input[type="hidden"]').attr('id');
-            datecontrol_options.idSave = dateId;
-            inputGroup.find('.krajee-datepicker').datecontrol(datecontrol_options);
-            if (inputGroup.find('.krajee-datepicker').data('kvDatepicker')) {
-                inputGroup.find('.krajee-datepicker').kvDatepicker('destroy');
-            }
-            inputGroup.kvDatepicker(kvDatepicker_options);
+            _.initDatepicker(value);
 
         });
-    }
+    };
+
+    _.initDatepicker = function(value) {
+        var inputGroup = $(value);
+        var datecontrol_options = {
+            "idSave": "", //"sonderwunsch-0-angebot_datum"
+            "url":"\/index.php?r=datecontrol%2Fparse%2Fconvert",
+            "type":"date",
+            "saveFormat":"Y-m-d",
+            "dispFormat":"d.m.Y",
+            "saveTimezone":"Europe\/Berlin",
+            "dispTimezone":"Europe\/Berlin",
+            "asyncRequest":true,
+            "language":"de",
+            "dateSettings":{"days":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"],
+                "daysShort":["Son","Mon","Die","Mit","Don","Fre","Sam","Son"],
+                "months":["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+                "monthsShort":["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],
+                "meridiem":["Vorm.","Nachm."]}
+        };
+        var kvDatepicker_options = {"autoclose":true,"format":"dd.mm.yyyy","language":"de"};
+        var dateId = inputGroup.next('input[type="hidden"]').attr('id');
+        datecontrol_options.idSave = dateId;
+        inputGroup.find('.krajee-datepicker').datecontrol(datecontrol_options);
+        if (inputGroup.find('.krajee-datepicker').data('kvDatepicker')) {
+            inputGroup.find('.krajee-datepicker').kvDatepicker('destroy');
+        }
+        inputGroup.kvDatepicker(kvDatepicker_options);
+    };
 
     /**
      * Init maskmoney
@@ -301,15 +305,45 @@ var DatenblattForm = function () {
                         $( ".modal-body .message" ).html( msg + xhr.status + " " + xhr.statusText );
                     } else {
 
-                        var today = new Date();
-                        console.log(today);
-                        var dd = today.getDate();
-                        var mm = today.getMonth()+1; //January is 0!
-                        var yy = today.getFullYear();
-                        if (dd < 10) { dd = '0' + dd; }
-                        if (mm < 10) { mm = '0' + mm; }
-                        elm.closest('tr').find('.erstell-datum').html(dd + '.' + mm + '.' + yy);
+                        // var today = new Date();
+                        // var dd = today.getDate();
+                        // var mm = today.getMonth()+1; //January is 0!
+                        // var yy = today.getFullYear();
+                        // if (dd < 10) { dd = '0' + dd; }
+                        // if (mm < 10) { mm = '0' + mm; }
+                        // elm.closest('tr').find('.erstell-datum').html(dd + '.' + mm + '.' + yy);
+
+                        _.initUpdateErstelldatumVorlageForm();
                     }
+                }
+            );
+
+        });
+    };
+
+    _.initUpdateErstelldatumVorlageForm = function() {
+        var form = $('.updateErstelldatumVorlageForm');
+        var elm = form.find('.input-group.date');
+        _.initDatepicker(elm[0]);
+
+        form.submit(function(e) {
+            e.preventDefault();
+
+            form.find( ".submit-message" ).empty().load(
+                form.attr('action'),
+                form.serialize(),
+                function( response, status, xhr ) {
+
+                    if ( status == "error" ) {
+                        var msg = "Sorry but there was an error: ";
+                        form.find( ".submit-message" ).html( msg + xhr.status + " " + xhr.statusText );
+                    } else {
+
+                        $('#exampleModal').on('hidden.bs.modal', function () {
+                            location.reload();
+                        })
+                    }
+
                 }
             );
 
@@ -322,9 +356,6 @@ var DatenblattForm = function () {
             e.preventDefault();
 
             var form = $(this);
-
-            console.log(form.attr('action'));
-            console.log(form.serialize());
 
             $( ".sendEinzelAbschlagMailForm .submit-message" ).empty().load(
                 form.attr('action'),

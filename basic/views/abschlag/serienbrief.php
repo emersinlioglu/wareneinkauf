@@ -3,6 +3,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use app\models\Vorlage;
+use kartik\datecontrol\DateControl;
+
 $this->title = 'Serienbriefe';
 ?>
 
@@ -38,7 +40,7 @@ $this->registerJs('
         <div class="box-header with-border">
             <h4 class="box-title">
                 <a data-toggle="collapse" data-parent="#collapse-kaeuferdaten" href="#collapse-kaeuferdaten" aria-expanded="true" class="">
-                    Datum aktualisieren:
+                    Aktualisieren:
                 </a>
             </h4>
         </div>
@@ -61,9 +63,30 @@ $this->registerJs('
                             <?= Html::dropDownList('abschlag', null, $abschlagOptions, ['prompt' => 'Bitte auswählen', 'class'=>'form-control']); ?>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <?= $form->field($abschlagModel, 'vorlage_id')->dropDownList(
+                            ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+                            [
+                                'class' => 'form-control',
+                                'prompt'=>'Vorlage auswählen'
+                            ]
+                        ); ?>
+                    </div>
+                    <div class="col-sm-3">
+                        <?php
+                        echo $form->field($abschlagModel, "erstell_datum")->widget(DateControl::classname(), [
+                            'type' => DateControl::FORMAT_DATE,
+                            'options' => [
+                                'pluginOptions' => [
+                                    //'autoclose' => true
+                                ]
+                            ]
+                        ]);
+                        ?>
+                    </div>
                     <div class="col-sm-6">
-                        <b>Datum aktualisieren</b><br />
-                        Das Erinnerungsdatum wird auf das heutige Datum gesetzt, wenn keine Erinnerungsmail für den Abschlag bereits verschickt wurde.
+                        <b>Aktualisieren</b><br />
+                        Das Erstelldatum und die Vorlage werden gesetzt, wenn keine Erinnerungsmail für den Abschlag bereits verschickt wurde.
                     </div>
                 </div>
 
