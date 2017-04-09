@@ -214,18 +214,19 @@ class AbschlagController extends Controller
     public function actionDownloadAlsPdf()
     {
         $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
-        $vorlageId = Yii::$app->request->getQueryParam('vorlage', null);
+//        $vorlageId = Yii::$app->request->getQueryParam('vorlage', null);
         $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
         $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
-        if (is_null($abschlagNr)) {
+        if ($abschlagNr == '') {
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }
-        if (!$vorlageId) {
-            echo "Bitte wählen Sie eine Vorlage";
-            return;
-        }
+
+//        if (!$vorlageId) {
+//            echo "Bitte wählen Sie eine Vorlage";
+//            return;
+//        }
 
         $pdfContents = [];
         /** @var Datenblatt $datenblatt */
@@ -235,8 +236,8 @@ class AbschlagController extends Controller
 
                 $abschlag = $datenblatt->abschlags[$abschlagNr];
 
-                $abschlag->vorlage_id = $vorlageId;
-                $abschlag->save();
+//                $abschlag->vorlage_id = $vorlageId;
+//                $abschlag->save();
 
                 $pdfContents[] = $abschlag->getPdfContent();
             }

@@ -137,20 +137,20 @@ $this->registerJs('
                             <?= Html::dropDownList('abschlag', null, $abschlagOptions, ['prompt' => 'Bitte auswählen', 'class'=>'form-control']); ?>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
-                            <?= Html::dropDownList(
-                                'vorlage',
-                                null,
-                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
-                                [
-                                    'class' => 'form-control',
-                                    'prompt'=>'Vorlage auswählen'
-                                ]
-                            ); ?>
-                        </div>
-                    </div>
+<!--                    <div class="col-sm-3">-->
+<!--                        <div class="form-group">-->
+<!--                            <label class="control-label" for="datenblatt-firma_id">Vorlage</label>-->
+<!--                            --><?php //echo Html::dropDownList(
+//                                'vorlage',
+//                                null,
+//                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+//                                [
+//                                    'class' => 'form-control',
+//                                    'prompt'=>'Vorlage auswählen'
+//                                ]
+//                            ); ?>
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="col-sm-6">
                         <b>Die Mails als Pdf herunterladen.</b><br>
                         Für die Abschläge, für die bereits eine E-Mail versendet wurde, wird keine E-Mail-Vorlage gesetzt.
