@@ -142,6 +142,9 @@ class AbschlagController extends Controller
 
                     $abschlag->vorlage_id = $vorlageId;
                     $abschlag->mail_gesendet = date('Y-m-d H:i:s');
+                    if (is_null($abschlag->erstell_datum)) {
+                        $abschlag->erstell_datum = date('Y-m-d');
+                    }
 
                     //send mail
                     $pdfFileContent = $this->_createPdf($abschlag->getPdfContent(), Pdf::DEST_STRING);
