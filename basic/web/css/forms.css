@@ -1,6 +1,7 @@
 .no-label label {
     display: none;
 }
+.zinsverzug label,
 .sonderwunsch label {
     display: none;
 }

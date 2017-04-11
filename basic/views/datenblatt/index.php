@@ -76,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'maxCountSonderwunsches' => $maxCountSonderwunsches,
         'maxCountAbschlags' => $maxCountAbschlags,
         'maxCountNachlasses' => $maxCountNachlasses,
+        'maxCountZinsverzugs' => $maxCountZinsverzugs,
         'maxCountZahlungs' => $maxCountZahlungs,
     ]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

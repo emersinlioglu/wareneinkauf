@@ -192,6 +192,25 @@ use kartik\money\MaskMoney;
                         <td></td>
                     </tr>
                     <tr>
+                        <td>Zinsverzüge</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-align-right">
+                        <?php
+                            $totalZinsverzug = .0;
+                            foreach($modelDatenblatt->zinsverzugs as $zinsverzug) {
+                                $totalZinsverzug += (float) $zinsverzug->betrag;
+                            }
+                            echo number_format($totalZinsverzug, 2, ',', '.');
+                        ?> €
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td>Zwischensumme</td>
                         <td></td>
                         <td></td>
@@ -201,7 +220,7 @@ use kartik\money\MaskMoney;
                         <td></td>
                         <td class="text-align-right">
                         <?php
-                            echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass, 2, ',', '.');
+                            echo number_format($modelDatenblatt->getZwischenSumme(), 2, ',', '.');
                         ?> €
                         </td>
                         <td></td>
@@ -236,7 +255,8 @@ use kartik\money\MaskMoney;
                         <td></td>
                         <td class="text-align-right">
                         <?php
-                            echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass - $totalZahlungen, 2, ',', '.');
+                            //echo number_format($kaufvertragBetragTotal + $totalZinsverzug + $sonderwunschBetragTotal - $totalNachlass - $totalZahlungen, 2, ',', '.');
+                            echo number_format($modelDatenblatt->getOffenePosten(), 2, ',', '.');
                         ?> €
                         </td>
                         <td></td>

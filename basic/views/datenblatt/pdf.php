@@ -560,6 +560,46 @@ $this->params['breadcrumbs'][] = $this->title;
           </tr>
         <?php endforeach; ?>
         </table><br>
+        <br>
+        <strong><u>./. Zinsverzüge</u></strong>
+        <table>
+        <tr>
+            <td width="15%"></td>
+            <td width="15%"></td>
+            
+           
+            <td width="70%" align="right">
+                <?php
+                    $totalZinsverzug = .0;
+                    foreach($model->zinsverzugs as $zinsverzug) {
+                        $totalZinsverzug += (float) $zinsverzug->betrag;
+                    }
+                    echo number_format($totalZinsverzug,2, ',', '.');
+                ?>  €
+            </td>
+        </tr>
+        <tr>
+          <td width="15%"><strong>Schreiben vom :</strong></td>
+              <td width="15%" align="right" style="padding-left: 15px; padding-right:15px"><strong>Betrag</strong></td>
+              <td width="70%"><strong>Bemerkung</strong></td>
+          </tr>
+        <?php foreach($model->zinsverzugs as $key => $modelZinsverzug): ?>
+            
+            <tr>
+                <td width="15%">
+                    <?php
+                    echo Yii::$app->formatter->asDate($modelZinsverzug->schreiben_vom);
+                    ?>
+                </td>
+                <td width="15%" align="right" style="padding-left: 15px; padding-right:15px">
+                    <?= number_format($modelZinsverzug->betrag,2, ',', '.') ?> €
+                </td>
+                <td width="70%">
+                    <?= $modelZinsverzug->bemerkung ?>
+                </td>
+          </tr>
+        <?php endforeach; ?>
+        </table><br>
         <strong><u>Zwischensumme</u></strong>
         <table>
         <tr>
@@ -571,7 +611,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <td></td>
             <td></td>
             <td align="right"><?php
-                    echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass, 2, ',', '.');
+                    //echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass, 2, ',', '.');
+                    echo number_format($model->getZwischenSumme(), 2, ',', '.');
                 ?> €
             </td>
         </tr>
@@ -622,7 +663,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <td width="70%"></td>
             <td width="15%" align="right">
                 <?php
-                    echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass - $totalZahlungen, 2, ',', '.');
+                    //echo number_format($kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass - $totalZahlungen, 2, ',', '.');
+                    echo number_format($model->getOffenePosten(), 2, ',', '.');
                 ?> €</td>
             
         </tr>

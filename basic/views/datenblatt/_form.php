@@ -180,6 +180,16 @@ $this->registerJs('
             ]) ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <?= $this->render('_zinsverzug', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt,
+            ]) ?>
+
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-8">

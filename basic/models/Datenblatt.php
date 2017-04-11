@@ -34,6 +34,7 @@ use Yii;
  * @property Nachlass[] $nachlasses
  * @property Sonderwunsch[] $sonderwunsches
  * @property Zahlung[] $zahlungs
+ * @property Zinsverzug[] $zinsverzugs
  */
 class Datenblatt extends \yii\db\ActiveRecord
 {
@@ -191,6 +192,28 @@ class Datenblatt extends \yii\db\ActiveRecord
             return $value;
         }
 
+        if (substr($attribute, 0, strlen('zinsverzug')) == 'zinsverzug' && strpos($attribute, '__')) {
+
+            $parts = explode('__', $attribute);
+            $relatedObject = $parts[0];
+            $nth = $parts[1];
+            $attributeName = $parts[2];
+
+            $value = '';
+            if (count($this->zinsverzugs) > $nth) {
+
+                $zinsverzug = $this->zinsverzugs[$nth];
+                switch($attributeName) {
+
+                    default:
+                        $value = $zinsverzug->{$attributeName};
+                        break;
+                }
+            }
+
+            return $value;
+        }
+
         if (substr($attribute, 0, 7) == 'zahlung' && strpos($attribute, '__')) {
 
             $parts = explode('__', $attribute);
@@ -316,6 +339,14 @@ class Datenblatt extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getZinsverzugs()
+    {
+        return $this->hasMany(Zinsverzug::className(), ['datenblatt_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSonderwunsches()
     {
         return $this->hasMany(Sonderwunsch::className(), ['datenblatt_id' => 'id']);
@@ -378,6 +409,16 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public function getZinsverzugSumme() {
+
+        $total = 0;
+        foreach ($this->zinsverzugs as $zinsverzug) {
+            $total += $zinsverzug->betrag;
+        }
+
+        return $total;
+    }
+
     public function getZahlungSumme() {
 
         $total = 0;
@@ -388,11 +429,25 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public function getZwischenSumme() {
+
+        $this->calculate();
+
+        $total = $this->getAbschlagSumme()
+            + $this->getZinsverzugSumme()
+            - $this->getNachlassSumme();
+
+        return $total;
+    }
+
     public function getOffenePosten() {
 
         $this->calculate();
 
-        $total = $this->getAbschlagSumme() - $this->getNachlassSumme() - $this->getZahlungSumme();
+        $total = $this->getAbschlagSumme()
+            + $this->getZinsverzugSumme()
+            - $this->getNachlassSumme()
+            - $this->getZahlungSumme();
 
         return $total;
     }

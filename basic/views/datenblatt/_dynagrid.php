@@ -256,9 +256,25 @@ for ($i = 0; $i < $maxCountNachlasses; $i++) {
     ];
 }
 
+for ($i = 0; $i < $maxCountZinsverzugs; $i++) {
+    $cnt = $i + 1;
+    $gridColumns[] = [
+        'value'=> "zinsverzug__{$i}__schreibenVomLabel",
+        'label' => "{$cnt}. Zinsverzug-Schreiben vom:"
+    ];
+    $gridColumns[] = [
+        'value'=> "zinsverzug__{$i}__betrag",
+        'label' => "{$cnt}. Zinsverzug-Betrag:"
+    ];
+}
+
 $gridColumns[] = [
     'value'=> "nachlassSumme",
     'label' => "Minderungen/Nachlaß-Summe:"
+];
+$gridColumns[] = [
+    'value'=> "zinsverzugSumme",
+    'label' => "Zinsverzugs-Summe:"
 ];
 
 for ($i = 0; $i < $maxCountZahlungs; $i++) {

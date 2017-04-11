@@ -112,3 +112,9 @@ a.desc:after {
 .text-align-right {
     text-align: right;
 }
+
+.dynagrid-config-form .sortable.list.kv-connected {
+    height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
+}

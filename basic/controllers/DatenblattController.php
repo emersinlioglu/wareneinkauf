@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Kunde;
+use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
 use app\models\Datenblatt;
@@ -91,6 +92,12 @@ class DatenblattController extends Controller
             $maxCountNachlasses = max($maxCountNachlasses, $count);
         }
 
+        $maxCountZinsverzugs = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->zinsverzugs);
+            $maxCountZinsverzugs = max($maxCountZinsverzugs, $count);
+        }
+
         // max count of zahlungs of filtered datenblatts
         $models = $dataProvider->getModels();    
         $maxCountZahlungs = 0;
@@ -106,6 +113,7 @@ class DatenblattController extends Controller
             'maxCountSonderwunsches' => $maxCountSonderwunsches,
             'maxCountAbschlags' => $maxCountAbschlags,
             'maxCountNachlasses' => $maxCountNachlasses,
+            'maxCountZinsverzugs' => $maxCountZinsverzugs,
             'maxCountZahlungs' => $maxCountZahlungs,
         ]);
     }
@@ -318,11 +326,17 @@ die;*/
                 }
             }
 
+            // Zinsverzug
+            if (Zinsverzug::loadMultiple($modelDatenblatt->zinsverzugs, $data)) {
+                foreach ($modelDatenblatt->zinsverzugs as $item) {
+                    $item->save();
+                }
+            }
+
             // Zahlung
             if (Zahlung::loadMultiple($modelDatenblatt->zahlungs, $data)) {
                 foreach ($modelDatenblatt->zahlungs as $item) {
                     $item->validate();
-                    error_log($item->id . ' : ' . $item->betrag);
                     $item->save();
                 }
 
@@ -467,6 +481,21 @@ die;*/
 //        $this->redirect(['update', 'id' => $datenblattId]);
     }
 
+    /**
+     * Add new zinsverzug
+     * @param int $datenblattId
+     */
+    public function actionAddzinsverzug($datenblattId)
+    {
+
+        $new = new Zinsverzug();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
+
+        return $this->actionUpdate($datenblattId);
+//        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
 
     /**
      * Deletes an existing Datenblatt model.
@@ -536,6 +565,26 @@ die;*/
         $model = $this->findModel($datenblattId);
         if ($modelNachlass = Nachlass::findOne($nachlassId)) {
             $modelNachlass->delete();
+        }
+
+        return $this->actionUpdate($datenblattId, true);
+//        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    /**
+     * Deletes zinsverzug
+     *
+     * @param int $datenblattId
+     * @param int $zinsverzugId
+     * @return void
+     */
+    public function actionDeletezinsverzug($datenblattId, $zinsverzugId)
+    {
+        $this->actionUpdate($datenblattId);
+
+        $model = $this->findModel($datenblattId);
+        if ($modelZinsverzug = Zinsverzug::findOne($zinsverzugId)) {
+            $modelZinsverzug->delete();
         }
 
         return $this->actionUpdate($datenblattId, true);

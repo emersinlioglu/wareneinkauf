@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 /** @var \app\models\Datenblatt $modelDatenblatt */
 ?>
 
-<div class="col-md-6">
+<div class="col-md-9">
     <div class="box-group" id="accordion">
         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
         <div class="panel box box-primary">

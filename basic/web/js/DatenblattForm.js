@@ -35,7 +35,7 @@ var DatenblattForm = function () {
      * Init datepickers
      * @param panelId
      */
-    _.initDatepickers = function(container, panelId) {
+    _.initDatepickers = function(panelId) {
         // init datepickers
         _form.find('#' + panelId + ' .box-body').find('.input-group.date').each(function(index, value) {
 
@@ -117,12 +117,12 @@ var DatenblattForm = function () {
 
             var elm         = $(this);
             var panelId     = elm.closest('.panel-collapse').attr('id');
-
             // POST Request
             $.post(elm.attr('href') , _form.serialize(), function(data) {
 
                 $('.skin-blue.sidebar-mini').html($(data).find('.skin-blue.sidebar-mini').html());
                 var newContent = $(data).find('#' + panelId + ' .box-body');
+console.log('panel-collapse: ' + panelId);
 
                 // init plus minus icons
                 _.initPlusMinusIcons(newContent);
