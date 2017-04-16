@@ -561,7 +561,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endforeach; ?>
         </table><br>
         <br>
-        <strong><u>./. Zinsverzüge</u></strong>
+        <strong><u>./. Verzugszins</u></strong>
         <table>
         <tr>
             <td width="15%"></td>

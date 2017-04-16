@@ -15,7 +15,7 @@ use kartik\money\MaskMoney;
         <div class="box-header with-border">
             <h4 class="box-title">
                 <a data-toggle="collapse" data-parent="#collapse-zinsverzug" href="#collapse-zinsverzug" aria-expanded="true" class="">
-                    Zinsverzug:
+                    Verzugszins:
                     
                     <?php 
                     $total = 0;

@@ -192,7 +192,7 @@ use kartik\money\MaskMoney;
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Zinsverzüge</td>
+                        <td>Verzugszins</td>
                         <td></td>
                         <td></td>
                         <td></td>
