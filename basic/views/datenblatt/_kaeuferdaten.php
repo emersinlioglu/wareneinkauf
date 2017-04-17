@@ -57,7 +57,7 @@ use kartik\datecontrol\DateControl;
                 <div class="row">
                     <div class="col-sm-3">
                         <?= $form->field($modelDatenblatt, 'sap_debitor_nr')->textInput([
-                            'maxlength' => 3,
+                            'maxlength' => 6,
                             //'disabled' => 'disabled'
                         ]) ?>
                     </div>
