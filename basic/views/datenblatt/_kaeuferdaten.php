@@ -56,14 +56,16 @@ use kartik\datecontrol\DateControl;
 
                 <div class="row">
                     <div class="col-sm-3">
-                        <?= $form->field($modelKaeufer, 'debitor_nr')->textInput(['maxlength' => true, 'disabled' => 'disabled']) ?>
-                        <?php
-//                            echo $form->field($modelKaeufer, 'debitor_nr')->widget(TypeaheadBasic::classname(), [
-//                                'data' => ['aaaa' => 'aaaaa', 'b' => 'bbbb'],
-//                                'pluginOptions' => ['highlight' => true],
-//                                'options' => ['placeholder' => 'Filter as you type ...'],
-//                            ]);
-                        ?>
+                        <?= $form->field($modelDatenblatt, 'sap_debitor_nr')->textInput([
+                            'maxlength' => 3,
+                            //'disabled' => 'disabled'
+                        ]) ?>
+                    </div>
+                    <div class="col-sm-3">
+                        <?= $form->field($modelDatenblatt, 'intern_debitor_nr')->textInput([
+                            'maxlength' => true,
+                            'disabled' => 'disabled'
+                        ]) ?>
                     </div>
                 </div>
                 <div class="row">

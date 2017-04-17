@@ -24,6 +24,8 @@ use Yii;
  * @property string $abnahme_ge
  * @property integer $auflassung
  * @property integer $creator_user_id
+ * @property string $sap_debitor_nr
+ * @property string $intern_debitor_nr
  *
  *
  * @property Abschlag[] $abschlags
@@ -258,7 +260,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             [['creator_user_id'], 'required'],
             [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
             [['firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id', 'aktiv', 'auflassung', 'creator_user_id'], 'integer'], //'kaeufer_id',
-            [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'string']
+            [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen', 'sap_debitor_nr', 'intern_debitor_nr'], 'string']
         ];
     }
 
@@ -285,6 +287,8 @@ class Datenblatt extends \yii\db\ActiveRecord
             'abnahme_ge' => Yii::t('app', 'Abnahme Ge'),
             'auflassung' => Yii::t('app', 'Auflassung'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
+            'sap_debitor_nr' => Yii::t('app', 'SAP-Debitoren-Nr'),
+            'intern_debitor_nr' => Yii::t('app', 'Interne-Debitoren-Nr'),
         ];
     }
 
@@ -539,6 +543,21 @@ class Datenblatt extends \yii\db\ActiveRecord
             $label = Yii::$app->formatter->asDate($this->abnahme_ge);
         }
         return $label;
+    }
+
+    public function updateInternDebitorNr() {
+
+        $internDebitorNr = substr($this->sap_debitor_nr, 0, 3);
+        if ($this->haus) {
+            foreach($this->haus->teileigentumseinheits as $teileigentumseinheit) {
+                $internDebitorNr .=
+                    $teileigentumseinheit->einheitstyp->prefix_debitor_nr . $teileigentumseinheit->te_nummer;
+            }
+        }
+
+        $this->intern_debitor_nr = $internDebitorNr;
+
+        $this->save();
     }
 
 }

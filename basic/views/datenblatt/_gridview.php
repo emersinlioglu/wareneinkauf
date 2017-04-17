@@ -52,9 +52,9 @@
                 'label' => 'Ort'
             ],
             [
-                'attribute' => 'kaeufer_debitornr',
-                'value'=>'kaeufer.debitor_nr',
-                'label' => 'Debitoren Nr.'
+                'attribute' => 'sap_debitor_nr',
+                'value'=>'sap_debitor_nr',
+                'label' => 'SAP Debitoren Nr.'
             ],
 
             [

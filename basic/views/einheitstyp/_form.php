@@ -14,7 +14,8 @@ use yii\widgets\ActiveForm;
 
    
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-     <?= $form->field($model, 'einheit')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'einheit')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'prefix_debitor_nr')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

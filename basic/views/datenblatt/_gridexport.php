@@ -79,8 +79,8 @@ for ($i = 0; $i < $maxCountTEEinheits; $i++) {
 // Kaeufer Daten
 $gridColumns = array_merge($gridColumns, [
     [
-        'value'=>'kaeufer.debitor_nr',
-        'label' => 'Debitoren Nr.'
+        'value'=>'sap_debitor_nr',
+        'label' => 'SAP Debitoren Nr.'
     ],
     [
         'value'=>'kaeufer.anredeLabel',

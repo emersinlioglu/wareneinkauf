@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'debitor_nr') ?>
+    <?php //echo $form->field($model, 'debitor_nr') ?>
 
     <?= $form->field($model, 'anrede') ?>
 

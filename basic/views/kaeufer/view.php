@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //'id',
-            'debitor_nr',
+//            'debitor_nr',
            // 'beurkundung_am',
            // 'verbindliche_fertigstellung',
            // 'uebergang_bnl',

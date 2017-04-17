@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <table width="100%" border="0">
   <tr>
     <td><strong>Debitor-Nr.</strong></td>
-    <td><?= $model->kaeufer ? $model->kaeufer->debitor_nr : ''; ?></td>
+    <td><?= $model->sap_debitor_nr ?></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>

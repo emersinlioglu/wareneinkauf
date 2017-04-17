@@ -84,9 +84,14 @@ $gridColumns = [
         'label' => 'Ort'
     ],
     [
-        'attribute' => 'kaeufer_debitornr',
-        'value'=>'kaeufer.debitor_nr',
-        'label' => 'Debitoren Nr.'
+        'attribute' => 'sap_debitor_nr',
+        'value'=>'sap_debitor_nr',
+        'label' => 'SAP Debitoren Nr.'
+    ],
+    [
+        'attribute' => 'intern_debitor_nr',
+        'value'=>'intern_debitor_nr',
+        'label' => 'Interne Debitoren Nr.'
     ],
 
 //    [
@@ -159,10 +164,6 @@ for ($i = 0; $i < $maxCountTEEinheits; $i++) {
 
 // Kaeufer Daten
 $gridColumns = array_merge($gridColumns, [
-    [
-        'value'=>'kaeufer.debitor_nr',
-        'label' => 'Debitoren Nr.'
-    ],
     [
         'value'=>'kaeufer.anredeLabel',
         //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',

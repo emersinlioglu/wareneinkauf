@@ -40,7 +40,7 @@ class DatenblattSearch extends Datenblatt
             [['id', 'firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
             [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'safe'],
             [['haus', 'haus_strasse', 'haus_plz', 'haus_ort', 'haus_hausnr', 'te_nummer'], 'safe'],
-            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2'], 'safe'],
+            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2', 'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr'], 'safe'],
         ];
     }
@@ -174,6 +174,8 @@ class DatenblattSearch extends Datenblatt
         ]);
 
         $query->andFilterWhere(['like', 'besondere_regelungen_kaufvertrag', $this->besondere_regelungen_kaufvertrag])
+            ->andFilterWhere(['like', 'sap_debitor_nr', $this->sap_debitor_nr])
+            ->andFilterWhere(['like', 'intern_debitor_nr', $this->intern_debitor_nr])
             ->andFilterWhere(['like', 'haus.strasse', $this->haus_strasse])
             ->andFilterWhere(['like', 'haus.ort', $this->haus_ort])
             ->andFilterWhere(['like', 'haus.hausnr', $this->haus_hausnr])

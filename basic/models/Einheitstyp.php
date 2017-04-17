@@ -10,6 +10,7 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property string $einheit
+ * @property string $prefix_debitor_nr
  *
  * @property Teileigentumseinheit[] $teileigentumseinheits
  */
@@ -32,6 +33,7 @@ class Einheitstyp extends \yii\db\ActiveRecord
     {
         return [
             [['einheit'], 'required'],
+            [['prefix_debitor_nr'], 'string', 'max' => 3],
             [['name'], 'string', 'max' => 45],
             [['einheit'], 'string', 'max' => 255]
         ];
@@ -46,6 +48,7 @@ class Einheitstyp extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'einheit' => 'Einheit',
+            'prefix_debitor_nr' => 'Debitoren-Nr-Prefix',
         ];
     }
 

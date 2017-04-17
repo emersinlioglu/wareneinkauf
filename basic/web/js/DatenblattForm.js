@@ -225,7 +225,7 @@ console.log('panel-collapse: ' + panelId);
             .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 
                 var columns = [
-                    'debitor_nr',
+                    // 'debitor_nr',
                     'vorname',
                     'nachname'
                 ];
@@ -407,7 +407,23 @@ console.log('panel-collapse: ' + panelId);
             );
 
         });
-    }
+    };
+
+    _.initChangingDebitorenNr = function () {
+        $('#datenblatt-sap_debitor_nr').change(function () {
+
+            var self = $(this);
+            var internDebitorNr = self.val();
+
+            $('.te-einheiten tbody tr').each(function (key, value) {
+                internDebitorNr +=
+                    $(this).data('prefix-debitor-nr') + $(this).data('te-nummer');
+            });
+
+            $('#datenblatt-intern_debitor_nr').val(internDebitorNr);
+            console.log(internDebitorNr);
+        });
+    };
 
     _.init = function() {
         _form = $('#datenblatt-form');
@@ -420,6 +436,8 @@ console.log('panel-collapse: ' + panelId);
 
         _.initUpdateAbschlagDatum();
         _.initSendEinzelAbschlagMailBtn();
+
+        _.initChangingDebitorenNr();
     }
     
     _.init();

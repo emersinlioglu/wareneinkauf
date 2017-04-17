@@ -15,37 +15,43 @@
         <div id="collapse-te" class="panel-collapse collapse in" aria-expanded="false">
             <div class="box-body">
     
-                <table class="table">
-                    <tr>
-                        <th></th>
-                        <th>TE</th>
-                        <th>gefördert</th>
-                        <th>Geschoss</th>
-                        <th>Zimmer</th>
-                        <th>ME-Anteil</th>
-                        <th>Wohnfläche</th>
-                        <th class="text-align-right">Kaufpreis</th>
-                        <th class="text-align-right">KP/Einheit</th>
-                    </tr>
-                    <?php 
-                    /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
-                    if ($modelDatenblatt->haus):
-                    foreach ($modelDatenblatt->haus->teileigentumseinheits as $teileigentumseinheit): ?>
+                <table class="table te-einheiten">
+                    <thead>
                         <tr>
-                            <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
-                            <td><?= $teileigentumseinheit->te_nummer ?></td>
-                            <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
-                            <td><?= $teileigentumseinheit->geschoss ?></td>
-                            <td><?= $teileigentumseinheit->zimmer ?></td>
-                            <td><?= $teileigentumseinheit->me_anteil ?></td>
-                            <td><?= $teileigentumseinheit->wohnflaeche ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
-                            <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
-                            <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
+                            <th></th>
+                            <th>TE</th>
+                            <th>gefördert</th>
+                            <th>Geschoss</th>
+                            <th>Zimmer</th>
+                            <th>ME-Anteil</th>
+                            <th>Wohnfläche</th>
+                            <th class="text-align-right">Kaufpreis</th>
+                            <th class="text-align-right">KP/Einheit</th>
                         </tr>
-                    <?php 
-                    endforeach; 
-                    endif;
-                    ?>
+                    </thead>
+                    <tbody>
+                        <?php
+                        /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
+                        if ($modelDatenblatt->haus):
+                        foreach ($modelDatenblatt->haus->teileigentumseinheits as $teileigentumseinheit): ?>
+                            <tr
+                                data-prefix-debitor-nr="<?= $teileigentumseinheit->einheitstyp->prefix_debitor_nr ?>"
+                                data-te-nummer="<?= $teileigentumseinheit->te_nummer ?>">
+                                <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
+                                <td><?= $teileigentumseinheit->te_nummer ?></td>
+                                <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
+                                <td><?= $teileigentumseinheit->geschoss ?></td>
+                                <td><?= $teileigentumseinheit->zimmer ?></td>
+                                <td><?= $teileigentumseinheit->me_anteil ?></td>
+                                <td><?= $teileigentumseinheit->wohnflaeche ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
+                                <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
+                                <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
+                            </tr>
+                        <?php
+                        endforeach;
+                        endif;
+                        ?>
+                    </tbody>
                 </table>
                 
             </div>

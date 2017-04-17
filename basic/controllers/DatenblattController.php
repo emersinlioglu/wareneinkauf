@@ -226,7 +226,6 @@ class DatenblattController extends Controller
         $modelDatenblatt = $this->findModel($id);
         $modelDatenblatt->aktiv = 1;
 
-
         $data = Yii::$app->request->post();
 
 //        if ($preventPost && Yii::$app->request->isAjax) {
@@ -237,11 +236,10 @@ class DatenblattController extends Controller
 //if (isset($data['Datenblatt']['kaeufer_id']) && (int)$data['Datenblatt']['kaeufer_id'] == 0) {
 //    $data['Datenblatt']['kaeufer_id'] = 0;
 //}
-        /*echo "<pre>";
-print_r($data);
-echo "</pre>";
-die;*/
+
         if (!$preventPost && $modelDatenblatt->load($data) && $modelDatenblatt->save()) {
+
+            $modelDatenblatt->updateInternDebitorNr();
 
 //            // Käufer
 //            if ($modelKaeufer->load(Yii::$app->request->post())) {

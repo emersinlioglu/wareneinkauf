@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         $gridColumns = [
                             //['class' => 'yii\grid\SerialColumn'],
-                            'debitor_nr',
+//                            'debitor_nr',
                             [
                                 'attribute' => 'anrede',
                                 'value' => 'anredeLabel',
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'debitor_nr',
+//            'debitor_nr',
             //'beurkundung_am',
             //'verbindliche_fertigstellung',
             //'uebergang_bnl',

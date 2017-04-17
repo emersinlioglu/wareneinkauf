@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             'name',
             'einheit',
+            'prefix_debitor_nr',
         ],
     ]) ?>
 

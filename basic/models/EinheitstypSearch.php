@@ -20,7 +20,7 @@ class EinheitstypSearch extends Einheitstyp
         return [
             [['id'], 'integer'],
             [['name'], 'safe'],
-            [['einheit'], 'safe'],
+            [['einheit', 'prefix_debitor_nr'], 'safe'],
         ];
     }
 
@@ -61,6 +61,7 @@ class EinheitstypSearch extends Einheitstyp
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+                ->andFilterWhere(['like', 'prefix_debitor_nr', $this->prefix_debitor_nr])
                 ->andFilterWhere(['like', 'einheit', $this->einheit]);
 
         return $dataProvider;

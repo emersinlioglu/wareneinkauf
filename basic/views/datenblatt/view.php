@@ -278,7 +278,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td>Debitor-Nr.</td>
             <td></td>
             <td></td>
-            <td><?= $model->kaeufer ? $model->kaeufer->debitor_nr : ''; ?></td>
+            <td><?= $model->sap_debitor_nr; ?></td>
             <td></td>
             <td></td>
             <td></td>
