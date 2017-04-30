@@ -78,7 +78,8 @@ $this->registerJs('
                             'type' => DateControl::FORMAT_DATE,
                             'options' => [
                                 'pluginOptions' => [
-                                    //'autoclose' => true
+                                    'todayHighlight' => true,
+                                    //'autoclose' => true,
                                 ]
                             ]
                         ]);
