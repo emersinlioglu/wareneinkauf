@@ -65,7 +65,7 @@ $this->registerJs('
                     </div>
                     <div class="col-sm-3">
                         <?= $form->field($abschlagModel, 'vorlage_id')->dropDownList(
-                            ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+                            ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
                             [
                                 'class' => 'form-control',
                                 'prompt'=>'Vorlage auswählen'
