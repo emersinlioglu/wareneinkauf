@@ -236,9 +236,6 @@ class AbschlagController extends Controller
 
                 $abschlag = $datenblatt->abschlags[$abschlagNr];
 
-//                $abschlag->vorlage_id = $vorlageId;
-//                $abschlag->save();
-
                 $pdfContents[] = $abschlag->getPdfContent();
             }
         }
@@ -275,7 +272,7 @@ class AbschlagController extends Controller
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
             'cssInline' => ' tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}',
             //'options'=> ['title'=> 'Datenblatt'],
-            //'marginTop' => '40',
+            'marginBottom' => '40',
             'methods' => [
                 //'setHeader' => ['Erstellt am: ' . date("d.m.Y")],
                 //'setHeader' => [$headerHtml],
