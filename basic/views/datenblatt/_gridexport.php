@@ -193,7 +193,8 @@ $gridColumns[] = [
 
 $gridColumns[] = [
     'value'=> "offenePosten",
-    'label' => "Offene Posten:"
+    'label' => "Offene Posten:",
+    'format' => ['decimal', 2],
 ];
 
 
