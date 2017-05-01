@@ -423,7 +423,7 @@ echo DynaGrid::widget([
     'action' => ['abschlag/serienbrief'],
     'method' => 'post',
     'options' => array(
-        'class' => 'datenblatt-selection-form',
+        'class' => 'datenblatt-selection-form hide',
     )
 ]); ?>
     <?= Html::submitButton('submit', ['name' => 'submit', 'value' => 'selection']) ?>

@@ -787,4 +787,21 @@ class DatenblattController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionUpdatedebitorennummer() {
+        $datenblatts = Datenblatt::find()->all();
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+
+            if ($datenblatt->kaeufer) {
+                $debitorNr = $datenblatt->kaeufer->debitor_nr;
+                $datenblatt->sap_debitor_nr = $debitorNr;
+            }
+            $datenblatt->updateInternDebitorNr();
+
+            echo $datenblatt->sap_debitor_nr . ' - ' . $datenblatt->intern_debitor_nr . "<br>";
+        }
+
+        return 'Aktualisiert';
+    }
 }
