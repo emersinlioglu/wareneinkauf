@@ -112,6 +112,23 @@ class Abschlag extends \yii\db\ActiveRecord
             }
         }
 
+        $kaeuferDaten = array();
+        $kaeufer = $datenblatt->kaeufer;
+        if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
+            $kaeuferDaten[] = ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+        }
+        if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
+            $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
+        }
+        if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
+            $kaeuferDaten = array_reverse($kaeuferDaten);
+        }
+
+        $kaeuferNamen = '';
+        foreach ($kaeuferDaten as $name) {
+            $kaeuferNamen .= $name . '<br />';
+        }
+
         $replaceData = [
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
@@ -122,13 +139,14 @@ class Abschlag extends \yii\db\ActiveRecord
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
             '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
-            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herr',
-            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
-            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
+//            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herrn',
+//            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
+//            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
             '[kaeufer-strasse]' => $datenblatt->kaeufer->strasse,
             '[kaeufer-strassen-nr]' => $datenblatt->kaeufer->hausnr,
             '[kaeufer-plz]' => $datenblatt->kaeufer->plz,
             '[kaeufer-ort]' => $datenblatt->kaeufer->ort,
+            '[kaeufer]' => $kaeuferNamen,
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
         ];
