@@ -144,7 +144,7 @@ $this->registerJs('
 <!--                            --><?php //echo Html::dropDownList(
 //                                'vorlage',
 //                                null,
-//                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+//                                ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
 //                                [
 //                                    'class' => 'form-control',
 //                                    'prompt'=>'Vorlage auswählen'
@@ -209,7 +209,7 @@ $this->registerJs('
                             <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                             <?= Html::dropDownList(
                                 'vorlage', null,
-                                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+                                ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
                                 [
                                     'class' => 'form-control',
                                     'prompt'=>'Vorlage auswählen'

@@ -29,7 +29,7 @@ use kartik\datecontrol\DateControl;
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'vorlage_id')->dropDownList(
-                ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+                ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
                 [
                     'class' => 'form-control',
                     'prompt'=>'Vorlage auswählen'

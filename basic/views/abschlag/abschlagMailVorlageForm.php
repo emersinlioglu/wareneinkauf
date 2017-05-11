@@ -33,7 +33,7 @@ use yii\helpers\ArrayHelper;
                 <?= Html::dropDownList(
                     'vorlage',
                     null,
-                    ArrayHelper::map(Vorlage::findAll('1'), 'id', 'name'),
+                    ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
                     [
                         'class' => 'form-control',
                         'prompt'=>'Vorlage auswählen'
