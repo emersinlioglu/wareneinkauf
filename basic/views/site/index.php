@@ -31,7 +31,7 @@ $this->title = '';
 
         <h1>Willkommen </h1>
         <p class="lead">
-            bei ABG Wohnungsportal
+            beim ABG Wohnungsportal
         </p>
         <!--        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>-->
     </div>
@@ -40,71 +40,71 @@ $this->title = '';
 
 
         <?php
-        echo Highcharts::widget([
-            'options' => [
-                'title' => ['text' => 'Verkaufsentwicklung'],
-//                'xAxis' => [
-//                    'categories' => ['Apples', 'Bananas', 'Oranges']
+//        echo Highcharts::widget([
+//            'options' => [
+//                'title' => ['text' => 'Verkaufsentwicklung'],
+////                'xAxis' => [
+////                    'categories' => ['Apples', 'Bananas', 'Oranges']
+////                ],
+////                'yAxis' => [
+////                    'title' => ['text' => 'Fruit eaten']
+////                ],
+////                'series' => [
+////                    ['name' => 'Jane', 'data' => [1, 0, 4]],
+////                    ['name' => 'John', 'data' => [5, 7, 3]]
+////                ]
+//                'chart'=> [
+//                    'plotBackgroundColor'=> null,
+//                    'plotBorderWidth'=> null,
+//                    'plotShadow'=> false,
+//                    'type'=> 'pie'
 //                ],
-//                'yAxis' => [
-//                    'title' => ['text' => 'Fruit eaten']
+//                'tooltip'=> [
+//                        'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
 //                ],
-//                'series' => [
-//                    ['name' => 'Jane', 'data' => [1, 0, 4]],
-//                    ['name' => 'John', 'data' => [5, 7, 3]]
+//                'plotOptions'=> [
+//                    'pie'=> [
+//                        'allowPointSelect'=> true,
+//                        'cursor'=> 'pointer',
+//                        'dataLabels'=> [
+//                            'enabled'=> true,
+//                            'format'=> '<b>{point.name}</b>: {point.y:.2f} m²',
+//                            'style'=> [
+//                                'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
+//                            ],
+//                            'connectorColor'=> 'silver'
+//                        ]
+//                    ]
+//                ],
+//                'series'=> [
+//                    [
+//                        'name'=> 'Einheitstyp',
+//                        'data'=> $verkaufsentwicklungDataProProjekt,
+//                        'size'=> '75%',
+//                        'innerSize'=> '50%',
+//                        'dataLabels'=> [
+//                            'formatter'=> "function () {
+//                                // display only if larger than 1
+//                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+//                            }"
+//                        ]
+//                    ],
+//                    [
+//                        'name'=> 'Projekte',
+//                        'data'=> $verkaufsentwicklungData,
+//                        'size'=> '50%',
+//                        'dataLabels'=> [
+//                            'formatter'=> 'function () {
+//                                return this.y > 5 ? this.point.name : null;
+//                            }',
+//                            'color'=> '#ffffff',
+//                            'distance'=> -30
+//                        ]
+//                    ],
+//
 //                ]
-                'chart'=> [
-                    'plotBackgroundColor'=> null,
-                    'plotBorderWidth'=> null,
-                    'plotShadow'=> false,
-                    'type'=> 'pie'
-                ],
-                'tooltip'=> [
-                        'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
-                ],
-                'plotOptions'=> [
-                    'pie'=> [
-                        'allowPointSelect'=> true,
-                        'cursor'=> 'pointer',
-                        'dataLabels'=> [
-                            'enabled'=> true,
-                            'format'=> '<b>{point.name}</b>: {point.y:.2f} m²',
-                            'style'=> [
-                                'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
-                            ],
-                            'connectorColor'=> 'silver'
-                        ]
-                    ]
-                ],
-                'series'=> [
-                    [
-                        'name'=> 'Einheitstyp',
-                        'data'=> $verkaufsentwicklungDataProProjekt,
-                        'size'=> '75%',
-                        'innerSize'=> '50%',
-                        'dataLabels'=> [
-                            'formatter'=> "function () {
-                                // display only if larger than 1
-                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
-                            }"
-                        ]
-                    ],
-                    [
-                        'name'=> 'Projekte',
-                        'data'=> $verkaufsentwicklungData,
-                        'size'=> '50%',
-                        'dataLabels'=> [
-                            'formatter'=> 'function () {
-                                return this.y > 5 ? this.point.name : null;
-                            }',
-                            'color'=> '#ffffff',
-                            'distance'=> -30
-                        ]
-                    ],
-
-                ]
-            ]
-        ]);
+//            ]
+//        ]);
         ?>
 
 
