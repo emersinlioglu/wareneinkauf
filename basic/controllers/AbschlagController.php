@@ -270,7 +270,12 @@ class AbschlagController extends Controller
             'orientation' => Pdf::FORMAT_A4,
             'destination' => $destination,
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-            'cssInline' => ' tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}',
+            'cssInline' => '
+                *, body, p {
+                  font-family: \'calibri\',\'serif\',\'couriernew\' !important;
+                }
+                tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}
+            ',
             //'options'=> ['title'=> 'Datenblatt'],
             'marginBottom' => '40',
             'methods' => [
