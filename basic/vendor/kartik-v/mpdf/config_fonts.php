@@ -145,7 +145,11 @@ $this->fontdata = array(
 /* OCR-B font for Barcodes */
 	"ocrb" => array(
 		'R' => "ocrb10.ttf",
-		),
+    ),
+	"calibri" => array(
+		'R' => "Calibri.ttf",
+		'B' => "Calibrib.ttf",
+    ),
 
 
 
