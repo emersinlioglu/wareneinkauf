@@ -106,6 +106,7 @@ class AbschlagController extends Controller
                 if (is_null($abschlag->mail_gesendet)) {
 
                     $abschlag->load(Yii::$app->request->get());
+                    $abschlag->kaufvertrag_angefordert = $abschlag->erstell_datum;
 
                     if ($abschlag->save()) {
                         $data['success'][] = $datenblatt->id;
@@ -178,6 +179,7 @@ class AbschlagController extends Controller
                     $abschlag->mail_gesendet = date('Y-m-d H:i:s');
                     if (is_null($abschlag->erstell_datum)) {
                         $abschlag->erstell_datum = date('Y-m-d');
+                        $abschlag->kaufvertrag_angefordert = $abschlag->erstell_datum;
                     }
 
                     if ($abschlag->save()) {
@@ -235,6 +237,11 @@ class AbschlagController extends Controller
             if (isset($datenblatt->abschlags[$abschlagNr])) {
 
                 $abschlag = $datenblatt->abschlags[$abschlagNr];
+
+                if (is_null($abschlag->kaufvertrag_angefordert)) {
+                    $abschlag->kaufvertrag_angefordert = date('Y-m-d');
+                    $abschlag->save();
+                }
 
                 $pdfContents[] = $abschlag->getPdfContent();
             }
