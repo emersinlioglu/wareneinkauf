@@ -547,7 +547,7 @@ class Datenblatt extends \yii\db\ActiveRecord
 
     public function updateInternDebitorNr() {
 
-        $internDebitorNr = substr($this->sap_debitor_nr, 0, 3);
+        $internDebitorNr = $this->sap_debitor_nr . '-';
         if ($this->haus) {
             foreach($this->haus->teileigentumseinheits as $teileigentumseinheit) {
                 $internDebitorNr .=
