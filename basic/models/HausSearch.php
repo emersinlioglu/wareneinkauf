@@ -117,9 +117,9 @@ class HausSearch extends Haus
         }
 */
         
-        $query->andFilterWhere(['like', 'plz', $this->plz])
-            ->andFilterWhere(['like', 'ort', $this->ort])
-            ->andFilterWhere(['like', 'strasse', $this->strasse])
+        $query->andFilterWhere(['like', 'haus.plz', $this->plz])
+            ->andFilterWhere(['like', 'haus.ort', $this->ort])
+            ->andFilterWhere(['like', 'haus.strasse', $this->strasse])
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
             ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
