@@ -22,6 +22,7 @@ use app\models\Sonderwunsch;
 use app\models\Abschlag;
 use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
+use webvimark\modules\UserManagement\models\User;
 
 use kartik\dynagrid\DynaGridStore;
 
@@ -223,6 +224,7 @@ class DatenblattController extends Controller
      */
     public function actionUpdate($id, $preventPost = false)
     {
+        $canEditBasicData = User::hasPermission('write_datasheets_basicdata');
         $modelDatenblatt = $this->findModel($id);
         $modelDatenblatt->aktiv = 1;
 
@@ -400,6 +402,7 @@ class DatenblattController extends Controller
 
             'kaufpreisTotal' => $kaufpreisTotal,
             'sonderwuenscheTotal' => $sonderwuenscheTotal,
+            'canEditBasicData' => $canEditBasicData,
         ]);
     }
 

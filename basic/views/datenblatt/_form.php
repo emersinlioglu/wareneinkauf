@@ -69,7 +69,17 @@ $this->registerJs('
 <?php if ($modelDatenblatt->id): ?>
     <div class="row">
         <div class="col-sm-2">
-            <?= $form->field($modelDatenblatt, 'firma_id')->dropDownList(ArrayHelper::map(Firma::find()->all(), 'id', 'name'), ['prompt' => 'Firma auswählen'])->label('Firma') ?>
+            <?php $htmlOptions = $canEditBasicData ? [] : ['disabled' => 'disabled'] ?>
+            <?= $form->field($modelDatenblatt, 'firma_id')
+                ->dropDownList(ArrayHelper::map(
+                    Firma::find()->all(), 'id', 'name'),
+                    array_merge(
+                        ['prompt' => 'Firma auswählen'],
+                        $htmlOptions
+                    )
+                )
+                ->label('Firma')
+            ?>
         </div>
         <div class="col-sm-2">
             
@@ -84,7 +94,7 @@ $this->registerJs('
         <div class="col-sm-2">
             <?php
             $htmlOptions = ['prompt' => 'Projekt auswählen'];
-            if (!$modelDatenblatt->firma_id) {
+            if (!$modelDatenblatt->firma_id || !$canEditBasicData) {
                 $htmlOptions['disabled'] = 'disabled';
             }
             $projekte = $modelDatenblatt->firma ? $modelDatenblatt->firma->projekts : [];
@@ -95,7 +105,7 @@ $this->registerJs('
             <?php
             $htmlOptions = ['prompt' => 'Object auswählen'];
             $haeuserOptions = [];
-            if (!$modelDatenblatt->projekt_id) {
+            if (!$modelDatenblatt->projekt_id || !$canEditBasicData) {
                 $htmlOptions['disabled'] = 'disabled';
             } else {
                 /* @var $haus \app\models\Haus */
@@ -140,7 +150,8 @@ $this->registerJs('
         <?= $this->render('_kaeuferdaten', [
             'form' => $form,
             'modelKaeufer' => $modelKaeufer,
-            'modelDatenblatt' => $modelDatenblatt
+            'modelDatenblatt' => $modelDatenblatt,
+            'canEditBasicData' => $canEditBasicData,
         ]) ?>
     <?php //endif; ?>
 

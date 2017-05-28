@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = ['label' => $modelDatenblatt->id, 'url' => ['vi
 
         'kaufpreisTotal' => $kaufpreisTotal,
         'sonderwuenscheTotal' => $sonderwuenscheTotal,
+        'canEditBasicData' => $canEditBasicData,
     ]) ?>
 
 </div>

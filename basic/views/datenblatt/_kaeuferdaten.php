@@ -49,17 +49,21 @@ use kartik\datecontrol\DateControl;
                     <div class="col-sm-3">
                         <div class="form-group field-search-kaufer">
                             <label class="control-label" for="kaeufer-debitor_nr">Suche</label>
-                            <input type="text" id="search-kaufer" class="form-control ui-autocomplete-input" name="suche" value="" maxlength="255">
+                            <input type="text"
+                                   id="search-kaufer"
+                                   class="form-control ui-autocomplete-input"
+                                   name="suche" value="" maxlength="255" <?= $canEditBasicData ? '' : 'disabled'?>>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-3">
-                        <?= $form->field($modelDatenblatt, 'sap_debitor_nr')->textInput([
-                            'maxlength' => 6,
-                            //'disabled' => 'disabled'
-                        ]) ?>
+                        <?php $htmlOptions = $canEditBasicData ? [] : ['disabled' => 'disabled'] ?>
+
+                        <?= $form->field($modelDatenblatt, 'sap_debitor_nr')->textInput(
+                            array_merge(['maxlength' => 6,], $htmlOptions)
+                        )?>
                     </div>
                     <div class="col-sm-3">
                         <?= $form->field($modelDatenblatt, 'intern_debitor_nr')->textInput([
@@ -71,70 +75,98 @@ use kartik\datecontrol\DateControl;
                 <div class="row">
                     <div class="col-sm-3">
                         <?php
-                            echo $form->field($modelDatenblatt, "beurkundung_am")->widget(DateControl::classname(), [
-                                'type' => DateControl::FORMAT_DATE,
-//                                'disabled' => 'disabled',
-                                'options' => [
-                                    'pluginOptions' => [
-                                        //'autoclose' => true
+                            echo $form->field($modelDatenblatt, "beurkundung_am")->widget(DateControl::classname(),
+                                array_merge(
+                                    $htmlOptions,
+                                    [
+                                        'type' => DateControl::FORMAT_DATE,
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                //'autoclose' => true
+                                            ]
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                )
+                            );
                         ?>
                     </div>
                     <div class="col-sm-3">
                         <?php
-                            echo $form->field($modelDatenblatt, "verbindliche_fertigstellung")->widget(DateControl::classname(), [
-                                'type' => DateControl::FORMAT_DATE,
-//                                'disabled' => 'disabled',
-                                'options' => [
-                                    'pluginOptions' => [
-                                        //'autoclose' => true
+                            echo $form->field($modelDatenblatt, "verbindliche_fertigstellung")->widget(
+                                DateControl::classname(),
+                                array_merge(
+                                    $htmlOptions,
+                                    [
+                                        'type' => DateControl::FORMAT_DATE,
+        //                                'disabled' => 'disabled',
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                //'autoclose' => true
+                                            ]
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                )
+                            );
                         ?>
                         <?php
-                            echo $form->field($modelDatenblatt, "uebergang_bnl")->widget(DateControl::classname(), [
-                                'type' => DateControl::FORMAT_DATE,
-//                                'disabled' => 'disabled',
-                                'options' => [
-                                    'pluginOptions' => [
-                                        //'autoclose' => true
+                            echo $form->field($modelDatenblatt, "uebergang_bnl")->widget(
+                                DateControl::classname(),
+                                array_merge(
+                                    $htmlOptions,
+                                    [
+                                        'type' => DateControl::FORMAT_DATE,
+        //                                'disabled' => 'disabled',
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                //'autoclose' => true
+                                            ]
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                )
+                            );
                         ?>
                     </div>
                     <div class="col-sm-3">
                         <?php
-                            echo $form->field($modelDatenblatt, "abnahme_se")->widget(DateControl::classname(), [
-                                'type' => DateControl::FORMAT_DATE,
-//                                'disabled' => 'disabled',
-                                'options' => [
-                                    'pluginOptions' => [
-                                        //'autoclose' => true
+                            echo $form->field($modelDatenblatt, "abnahme_se")->widget(
+                                DateControl::classname(),
+                                array_merge(
+                                    $htmlOptions,
+                                    [
+                                        'type' => DateControl::FORMAT_DATE,
+        //                                'disabled' => 'disabled',
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                //'autoclose' => true
+                                            ]
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                )
+                            );
                         ?>
                         <?php
-                            echo $form->field($modelDatenblatt, "abnahme_ge")->widget(DateControl::classname(), [
-                                'type' => DateControl::FORMAT_DATE,
-//                                'disabled' => 'disabled',
-                                'options' => [
-                                    'pluginOptions' => [
-                                        //'autoclose' => true
+                            echo $form->field($modelDatenblatt, "abnahme_ge")->widget(
+                                DateControl::classname(),
+                                array_merge(
+                                    $htmlOptions,
+                                    [
+                                        'type' => DateControl::FORMAT_DATE,
+        //                                'disabled' => 'disabled',
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                //'autoclose' => true
+                                            ]
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                )
+                            );
                         ?>
                     </div>
 
                     <div class="col-sm-3">
-                        <?= $form->field($modelDatenblatt, 'auflassung')->checkbox([
-//                            'disabled' => 'disabled'
-                        ]) ?>
+                        <?= $form->field($modelDatenblatt, 'auflassung')->checkbox(
+                            array_merge($htmlOptions, [])
+                        ) ?>
                     </div>
                 </div>
 
