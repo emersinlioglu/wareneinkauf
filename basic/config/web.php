@@ -112,7 +112,7 @@ $config = [
             'timeFormat' => 'php:H:i:s',
             'decimalSeparator' => ',', 
             'thousandSeparator' => '.', 
-            'currencyCode' => 'EUR', 
+            'currencyCode' => 'EUR',
         ],
 
 //        'assetManager' => [

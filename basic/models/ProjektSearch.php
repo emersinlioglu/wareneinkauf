@@ -104,4 +104,92 @@ public $firma_nr;
 
         return $dataProvider;
     }
+
+    /**
+     * @return array
+     */
+    public static function getAllProjectsInfo($userId = null, $projektId = null) {
+
+        $sql = "
+            select 
+                p.name,
+                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id) 
+                as wohnflaechensumme,
+                (select SUM(te.kaufpreis) / SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id)  
+                as durchschnittlicherPreisProQuadradmeter,
+                (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id) 
+                as verkuafspreissumme,
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id) 
+                as einheitenGesamt,
+                -- (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkuaft' where h.projekt_id = p.id) as einheitenVerkauft,
+                
+                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'frei') 
+                as wohnflaechensummeFrei,
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'frei' where h.projekt_id = p.id) 
+                as einheitenFreiStück,
+                (
+                    (
+                        (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'frei' where h.projekt_id = p.id)
+                        /
+                        (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id)
+                    )
+                    * 100
+                ) 
+                as einheitenFreiProzent,
+                (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'frei' where h.projekt_id = p.id) 
+                as einheitenFreiPreisSumme,
+                
+                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'reserviert') 
+                as wohnflaechensummeReserviert,
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'reserviert' where h.projekt_id = p.id) 
+                as einheitenReserviertStück,
+                (
+                  (
+                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'reserviert' where h.projekt_id = p.id)
+                    /
+                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id)
+                  )
+                  * 100
+                ) as einheitenReserviertProzent,
+                (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'reserviert' where h.projekt_id = p.id) 
+                as einheitenReserviertPreisSumme,
+                
+                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'verkauft') 
+                as wohnflaechensummeVerkauft,
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkauft' where h.projekt_id = p.id) as einheitenVerkauftStück,
+                (
+                  (
+                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkauft' where h.projekt_id = p.id)
+                    /
+                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id)
+                  )
+                  * 100
+                ) as einheitenVerkauftProzent,
+                (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkauft' where h.projekt_id = p.id) 
+                as einheitenVerkauftPreisSumme
+
+            from projekt p
+            where
+            1
+        ";
+
+        if (!is_null($userId)) {
+            $sql .= sprintf(
+                'and p.id in (select pu.projekt_id from projekt_user pu where pu.user_id = %s)',
+                $userId
+            );
+        }
+
+        if (!is_null($projektId)) {
+            $sql .= sprintf(
+                'and p.id = %s',
+                $projektId
+            );
+        }
+
+        $rows = Yii::$app->getDb()->createCommand($sql)->queryAll();
+
+        return $rows;
+    }
+
 }

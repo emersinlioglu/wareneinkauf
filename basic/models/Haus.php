@@ -14,8 +14,7 @@ use yii\helpers\Html;
  * @property string $ort
  * @property string $strasse
  * @property string $hausnr
- * @property integer $reserviert
- * @property integer $verkauft
+ * @property string $status
  * @property integer $rechnung_vertrieb
  * @property integer $creator_user_id
  *
@@ -26,6 +25,18 @@ use yii\helpers\Html;
  */
 class Haus extends \yii\db\ActiveRecord
 {
+    const STATUS_FREI = 'frei';
+    const STATUS_RESERVIERT = 'reserviert';
+    const STATUS_VERKAUFT   = 'verkauft';
+
+    public static function statusOptions() {
+        return [
+            Haus::STATUS_FREI=> 'Frei',
+            Haus::STATUS_RESERVIERT => 'Reserviert',
+            Haus::STATUS_VERKAUFT => 'Verkauft'
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -41,8 +52,8 @@ class Haus extends \yii\db\ActiveRecord
     {
         return [
             [['creator_user_id'], 'required'],
-            [['projekt_id', 'firma_id', 'reserviert', 'verkauft', 'rechnung_vertrieb', 'creator_user_id'], 'integer'],
-            [['plz', 'ort', 'strasse'], 'string', 'max' => 255],
+            [['projekt_id', 'firma_id', 'rechnung_vertrieb', 'creator_user_id'], 'integer'],
+            [['plz', 'ort', 'strasse', 'status'], 'string', 'max' => 255],
             [['hausnr'], 'string', 'max' => 45]
         ];
     }
@@ -60,8 +71,7 @@ class Haus extends \yii\db\ActiveRecord
             'ort' => Yii::t('app', 'Ort'),
             'strasse' => Yii::t('app', 'Strasse'),
             'hausnr' => Yii::t('app', 'Hausnr'),
-            'reserviert' => Yii::t('app', 'Reserviert'),
-            'verkauft' => Yii::t('app', 'Verkauft'),
+            'status' => Yii::t('app', 'Status'),
             'rechnung_vertrieb' => Yii::t('app', 'Rechnung Vertrieb'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
         ];

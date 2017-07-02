@@ -61,27 +61,27 @@ class SiteController extends Controller
         $einheitstypModel = new Einheitstyp();
         $projektModel     = new Projekt();
 
-        $verkaufsentwicklungData = [];
-        $verkaufsentwicklungDataProProjekt = [];
-
-        foreach ($projektModel->getWohnflaeschenDataFuerAlleProjekte() as $key => $row) {
-            $verkaufsentwicklungData[] = [
-                'name'      => $row['name'],
-                'y'         => (float) $row['summeWohnflaeche'],
-            ];
-
-            $projektData = $einheitstypModel->getProjektVerkaufsentwicklungData($row['projektId']);
-            foreach ($projektData as $pKey => $pData) {
-                $verkaufsentwicklungDataProProjekt[] = [
-                    'name'      => $pData['projektName'],
-                    'y'         => (float) $pData['summeWohnflaeche'],
-                ];
-            }
-        }
+//        $verkaufsentwicklungData = [];
+//        $verkaufsentwicklungDataProProjekt = [];
+//
+//        foreach ($projektModel->getWohnflaeschenDataFuerAlleProjekte() as $key => $row) {
+//            $verkaufsentwicklungData[] = [
+//                'name'      => $row['name'],
+//                'y'         => (float) $row['summeWohnflaeche'],
+//            ];
+//
+//            $projektData = $einheitstypModel->getProjektVerkaufsentwicklungData($row['projektId']);
+//            foreach ($projektData as $pKey => $pData) {
+//                $verkaufsentwicklungDataProProjekt[] = [
+//                    'name'      => $pData['projektName'],
+//                    'y'         => (float) $pData['summeWohnflaeche'],
+//                ];
+//            }
+//        }
 
         return $this->render('index', [
-            'verkaufsentwicklungData'           => $verkaufsentwicklungData,
-            'verkaufsentwicklungDataProProjekt' => $verkaufsentwicklungDataProProjekt
+//            'verkaufsentwicklungData'           => $verkaufsentwicklungData,
+//            'verkaufsentwicklungDataProProjekt' => $verkaufsentwicklungDataProProjekt
         ]);
     }
 

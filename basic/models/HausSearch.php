@@ -25,8 +25,8 @@ class HausSearch extends Haus
     public function rules()
     {
         return [
-            [['id', 'projekt_id', 'reserviert', 'verkauft', 'rechnung_vertrieb'], 'integer'],
-            [['plz', 'ort', 'strasse', 'hausnr', 'te_nummer'], 'safe'],
+            [['id', 'projekt_id', 'rechnung_vertrieb'], 'integer'],
+            [['plz', 'ort', 'strasse', 'hausnr', 'te_nummer', 'status'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr', 'onlyNotAssigned'], 'safe'],
         ];
     }
@@ -104,8 +104,7 @@ class HausSearch extends Haus
         $query->andFilterWhere([
             'id' => $this->id,
             'projekt_id' => $this->projekt_id,
-            'reserviert' => $this->reserviert,
-            'verkauft' => $this->verkauft,
+            'status' => $this->status,
             'rechnung_vertrieb' => $this->rechnung_vertrieb,
         ]);
 

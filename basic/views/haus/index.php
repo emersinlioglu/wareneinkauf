@@ -4,6 +4,7 @@ use yii\helpers\Html;
 //use yii\grid\GridView;
 use kartik\grid\GridView;
 use webvimark\modules\UserManagement\models\User;
+use \app\models\Haus;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\HausSearch */
@@ -47,25 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'projekt.name',
                 'label' => 'Projekt'
             ],
-            // 'reserviert',
             [
-                'class' => 'kartik\grid\BooleanColumn',
-                'attribute' => 'reserviert',
-                'vAlign' => 'middle',
-                'trueLabel' => 'Ja',
-                'falseLabel' => 'Nein',
-                // 'filterType'=>GridView::FILTER_CHECKBOX,
+                'attribute' => 'status',
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'status',
+                    Haus::statusOptions(),
+                    ['class'=>'form-control','prompt' => '']
+                ),
             ],
-            // 'verkauft',
-            [
-                'class' => 'kartik\grid\BooleanColumn',
-                'attribute' => 'verkauft',
-                'vAlign' => 'middle',
-                'trueLabel' => 'Ja',
-                'falseLabel' => 'Nein',
-
-                // 'filterType'=>GridView::FILTER_CHECKBOX,
-            ],
+//            [
+//                'class' => 'kartik\grid\BooleanColumn',
+//                'attribute' => 'verkauft',
+//                'vAlign' => 'middle',
+//                'trueLabel' => 'Ja',
+//                'falseLabel' => 'Nein',
+//
+//                // 'filterType'=>GridView::FILTER_CHECKBOX,
+//            ],
             // 'rechnung_vertrieb',
             [
                 'class' => 'kartik\grid\BooleanColumn',

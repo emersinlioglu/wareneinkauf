@@ -38,6 +38,9 @@ $this->title = '';
 
     <div class="body-content">
 
+        <?= \app\components\ProjectDashboard::widget([
+            'userId' => (!Yii::$app->user->isSuperadmin ? Yii::$app->user->getId() : null)
+        ]) ?>
 
         <?php
 //        echo Highcharts::widget([

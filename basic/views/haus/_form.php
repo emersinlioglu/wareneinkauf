@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Projekt;
 use app\models\Firma;
+use app\models\Haus;
 use app\models\Einheitstyp;
 //use kartik\datetime\DateTimePicker;
 use kartik\datecontrol\DateControl;
@@ -77,8 +78,7 @@ $this->registerJs('
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <?= $form->field($model, 'reserviert')->checkbox([]) ?>
-            <?= $form->field($model, 'verkauft')->checkbox([]) ?>
+            <?= $form->field($model, 'status')->dropDownList(Haus::statusOptions(), ['prompt' => 'Bitte wählen'])->label('Status'); ?>
             <?= $form->field($model, 'rechnung_vertrieb')->checkbox([]) ?>
         </div>
     </div>
