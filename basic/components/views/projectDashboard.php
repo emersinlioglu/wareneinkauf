@@ -245,7 +245,7 @@ echo Highcharts::widget([
                         <tr>
                             <td><?= $einheitstyp->name ?></td>
                             <?php
-                                $decimal = in_array($einheitstyp->einheit,  ['Stück', 'Stck.']) ? 0 : 2;
+                                $decimal = $einheitstyp->einheit == 'm2' ? 2 : 0;
                             ?>
                             <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensumme'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
                             <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>

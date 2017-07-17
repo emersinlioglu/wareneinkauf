@@ -215,7 +215,7 @@ public $firma_nr;
             select 
             
                 (
-                    select SUM(te.wohnflaeche) from teileigentumseinheit te 
+                    select COUNT(te.wohnflaeche) from teileigentumseinheit te 
                     left join haus h on te.haus_id = h.id 
                     where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                 ) 
