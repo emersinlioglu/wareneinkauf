@@ -74,26 +74,28 @@ class ProjectDashboard extends Widget
                 }
 
                 // Diagramm 2
-                if ($frei > 0) {
-                    $veDataProProjekt[] =
-                        [
-                            'name'      => $einheitstyp->name,
-                            'y'         => (float)$frei,
-                        ];
-                }
-                if ($reserviert > 0) {
-                    $veDataProProjekt[] =
-                        [
-                            'name'      => $einheitstyp->name,
-                            'y'         => (float)$reserviert,
-                        ];
-                }
-                if ($verkauft > 0) {
-                    $veDataProProjekt[] =
-                        [
-                            'name'      => $einheitstyp->name,
-                            'y'         => (float)$verkauft,
-                        ];
+                if ($einheitstyp->einheit == 'm2') {
+                    if ($frei > 0) {
+                        $veDataProProjekt[] =
+                            [
+                                'name'      => $einheitstyp->name,
+                                'y'         => (float)$frei,
+                            ];
+                    }
+                    if ($reserviert > 0) {
+                        $veDataProProjekt[] =
+                            [
+                                'name'      => $einheitstyp->name,
+                                'y'         => (float)$reserviert,
+                            ];
+                    }
+                    if ($verkauft > 0) {
+                        $veDataProProjekt[] =
+                            [
+                                'name'      => $einheitstyp->name,
+                                'y'         => (float)$verkauft,
+                            ];
+                    }
                 }
 
 
