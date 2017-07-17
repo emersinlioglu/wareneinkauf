@@ -211,11 +211,14 @@ public $firma_nr;
      */
     public static function getInfoForEinheitstyp($projektId = null, $einheitstypId = null) {
 
+        $einheitstyp = Einheitstyp::findOne(['id' => $einheitstypId]);
+        $calculate = $einheitstyp->einheit == 'm2' ? 'SUM' : 'COUNT';
+
         $sql = "
             select 
             
                 (
-                    select COUNT(te.wohnflaeche) from teileigentumseinheit te 
+                    select $calculate(te.wohnflaeche) from teileigentumseinheit te 
                     left join haus h on te.haus_id = h.id 
                     where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                 ) 
@@ -229,7 +232,7 @@ public $firma_nr;
                 as einheitenGesamt,
                 -- (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkuaft' where h.projekt_id = p.id) as einheitenVerkauft,
                 
-                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'frei' and te.einheitstyp_id = $einheitstypId) 
+                (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'frei' and te.einheitstyp_id = $einheitstypId) 
                 as wohnflaechensummeFrei,
                 (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'frei' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
                 as einheitenFreiStück,
@@ -245,7 +248,7 @@ public $firma_nr;
                 (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'frei' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
                 as einheitenFreiPreisSumme,
                 
-                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'reserviert' and te.einheitstyp_id = $einheitstypId) 
+                (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'reserviert' and te.einheitstyp_id = $einheitstypId) 
                 as wohnflaechensummeReserviert,
                 (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'reserviert' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
                 as einheitenReserviertStück,
@@ -260,7 +263,7 @@ public $firma_nr;
                 (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'reserviert' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
                 as einheitenReserviertPreisSumme,
                 
-                (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'verkauft' and te.einheitstyp_id = $einheitstypId) 
+                (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status = 'verkauft' and te.einheitstyp_id = $einheitstypId) 
                 as wohnflaechensummeVerkauft,
                 (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkauft' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) as einheitenVerkauftStück,
                 (
