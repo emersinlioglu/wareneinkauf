@@ -13,6 +13,7 @@
     }
 </style>
 
+<div class="col-sm-6">
 <?php
 use miloschuman\highcharts\Highcharts;
 use app\models\ProjektSearch;
@@ -20,7 +21,7 @@ use \app\models\Einheitstyp;
 
 echo Highcharts::widget([
     'options' => [
-        'title' => ['text' => 'Verkaufsentwicklung'],
+        'title' => ['text' => 'Verkaufsentwicklung (Stck.)'],
 //                'xAxis' => [
 //                    'categories' => ['Apples', 'Bananas', 'Oranges']
 //                ],
@@ -98,7 +99,90 @@ echo Highcharts::widget([
     ]
 ]);
 ?>
+</div>
 
+<div class="row">
+<div class="col-sm-6">
+<?php
+echo Highcharts::widget([
+    'options' => [
+        'title' => ['text' => 'Verkaufsentwicklung (in m²)'],
+//                'xAxis' => [
+//                    'categories' => ['Apples', 'Bananas', 'Oranges']
+//                ],
+//                'yAxis' => [
+//                    'title' => ['text' => 'Fruit eaten']
+//                ],
+//                'series' => [
+//                    ['name' => 'Jane', 'data' => [1, 0, 4]],
+//                    ['name' => 'John', 'data' => [5, 7, 3]]
+//                ],
+        'chart'=> [
+            'plotBackgroundColor'=> null,
+            'plotBorderWidth'=> null,
+            'plotShadow'=> false,
+            'type'=> 'pie'
+        ],
+        'tooltip'=> [
+            'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
+        ],
+        'plotOptions'=> [
+            'pie'=> [
+                'allowPointSelect'=> true,
+                'cursor'=> 'pointer',
+                'dataLabels'=> [
+                    'enabled'=> true,
+                    'format'=> '<b>{point.name}</b>: {point.y:.2f}',
+                    'style'=> [
+                        'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
+                    ],
+                    'connectorColor'=> 'silver'
+                ]
+            ]
+        ],
+        'series'=> [
+            [
+                'name'=> 'Status',
+                'data'=> $veDataProProjektStatus,
+                'size'=> '100%',
+                'dataLabels'=> [
+                    'formatter'=> 'function () {
+                        return this.y > 5 ? this.point.name : null;
+                    }',
+                    'color'=> '#ffffff',
+                    'distance'=> -60
+                ]
+            ],
+            [
+                'name'=> 'Einheiten',
+                'data'=> $veDataProProjekt,
+                'size'=> '70%',
+                'dataLabels'=> [
+                    'formatter'=> "function () {
+                        // display only if larger than 1
+                        return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
+                    }"
+                ]
+            ],
+            [
+                'name'=> 'Projekte',
+                'data'=> $veData,
+                'size'=> '40%',
+                'dataLabels'=> [
+                    'formatter'=> 'function () {
+                        return this.y > 5 ? this.point.name : null;
+                    }',
+                    'color'=> '#ffffff',
+                    'distance'=> -30
+                ]
+            ],
+
+        ]
+    ]
+]);
+?>
+</div>
+</div>
 
 <div class="panel box box-primary">
     <div class="box-header with-border">
@@ -116,36 +200,36 @@ echo Highcharts::widget([
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Fläche/Plätze</th>
-                        <th colspan="2">Verkaufspreis</th>
-                        <th>Einheiten/Soll</th>
-                        <th>Einheiten/Ist</th>
-                        <th>Status Einheiten frei</th>
-                        <th>Status Einheiten in %</th>
-                        <th>Status € in %</th>
-                        <th>Status €</th>
+                        <th bgcolor="#f2f2f2">Fläche/Plätze</th>
+                        <th bgcolor="#f2f2f2" colspan="2">Verkaufspreis</th>
+                        <th bgcolor="#d9d9d9">Einheiten/Soll</th>
+                        <th bgcolor="#d9d9d9">Einheiten/Ist</th>
+                        <th bgcolor="#c4d89b">Status Einheiten frei</th>
+                        <th bgcolor="#c4d89b">Status Einheiten in %</th>
+                        <th bgcolor="#ffff00">Status € in %</th>
+                        <th bgcolor="#ffff00">Status €</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($projectDashboardData as $data): ?>
                     <tr style="background-color: #cecece; font-weight: bold">
                         <td><?= $data['name'] ?></td>
-                        <td>
+                        <td bgcolor="#f2f2f2">
 <!--                            --><?php //echo Yii::$app->formatter->format($data['wohnflaechensumme'], ['decimal', 2]) ?><!-- m²-->
                         </td>
-                        <td>
+                        <td bgcolor="#f2f2f2">
 <!--                            --><?php //echo Yii::$app->formatter->format($data['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?><!-- €/m²-->
                         </td>
-                        <td><?= Yii::$app->formatter->format($data['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
+                        <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format($data['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
 
-                        <td><?= Yii::$app->formatter->format($data['einheitenGesamt'], ['decimal', 0]) ?></td>
-                        <td><?= number_format($data['einheitenVerkauftStück'], 0) ?></td>
+                        <td bgcolor="#d9d9d9"><?= Yii::$app->formatter->format($data['einheitenGesamt'], ['decimal', 0]) ?></td>
+                        <td bgcolor="#d9d9d9"><?= number_format($data['einheitenVerkauftStück'], 0) ?></td>
 
-                        <td><?= number_format($data['einheitenFreiStück'], 0) ?></td>
-                        <td><?= number_format($data['einheitenVerkauftProzent'], 2) ?> %</td>
+                        <td bgcolor="#c4d89b"><?= number_format($data['einheitenFreiStück'], 0) ?></td>
+                        <td bgcolor="#c4d89b"><?= number_format($data['einheitenVerkauftProzent'], 2) ?> %</td>
 
-                        <td><?= number_format($data['betragInProzentAngefordert'], 2) ?> %</td>
-                        <td><?= Yii::$app->formatter->format((float)$data['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
+                        <td bgcolor="#ffff00"><?= number_format($data['betragInProzentAngefordert'], 2) ?> %</td>
+                        <td bgcolor="#ffff00"><?= Yii::$app->formatter->format((float)$data['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
 
                     </tr>
 
@@ -163,18 +247,18 @@ echo Highcharts::widget([
                             <?php
                                 $decimal = in_array($einheitstyp->einheit,  ['Stück', 'Stck.']) ? 0 : 2;
                             ?>
-                            <td><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensumme'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
-                            <td><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>
-                            <td><?= Yii::$app->formatter->format((float)$einheitstypData['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
+                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensumme'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
+                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>
+                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
 
-                            <td><?= Yii::$app->formatter->format($einheitstypData['einheitenGesamt'], ['decimal', 0]) ?></td>
-                            <td><?= number_format($einheitstypData['einheitenVerkauftStück'], 0) ?></td>
+                            <td bgcolor="#d9d9d9"><?= Yii::$app->formatter->format($einheitstypData['einheitenGesamt'], ['decimal', 0]) ?></td>
+                            <td bgcolor="#d9d9d9"><?= number_format($einheitstypData['einheitenVerkauftStück'], 0) ?></td>
 
-                            <td><?= number_format($einheitstypData['einheitenFreiStück'], 0) ?></td>
-                            <td><?= number_format($einheitstypData['einheitenVerkauftProzent'], 2) ?> %</td>
+                            <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenFreiStück'], 0) ?></td>
+                            <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenVerkauftProzent'], 2) ?> %</td>
 
-                            <td><?php echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?> %</td>
-                            <td><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
+                            <td bgcolor="#ffff00"><?php echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?> %</td>
+                            <td bgcolor="#ffff00"><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
                         </tr>
                     <?php endforeach; ?>
 
