@@ -46,7 +46,7 @@ echo Highcharts::widget([
                 'cursor'=> 'pointer',
                 'dataLabels'=> [
                     'enabled'=> true,
-                    'format'=> '<b>{point.name}</b>: {point.y:.2f} m²',
+                    'format'=> '<b>{point.name}</b>: {point.y:.0f}',
                     'style'=> [
                         'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
                     ],
@@ -56,21 +56,35 @@ echo Highcharts::widget([
         ],
         'series'=> [
             [
+                'name'=> 'Status',
+                'data'=> $verkaufsentwicklungDataProProjektStatus,
+                'size'=> '100%',
+                'dataLabels'=> [
+                    'formatter'=> 'function () {
+                                return this.y > 5 ? this.point.name : null;
+                            }',
+                    'color'=> '#ffffff',
+                    'distance'=> -60
+                ]
+            ],
+            [
                 'name'=> 'Einheiten',
                 'data'=> $verkaufsentwicklungDataProProjekt,
-                'size'=> '75%',
-                'innerSize'=> '50%',
+                'size'=> '70%',
+//                'innerSize'=> '0%',
                 'dataLabels'=> [
                     'formatter'=> "function () {
                                 // display only if larger than 1
-                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+//                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + 'Stck.' : null;
+                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
                             }"
                 ]
             ],
             [
                 'name'=> 'Projekte',
                 'data'=> $verkaufsentwicklungData,
-                'size'=> '50%',
+                'size'=> '40%',
+//                'innerSize'=> '50%',
                 'dataLabels'=> [
                     'formatter'=> 'function () {
                                 return this.y > 5 ? this.point.name : null;

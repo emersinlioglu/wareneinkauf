@@ -29,28 +29,69 @@ class ProjectDashboard extends Widget
 
         $verkaufsentwicklungData = [];
         $verkaufsentwicklungDataProProjekt = [];
+        $verkaufsentwicklungDataProProjektStatus = [];
         foreach ($projectDashboardData as $data) {
+
+            foreach (Einheitstyp::find()->all() as $einheitstyp) {
+
+                $einheitstypData = ProjektSearch::getInfoForEinheitstyp(
+                    $data['projektId'],
+                    $einheitstyp->id
+                );
+
+                if ($einheitstypData['einheitenGesamt'] > 0) {
+                    $verkaufsentwicklungDataProProjekt[] =
+                    [
+                        'name'      => $einheitstyp->name,
+                        'y'         => (float)$einheitstypData['einheitenGesamt'],
+                    ];
+                }
+
+
+                if ($einheitstypData['einheitenFreiStück'] > 0) {
+                    $verkaufsentwicklungDataProProjektStatus[] =
+                    [
+                        'name'      => 'Frei',
+                        'y'         => (float)$einheitstypData['einheitenFreiStück'],
+                    ];
+                }
+                if ($einheitstypData['einheitenReserviertStück'] > 0) {
+                    $verkaufsentwicklungDataProProjektStatus[] =
+                    [
+                        'name'      => 'Reserviert',
+                        'y'         => (float)$einheitstypData['einheitenReserviertStück'],
+                    ];
+                }
+                if ($einheitstypData['einheitenVerkauftStück'] > 0) {
+                    $verkaufsentwicklungDataProProjektStatus[] =
+                    [
+                        'name'      => 'Verkauft',
+                        'y'         => (float)$einheitstypData['einheitenVerkauftStück'],
+                    ];
+                }
+
+            }
 
             $verkaufsentwicklungData[] = [
                 'name'      => $data['name'],
-                'y'         => (float)$data['wohnflaechensumme'],
+                'y'         => (float)$data['einheitenGesamt'],
             ];
 
-            $verkaufsentwicklungDataProProjekt[] =
-                [
-                    'name'      => 'Frei',
-                    'y'         => (float)$data['wohnflaechensummeFrei'],
-                ];
-            $verkaufsentwicklungDataProProjekt[] =
-                [
-                    'name'      => 'Reserviert',
-                    'y'         => (float)$data['wohnflaechensummeReserviert'],
-                ];
-            $verkaufsentwicklungDataProProjekt[] =
-                [
-                    'name'      => 'Verkauft',
-                    'y'         => (float)$data['wohnflaechensummeVerkauft'],
-                ];
+//            $verkaufsentwicklungDataProProjekt[] =
+//                [
+//                    'name'      => 'Frei',
+//                    'y'         => (float)$data['wohnflaechensummeFrei'],
+//                ];
+//            $verkaufsentwicklungDataProProjekt[] =
+//                [
+//                    'name'      => 'Reserviert',
+//                    'y'         => (float)$data['wohnflaechensummeReserviert'],
+//                ];
+//            $verkaufsentwicklungDataProProjekt[] =
+//                [
+//                    'name'      => 'Verkauft',
+//                    'y'         => (float)$data['wohnflaechensummeVerkauft'],
+//                ];
 
         }
 
@@ -62,6 +103,7 @@ class ProjectDashboard extends Widget
             "projectDashboardData" => $projectDashboardData,
             "verkaufsentwicklungData" => $verkaufsentwicklungData,
             "verkaufsentwicklungDataProProjekt" => $verkaufsentwicklungDataProProjekt,
+            "verkaufsentwicklungDataProProjektStatus" => $verkaufsentwicklungDataProProjektStatus,
         ));
     }
 }
