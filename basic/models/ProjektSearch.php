@@ -272,7 +272,76 @@ public $firma_nr;
                   * 100
                 ) as einheitenVerkauftProzent,
                 (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkauft' where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
-                as einheitenVerkauftPreisSumme
+                as einheitenVerkauftPreisSumme,
+                
+                (
+                  (
+                      
+                        (
+                                (
+                                    (
+                                        select SUM(te.kaufpreis) from teileigentumseinheit te
+                                        left join haus h on h.id = te.haus_id
+                                        where te.einheitstyp_id = $einheitstypId
+                                        and h.status = 'verkauft'
+                                        and h.projekt_id = p.id
+                                    )
+                                    /
+                                    (
+                                        select SUM(te.kaufpreis) from teileigentumseinheit te
+                                        left join haus h on h.id = te.haus_id
+                                        where 
+                                        h.status = 'verkauft'
+                                        and h.projekt_id = p.id
+                                    )
+                                )
+                                *
+                                (
+                                    select SUM(a.kaufvertrag_betrag) from abschlag a left join datenblatt db on db.id = a.datenblatt_id left join projekt pr on db.projekt_id = pr.id
+                                    where a.kaufvertrag_angefordert is not null and pr.id = p.id
+                                )
+                        )
+                      
+                        /
+                        
+                        (
+                            select SUM(a.kaufvertrag_betrag) from abschlag a left join datenblatt db on db.id = a.datenblatt_id left join projekt pr on db.projekt_id = pr.id
+                            where a.kaufvertrag_angefordert is not null and pr.id = p.id
+                        )
+                  ) 
+                  * 
+                  100
+                  
+                ) as betragInProzentAngefordert,
+                
+                
+                
+                
+                (
+                    (
+                      (
+                       select SUM(te.kaufpreis) from teileigentumseinheit te
+                       left join haus h on h.id = te.haus_id
+                       where te.einheitstyp_id = $einheitstypId
+                       and h.status = 'verkauft'
+                       and h.projekt_id = p.id
+                      )
+                      /
+                      (
+                      select SUM(te.kaufpreis) from teileigentumseinheit te
+                       left join haus h on h.id = te.haus_id
+                       where 
+                        h.status = 'verkauft'
+                       and h.projekt_id = p.id
+                      )
+                    )
+                    *
+                    (
+                      select SUM(a.kaufvertrag_betrag) from abschlag a left join datenblatt db on db.id = a.datenblatt_id left join projekt pr on db.projekt_id = pr.id
+                      where a.kaufvertrag_angefordert is not null and pr.id = p.id
+                    )
+                  
+                ) as betragInEuroAngefordert
 
             from projekt p
             where

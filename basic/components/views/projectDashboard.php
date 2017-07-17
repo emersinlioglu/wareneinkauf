@@ -159,8 +159,8 @@ echo Highcharts::widget([
                             <td><?= number_format($einheitstypData['einheitenFreiStück'], 0) ?></td>
                             <td><?= number_format($einheitstypData['einheitenVerkauftProzent'], 2) ?> %</td>
 
-<!--                            <td>--><?php //echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?><!-- %</td>-->
-<!--                            <td>--><?php //echo Yii::$app->formatter->format($einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?><!-- €</td>-->
+                            <td><?php echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?> %</td>
+                            <td><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
                         </tr>
                     <?php endforeach; ?>
 
