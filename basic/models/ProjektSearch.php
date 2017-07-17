@@ -224,7 +224,7 @@ public $firma_nr;
                 ) 
                 as wohnflaechensumme,
                 
-                (select SUM(te.kaufpreis) / SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)  
+                (select SUM(te.kaufpreis) / $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)  
                 as durchschnittlicherPreisProQuadradmeter,
                 (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId) 
                 as verkuafspreissumme,
