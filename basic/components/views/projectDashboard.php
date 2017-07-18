@@ -11,6 +11,9 @@
         text-align: right;
         white-space: nowrap;
     }
+    .projects tbody tr.projekt {
+        cursor: pointer;
+    }
 </style>
 
 <div class="col-sm-6">
@@ -211,8 +214,8 @@ echo Highcharts::widget([
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($projectDashboardData as $data): ?>
-                    <tr style="background-color: #cecece; font-weight: bold">
+                <?php foreach ($projectDashboardData as $key => $data): ?>
+                    <tr style="background-color: #cecece; font-weight: bold" key="<?= $key ?>" class="projekt">
                         <td><?= $data['name'] ?></td>
                         <td bgcolor="#f2f2f2">
 <!--                            --><?php //echo Yii::$app->formatter->format($data['wohnflaechensumme'], ['decimal', 2]) ?><!-- m²-->
@@ -242,7 +245,7 @@ echo Highcharts::widget([
 
                             if(!is_array($einheitstypData)) continue;
                         ?>
-                        <tr>
+                        <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
                             <td><?= $einheitstyp->name ?></td>
                             <?php
                                 $decimal = $einheitstyp->einheit == 'm2' ? 2 : 0;
@@ -271,6 +274,17 @@ echo Highcharts::widget([
     </div>
 </div>
 
+<?php
+$this->registerJs('
+    $(function(){
+       $("table.projects tr.projekt").click(function() {
+            var table = $(this).closest("table");
+            table.find("tr.einheitstypen").addClass("hide");
+            $(this).nextUntil(".projekt", "tr").removeClass("hide");
+         });
+    });
+');
+?>
 
 <!--<div class="panel box box-primary">-->
 <!--    <div class="box-header with-border">-->
