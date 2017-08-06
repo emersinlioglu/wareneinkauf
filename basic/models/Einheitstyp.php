@@ -16,8 +16,13 @@ use Yii;
  */
 class Einheitstyp extends \yii\db\ActiveRecord
 {
-    
     const TYPE_HAUS = 1;
+    const TYP_STELLPLATZ = 2;
+    const TYP_LAGERRAUM = 3;
+    const TYP_GARAGE = 4;
+    const TYP_AUSSENSTELLPLATZ = 5;
+    const TYP_KELLER = 6;
+
     /**
      * @inheritdoc
      */

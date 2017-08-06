@@ -43,6 +43,17 @@ $this->registerJs('
                     { text: "[kaeufer-strassen-nr]", value: "[kaeufer-strassen-nr]" },
                     { text: "[kaeufer-plz]", value: "[kaeufer-plz]" },
                     { text: "[kaeufer-ort]", value: "[kaeufer-ort]" },
+                    
+                    { text: "[tenummer-stellplatz]", value: "[tenummer-stellplatz]" },
+                    { text: "[tenummer-lagerraum]", value: "[tenummer-lagerraum]" },
+                    { text: "[tenummer-garage]", value: "[tenummer-garage]" },
+                    { text: "[tenummer-aussenstellplatz]", value: "[tenummer-aussenstellplatz]" },
+                    { text: "[tenummer-keller]", value: "[tenummer-keller]" },
+                    { text: "[einheitstypname-stellplatz]", value: "[einheitstypname-stellplatz]" },
+                    { text: "[einheitstypname-lagerraum]", value: "[einheitstypname-lagerraum]" },
+                    { text: "[einheitstypname-garage]", value: "[einheitstypname-garage]" },
+                    { text: "[einheitstypname-aussenstellplatz]", value: "[einheitstypname-aussenstellplatz]" },
+                    { text: "[einheitstypname-keller]", value: "[einheitstypname-keller]" },
                 ]
             });
         },

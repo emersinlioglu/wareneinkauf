@@ -138,6 +138,12 @@ class Abschlag extends \yii\db\ActiveRecord
 					. $kaeufer->vorname . ' ' . $kaeufer->nachname;
 		}
 
+        $einheitstypStellplatz = Einheitstyp::findOne(Einheitstyp::TYP_STELLPLATZ);
+        $einheitstypLagerraum = Einheitstyp::findOne(Einheitstyp::TYP_LAGERRAUM);
+        $einheitstypGarage = Einheitstyp::findOne(Einheitstyp::TYP_GARAGE);
+        $einheitstypAussenstellplatz = Einheitstyp::findOne(Einheitstyp::TYP_AUSSENSTELLPLATZ);
+        $einheitstypKeller = Einheitstyp::findOne(Einheitstyp::TYP_KELLER);
+
         $replaceData = [
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
@@ -158,6 +164,16 @@ class Abschlag extends \yii\db\ActiveRecord
             '[kaeufer]' => $kaeuferNamen,
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
+            '[tenummer-stellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ),
+            '[tenummer-lagerraum]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_LAGERRAUM),
+            '[tenummer-garage]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_GARAGE),
+            '[tenummer-aussenstellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_AUSSENSTELLPLATZ),
+            '[tenummer-keller]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_KELLER),
+            '[einheitstypname-stellplatz]' => $einheitstypStellplatz->name,
+            '[einheitstypname-lagerraum]' => $einheitstypLagerraum->name,
+            '[einheitstypname-garage]' => $einheitstypGarage->name,
+            '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
+            '[einheitstypname-keller]' => $einheitstypKeller->name,
         ];
 
         $content = $projekt->mail_header;
