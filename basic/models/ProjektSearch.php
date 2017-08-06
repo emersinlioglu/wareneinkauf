@@ -313,7 +313,7 @@ public $firma_nr;
                 as einheitenVerkauftStückGefoerdert,
                 (
                   (
-                    (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('frei') where te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
+                    (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('reserviert','verkauft') where te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                     /
                     (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                   )
@@ -321,9 +321,9 @@ public $firma_nr;
                 ) as einheitenVerkauftProzent,
                 (
                   (
-                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('reserviert','verkauft') where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
+                    (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('reserviert','verkauft') where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                     /
-                    (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
+                    (select $calculate(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                   )
                   * 100
                 ) as einheitenVerkauftProzentGefoerdert,
@@ -338,7 +338,7 @@ public $firma_nr;
                         select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.status in ('reserviert','verkauft') and te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                     )
                     * 100
-                    / (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 0 and h.projekt_id = p.id)
+                    / (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                   
                 ) as betragInProzentAngefordert,
                 (
@@ -347,16 +347,16 @@ public $firma_nr;
                         select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.status in ('reserviert','verkauft') and te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                     )
                     * 100
-                    / (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.projekt_id = p.id)
+                    / (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId)
                     
                 ) as betragInProzentAngefordertGefoerdert,
                 
                 
                 (
-                    select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 0 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
+                    select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 0 and h.status in ('reserviert','verkauft') and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                 ) as betragInEuroAngefordert,
                 (
-                    select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
+                    select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where te.gefoerdert = 1 and h.status in ('reserviert','verkauft') and h.projekt_id = p.id and te.einheitstyp_id = $einheitstypId
                 ) as betragInEuroAngefordertGefoerdert
 
             from projekt p
