@@ -254,6 +254,10 @@ class ProjektController extends Controller
                     background-color: #cecece; 
                     font-weight: bold;
                 }
+                
+                .projects tr td:nth-child(2) {
+                    border-right: 3px solid white;
+                }
             ',
             //'options'=> ['title'=> 'Datenblatt'],
             'marginTop' => '40',
