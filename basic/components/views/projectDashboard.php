@@ -26,172 +26,172 @@ use miloschuman\highcharts\Highcharts;
 use app\models\ProjektSearch;
 use \app\models\Einheitstyp;
 
-echo Highcharts::widget([
-    'options' => [
-        'title' => ['text' => 'Verkaufsentwicklung (Stck.)'],
-//                'xAxis' => [
-//                    'categories' => ['Apples', 'Bananas', 'Oranges']
-//                ],
-//                'yAxis' => [
-//                    'title' => ['text' => 'Fruit eaten']
-//                ],
-//                'series' => [
-//                    ['name' => 'Jane', 'data' => [1, 0, 4]],
-//                    ['name' => 'John', 'data' => [5, 7, 3]]
+//echo Highcharts::widget([
+//    'options' => [
+//        'title' => ['text' => 'Verkaufsentwicklung (Stck.)'],
+////                'xAxis' => [
+////                    'categories' => ['Apples', 'Bananas', 'Oranges']
+////                ],
+////                'yAxis' => [
+////                    'title' => ['text' => 'Fruit eaten']
+////                ],
+////                'series' => [
+////                    ['name' => 'Jane', 'data' => [1, 0, 4]],
+////                    ['name' => 'John', 'data' => [5, 7, 3]]
+////                ]
+//        'chart'=> [
+//            'plotBackgroundColor'=> null,
+//            'plotBorderWidth'=> null,
+//            'plotShadow'=> false,
+//            'type'=> 'pie'
+//        ],
+//        'tooltip'=> [
+//            'pointFormat'=> '{series.name}: <b>{point.percentage:.0f}%</b>'
+//        ],
+//        'plotOptions'=> [
+//            'pie'=> [
+//                'allowPointSelect'=> true,
+//                'cursor'=> 'pointer',
+//                'dataLabels'=> [
+//                    'enabled'=> true,
+//                    'format'=> '<b>{point.name}</b>: {point.y:.0f}',
+//                    'style'=> [
+//                        'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
+//                    ],
+//                    'connectorColor'=> 'silver'
 //                ]
-        'chart'=> [
-            'plotBackgroundColor'=> null,
-            'plotBorderWidth'=> null,
-            'plotShadow'=> false,
-            'type'=> 'pie'
-        ],
-        'tooltip'=> [
-            'pointFormat'=> '{series.name}: <b>{point.percentage:.0f}%</b>'
-        ],
-        'plotOptions'=> [
-            'pie'=> [
-                'allowPointSelect'=> true,
-                'cursor'=> 'pointer',
-                'dataLabels'=> [
-                    'enabled'=> true,
-                    'format'=> '<b>{point.name}</b>: {point.y:.0f}',
-                    'style'=> [
-                        'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
-                    ],
-                    'connectorColor'=> 'silver'
-                ]
-            ]
-        ],
-        'series'=> [
-            [
-                'name'=> 'Status',
-                'data'=> $verkaufsentwicklungDataProProjektStatus,
-                'size'=> '100%',
-                'dataLabels'=> [
-                    'formatter'=> 'function () {
-                                return this.y > 5 ? this.point.name : null;
-                            }',
-                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                    'distance'=> -60
-                ]
-            ],
-            [
-                'name'=> 'Einheiten',
-                'data'=> $verkaufsentwicklungDataProProjekt,
-                'size'=> '70%',
-//                'innerSize'=> '0%',
-                'dataLabels'=> [
-                    'formatter'=> "function () {
-                                // display only if larger than 1
-//                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + 'Stck.' : null;
-                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
-                            }",
-                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                ]
-            ],
-            [
-                'name'=> 'Projekte',
-                'data'=> $verkaufsentwicklungData,
-                'size'=> '40%',
-//                'innerSize'=> '50%',
-                'dataLabels'=> [
-                    'formatter'=> 'function () {
-                                return this.y > 5 ? this.point.name : null;
-                            }',
-                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                    'distance'=> -30
-                ]
-            ],
-
-        ]
-    ]
-]);
+//            ]
+//        ],
+//        'series'=> [
+//            [
+//                'name'=> 'Status',
+//                'data'=> $verkaufsentwicklungDataProProjektStatus,
+//                'size'=> '100%',
+//                'dataLabels'=> [
+//                    'formatter'=> 'function () {
+//                                return this.y > 5 ? this.point.name : null;
+//                            }',
+//                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                    'distance'=> -60
+//                ]
+//            ],
+//            [
+//                'name'=> 'Einheiten',
+//                'data'=> $verkaufsentwicklungDataProProjekt,
+//                'size'=> '70%',
+////                'innerSize'=> '0%',
+//                'dataLabels'=> [
+//                    'formatter'=> "function () {
+//                                // display only if larger than 1
+////                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + 'Stck.' : null;
+//                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
+//                            }",
+//                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                ]
+//            ],
+//            [
+//                'name'=> 'Projekte',
+//                'data'=> $verkaufsentwicklungData,
+//                'size'=> '40%',
+////                'innerSize'=> '50%',
+//                'dataLabels'=> [
+//                    'formatter'=> 'function () {
+//                                return this.y > 5 ? this.point.name : null;
+//                            }',
+//                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                    'distance'=> -30
+//                ]
+//            ],
+//
+//        ]
+//    ]
+//]);
 ?>
 </div>
 
 <div class="row">
 <div class="col-sm-6">
 <?php
-echo Highcharts::widget([
-    'options' => [
-        'title' => ['text' => 'Verkaufsentwicklung (in m²)'],
-//                'xAxis' => [
-//                    'categories' => ['Apples', 'Bananas', 'Oranges']
-//                ],
-//                'yAxis' => [
-//                    'title' => ['text' => 'Fruit eaten']
-//                ],
-//                'series' => [
-//                    ['name' => 'Jane', 'data' => [1, 0, 4]],
-//                    ['name' => 'John', 'data' => [5, 7, 3]]
-//                ],
-        'chart'=> [
-            'plotBackgroundColor'=> null,
-            'plotBorderWidth'=> null,
-            'plotShadow'=> false,
-            'type'=> 'pie',
-            'height'=> 500,
-        ],
-        'tooltip'=> [
-            'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
-        ],
-        'plotOptions'=> [
-            'pie'=> [
-                
-                'size'=>700,
-                'allowPointSelect'=> true,
-                'cursor'=> 'pointer',
-                'dataLabels'=> [
-                    'enabled'=> true,
-                    'format'=> '<b>{point.name}</b>: {point.y:.2f}',
-                    'style'=> [
-                        'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
-                    ],
-                    'connectorColor'=> 'silver'
-                ]
-            ]
-        ],
-        'series'=> [
-            [
-                'name'=> 'Status',
-                'data'=> $veDataProProjektStatus,
-                'size'=> '100%',
-                'dataLabels'=> [
-                    'formatter'=> 'function () {
-                        return this.y > 5 ? this.point.name : null;
-                    }',
-                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                    'distance'=> -60
-                ]
-            ],
-            [
-                'name'=> 'Einheiten',
-                'data'=> $veDataProProjekt,
-                'size'=> '70%',
-                'dataLabels'=> [
-                    'formatter'=> "function () {
-                        // display only if larger than 1
-                        return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
-                    }",
-                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                ]
-            ],
-            [
-                'name'=> 'Projekte',
-                'data'=> $veData,
-                'size'=> '40%',
-                'dataLabels'=> [
-                    'formatter'=> 'function () {
-                        return this.y > 5 ? this.point.name : null;
-                    }',
-                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
-                    'distance'=> -30
-                ]
-            ],
-
-        ]
-    ]
-]);
+//echo Highcharts::widget([
+//    'options' => [
+//        'title' => ['text' => 'Verkaufsentwicklung (in m²)'],
+////                'xAxis' => [
+////                    'categories' => ['Apples', 'Bananas', 'Oranges']
+////                ],
+////                'yAxis' => [
+////                    'title' => ['text' => 'Fruit eaten']
+////                ],
+////                'series' => [
+////                    ['name' => 'Jane', 'data' => [1, 0, 4]],
+////                    ['name' => 'John', 'data' => [5, 7, 3]]
+////                ],
+//        'chart'=> [
+//            'plotBackgroundColor'=> null,
+//            'plotBorderWidth'=> null,
+//            'plotShadow'=> false,
+//            'type'=> 'pie',
+//            'height'=> 500,
+//        ],
+//        'tooltip'=> [
+//            'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
+//        ],
+//        'plotOptions'=> [
+//            'pie'=> [
+//                
+//                'size'=>700,
+//                'allowPointSelect'=> true,
+//                'cursor'=> 'pointer',
+//                'dataLabels'=> [
+//                    'enabled'=> true,
+//                    'format'=> '<b>{point.name}</b>: {point.y:.2f}',
+//                    'style'=> [
+//                        'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"
+//                    ],
+//                    'connectorColor'=> 'silver'
+//                ]
+//            ]
+//        ],
+//        'series'=> [
+//            [
+//                'name'=> 'Status',
+//                'data'=> $veDataProProjektStatus,
+//                'size'=> '100%',
+//                'dataLabels'=> [
+//                    'formatter'=> 'function () {
+//                        return this.y > 5 ? this.point.name : null;
+//                    }',
+//                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                    'distance'=> -60
+//                ]
+//            ],
+//            [
+//                'name'=> 'Einheiten',
+//                'data'=> $veDataProProjekt,
+//                'size'=> '70%',
+//                'dataLabels'=> [
+//                    'formatter'=> "function () {
+//                        // display only if larger than 1
+//                        return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
+//                    }",
+//                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                ]
+//            ],
+//            [
+//                'name'=> 'Projekte',
+//                'data'=> $veData,
+//                'size'=> '40%',
+//                'dataLabels'=> [
+//                    'formatter'=> 'function () {
+//                        return this.y > 5 ? this.point.name : null;
+//                    }',
+//                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
+//                    'distance'=> -30
+//                ]
+//            ],
+//
+//        ]
+//    ]
+//]);
 ?>
 </div>
 </div>
