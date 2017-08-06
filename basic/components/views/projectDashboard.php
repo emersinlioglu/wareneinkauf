@@ -230,7 +230,7 @@ use \app\models\Einheitstyp;
                             <?php echo \yii\helpers\Html::a(
                                 '<span class="glyphicon glyphicon-download"></span>',
                                 \yii\helpers\Url::to(['projekt/pdf', 'id' => $data['projektId']]),
-                                ['target' => '_blank']
+                                ['target' => '_blank', 'class' => 'pull-right']
                             )
                             ?>
                         </td>
@@ -246,7 +246,9 @@ use \app\models\Einheitstyp;
                         <td bgcolor="#d9d9d9"><?= number_format($data['einheitenVerkauftStück'], 0) ?></td>
 
                         <td bgcolor="#c4d89b"><?= number_format($data['einheitenFreiStück'], 0) ?></td>
-                        <td bgcolor="#c4d89b"><?= number_format($data['einheitenVerkauftProzent'], 2) ?> %</td>
+                        <td bgcolor="#c4d89b">
+<!--                            --><?php //echo number_format($data['einheitenVerkauftProzent'], 2) ?><!-- %-->
+                        </td>
 
                         <td bgcolor="#ffff00"><?= number_format($data['betragInProzentAngefordert'], 2) ?> %</td>
                         <td bgcolor="#ffff00"><?= Yii::$app->formatter->format((float)$data['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
