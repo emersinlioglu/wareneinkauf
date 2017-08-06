@@ -125,6 +125,7 @@ class Abschlag extends \yii\db\ActiveRecord
         }
 
         $kaeuferNamen = '';
+        $cnt = count($kaeuferDaten);
         //foreach ($kaeuferDaten as $name) {
         //    $kaeuferNamen .= $name . '<br />';
         //}
