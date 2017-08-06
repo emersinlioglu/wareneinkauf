@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
              [
                 'attribute' => 'nr',
                 'value'=>'nr',
-                'label' => 'Firmen Nr.'
+                'label' => 'Buchungskr.'
             ],
 
             [

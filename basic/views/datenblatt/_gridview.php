@@ -24,7 +24,7 @@
             [
                 'attribute' => 'firma_nr',
                 'value'=>'firma.nr',
-                'label' => 'Firmen Nr.'
+                'label' => 'Buchungskr.'
             ],
             [
                 'attribute' => 'projekt_name',

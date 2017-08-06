@@ -88,7 +88,7 @@ $this->registerJs('
             if($modelDatenblatt->firma) {
                 //echo $modelDatenblatt->firma->nr;
             }
-            echo $form->field($firma, 'nr')->textInput(['disabled' => 'disabled'])->label('Firmennummer')
+            echo $form->field($firma, 'nr')->textInput(['disabled' => 'disabled'])->label('Buchungskr.')
             ?>
         </div>
         <div class="col-sm-2">

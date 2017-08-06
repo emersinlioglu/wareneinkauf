@@ -65,6 +65,7 @@ use kartik\money\MaskMoney;
                             ->widget(MaskMoney::classname(), [
                                 'options' => [
                                     'id' => 'zinsverzug-' . $key . '-betrag-id',
+                                    'style' => 'text-align: right'
                                 ],
                                 'pluginOptions' => [
                                     'allowNegative' => true

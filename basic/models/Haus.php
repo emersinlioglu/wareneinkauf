@@ -141,4 +141,17 @@ class Haus extends \yii\db\ActiveRecord
         }
         return implode('/ ', $teNummers);
     }
+	
+    public function getTenummer() {
+
+        $teNummer ='';
+         foreach ($this->teileigentumseinheits as $te) {
+           
+            if ($te->einheitstyp_id == 1) {
+                $teNummer= $te->te_nummer;
+                break;
+            }
+        }
+        return $teNummer;
+    }
 }

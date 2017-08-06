@@ -68,7 +68,8 @@ use kartik\money\MaskMoney;
                                         //->textInput()
                                         ->widget(MaskMoney::classname(), [
                                             'options' => [
-                                                'id' => $key . '-zhb-id'
+                                                'id' => $key . '-zhb-id',
+                                                'style' => 'text-align: right'
                                             ],
 //                                            'pluginOptions' => [
 //                                                'suffix' => ' €',

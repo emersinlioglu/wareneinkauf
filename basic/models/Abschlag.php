@@ -125,15 +125,23 @@ class Abschlag extends \yii\db\ActiveRecord
         }
 
         $kaeuferNamen = '';
-        foreach ($kaeuferDaten as $name) {
-            $kaeuferNamen .= $name . '<br />';
-        }
+        //foreach ($kaeuferDaten as $name) {
+        //    $kaeuferNamen .= $name . '<br />';
+        //}
+
+		if ($cnt==2){
+        	$kaeuferNamen=implode('<br>', $kaeuferDaten);
+        } else {
+			$kaeuferNamen = 
+					($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . '<br>' 
+					. $kaeufer->vorname . ' ' . $kaeufer->nachname;
+		}
 
         $replaceData = [
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,
-            '[wohnung-nr]' => $datenblatt->haus->hausnr,
+            '[wohnung-nr]' => $datenblatt->haus->tenummer,
             '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => number_format($this->kaufvertrag_prozent, 2, ',', '.'),
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),

@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
           //  'anrede',
 		  [
     'attribute'=>'anrede',
-	'value' => $model->anrede == 1 ? 'Frau' : 'Herr',
+	'value' => $model->anrede == 1 ? 'Frau' : 'Herrn',
     
 ],
             'titel',
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nachname',
             [
     'attribute'=>'anrede2',
-    'value' => $model->anrede2 == 1 ? 'Frau' : 'Herr',
+    'value' => $model->anrede2 == 1 ? 'Frau' : 'Herrn',
     
 ],
             'titel2',

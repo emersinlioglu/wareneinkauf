@@ -25,7 +25,8 @@ $this->registerJs('
 		menubar:false,
 		statusbar: false,
         plugins: "table",
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect"
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect",
+        fontsize_formats: "7pt 8pt 9pt 10pt 11pt 12pt 13pt 14pt 18pt 24pt 36pt"
 	});
 ');
 ?>

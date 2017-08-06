@@ -74,7 +74,8 @@ use kartik\money\MaskMoney;
                                 ->widget(MaskMoney::classname(), [
                                     'options' => [
                                         'id' => $key . '-kaufvertrag_betrag-id',
-                                        'disabled' => 'disabled'
+                                        'disabled' => 'disabled',
+                                        'style' => 'text-align: right'
                                     ],
                                 ])
                             ?>
@@ -107,7 +108,8 @@ use kartik\money\MaskMoney;
                                 ->widget(MaskMoney::classname(), [
                                     'options' => [
                                         'id' => $key . '-sonderwunsch_betrag-id',
-                                        'disabled' => 'disabled'
+                                        'disabled' => 'disabled',
+                                        'style' => 'text-align: right'
                                     ],
                                 ])
                             ?>
@@ -136,7 +138,8 @@ use kartik\money\MaskMoney;
                                 ->widget(MaskMoney::classname(), [
                                     'options' => [
                                         'id' => $key . '-summe-id',
-                                        'disabled' => 'disabled'
+                                        'disabled' => 'disabled',
+                                        'style' => 'text-align: right'
                                     ],
                                 ])
                             ?>

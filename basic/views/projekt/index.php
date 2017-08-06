@@ -39,14 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'firma_nr',
                 'value'=>'firma.nr',
-                'label' => 'Firmen Nr.'
+                'label' => 'Buchungskr.'
             ],
             'strasse',
             'hausnr',
             'plz',
             'ort',
-            'mail_header',
-            'mail_footer',
+            //'mail_header',
+            //'mail_footer',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view}<br>{update}<br>{delete}<br>{pdf}',

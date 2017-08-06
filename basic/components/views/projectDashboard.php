@@ -71,7 +71,7 @@ echo Highcharts::widget([
                     'formatter'=> 'function () {
                                 return this.y > 5 ? this.point.name : null;
                             }',
-                    'color'=> '#ffffff',
+                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                     'distance'=> -60
                 ]
             ],
@@ -85,7 +85,8 @@ echo Highcharts::widget([
                                 // display only if larger than 1
 //                                return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + 'Stck.' : null;
                                 return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
-                            }"
+                            }",
+                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                 ]
             ],
             [
@@ -97,7 +98,7 @@ echo Highcharts::widget([
                     'formatter'=> 'function () {
                                 return this.y > 5 ? this.point.name : null;
                             }',
-                    'color'=> '#ffffff',
+                   'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                     'distance'=> -30
                 ]
             ],
@@ -128,13 +129,16 @@ echo Highcharts::widget([
             'plotBackgroundColor'=> null,
             'plotBorderWidth'=> null,
             'plotShadow'=> false,
-            'type'=> 'pie'
+            'type'=> 'pie',
+            'height'=> 500,
         ],
         'tooltip'=> [
             'pointFormat'=> '{series.name}: <b>{point.percentage:.2f}%</b>'
         ],
         'plotOptions'=> [
             'pie'=> [
+                
+                'size'=>700,
                 'allowPointSelect'=> true,
                 'cursor'=> 'pointer',
                 'dataLabels'=> [
@@ -156,7 +160,7 @@ echo Highcharts::widget([
                     'formatter'=> 'function () {
                         return this.y > 5 ? this.point.name : null;
                     }',
-                    'color'=> '#ffffff',
+                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                     'distance'=> -60
                 ]
             ],
@@ -168,7 +172,8 @@ echo Highcharts::widget([
                     'formatter'=> "function () {
                         // display only if larger than 1
                         return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '' : null;
-                    }"
+                    }",
+                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                 ]
             ],
             [
@@ -179,7 +184,7 @@ echo Highcharts::widget([
                     'formatter'=> 'function () {
                         return this.y > 5 ? this.point.name : null;
                     }',
-                    'color'=> '#ffffff',
+                    'color'=> "(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'",
                     'distance'=> -30
                 ]
             ],

@@ -64,7 +64,8 @@ use kartik\money\MaskMoney;
                             //->textInput([])
                             ->widget(MaskMoney::classname(), [
                                 'options' => [
-                                    'id' => $key . '-betrag-id',
+                                    'id' => $key . '-betrag-id',,
+                                    'style' => 'text-align: right'
                                 ],
                                 'pluginOptions' => [
                                     'allowNegative' => true
