@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use kartik\mpdf\Pdf;
 use Yii;
 use app\models\Projekt;
 use app\models\ProjektSearch;
@@ -181,6 +182,89 @@ class ProjektController extends Controller
         }
 
         return '';
+    }
+
+    public function actionPdf($id) {
+
+        $projekt = Projekt::findOne($id);
+
+        $projectDashboardData = ProjektSearch::getAllProjectsInfo(
+            null,
+            $projekt->id
+        );
+
+        $content = $this->renderPartial('pdf', ['projectDashboardData' => $projectDashboardData]);
+
+        //get your html raw content without layouts
+        // $content = $this->renderPartial('view');
+        //set up the kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            'content' => $content,
+
+            //'mode'=> Pdf::MODE_CORE,
+            'mode' => Pdf::MODE_BLANK,
+            'format' => Pdf::FORMAT_A4,
+            'defaultFontSize' => 10.0,
+            'orientation' => Pdf::ORIENT_LANDSCAPE,
+            'destination' => Pdf::DEST_BROWSER,
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssInline' => '
+                *, body, p {
+                  font-family: \'calibri\',\'serif\',\'couriernew\' !important;
+                }
+//                tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}
+                
+                .projects thead tr th {
+                    text-align: center;
+                }
+                .projects tbody tr td:not(:first-child) {
+                    text-align: right;
+                    white-space: nowrap;
+                }
+                .projects tbody tr.projekt {
+                    cursor: pointer;
+                }
+                
+                
+                .projects tr th:nth-child(n+2),
+                .projects tr td:nth-child(n+2)
+                {
+                    background-color: #f2f2f2;
+                }
+                
+                .projects tr th:nth-child(n+5), 
+                .projects tr td:nth-child(n+5)
+                {
+                    background-color: #d9d9d9;
+                }
+                
+                .projects tr th:nth-child(n+7), 
+                .projects tr td:nth-child(n+7)
+                {
+                    background-color: #c4d89b;
+                }
+                
+                .projects tr th:nth-child(n+9), 
+                .projects tr td:nth-child(n+9)
+                {
+                    background-color: #ffff00;
+                }
+                
+                .projects tr.projekt td {
+                    background-color: #cecece; 
+                    font-weight: bold;
+                }
+            ',
+            //'options'=> ['title'=> 'Datenblatt'],
+            'marginTop' => '40',
+            'marginBottom' => '40',
+            'methods' => [
+                'setHeader' => [$this->renderPartial('_pdf_header', ['pdfLogo' => $projekt->getPdfLogoName()])],
+                'setFooter' => ['Erstellt am: ' . date("d.m.Y") . '| |' . 'Seite {PAGENO} / {nb}'],
+            ]
+        ]);
+
+        return $pdf->render();
     }
 
     /**

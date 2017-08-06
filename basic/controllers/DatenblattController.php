@@ -743,9 +743,8 @@ class DatenblattController extends Controller
         $this->_calculatePreises($modelDatenblatt);
 		
 		$pdfLogo = '';
-		if ($modelDatenblatt->projekt && $modelDatenblatt->projekt->name) {
-			$pdfLogo = $modelDatenblatt->projekt->name . '_logo.png';
-			$pdfLogo = str_replace(' ', '_', $pdfLogo);
+		if ($modelDatenblatt->projekt) {
+			$pdfLogo = $modelDatenblatt->projekt->getPdfLogoName();
 		}
 		
         $headerHtml = $this->renderPartial('_pdf_header', ['model' => $modelDatenblatt, 'pdfLogo' => $pdfLogo]);

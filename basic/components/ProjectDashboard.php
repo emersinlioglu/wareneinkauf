@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use webvimark\modules\UserManagement\models\User;
 use yii\base\Widget;
 use yii\helpers\Html;
 use \app\models\ProjektSearch;
@@ -21,8 +22,13 @@ class ProjectDashboard extends Widget
 
     public function run() {
 
+        $userId = $this->userId;
+        if (User::hasPermission('view_all_projects_in_dashboard')) {
+            $userId = null; // to show all projects
+        }
+
         $projectDashboardData = ProjektSearch::getAllProjectsInfo(
-            $this->userId,
+            $userId,
             $this->projectId
         );
 
@@ -145,7 +151,7 @@ class ProjectDashboard extends Widget
 
         }
 
-        if (!\Yii::$app->user->isSuperadmin) {
+        if (count($projectDashboardData) == 0) {
             return '';
         }
 

@@ -49,12 +49,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'mail_footer',
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view}<br>{update}<br>{delete}<br>{pdf}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return User::hasPermission('write_projects') ? Html::a('Update', $url) : '';
+                        return User::hasPermission('write_projects') ? Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url) : '';
                     },
                     'delete' => function ($url, $model, $key) {
-                        return User::hasPermission('write_projects') ? Html::a('Delete', $url) : '';
+                        return User::hasPermission('write_projects') ? Html::a('<span class="glyphicon glyphicon-trash"></span>', $url) : '';
+                    },
+                    'pdf' => function ($url, $model, $key) {
+                        $url = \yii\helpers\Url::to(['pdf', 'id' => $model->id]);
+                        return Html::a('<span class="glyphicon glyphicon-download"></span>', $url, ['target' => '_blank']);
                     }
                 ]
 

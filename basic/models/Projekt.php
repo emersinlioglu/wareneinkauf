@@ -160,4 +160,19 @@ class Projekt extends \yii\db\ActiveRecord
         return $rows;
     }
 
+    /**
+     * Pdf Logo name
+     * @return mixed|string
+     */
+    public function getPdfLogoName() {
+        $pdfLogo = '';
+
+        if ($this->name) {
+            $pdfLogo = $this->name . '_logo.png';
+            $pdfLogo = str_replace(' ', '_', $pdfLogo);
+        }
+
+        return $pdfLogo;
+    }
+
 }

@@ -4,7 +4,7 @@
     }
     /*.projects table thead tr th,*/
     /*.projects table tbody tr td {*/
-        /*text-align: right;*/
+    /*text-align: right;*/
     /*}*/
 
     .projects tbody tr td:not(:first-child) {
@@ -13,6 +13,10 @@
     }
     .projects tbody tr.projekt {
         cursor: pointer;
+    }
+
+    .projects tr td:nth-child(2){
+        border-right: 2px solid white;
     }
 </style>
 
@@ -245,24 +249,54 @@ echo Highcharts::widget([
 
                             if(!is_array($einheitstypData)) continue;
                         ?>
-                        <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
-                            <td><?= $einheitstyp->name ?></td>
-                            <?php
-                                $decimal = $einheitstyp->einheit == 'm2' ? 2 : 0;
-                            ?>
-                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensumme'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
-                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>
-                            <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
 
-                            <td bgcolor="#d9d9d9"><?= Yii::$app->formatter->format($einheitstypData['einheitenGesamt'], ['decimal', 0]) ?></td>
-                            <td bgcolor="#d9d9d9"><?= number_format($einheitstypData['einheitenVerkauftStück'], 0) ?></td>
+                        <?php if((float)$einheitstypData['wohnflaechensumme'] + (float)$einheitstypData['verkuafspreissumme'] > 0): ?>
+                            <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
+                                <td>
+                                    <?= $einheitstyp->name ?><br>
+                                    -frei finanziert-
+                                </td>
+                                <?php
+                                    $decimal = $einheitstyp->einheit == 'm2' ? 2 : 0;
+                                ?>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensumme'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeter'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['verkuafspreissumme'], ['decimal', 2]) ?> €</td>
 
-                            <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenFreiStück'], 0) ?></td>
-                            <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenVerkauftProzent'], 2) ?> %</td>
+                                <td bgcolor="#d9d9d9"><?= Yii::$app->formatter->format($einheitstypData['einheitenGesamt'], ['decimal', 0]) ?></td>
+                                <td bgcolor="#d9d9d9"><?= number_format($einheitstypData['einheitenVerkauftStück'], 0) ?></td>
 
-                            <td bgcolor="#ffff00"><?php echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?> %</td>
-                            <td bgcolor="#ffff00"><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
-                        </tr>
+                                <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenFreiStück'], 0) ?></td>
+                                <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenVerkauftProzent'], 2) ?> %</td>
+
+                                <td bgcolor="#ffff00"><?php echo number_format($einheitstypData['betragInProzentAngefordert'], 2) ?> %</td>
+                                <td bgcolor="#ffff00"><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordert'], ['decimal', 2]) ?> €</td>
+                            </tr>
+                        <?php endif; ?>
+
+                        <?php if((float)$einheitstypData['wohnflaechensummeGefoerdert'] + (float)$einheitstypData['verkuafspreissummeGefoerdert'] > 0): ?>
+                            <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
+                                <td>
+                                    <?= $einheitstyp->name ?><br>
+                                    -gefördert-
+                                </td>
+                                <?php
+                                    $decimal = $einheitstyp->einheit == 'm2' ? 2 : 0;
+                                ?>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['wohnflaechensummeGefoerdert'], ['decimal', $decimal]) ?> <?= $einheitstyp->einheit ?></td>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['durchschnittlicherPreisProQuadradmeterGefoerdert'], ['decimal', 2]) ?> €/<?= $einheitstyp->einheit ?></td>
+                                <td bgcolor="#f2f2f2"><?= Yii::$app->formatter->format((float)$einheitstypData['verkuafspreissummeGefoerdert'], ['decimal', 2]) ?> €</td>
+
+                                <td bgcolor="#d9d9d9"><?= Yii::$app->formatter->format($einheitstypData['einheitenGesamtGefoerdert'], ['decimal', 0]) ?></td>
+                                <td bgcolor="#d9d9d9"><?= number_format($einheitstypData['einheitenVerkauftStückGefoerdert'], 0) ?></td>
+
+                                <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenFreiStückGefoerdert'], 0) ?></td>
+                                <td bgcolor="#c4d89b"><?= number_format($einheitstypData['einheitenVerkauftProzentGefoerdert'], 2) ?> %</td>
+
+                                <td bgcolor="#ffff00"><?php echo number_format($einheitstypData['betragInProzentAngefordertGefoerdert'], 2) ?> %</td>
+                                <td bgcolor="#ffff00"><?php echo Yii::$app->formatter->format((float)$einheitstypData['betragInEuroAngefordertGefoerdert'], ['decimal', 2]) ?> €</td>
+                            </tr>
+                        <?php endif; ?>
                     <?php endforeach; ?>
 
                 <?php endforeach; ?>
