@@ -225,7 +225,15 @@ echo Highcharts::widget([
                 <tbody>
                 <?php foreach ($projectDashboardData as $key => $data): ?>
                     <tr style="background-color: #cecece; font-weight: bold" key="<?= $key ?>" class="projekt">
-                        <td><?= $data['name'] ?></td>
+                        <td>
+                            <?= $data['name'] ?>
+                            <?php echo \yii\helpers\Html::a(
+                                '<span class="glyphicon glyphicon-download"></span>',
+                                \yii\helpers\Url::to(['projekt/pdf', 'id' => $data['projektId']]),
+                                ['target' => '_blank']
+                            )
+                            ?>
+                        </td>
                         <td bgcolor="#f2f2f2">
 <!--                            --><?php //echo Yii::$app->formatter->format($data['wohnflaechensumme'], ['decimal', 2]) ?><!-- m²-->
                         </td>
