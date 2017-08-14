@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return User::hasPermission('write_company') ? Html::a('Update', $url) : '';
                     },
                     'delete' => function ($url, $model, $key) {
-                        return User::hasPermission('write_company') ? Html::a('Delete', $url) : '';
+                        return User::hasPermission('write_company') ? Html::a('Delete', $url, [
+                            'data' => [
+                                'confirm' => 'Sind Sie sich sicher?',
+                                'method' => 'post',
+                            ],
+                        ]) : '';
                     }
                 ]
             ],
