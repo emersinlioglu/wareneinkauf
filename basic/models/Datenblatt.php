@@ -280,15 +280,15 @@ class Datenblatt extends \yii\db\ActiveRecord
             'sonstige_anmerkungen' => Yii::t('app', 'Sonstige Anmerkungen'),
             'aktiv' => Yii::t('app', 'Aktiv'),
 
-            'beurkundung_am' => Yii::t('app', 'Beurkundung Am'),
+            'beurkundung_am' => Yii::t('app', 'Beurkundung am'),
             'verbindliche_fertigstellung' => Yii::t('app', 'Verbindliche Fertigstellung'),
-            'uebergang_bnl' => Yii::t('app', 'Uebergang Bnl'),
-            'abnahme_se' => Yii::t('app', 'Abnahme Se'),
-            'abnahme_ge' => Yii::t('app', 'Abnahme Ge'),
+            'uebergang_bnl' => Yii::t('app', 'Lasten'),
+            'abnahme_se' => Yii::t('app', 'Abnahme Sondereigentum / Abnahme  '),
+            'abnahme_ge' => Yii::t('app', 'Gemeinschaftseigentum / Übergang Besitz Nutzen'),
             'auflassung' => Yii::t('app', 'Auflassung'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
-            'sap_debitor_nr' => Yii::t('app', 'SAP-Debitoren-Nr'),
-            'intern_debitor_nr' => Yii::t('app', 'Interne-Debitoren-Nr'),
+            'sap_debitor_nr' => Yii::t('app', 'SAP-Debitor Nr.'),
+            'intern_debitor_nr' => Yii::t('app', 'Interne-Debitor Nr.'),
         ];
     }
 
