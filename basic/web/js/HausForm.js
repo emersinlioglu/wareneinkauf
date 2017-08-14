@@ -99,6 +99,43 @@ var HausForm = function () {
         });
     }
 
+    _.postPluMinusIcon = function(elm) {
+
+        var container = elm.closest('.container');
+        var containerId = elm.closest('.container').attr('id');
+
+        // POST Request
+        $.post(elm.attr('href'), _form.serialize(), function (data) {
+
+            // set html
+            container.html($(data).find('#' + containerId).html());
+
+            // init plus minus icons
+            _.initPlusMinusIcons(container);
+
+            _.initDatepickers(container);
+
+            // init money widget
+            container.find('input[name*="kaufpreis-id-disp"]').each(function(i, elm) {
+
+                var inputDisplay = $(elm);
+                var input = inputDisplay.next();
+                var maskMoneyConfig = {"decimal":",","thousands":"."};
+
+                inputDisplay.maskMoney(maskMoneyConfig);
+                var val = parseFloat(input.val());
+                inputDisplay.maskMoney('mask', val);
+                inputDisplay.on('change', function () {
+                    var numDecimal = inputDisplay.maskMoney('unmasked')[0];
+                    input.val(numDecimal);
+                    input.trigger('change');
+                });
+            });
+
+            $("#myModal").modal('hide');
+        });
+    }
+
     _.initPlusMinusIcons = function (container) {
 
         _cnt = _form;
@@ -110,38 +147,16 @@ var HausForm = function () {
             e.preventDefault();
 
             var elm = $(this);
-            var container = elm.closest('.container');
-            var containerId = elm.closest('.container').attr('id');
 
-            // POST Request
-            $.post(elm.attr('href'), _form.serialize(), function (data) {
+            if (elm.hasClass('delete-button')) {
+                $("#myModal").modal('show');
 
-                // set html
-                container.html($(data).find('#' + containerId).html());
-
-                // init plus minus icons
-                _.initPlusMinusIcons(container);
-
-                _.initDatepickers(container);
-
-                // init money widget
-                container.find('input[name*="kaufpreis-id-disp"]').each(function(i, elm) {
-
-                    var inputDisplay = $(elm);
-                    var input = inputDisplay.next();
-                    var maskMoneyConfig = {"decimal":",","thousands":"."};
-
-                    inputDisplay.maskMoney(maskMoneyConfig);
-                    var val = parseFloat(input.val());
-                    inputDisplay.maskMoney('mask', val);
-                    inputDisplay.on('change', function () {
-                        var numDecimal = inputDisplay.maskMoney('unmasked')[0];
-                        input.val(numDecimal);
-                        input.trigger('change');
-                    });
+                $("#myModal").on("click",".btn-primary",function(){
+                    _.postPluMinusIcon(elm)
                 });
-
-            });
+            } else {
+                _.postPluMinusIcon(elm)
+            }
 
             return false;
         });
@@ -149,6 +164,7 @@ var HausForm = function () {
     }
 
     _.init = function () {
+
         _form = $('.haus-form form');
 
         if (!_form) return;

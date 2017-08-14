@@ -32,11 +32,16 @@ var ProjektForm = function () {
     _.initRemoveUserAssignment = function() {
 
         $('.assigned-users .glyphicon-trash').click(function() {
-            
+
             var removeUserAssignmentUrl = $(this).data('url');
-            $.get(removeUserAssignmentUrl, function() {
-                location.reload();
+
+            $("#myModal").modal('show');
+            $("#myModal").on("click",".btn-primary",function(){
+                $.get(removeUserAssignmentUrl, function() {
+                    location.reload();
+                });
             });
+
         });
     }
 

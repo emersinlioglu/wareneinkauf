@@ -101,6 +101,36 @@ var DatenblattForm = function () {
         });
     }
 
+    _.postPluMinusIcon = function(elm) {
+
+        var panelId     = elm.closest('.panel-collapse').attr('id');
+
+        // POST Request
+        $.post(elm.attr('href') , _form.serialize(), function(data) {
+
+            $('.skin-blue.sidebar-mini').html($(data).find('.skin-blue.sidebar-mini').html());
+            var newContent = $(data).find('#' + panelId + ' .box-body');
+
+            // init plus minus icons
+            _.initPlusMinusIcons(newContent);
+
+            //// init betrag validation
+            //_.initBetragValidation(newContent);
+
+            // set html
+            _form.find('#' + panelId + ' .box-body').replaceWith(newContent);
+
+            // init datepickers
+            _.initDatepickers(panelId);
+
+            // init maskmoney
+            _.initMaskmoney(panelId);
+
+            $("#myModal").modal('hide');
+
+        });
+    }
+
     /**
      * init plus/minus icons
      * @param container
@@ -115,31 +145,17 @@ var DatenblattForm = function () {
         _cnt.find('.add-button, .delete-button').click(function(e) {
             e.preventDefault();
 
-            var elm         = $(this);
-            var panelId     = elm.closest('.panel-collapse').attr('id');
-            // POST Request
-            $.post(elm.attr('href') , _form.serialize(), function(data) {
+            var elm = $(this);
 
-                $('.skin-blue.sidebar-mini').html($(data).find('.skin-blue.sidebar-mini').html());
-                var newContent = $(data).find('#' + panelId + ' .box-body');
-console.log('panel-collapse: ' + panelId);
+            if (elm.hasClass('delete-button')) {
+                $("#myModal").modal('show');
 
-                // init plus minus icons
-                _.initPlusMinusIcons(newContent);
-
-                //// init betrag validation
-                //_.initBetragValidation(newContent);
-
-                // set html
-                _form.find('#' + panelId + ' .box-body').replaceWith(newContent);
-
-                // init datepickers
-                _.initDatepickers(panelId);
-
-                // init maskmoney
-                _.initMaskmoney(panelId);
-
-            });
+                $("#myModal").on("click",".btn-primary",function(){
+                    _.postPluMinusIcon(elm)
+                });
+            } else {
+                _.postPluMinusIcon(elm)
+            }
 
             return false;
         });

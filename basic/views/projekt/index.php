@@ -55,7 +55,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         return User::hasPermission('write_projects') ? Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url) : '';
                     },
                     'delete' => function ($url, $model, $key) {
-                        return User::hasPermission('write_projects') ? Html::a('<span class="glyphicon glyphicon-trash"></span>', $url) : '';
+                        return User::hasPermission('write_projects') ?
+                            Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+                                [
+                                    'data' => [
+                                        'confirm' => 'Sind Sie sich sicher?',
+                                        'method' => 'post',
+                                    ],
+                                ]) : '';
                     },
                     'pdf' => function ($url, $model, $key) {
                         $url = \yii\helpers\Url::to(['pdf', 'id' => $model->id]);
