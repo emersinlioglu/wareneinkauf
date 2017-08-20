@@ -327,9 +327,18 @@ use \app\models\Einheitstyp;
 $this->registerJs('
     $(function(){
        $("table.projects tr.projekt").click(function() {
+            var hasHideClass = $(this).next().hasClass("hide");
+            
             var table = $(this).closest("table");
             table.find("tr.einheitstypen").addClass("hide");
-            $(this).nextUntil(".projekt", "tr").removeClass("hide");
+            
+            if (hasHideClass) {
+                console.log("hat gallss");
+                $(this).nextUntil(".projekt", "tr").removeClass("hide");
+            } else {
+                console.log("hat gein gallss");
+                $(this).nextUntil(".projekt", "tr").addClass("hide");
+            }
          });
     });
 ');

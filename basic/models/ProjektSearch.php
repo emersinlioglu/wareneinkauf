@@ -120,7 +120,7 @@ public $firma_nr;
                 as durchschnittlicherPreisProQuadradmeter,
                 (select SUM(te.kaufpreis) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id) 
                 as verkuafspreissumme,
-                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id) 
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and te.einheitstyp_id = 1) 
                 as einheitenGesamt,
                 -- (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status = 'verkuaft' where h.projekt_id = p.id) as einheitenVerkauft,
                 
@@ -157,7 +157,7 @@ public $firma_nr;
                 
                 (select SUM(te.wohnflaeche) from teileigentumseinheit te left join haus h on te.haus_id = h.id where h.projekt_id = p.id and h.status in ('reserviert','verkauft')) 
                 as wohnflaechensummeVerkauft,
-                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('reserviert','verkauft') where h.projekt_id = p.id) 
+                (select count(*) from teileigentumseinheit te left join haus h on te.haus_id = h.id and h.status in ('reserviert','verkauft') where h.projekt_id = p.id and te.einheitstyp_id = 1) 
                 as einheitenVerkauftStück,
                 (
                   (
