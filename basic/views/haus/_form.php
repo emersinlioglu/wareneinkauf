@@ -79,7 +79,19 @@ $this->registerJs('
     <div class="row">
         <div class="col-sm-3">
             <?= $form->field($model, 'status')->dropDownList(Haus::statusOptions(), ['prompt' => 'Bitte wählen'])->label('Status'); ?>
-            <?= $form->field($model, 'rechnung_vertrieb')->checkbox([]) ?>
+            <?php
+
+            $opt = [];
+            $isPermitted = \webvimark\modules\UserManagement\models\User::getCurrentUser()->hasPermission('set_rechnung_vertrieb');
+            if (!$isPermitted) {
+                $opt['disabled'] = 'disabled';
+            }
+
+            echo $form->field($model, 'rechnung_vertrieb')->checkbox(
+                $opt
+            );
+
+            ?>
         </div>
     </div>
     

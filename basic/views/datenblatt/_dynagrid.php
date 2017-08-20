@@ -333,6 +333,7 @@ $gridColumns[] = [
                 if (User::hasPermission('report')) {
                     return Html::a('<span class="fa fa-print"></span> Drucken', $url, [
                                 'title' => Yii::t('app', 'Report'),
+                                'target' => '_blank',
                                 'class'=>'btn btn-primary btn-xs',                                  
                     ]);
                 } else {
