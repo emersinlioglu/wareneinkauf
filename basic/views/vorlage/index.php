@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return '
                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myTextModal">
-                            Text
+                            <span class="glyphicon glyphicon-eye-open"></span> Vorlage
                         </button>
                         
                         <!-- Modal -->
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Modal Header</h4>
+                                <h4 class="modal-title">Vorlage</h4>
                               </div>
                               <div class="modal-body">
                                 '.$model->text.'

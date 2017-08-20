@@ -46,7 +46,7 @@ class Vorlage extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'betreff' => 'Betreff',
-            'text' => 'Text',
+            'text' => 'Vorlage',
             'deleted' => 'Gelöscht',
         ];
     }
