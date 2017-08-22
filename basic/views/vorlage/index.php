@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //                '.\yii\helpers\StringHelper::truncate($model->text, 100).'
                 'value' => function ($model) {
                     return '
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myTextModal">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myTextModal-'.$model->id.'">
                             <span class="glyphicon glyphicon-eye-open"></span> Vorlage
                         </button>
                         
                         <!-- Modal -->
-                        <div id="myTextModal" class="modal large fade" role="dialog">
-                          <div class="modal-dialog" width="900">
+                        <div id="myTextModal-'.$model->id.'" class="modal large fade" role="dialog">
+                          <div class="modal-dialog" style="width: 900px;">
                         
                             <!-- Modal content-->
                             <div class="modal-content">
