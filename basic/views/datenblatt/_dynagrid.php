@@ -1,6 +1,8 @@
 <style>
-    .pagination {
+    .kv-panel-before .pagination {
         margin: 0;
+        float: left;
+        margin-right: 20px;
     }
     /*.kv-grid-table tr > *:last-child {*/
         /*display: none;*/
@@ -389,15 +391,18 @@ echo DynaGrid::widget([
         'id'=>'DatenblattSearch',
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
-            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
-            . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+            'before' => '{pager} {toggleData} {export}'
         ],
         'toolbar' =>  [
-            'before' => '<div class="pull-right">{pager}</div>',
+            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} '
+                . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
+//            . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+////            'before' => '<div class="pull-right">{pager}</div>',
         ],
         'autoXlFormat'=>true,
             'export'=>[
-                //'fontAwesome'=>true,
+                'fontAwesome'=>true,
                 'showConfirmAlert'=>false,
                 'target'=>'_BLANK'
             ],
