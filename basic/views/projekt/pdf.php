@@ -3,7 +3,7 @@ use app\models\ProjektSearch;
 use \app\models\Einheitstyp;
 ?>
 
-<h3>Verkaufsentwicklung:</h3>
+<h3>Verkaufs- u. Reservierungsstatus:</h3>
 
 <table class="table table-bordered projects">
     <thead>
