@@ -266,7 +266,7 @@ use \app\models\Einheitstyp;
                         ?>
 
                         <?php if((float)$einheitstypData['wohnflaechensumme'] + (float)$einheitstypData['verkuafspreissumme'] > 0): ?>
-                            <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
+                            <tr class="einheitstypen hide">
                                 <td>
                                     <?= $einheitstyp->name ?><br>
                                     -frei finanziert-
@@ -290,7 +290,7 @@ use \app\models\Einheitstyp;
                         <?php endif; ?>
 
                         <?php if((float)$einheitstypData['wohnflaechensummeGefoerdert'] + (float)$einheitstypData['verkuafspreissummeGefoerdert'] > 0): ?>
-                            <tr class="einheitstypen <?= $key == 0 ? '' : 'hide' ?>">
+                            <tr class="einheitstypen hide">
                                 <td>
                                     <?= $einheitstyp->name ?><br>
                                     -gefördert-

@@ -1,3 +1,12 @@
+<style>
+    .pagination {
+        margin: 0;
+    }
+    /*.kv-grid-table tr > *:last-child {*/
+        /*display: none;*/
+    /*}*/
+</style>
+
 <?php
 
 use yii\helpers\Html;
@@ -302,62 +311,65 @@ $gridColumns[] = [
 ];
 
 $gridColumns[] = [
-        'class' => 'kartik\grid\ActionColumn',
-        //'contentOptions' => ['style' => 'width:200px;'],
-        //'header'=>'Actions',
-        'template' => '{view}{update}{report}{delete} ',
-        'buttons' => [
-            'view' => function ($url, $model) {
+    'class' => 'kartik\grid\ActionColumn',
+    //'contentOptions' => ['style' => 'width:200px;'],
+    //'header'=>'Actions',
+    'order'=>DynaGrid::ORDER_FIX_LEFT,
+    'template' => '{view}{update}{report}{delete} ',
+    'buttons' => [
+        'view' => function ($url, $model) {
 
-                if (User::hasPermission('read_datasheets')) {
-                    return Html::a('<span class="fa fa-search"></span> Anzeigen ', $url, [
-                                'title' => Yii::t('app', 'View'),
-                                'class'=>'btn btn-primary btn-xs',                                  
-                    ]);
-                } else {
-                    return '';
-                }
-            },  
-            'update' => function ($url, $model) {
-                if (User::hasPermission('write_datasheets')) {
-                    return Html::a('<span class=" glyphicon glyphicon-pencil"></span> Bearbeiten', $url, [
-                                'title' => Yii::t('app', 'Update'),
-                                'class'=>'btn btn-primary btn-xs',                                  
-                    ]);
-                } else {
-                    return '';
-                }
-            },
-            //print button
-            'report' => function ($url, $model) {
-                if (User::hasPermission('report')) {
-                    return Html::a('<span class="fa fa-print"></span> Drucken', $url, [
-                                'title' => Yii::t('app', 'Report'),
-                                'target' => '_blank',
-                                'class'=>'btn btn-primary btn-xs',                                  
-                    ]);
-                } else {
-                    return '';
-                }
-            },
-            'delete' => function ($url, $model) {
-                if (User::hasPermission('write_datasheets')) {
-                    return Html::a('<span class="glyphicon glyphicon-trash"></span> Löschen', $url, [
-                                'title' => Yii::t('app', 'Delete'),
-                                'class'=>'btn btn-primary btn-xs',
-                                'data-confirm'=>'Wollen Sie diesen Eintrag wirklich löschen?',
-                                'data-method'=>'post',                                  
-                    ]);
-                } else {
-                    return '';
-                }
-            },
-            
-        ],  
-    ];
-$gridColumns[] = ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_RIGHT];
+            if (User::hasPermission('read_datasheets')) {
+                return Html::a('<span class="fa fa-search"></span> Anzeigen ', $url, [
+                    'title' => Yii::t('app', 'View'),
+                    'class'=>'btn btn-primary btn-xs',
+                ]);
+            } else {
+                return '';
+            }
+        },
+        'update' => function ($url, $model) {
+            if (User::hasPermission('write_datasheets')) {
+                return Html::a('<span class=" glyphicon glyphicon-pencil"></span> Bearbeiten', $url, [
+                    'title' => Yii::t('app', 'Update'),
+                    'class'=>'btn btn-primary btn-xs',
+                ]);
+            } else {
+                return '';
+            }
+        },
+        //print button
+        'report' => function ($url, $model) {
+            if (User::hasPermission('report')) {
+                return Html::a('<span class="fa fa-print"></span> Drucken', $url, [
+                    'title' => Yii::t('app', 'Report'),
+                    'target' => '_blank',
+                    'class'=>'btn btn-primary btn-xs',
+                ]);
+            } else {
+                return '';
+            }
+        },
+        'delete' => function ($url, $model) {
+            if (User::hasPermission('write_datasheets')) {
+                return Html::a('<span class="glyphicon glyphicon-trash"></span> Löschen', $url, [
+                    'title' => Yii::t('app', 'Delete'),
+                    'class'=>'btn btn-primary btn-xs',
+                    'data-confirm'=>'Wollen Sie diesen Eintrag wirklich löschen?',
+                    'data-method'=>'post',
+                ]);
+            } else {
+                return '';
+            }
+        },
 
+    ],
+];
 
+$gridColumns[] = [
+    'class'=>'kartik\grid\CheckboxColumn',
+    'order'=>DynaGrid::ORDER_FIX_LEFT
+];
 
 
 echo DynaGrid::widget([
@@ -377,19 +389,12 @@ echo DynaGrid::widget([
         'id'=>'DatenblattSearch',
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
-//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
-//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} <a href="#">Serienbrief</a>'
+            'before' => '<div class="pull-left">{pager}</div>',
+        ],
+        'toolbar' =>  [
             'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
             . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
-//            'after' => '<a href="#">AAAAA</a>',
         ],
-//        'toolbar' =>  [
-//            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} <a href="#">AAAAA</a>',
-//            ['content'=>'{dynagridFilter}{dynagridSort}{dynagrid}'],
-//            ['content'=>'<a href="#">AAAAA</a>'],
-//            '{export}',
-//            '{togall}',
-//        ],
         'autoXlFormat'=>true,
             'export'=>[
                 //'fontAwesome'=>true,
