@@ -389,11 +389,11 @@ echo DynaGrid::widget([
         'id'=>'DatenblattSearch',
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
-            'before' => '<div class="pull-left">{pager}</div>',
-        ],
-        'toolbar' =>  [
             'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
             . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+        ],
+        'toolbar' =>  [
+            'before' => '<div class="pull-right">{pager}</div>',
         ],
         'autoXlFormat'=>true,
             'export'=>[
