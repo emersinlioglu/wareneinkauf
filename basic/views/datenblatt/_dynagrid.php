@@ -309,7 +309,7 @@ $gridColumns[] = [
 $gridColumns[] = [
     'value'=> "offenePosten",
     'label' => "Offene Posten:",
-    'format' => ['decimal', 2],
+    'format' => ['currency'],
 ];
 
 $gridColumns[] = [
