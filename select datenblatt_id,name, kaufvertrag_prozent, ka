@@ -1,0 +1,25 @@
+select datenblatt_id,name, kaufvertrag_prozent, kaufvertrag_betrag from abschlag
+inner join datenblatt
+on
+datenblatt.id=abschlag.datenblatt_id
+where (abschlag.name like 'Abschlag 3' or abschlag.name like 'Abschlag 4' or abschlag.name like 'Abschlag 5') and datenblatt.projekt_id=5
+
+
+select datenblatt_id,name, kaufvertrag_prozent, kaufvertrag_betrag from abschlag
+inner join datenblatt
+on
+datenblatt.id=abschlag.datenblatt_id
+where (abschlag.name like 'Abschlag 3' or abschlag.name like 'Abschlag 4' or abschlag.name like 'Abschlag 5') and datenblatt.projekt_id=5
+set abschlag
+update=
+where abschlag.name like 'Abschlag 3' and datenblatt.projekt_id=5
+
+
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_betrag = 12.6*a.kaufvertrag_betrag/a.kaufvertrag_prozent where a.name like 'Abschlag 3' and d.projekt_id=5;
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_prozent = 12.6 where a.name like 'Abschlag 3' and d.projekt_id=5;
+
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_betrag = 17.5*a.kaufvertrag_betrag/a.kaufvertrag_prozent where a.name like 'Abschlag 4' and d.projekt_id=5
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_prozent = 17.5 where a.name like 'Abschlag 4' and d.projekt_id=5
+
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_betrag = 13.4*a.kaufvertrag_betrag/a.kaufvertrag_prozent where a.name like 'Abschlag 5' and d.projekt_id=5
+UPDATE abschlag AS a INNER JOIN datenblatt AS d ON d.id=a.datenblatt_id SET a.kaufvertrag_prozent = 13.4 where a.name like 'Abschlag 5' and d.projekt_id=5
