@@ -112,16 +112,86 @@ $this->params['breadcrumbs'][] = $this->title;
                         return User::hasPermission('write_ownership') ? Html::a('Update', $url) : '';
                     },
                     'delete' => function ($url, $model, $key) {
-                        return User::hasPermission('write_ownership') ? Html::a('Delete', $url, [
-                            'data' => [
-                                'confirm' => 'Sind Sie sich sicher?',
-                                'method' => 'post',
-                            ],
-                        ]) : '';
+
+                        if (User::hasPermission('write_ownership')) {
+                            /** @var $model \app\models\Haus */
+                            if (count($model->datenblatts) > 0) {
+
+                                $ids = array();
+                                foreach ($model->datenblatts as $datenblatt) {
+                                    $ids[] = $datenblatt->id;
+                                }
+                                return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
+
+                            } else {
+                                return Html::a('Delete', $url, [
+                                    'data' => [
+                                        'confirm' => 'Sind Sie sich sicher?',
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                            }
+                        }
+
                     }
                 ]
             ],
         ],
     ]); ?>
 
+</div>
+
+<?php
+$this->registerJs(
+    "   
+        $('.not-deletable').click(function(event) { 
+            event.preventDefault();
+            
+            $('.dyna-content').empty();
+            
+            var datenblattIds = $(this).attr('data-datenblatts');
+            datenblattIds.split(',').forEach(function(entry) {
+                
+                var link = $('<a>')
+                    .attr('href', 'index.php?r=datenblatt/view&id=' + entry)
+                    .text('Datenblatt ' + entry);
+                
+                link.appendTo($('.dyna-content'));
+                $('<br>').appendTo($('.dyna-content'));
+            });
+            
+            $('#myModal').modal();
+            
+        });
+    ",
+    \yii\web\View::POS_READY,
+    'my-button-handler'
+);
+?>
+
+<!-- Trigger the modal with a button -->
+<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+                <p>Die Teileigentumseinheit kann nicht gelöscht werden.</p>
+                <div class="dyna-content">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            </div>
+        </div>
+
+    </div>
 </div>
