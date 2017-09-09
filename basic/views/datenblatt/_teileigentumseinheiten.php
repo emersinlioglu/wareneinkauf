@@ -43,7 +43,7 @@
                                 <td><?= $teileigentumseinheit->geschoss ?></td>
                                 <td><?= $teileigentumseinheit->zimmer ?></td>
                                 <td><?= $teileigentumseinheit->me_anteil ?></td>
-                                <td><?= $teileigentumseinheit->wohnflaeche ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
+                                <td><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
                             </tr>

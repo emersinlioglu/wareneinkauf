@@ -137,7 +137,18 @@ $this->registerJs('
                 <td><?= $form->field($modelTeilieigentum, 'geschoss')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][geschoss]"]) ?></td>
                 <td><?= $form->field($modelTeilieigentum, 'zimmer')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][zimmer]"]) ?></td>
                 <td><?= $form->field($modelTeilieigentum, 'me_anteil')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][me_anteil]"]) ?></td>
-                <td><?= $form->field($modelTeilieigentum, 'wohnflaeche')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][wohnflaeche]"]) ?></td>
+                <td>
+                    <?php //echo $form->field($modelTeilieigentum, 'wohnflaeche')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][wohnflaeche]"]) ?>
+                    <?php
+                    echo $form->field($modelTeilieigentum, 'wohnflaeche')
+                        ->widget(MaskMoney::classname(), [
+                            'options' => [
+                                'id' => $key . '-wohnflaeche-id',
+                                'name' => "Teileigentumseinheiten[$key][wohnflaeche]",
+                            ],
+                        ]);
+                    ?>
+                </td>
                 <td><?=
                     $form->field($modelTeilieigentum, 'kaufpreis')
 //                        ->textInput(['name' => "Teileigentumseinheiten[$key][kaufpreis]"])

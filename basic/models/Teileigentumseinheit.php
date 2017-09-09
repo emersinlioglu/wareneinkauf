@@ -15,7 +15,7 @@ use Yii;
  * @property string $geschoss
  * @property string $zimmer
  * @property string $me_anteil
- * @property string $wohnflaeche
+ * @property double $wohnflaeche
  * @property double $kaufpreis
  * @property double $kp_einheit
  *
@@ -40,9 +40,9 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
         return [
             [['haus_id', 'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['kaufpreis', 'kp_einheit'], 'number'],
+            [['kaufpreis', 'kp_einheit', 'wohnflaeche'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
-            [['geschoss', 'zimmer', 'me_anteil', 'wohnflaeche'], 'string', 'max' => 45]
+            [['geschoss', 'zimmer', 'me_anteil', ], 'string', 'max' => 45]
         ];
     }
 
