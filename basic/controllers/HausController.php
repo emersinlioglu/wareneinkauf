@@ -109,14 +109,14 @@ class HausController extends Controller
      public function actionUpdate($id, $preventPost = false)
     {
         $model = $this->findModel($id);
-        
-        $modelsTeilieigentum = $model->teileigentumseinheits;
-        
-         if (!$preventPost && $model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            $data = Yii::$app->request->post();
- 
-            if (Teileigentumseinheit::loadMultiple($model->teileigentumseinheits, $data, 'Teileigentumseinheiten')) {
+
+        $data = Yii::$app->request->post();
+
+        if (!$preventPost && $model->load($data) && $model->save()) {
+
+            if (Teileigentumseinheit::loadMultiple($model->teileigentumseinheits, $data, 'Teileigentumseinheiten')
+                && Teileigentumseinheit::validateMultiple($model->teileigentumseinheits)) {
+
                 foreach ($model->teileigentumseinheits as $item) {
                     $item->save();
                 }
@@ -128,22 +128,18 @@ class HausController extends Controller
                 }
             }
 
-//                return $this->redirect(['update', 'id' => $model->id]);
-            
-        } 
-        
-        foreach ($model->teileigentumseinheits as $te) {
-            if ($te->wohnflaeche > 0) {
-                $te->kp_einheit = (float)$te->kaufpreis / (float)$te->wohnflaeche;
-            } else {
-                $te->kp_einheit = 0;
-            }
         }
-        
-            
+
+//        foreach ($model->teileigentumseinheits as $te) {
+//            if ($te->wohnflaeche > 0) {
+//                $te->kp_einheit = (float)$te->kaufpreis / (float)$te->wohnflaeche;
+//            } else {
+//                $te->kp_einheit = 0;
+//            }
+//        }
+
         return $this->render('update', [
             'model' => $model,
-            'modelsTeilieigentum' => $modelsTeilieigentum
         ]);
     }
     
@@ -163,7 +159,7 @@ class HausController extends Controller
     }
     
     /**
-     * Add new 
+     * Add new
      * @param int $datenblattId
      */
     public function actionAddzaehlerstand($hausId) {

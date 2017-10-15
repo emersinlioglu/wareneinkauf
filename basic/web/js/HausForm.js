@@ -101,8 +101,8 @@ var HausForm = function () {
 
     _.postPluMinusIcon = function(elm) {
 
-        var container = elm.closest('.container');
-        var containerId = elm.closest('.container').attr('id');
+        var container = elm.closest('.container-table');
+        var containerId = container.attr('id');
 
         // POST Request
         $.post(elm.attr('href'), _form.serialize(), function (data) {
@@ -116,7 +116,7 @@ var HausForm = function () {
             _.initDatepickers(container);
 
             // init money widget
-            container.find('input[name*="kaufpreis-id-disp"]').each(function(i, elm) {
+            container.find('input[name*="id-disp"]').each(function(i, elm) {
 
                 var inputDisplay = $(elm);
                 var input = inputDisplay.next();

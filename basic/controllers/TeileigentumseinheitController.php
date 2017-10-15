@@ -47,6 +47,21 @@ class TeileigentumseinheitController extends Controller
     }
 
     /**
+     * Lists all Teileigentumseinheit models.
+     * @return mixed
+     */
+    public function actionForecast()
+    {
+        $searchModel = new TeileigentumseinheitSearch();
+        $dataProvider = $searchModel->searchForecast(Yii::$app->request->queryParams);
+
+        return $this->render('forecast', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Teileigentumseinheit model.
      * @param string $id
      * @return mixed
