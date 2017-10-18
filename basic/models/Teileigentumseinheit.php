@@ -42,7 +42,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['haus_id', 'einheitstyp_id'], 'required'],
+            [['te_nummer', 'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
@@ -54,7 +54,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function checkRequirement($attribute, $params)
     {
         if ($this->forecast_preis != $this->verkaufspreis && strlen($this->verkaufspreis_begruendung) == 0) {
-            $this->addError('verkaufspreis_begruendung', 'Das Feld darf nicht leer sein');
+            $this->addError('verkaufspreis_begruendung', 'Das Feld "Begründung" darf nicht leer sein');
         }
     }
 

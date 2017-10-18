@@ -103,11 +103,11 @@ $this->registerJs('
             <tr>
                 <th style="width: 10%;">Typ</th>
                 <th style="width: 6%;">TE-Nummer</th>
-                <th style="width: 10%;">Gefördert</th>
+                <th style="width: 6%;">Gefördert</th>
                 <th style="width: 5%;">Geschoss</th>
                 <th style="width: 5%;">Zimmer</th>
-                <th style="width: 10%;">ME-Anteil</th>
-                <th style="width: 10%;">Wohnfläche</th>
+                <th style="width: 5%;">ME-Anteil</th>
+                <th style="width: 5%;">Wohnfläche</th>
                 <th style="width: 10%;">Kaufpreis</th>
                 <th style="width: 10%;">Forecast</th>
                 <th style="width: 10%;">Verkaufspreis</th>
