@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Haus;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 
 /**
  * TeileigentumseinheitController implements the CRUD actions for Teileigentumseinheit model.
@@ -214,6 +215,42 @@ class TeileigentumseinheitController extends Controller
             'fehlgeschlageneTeileigentumseinheiten' => $fehlgeschlageneTeileigentumseinheiten,
         ]);
     }
+
+    /**
+     * Search for autocomplete
+     */
+    public function actionAutocomplete()
+    {
+        if (isset($_GET['term'])) {
+
+            $kaeufers = Teileigentumseinheit::find()
+                ->where(['like', 'te_nummer', $_GET['term']])
+                ->andWhere("(haus_id IS NULL OR haus_id = '')")
+                ->orderBy('CAST(te_nummer AS DECIMAL)')
+                ->all();
+
+            $results = array();
+            $results[] = array(
+                'id' => 0,
+                'value' => '',
+                'label' => '',
+                'debitor_nr' => 'Debitor-Nr.',
+                'vorname' => 'Vorname',
+                'nachname' => 'Nachname'
+            );
+
+            foreach ($kaeufers as $kaeufer) {
+                $data = $kaeufer->attributes;
+                $results[] = $data;
+            }
+
+            echo Json::encode($results);
+            return;
+        }
+
+        echo Json::encode([]);
+    }
+
 
     /**
      * Finds the Teileigentumseinheit model based on its primary key value.

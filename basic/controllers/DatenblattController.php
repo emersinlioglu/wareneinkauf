@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Kunde;
+use app\models\Teileigentumseinheit;
 use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -775,6 +776,38 @@ class DatenblattController extends Controller
             ]
         ]);
         return $pdf->render();
+    }
+
+    public function actionAddTeileigentumseinheit($datenblattId, $teId) {
+
+        $model = $this->findModel($datenblattId);
+
+        if (!$model->isAbschlagAngefordert()) {
+
+            $te = Teileigentumseinheit::findOne($teId);
+            $te->haus_id = $model->haus_id;
+            $te->save();
+
+            $model->refresh();
+        }
+
+        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model]);
+    }
+
+    public function actionRemoveTeileigentumseinheit($datenblattId, $teId) {
+
+        $model = $this->findModel($datenblattId);
+
+        if (!$model->isAbschlagAngefordert()) {
+
+            $te = Teileigentumseinheit::findOne($teId);
+            $te->haus_id = null;
+            $te->save();
+
+            $model->refresh();
+        }
+
+        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model]);
     }
 
     /**

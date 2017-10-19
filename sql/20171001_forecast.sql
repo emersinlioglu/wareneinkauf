@@ -5,3 +5,6 @@ ALTER TABLE `teileigentumseinheit`
 
 ALTER TABLE `teileigentumseinheit`
   DROP FOREIGN KEY `fk_teileigentumseinheit_haus1`;
+
+ALTER TABLE `teileigentumseinheit`
+  CHANGE COLUMN `haus_id` `haus_id` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `id`;
