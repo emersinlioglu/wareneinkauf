@@ -6,6 +6,7 @@ use kartik\money\MaskMoney;
 
 /* @var $modelDatenblatt app\models\Datenblatt */
 /* @var $form yii\bootstrap\ActiveForm */
+/** @var \app\models\AbschlagMeilenstein $abschlagMeilenstein */
 ?>
 
 <div class="box-group" id="accordion">
@@ -69,10 +70,14 @@ use kartik\money\MaskMoney;
                             <?= $form->field($modelAbschlag, "[$key]name")->textInput([]) ?>
                         </td>
                         <td>
-                            <?= $form->field($modelAbschlag, "[$key]kaufvertrag_prozent")->textInput([]) ?>
-                            <?php 
-                                $kaufvertragProzentTotal += $modelAbschlag->kaufvertrag_prozent 
-                            ?>
+                            <?= $form->field($modelAbschlag, "[$key]kaufvertrag_prozent")->textInput(['disabled' => 'disabled']) ?>
+                            <?php $kaufvertragProzentTotal += $modelAbschlag->kaufvertrag_prozent; ?>
+
+                            <ul>
+                                <?php foreach ($modelAbschlag->abschlagMeilensteins as $abschlagMeilenstein): ?>
+                                    <li><?= $abschlagMeilenstein->meilenstein->name ?></li>
+                                <?php endforeach; ?>
+                            </ul>
                         </td>
                         <td>
                             <?= $form->field($modelAbschlag, "[$key]kaufvertrag_betrag")

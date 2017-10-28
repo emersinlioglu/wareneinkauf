@@ -29,7 +29,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/Chart.min.js',
-//        'js/jquery-ui-1.11.4.custom/jquery-ui.min.js',
+        'js/jquery-ui-1.11.4.custom/jquery-ui.min.js',
         'js/DatenblattMassenbearbeitungForm.js',
         'js/DatenblattForm.js',
         'js/jquery-sortable.js',

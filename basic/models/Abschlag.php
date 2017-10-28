@@ -23,6 +23,7 @@ use Yii;
  *
  * @property Datenblatt $datenblatt
  * @property Vorlage $vorlage
+ * @property AbschlagMeilensteins[] $abschlagMeilensteins
  */
 class Abschlag extends \yii\db\ActiveRecord
 {
@@ -83,6 +84,14 @@ class Abschlag extends \yii\db\ActiveRecord
     public function getVorlage()
     {
         return $this->hasOne(Vorlage::className(), ['id' => 'vorlage_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbschlagMeilensteins()
+    {
+        return $this->hasMany(AbschlagMeilenstein::className(), ['abschlag_id' => 'id']);
     }
 
     public function getPdfHeader()
