@@ -243,15 +243,29 @@ class DatenblattController extends Controller
 //    $data['Datenblatt']['kaeufer_id'] = 0;
 //}
 
-        $oldProjektId = $modelDatenblatt->projekt_id;
-
         if (!$preventPost && $modelDatenblatt->load($data) && $modelDatenblatt->save()) {
 
             $modelDatenblatt->updateInternDebitorNr();
 
-//            if (empty($oldProjektId) && !empty($modelDatenblatt->projekt_id)) {
-//                // create abschlags from project template
-//            }
+            if (count($modelDatenblatt->abschlags) == 0 && !empty($modelDatenblatt->projekt_id)) {
+
+                if ($modelDatenblatt->projekt && !$modelDatenblatt->istAngefordert()) {
+                    foreach ($modelDatenblatt->projekt->projektAbschlags as $projektAbschlag) {
+                        $abschlag = new Abschlag();
+                        $abschlag->datenblatt_id = $modelDatenblatt->id;
+                        $abschlag->name = $projektAbschlag->name;
+                        $abschlag->kaufvertrag_prozent = $projektAbschlag->getKaufvertragProzentSumme();
+                        $abschlag->save();
+
+                        foreach ($projektAbschlag->meilensteins as $meilenstein) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->save();
+                        }
+                    }
+                }
+            }
 
 
 //            // Käufer
@@ -366,6 +380,8 @@ class DatenblattController extends Controller
 
 //            $modelDatenblatt = $this->findModel($modelDatenblatt->id);
 //            $modelKaeufer = $modelDatenblatt->kaeufer;
+
+            $modelDatenblatt->refresh();
         }
 
         $modelKaeufer = new Kaeufer();
@@ -417,28 +433,13 @@ class DatenblattController extends Controller
         ]);
     }
 
-    public function actionCreateAbschlaege($id) {
-        /** @var Datenblatt $datenblatt */
+    public function actionKonfiguration($id) {
         $datenblatt = $this->findModel($id);
 
-        if ($datenblatt->projekt && !$datenblatt->istAngefordert()) {
-            foreach ($datenblatt->projekt->projektAbschlags as $projektAbschlag) {
-                $abschlag = new Abschlag();
-                $abschlag->datenblatt_id = $datenblatt->id;
-                $abschlag->name = $projektAbschlag->name;
-                $abschlag->kaufvertrag_prozent = $projektAbschlag->getKaufvertragProzentSumme();
-                $abschlag->save();
-
-                foreach ($projektAbschlag->meilensteins as $meilenstein) {
-                    $abschlagMeilenstein = new AbschlagMeilenstein();
-                    $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
-                    $abschlagMeilenstein->abschlag_id = $abschlag->id;
-                    $abschlagMeilenstein->save();
-                }
-            }
-        }
-
-        $this->redirect(['update', 'id' => $datenblatt->id]);
+        return $this->render('konfiguration', [
+            'datenblatt' => $datenblatt,
+            'projekt' => $datenblatt->projekt
+        ]);
     }
 
     /**
@@ -447,7 +448,6 @@ class DatenblattController extends Controller
      */
     public function actionAddsonderwunsch($datenblattId)
     {
-
         $new = new Sonderwunsch();
         $new->datenblatt_id = $datenblattId;
         $new->save();
@@ -462,13 +462,12 @@ class DatenblattController extends Controller
      */
     public function actionAddabschlag($datenblattId)
     {
-
         $new = new Abschlag();
         $new->datenblatt_id = $datenblattId;
         $new->save();
 
-        return $this->actionUpdate($datenblattId);
-//        $this->redirect(['update', 'id' => $datenblattId]);
+        //return $this->actionUpdate($datenblattId);
+        $this->redirect(['konfiguration', 'id' => $datenblattId]);
     }
 
     /**
@@ -477,7 +476,6 @@ class DatenblattController extends Controller
      */
     public function actionAddzahlung($datenblattId)
     {
-
         $new = new Zahlung();
         $new->datenblatt_id = $datenblattId;
         $new->save();
@@ -582,8 +580,8 @@ class DatenblattController extends Controller
             $modelAbschlag->delete();
         }
 
-        return $this->actionUpdate($datenblattId, true);
-//        return $this->redirect(['update', 'id' => $datenblattId]);
+        //return $this->actionUpdate($datenblattId, true);
+        return $this->redirect(['konfiguration', 'id' => $datenblattId]);
     }
 
     /**

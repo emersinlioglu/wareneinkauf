@@ -94,6 +94,14 @@ class Abschlag extends \yii\db\ActiveRecord
         return $this->hasMany(AbschlagMeilenstein::className(), ['abschlag_id' => 'id']);
     }
 
+    public function getZuordnungenAsString() {
+        $ids = [];
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            $ids[] = $abschlagMeilenstein->meilenstein_id;
+        }
+        return implode(',', $ids);
+    }
+
     public function getPdfHeader()
     {
         $projekt = $this->datenblatt->projekt;
