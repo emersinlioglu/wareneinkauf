@@ -572,4 +572,14 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $this->projekt && !$this->istAngefordert();
     }
 
+    public function getBenutzteMeilensteinIds() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                $result[$abschlagMeilenstein->meilenstein_id] = $abschlagMeilenstein->meilenstein_id;
+            }
+        }
+        return $result;
+    }
+
 }

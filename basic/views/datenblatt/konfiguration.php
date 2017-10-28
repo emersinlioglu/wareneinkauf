@@ -4,7 +4,8 @@ use yii\widgets\ActiveForm;
 use \yii\helpers\Html;
 
 
-$this->title = 'Projekt-Abschläge konfigurieren';
+$this->title = 'Datenblatt-Abschläge konfigurieren';
+/** @var \app\models\Datenblatt $datenblatt */
 /** @var \app\models\Projekt $projekt */
 /** @var \app\models\ProjektAbschlag $abschlag */
 ?>
@@ -23,7 +24,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
             <div id="collapse-abschlag" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
 
-                    <?php $form = ActiveForm::begin(['options' => []]); ?>
+                    <?php $form = ActiveForm::begin(); ?>
 
                         <table class="table table-bordered abschlag-tabelle">
                             <thead>
@@ -63,7 +64,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                                             </ol>
 
                                             <div class="hide">
-                                                <?php echo Html::textInput("ProjektAbschlagZuordnung[$abschlag->id]", $abschlag->getZuordnungenAsString(),
+                                                <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$abschlag->id]", $abschlag->getZuordnungenAsString(),
                                                     ['class' => 'abschlag-zuordnungen'])
                                                 ?>
                                             </div>
@@ -168,7 +169,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                             <tr>
                                 <td>
                                     <ol class="meilenstein sortable">
-                                        <?php if(!$meilenstein->projekt_abschlag_id): ?>
+                                        <?php if(!in_array($meilenstein->id, $datenblatt->getBenutzteMeilensteinIds())): ?>
                                             <li data-meilenstein-id="<?= $meilenstein->id ?>" data-prozent="<?= $meilenstein->kaufvertrag_prozent ?>">
                                                 <i class="glyphicon glyphicon-move"></i><?= $meilenstein->name ?>
                                             </li>
@@ -179,17 +180,18 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                                     <div class="hide">
                                         <?= $form->field($meilenstein, "[$key]id")->hiddenInput() ?>
                                     </div>
-                                    <?= $form->field($meilenstein, "[$key]name")->textInput([])->label(false) ?>
+                                    <?= $form->field($meilenstein, "[$key]name")->textInput(['disabled' => 'disabled'])->label(false) ?>
                                 </td>
                                 <td>
-                                    <?= $form->field($meilenstein, "[$key]number")->textInput([])->label(false) ?>
+                                    <?= $form->field($meilenstein, "[$key]number")->textInput(['disabled' => 'disabled'])->label(false) ?>
                                 </td>
                                 <td>
                                     <?= $form->field($meilenstein, "[$key]kaufvertrag_prozent")
                                         ->widget(\kartik\money\MaskMoney::classname(), [
                                             'options' => [
                                                 'id' => $key . '-kaufvertrag_prozent-id',
-                                                'style' => 'text-align: right'
+                                                'style' => 'text-align: right',
+                                                'disabled' => 'disabled'
                                             ],
                                         ])->label(false)
                                     ?>

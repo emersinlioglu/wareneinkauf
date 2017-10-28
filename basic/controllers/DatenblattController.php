@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\AbschlagMeilenstein;
 use app\models\Kunde;
+use app\models\Meilenstein;
 use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -436,9 +437,46 @@ class DatenblattController extends Controller
     public function actionKonfiguration($id) {
         $datenblatt = $this->findModel($id);
 
+        if (Yii::$app->request->isPost) {
+
+            // ProjektAbschlag
+            $projektAbschlagData = Yii::$app->request->post('Abschlag', []);
+            foreach ($projektAbschlagData as $data) {
+                $projektAbschlag = Abschlag::findOne($data['id']);
+                $projektAbschlag->load($data, '');
+                $projektAbschlag->save();
+            }
+
+            // Meilenstein Zuordnungen
+            $abschlagMeilensteinZuordnungData = Yii::$app->request->post('AbschlagMeilensteinZuordnung', []);
+            foreach ($abschlagMeilensteinZuordnungData as $abschlagId => $meilensteinIdsAsString) {
+
+                /** @var Abschlag $abschlag */
+                $abschlag = Abschlag::findOne($abschlagId);
+                foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                    $abschlagMeilenstein->delete();
+                }
+
+                $meilensteinIds = explode(',', $meilensteinIdsAsString);
+                foreach ($meilensteinIds as $meilensteinId) {
+                    if ($meilenstein = Meilenstein::findOne($meilensteinId)) {
+                        $abschlagMeilenstein = new AbschlagMeilenstein();
+                        $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                        $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                        $abschlagMeilenstein->save();
+                    }
+                }
+
+                $abschlag->refresh();
+                $abschlag->updateKaufvertragProzent();
+            }
+
+            $datenblatt->refresh();
+        }
+
         return $this->render('konfiguration', [
             'datenblatt' => $datenblatt,
-            'projekt' => $datenblatt->projekt
+            'projekt' => $datenblatt->projekt,
         ]);
     }
 

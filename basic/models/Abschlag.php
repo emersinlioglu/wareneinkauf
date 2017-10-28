@@ -102,6 +102,16 @@ class Abschlag extends \yii\db\ActiveRecord
         return implode(',', $ids);
     }
 
+    public function updateKaufvertragProzent() {
+        $kaufvertragProzent = .0;
+        /** @var AbschlagMeilenstein $abschlagMeilenstein */
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            $kaufvertragProzent += $abschlagMeilenstein->meilenstein->kaufvertrag_prozent;
+        }
+        $this->kaufvertrag_prozent = $kaufvertragProzent;
+        return $this->update();
+    }
+
     public function getPdfHeader()
     {
         $projekt = $this->datenblatt->projekt;
