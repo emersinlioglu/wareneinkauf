@@ -560,4 +560,16 @@ class Datenblatt extends \yii\db\ActiveRecord
         $this->save();
     }
 
+    public function istAngefordert() {
+        $result = false;
+        foreach ($this->abschlags as $abschlag) {
+            $result |= !empty($abschlag->kaufvertrag_angefordert);
+        }
+        return $result;
+    }
+
+    public function kannAbschlaegeAusProjektErstellen() {
+        return $this->projekt && !$this->istAngefordert();
+    }
+
 }

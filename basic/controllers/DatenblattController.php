@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\AbschlagMeilenstein;
 use app\models\Kunde;
 use app\models\Zinsverzug;
 use Yii;
@@ -199,22 +200,22 @@ class DatenblattController extends Controller
         $model->creator_user_id = Yii::$app->user->getId();
         $model->save();
 
-        $abschlags = [
-            'Abschlag 1' => 25.0,
-            'Abschlag 2' => 28.0,
-            'Abschlag 3' => 16.8,
-            'Abschlag 4' => 8.4,
-            'Abschlag 5' => 18.3,
-            //  'Abschlag 6' => 0.0,
-            'Schlussrechnung' => 3.5
-        ];
-        foreach ($abschlags as $name => $percentage) {
-            $abschlag = new Abschlag();
-            $abschlag->datenblatt_id = $model->id;
-            $abschlag->name = $name;
-            $abschlag->kaufvertrag_prozent = $percentage;
-            $abschlag->save();
-        }
+//        $abschlags = [
+//            'Abschlag 1' => 25.0,
+//            'Abschlag 2' => 28.0,
+//            'Abschlag 3' => 16.8,
+//            'Abschlag 4' => 8.4,
+//            'Abschlag 5' => 18.3,
+//            //  'Abschlag 6' => 0.0,
+//            'Schlussrechnung' => 3.5
+//        ];
+//        foreach ($abschlags as $name => $percentage) {
+//            $abschlag = new Abschlag();
+//            $abschlag->datenblatt_id = $model->id;
+//            $abschlag->name = $name;
+//            $abschlag->kaufvertrag_prozent = $percentage;
+//            $abschlag->save();
+//        }
 
         $this->redirect(['datenblatt/update', 'id' => $model->id]);
     }
@@ -242,9 +243,16 @@ class DatenblattController extends Controller
 //    $data['Datenblatt']['kaeufer_id'] = 0;
 //}
 
+        $oldProjektId = $modelDatenblatt->projekt_id;
+
         if (!$preventPost && $modelDatenblatt->load($data) && $modelDatenblatt->save()) {
 
             $modelDatenblatt->updateInternDebitorNr();
+
+//            if (empty($oldProjektId) && !empty($modelDatenblatt->projekt_id)) {
+//                // create abschlags from project template
+//            }
+
 
 //            // Käufer
 //            if ($modelKaeufer->load(Yii::$app->request->post())) {
@@ -409,6 +417,29 @@ class DatenblattController extends Controller
         ]);
     }
 
+    public function actionCreateAbschlaege($id) {
+        /** @var Datenblatt $datenblatt */
+        $datenblatt = $this->findModel($id);
+
+        if ($datenblatt->projekt && !$datenblatt->istAngefordert()) {
+            foreach ($datenblatt->projekt->projektAbschlags as $projektAbschlag) {
+                $abschlag = new Abschlag();
+                $abschlag->datenblatt_id = $datenblatt->id;
+                $abschlag->name = $projektAbschlag->name;
+                $abschlag->kaufvertrag_prozent = $projektAbschlag->getKaufvertragProzentSumme();
+                $abschlag->save();
+
+                foreach ($projektAbschlag->meilensteins as $meilenstein) {
+                    $abschlagMeilenstein = new AbschlagMeilenstein();
+                    $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                    $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                    $abschlagMeilenstein->save();
+                }
+            }
+        }
+
+        $this->redirect(['update', 'id' => $datenblatt->id]);
+    }
 
     /**
      * Add new datenblatt

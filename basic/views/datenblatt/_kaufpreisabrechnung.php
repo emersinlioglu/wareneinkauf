@@ -21,6 +21,12 @@ use kartik\money\MaskMoney;
         <div id="collapse-kaufpreisabrechnung" class="panel-collapse collapse in" aria-expanded="false">
             <div class="box-body">
 
+                <?php if ($modelDatenblatt->kannAbschlaegeAusProjektErstellen()): ?>
+                    <?= Html::a('Abschläge aus Projekt-Volage erstellen',
+                        ["datenblatt/create-abschlaege", 'id' => $modelDatenblatt->id],
+                        ['class' => 'btn btn-success']) ?>
+                <?php endif; ?>
+
                 <table class="table table-bordered">   
                     <tr>
                         <th>Bezeichnung</th>
