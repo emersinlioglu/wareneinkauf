@@ -809,4 +809,10 @@ class DatenblattController extends Controller
 
         return 'Aktualisiert';
     }
+
+    public function actionMassenbearbeitung() {
+
+        return $this->render('massenbearbeitung', []);
+    }
+
 }

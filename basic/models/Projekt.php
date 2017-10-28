@@ -21,6 +21,8 @@ use Yii;
  *
  * @property Haus[] $hauses
  * @property Firma $firma
+ * @property ProjektAbschlag[] $projektAbschlags
+ * @property Meilenstein[] $meilensteins
  */
 class Projekt extends \yii\db\ActiveRecord
 {
@@ -88,6 +90,22 @@ class Projekt extends \yii\db\ActiveRecord
     public function getUsers() {
         return $this->hasMany(User::className(), ['id' => 'user_id'])
           ->viaTable('projekt_user', ['projekt_id' => 'id']);
+    }
+
+    public function getProjektAbschlags() {
+        return $this->hasMany(ProjektAbschlag::className(), ['projekt_id' => 'id']);
+    }
+
+    public function getMeilensteins() {
+        return $this->hasMany(Meilenstein::className(), ['projekt_id' => 'id']);
+    }
+
+    public function getProzentSummeMeilensteine() {
+        $summe = 0;
+        foreach ($this->meilensteins as $meilenstein) {
+            $summe += $meilenstein->kaufvertrag_prozent;
+        }
+        return $summe;
     }
 
     /**

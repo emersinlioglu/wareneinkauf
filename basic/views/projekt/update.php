@@ -14,6 +14,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <!-- <h1> <?//= Html::encode($this->title) ?> </h1> -->
 
+    <?= Html::a(Yii::t('app', 'Konfiguration'), ['konfiguration', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
