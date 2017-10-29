@@ -76,8 +76,11 @@ use kartik\money\MaskMoney;
                             ->widget(MaskMoney::classname(), [
                                 'options' => [
                                     'id' => $key . '-angebot_betrag-id',
-                                    'style' => 'text-align: right'
+                                    'style' => 'text-align: right',
                                 ],
+                                'pluginOptions' => [
+                                    'allowNegative' => true,
+                                ]
                             ])
                         ?>
                     </td>
@@ -101,6 +104,9 @@ use kartik\money\MaskMoney;
                                     'id' => $key . '-beauftragt_betrag-id',
                                     'style' => 'text-align: right'
                                 ],
+                                'pluginOptions' => [
+                                    'allowNegative' => true,
+                                ]
                             ])
                         ?>
                     </td>
@@ -125,6 +131,9 @@ use kartik\money\MaskMoney;
                                     'id' => $key . '-rechnungsstellung_betrag-id',
                                     'style' => 'text-align: right'
                                 ],
+                                'pluginOptions' => [
+                                    'allowNegative' => true,
+                                ]
                             ])
                         ?>
                     </td>
