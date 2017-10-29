@@ -696,10 +696,10 @@ class Datenblatt extends \yii\db\ActiveRecord
         }
         $sonderwuenscheZusammenfassung .= '<tr class="bordertop">';
         $sonderwuenscheZusammenfassung .= '<td>';
-        $sonderwuenscheZusammenfassung .= "Zahlungsbetrag Gesamt";
+        $sonderwuenscheZusammenfassung .= "<b>Zahlungsbetrag Gesamt</b>";
         $sonderwuenscheZusammenfassung .= '</td>';
         $sonderwuenscheZusammenfassung .= '<td style="text-align: right;">';
-        $sonderwuenscheZusammenfassung .= Yii::$app->formatter->asCurrency($this->getSonderwunschBeauftragtSumme());
+        $sonderwuenscheZusammenfassung .= "<b>".Yii::$app->formatter->asCurrency($this->getSonderwunschBeauftragtSumme()) . "</b>";
         $sonderwuenscheZusammenfassung .= '</td>';
         $sonderwuenscheZusammenfassung .= '</tr>';
         $sonderwuenscheZusammenfassung .= '</table>';
