@@ -29,6 +29,10 @@ $this->params['breadcrumbs'][] = $model->name;
         'model' => $model,
         'attributes' => [
             'id',
+            [
+                'attribute' => 'vorlageTyp.name',
+                'label' => 'Vorlagetyp'
+            ],
             'name',
             'betreff',
 //            'text:ntext',

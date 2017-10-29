@@ -18,7 +18,7 @@ class VorlageSearch extends Vorlage
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'vorlage_typ_id'], 'integer'],
             [['name', 'betreff', 'text'], 'safe'],
         ];
     }
@@ -47,6 +47,8 @@ class VorlageSearch extends Vorlage
             'query' => $query,
         ]);
 
+        $query->with(['vorlageTyp']);
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -57,6 +59,7 @@ class VorlageSearch extends Vorlage
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'vorlage_typ_id' => $this->vorlage_typ_id,
         ]);
 
         $query->andWhere('deleted IS NULL');

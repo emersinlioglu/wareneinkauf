@@ -133,8 +133,8 @@ class Abschlag extends \yii\db\ActiveRecord
 		if ($cnt==2){
         	$kaeuferNamen=implode('<br>', $kaeuferDaten);
         } else {
-			$kaeuferNamen = 
-					($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . '<br>' 
+			$kaeuferNamen =
+					($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . '<br>'
 					. $kaeufer->vorname . ' ' . $kaeufer->nachname;
 		}
 

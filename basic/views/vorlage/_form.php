@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use \app\models\VorlageTyp;
+use \yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Vorlage */
@@ -54,6 +56,7 @@ $this->registerJs('
                     { text: "[einheitstypname-garage]", value: "[einheitstypname-garage]" },
                     { text: "[einheitstypname-aussenstellplatz]", value: "[einheitstypname-aussenstellplatz]" },
                     { text: "[einheitstypname-keller]", value: "[einheitstypname-keller]" },
+                    { text: "[sonderwuensche-zusammenfassung]", value: "[sonderwuensche-zusammenfassung]" },
                 ]
             });
         },
@@ -64,6 +67,8 @@ $this->registerJs('
 <div class="mail-vorlage-form">
 
     <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->field($model, 'vorlage_typ_id')->dropDownList(ArrayHelper::map(VorlageTyp::find()->all(), 'id', 'name')) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

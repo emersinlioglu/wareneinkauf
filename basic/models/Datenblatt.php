@@ -393,11 +393,21 @@ class Datenblatt extends \yii\db\ActiveRecord
         return implode('/ ', $teNummers);
     }
 
-    public function getSonderwunschSumme() {
+    public function getSonderwunschAngebotSumme() {
 
         $total = 0;
         foreach ($this->sonderwunsches as $sonderwunsch) {
             $total += $sonderwunsch->rechnungsstellung_betrag;
+        }
+
+        return $total;
+    }
+
+    public function getSonderwunschBeauftragtSumme() {
+
+        $total = 0;
+        foreach ($this->sonderwunsches as $sonderwunsch) {
+            $total += $sonderwunsch->beauftragt_betrag;
         }
 
         return $total;
@@ -558,6 +568,143 @@ class Datenblatt extends \yii\db\ActiveRecord
         $this->intern_debitor_nr = $internDebitorNr;
 
         $this->save();
+    }
+
+    public function hasAngeforderteSonderwuensche() {
+        $result = false;
+        foreach ($this->sonderwunsches as $sonderwunsch) {
+            $result |= !empty($sonderwunsch->beauftragt_datum);
+        }
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReplaceData() {
+
+        $datenblatt = $this;
+        $projekt = $datenblatt->projekt;
+
+//        $abschlagNr = 0;
+//        foreach($datenblatt->abschlags as $abschlag) {
+//            $abschlagNr++;
+//            if($abschlag->id == $this->id) {
+//                break;
+//            }
+//        }
+
+        $kaeuferDaten = array();
+        $kaeufer = $datenblatt->kaeufer;
+        if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
+            $kaeuferDaten[] = ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+        }
+        if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
+            $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
+        }
+        if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
+            $kaeuferDaten = array_reverse($kaeuferDaten);
+        }
+
+        $kaeuferNamen = '';
+        $cnt = count($kaeuferDaten);
+        if ($cnt==2){
+            $kaeuferNamen=implode('<br>', $kaeuferDaten);
+        } else {
+            $kaeuferNamen =
+                ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . '<br>'
+                . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+        }
+
+        $einheitstypStellplatz = Einheitstyp::findOne(Einheitstyp::TYP_STELLPLATZ);
+        $einheitstypLagerraum = Einheitstyp::findOne(Einheitstyp::TYP_LAGERRAUM);
+        $einheitstypGarage = Einheitstyp::findOne(Einheitstyp::TYP_GARAGE);
+        $einheitstypAussenstellplatz = Einheitstyp::findOne(Einheitstyp::TYP_AUSSENSTELLPLATZ);
+        $einheitstypKeller = Einheitstyp::findOne(Einheitstyp::TYP_KELLER);
+
+
+
+        $replaceData = [
+            '[projekt-name]' => $projekt->name,
+            '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
+            '[projekt-ort]' => $projekt->ort,
+            '[wohnung-nr]' => $datenblatt->haus->tenummer,
+    //            '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => number_format($this->kaufvertrag_prozent, 2, ',', '.'),
+    //            '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
+    //            '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
+    //            '[abschlag-nr]' => $abschlagNr,
+            '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
+//            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herrn',
+//            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
+//            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
+            '[kaeufer-strasse]' => $datenblatt->kaeufer->strasse,
+            '[kaeufer-strassen-nr]' => $datenblatt->kaeufer->hausnr,
+            '[kaeufer-plz]' => $datenblatt->kaeufer->plz,
+            '[kaeufer-ort]' => $datenblatt->kaeufer->ort,
+            '[kaeufer]' => $kaeuferNamen,
+            '\r\n' => '<br>',
+            '\n\    r' => '<br>',
+            '[tenummer-stellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ),
+            '[tenummer-lagerraum]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_LAGERRAUM),
+            '[tenummer-garage]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_GARAGE),
+            '[tenummer-aussenstellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_AUSSENSTELLPLATZ),
+            '[tenummer-keller]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_KELLER),
+            '[einheitstypname-stellplatz]' => $einheitstypStellplatz->name,
+            '[einheitstypname-lagerraum]' => $einheitstypLagerraum->name,
+            '[einheitstypname-garage]' => $einheitstypGarage->name,
+            '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
+            '[einheitstypname-keller]' => $einheitstypKeller->name,
+            '[sonderwuensche-zusammenfassung]' => $datenblatt->getSonderwunschZusammenfassungTabelle(),
+        ];
+
+        return $replaceData;
+    }
+
+    public function getSonderwunschPdfContent(Vorlage $vorlage) {
+
+        $content = $this->projekt->mail_header;
+        $content .= strtr($vorlage->text, $this->getReplaceData());
+        $content .=
+            '<div class="footer" style="font-size: 9px; text-align: center; position: absolute; bottom: 40px; width: 85%;">'
+            . $this->projekt->mail_footer
+            . '</div>';
+
+        return $content;
+    }
+
+    public function getAngeforderteSonderwuensche() {
+        $result = [];
+        foreach ($this->sonderwunsches as $sonderwunsch) {
+            if (!empty($sonderwunsch->beauftragt_datum)) {
+                $result[] = $sonderwunsch;
+            }
+        }
+        return $result;
+    }
+
+    public function getSonderwunschZusammenfassungTabelle() {
+        $sonderwuenscheZusammenfassung = '<table>';
+        foreach ($this->getAngeforderteSonderwuensche() as $sonderwunsch) {
+            $sonderwuenscheZusammenfassung .= '<tr>';
+            $sonderwuenscheZusammenfassung .= '<td>';
+            $sonderwuenscheZusammenfassung .= "Beauftragt vom " . Yii::$app->formatter->asDate($sonderwunsch->beauftragt_datum). " ($sonderwunsch->name)";
+            $sonderwuenscheZusammenfassung .= '</td>';
+            $sonderwuenscheZusammenfassung .= '<td style="text-align: right;">';
+            $sonderwuenscheZusammenfassung .= Yii::$app->formatter->asCurrency($sonderwunsch->beauftragt_betrag);
+            $sonderwuenscheZusammenfassung .= '</td>';
+            $sonderwuenscheZusammenfassung .= '</tr>';
+        }
+        $sonderwuenscheZusammenfassung .= '<tr>';
+        $sonderwuenscheZusammenfassung .= '<td>';
+        $sonderwuenscheZusammenfassung .= "Zahlungsbetrag Gesamt";
+        $sonderwuenscheZusammenfassung .= '</td>';
+        $sonderwuenscheZusammenfassung .= '<td style="text-align: right;">';
+        $sonderwuenscheZusammenfassung .= Yii::$app->formatter->asCurrency($this->getSonderwunschBeauftragtSumme());
+        $sonderwuenscheZusammenfassung .= '</td>';
+        $sonderwuenscheZusammenfassung .= '</tr>';
+        $sonderwuenscheZusammenfassung .= '</table>';
+
+        return $sonderwuenscheZusammenfassung;
     }
 
 }

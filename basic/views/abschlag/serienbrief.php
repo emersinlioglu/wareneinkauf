@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use app\models\Vorlage;
 use kartik\datecontrol\DateControl;
+use \app\models\VorlageTyp;
 
 $this->title = 'Serienbriefe';
 ?>
@@ -65,7 +66,7 @@ $this->registerJs('
                     </div>
                     <div class="col-sm-3">
                         <?= $form->field($abschlagModel, 'vorlage_id')->dropDownList(
-                            ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
+                            ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_ABSCHLAG), 'id', 'name'),
                             [
                                 'class' => 'form-control',
                                 'prompt'=>'Vorlage auswählen'
@@ -287,3 +288,58 @@ $this->registerJs('
     }
 </style>
 
+<div class="box-group" id="accordion">
+    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#collapse-kaeuferdaten" href="#collapse-kaeuferdaten" aria-expanded="true" class="">
+                    Sonderwunsch-Pdf herunterladen:
+                </a>
+            </h4>
+        </div>
+        <div id="collapse-kaeuferdaten" class="panel-collapse collapse in" aria-expanded="false">
+            <div class="box-body">
+
+                <?php
+                $form = ActiveForm::begin([
+                    'action' => ['abschlag/download-sonderwunsch-als-pdf'],
+                    'method' => 'get',
+                    'options' => array(
+                        'class' => 'downloadAlsPdfForm',
+                        'target'=>'_blank'
+                    )
+                ]);
+                ?>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
+                            <?= Html::dropDownList('sonderwunschVorlageId', null,
+                                ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_SONDERWUNSCH),'id', 'name'),
+                                ['prompt' => 'Bitte auswählen', 'class'=>'form-control']);
+                            ?>
+                        </div>
+                    </div>
+<!--                    <div class="col-sm-6">-->
+<!--                        <b>Die Mails als Pdf herunterladen.</b><br>-->
+<!--                        Für die Abschläge, für die bereits eine E-Mail versendet wurde, wird keine E-Mail-Vorlage gesetzt.-->
+<!--                    </div>-->
+                </div>
+
+                <?php foreach ($datenblattIds as $datenblattId): ?>
+                    <?= Html::hiddenInput('datenblatt[]', $datenblattId); ?>
+                <?php endforeach; ?>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <?= Html::submitButton('Drucken', ['name' => 'submit', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                    </div>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+
+            </div>
+        </div>
+    </div>
+</div>

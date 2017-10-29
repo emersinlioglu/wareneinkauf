@@ -12,6 +12,8 @@ use Yii;
  * @property string $betreff
  * @property string $text
  * @property string $deleted
+ *
+ * @property VorlageTyp $vorlageTyp
  */
 class Vorlage extends \yii\db\ActiveRecord
 {
@@ -29,7 +31,8 @@ class Vorlage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'betreff', 'text'], 'required'],
+            [['name', 'betreff', 'text', 'vorlage_typ_id'], 'required'],
+            [['vorlage_typ_id'], 'integer'],
             [['deleted'], 'safe'],
             [['text'], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -48,6 +51,32 @@ class Vorlage extends \yii\db\ActiveRecord
             'betreff' => 'Betreff',
             'text' => 'Vorlage',
             'deleted' => 'Gelöscht',
+            'vorlage_typ_id' => 'Typ',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbschlags()
+    {
+        return $this->hasMany(Abschlag::className(), ['vorlage_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVorlageTyp()
+    {
+        return $this->hasOne(VorlageTyp::className(), ['id' => 'vorlage_typ_id']);
+    }
+
+    public static function getVorlagen($vorlageTypId) {
+        return Vorlage::find()
+            ->where([
+                'deleted' => null,
+                'vorlage_typ_id' => $vorlageTypId
+            ])
+            ->all();
     }
 }

@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 //use kartik\grid\GridView;
+use \app\models\VorlageTyp;
+use \yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\VorlageSearch */
@@ -33,6 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'headerOptions' => ['style' => 'width: 70px;'],
+            ],
+            [
+                'attribute' => 'vorlage_typ_id',
+                'value' => 'vorlageTyp.name',
+                'filter' => ArrayHelper::map(VorlageTyp::find()->all(), 'id', 'name'),
             ],
             'name',
             'betreff',

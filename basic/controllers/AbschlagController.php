@@ -258,6 +258,34 @@ class AbschlagController extends Controller
         return $this->_createPdf($html);
     }
 
+    public function actionDownloadSonderwunschAlsPdf()
+    {
+        $sonderwunschVorlageId = Yii::$app->request->getQueryParam('sonderwunschVorlageId', null);
+        $vorlage = Vorlage::findOne($sonderwunschVorlageId);
+        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        if (!$vorlage) {
+            echo "Bitte wählen Sie eine Vorlage aus!";
+            return;
+        }
+
+        $pdfContents = [];
+        /** @var Datenblatt $datenblatt */
+        foreach($datenblatts as $datenblatt) {
+            if ($datenblatt->hasAngeforderteSonderwuensche()) {
+                $pdfContents[] = $datenblatt->getSonderwunschPdfContent($vorlage);
+            }
+        }
+
+        $html = implode(
+            '<div class="wrapper" style="page-break-before:always;"></div>',
+            $pdfContents
+        );
+
+        return $this->_createPdf($html);
+    }
+
     /**
      * @param $content
      *
