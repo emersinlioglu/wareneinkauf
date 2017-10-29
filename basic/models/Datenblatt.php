@@ -683,7 +683,7 @@ class Datenblatt extends \yii\db\ActiveRecord
     }
 
     public function getSonderwunschZusammenfassungTabelle() {
-        $sonderwuenscheZusammenfassung = '<table style="width: 50%; margin: 0 auto;">';
+        $sonderwuenscheZusammenfassung = '<table style="width: 60%; margin: 0 auto;">';
         foreach ($this->getAngeforderteSonderwuensche() as $sonderwunsch) {
             $sonderwuenscheZusammenfassung .= '<tr>';
             $sonderwuenscheZusammenfassung .= '<td>';
@@ -694,7 +694,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             $sonderwuenscheZusammenfassung .= '</td>';
             $sonderwuenscheZusammenfassung .= '</tr>';
         }
-        $sonderwuenscheZusammenfassung .= '<tr>';
+        $sonderwuenscheZusammenfassung .= '<tr class="bordertop">';
         $sonderwuenscheZusammenfassung .= '<td>';
         $sonderwuenscheZusammenfassung .= "Zahlungsbetrag Gesamt";
         $sonderwuenscheZusammenfassung .= '</td>';

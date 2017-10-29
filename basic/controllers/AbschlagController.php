@@ -283,7 +283,7 @@ class AbschlagController extends Controller
             $pdfContents
         );
 
-        return $this->_createPdf($html);
+        return $this->_createPdf($html, Pdf::DEST_BROWSER, false);
     }
 
     /**
@@ -291,9 +291,22 @@ class AbschlagController extends Controller
      *
      * @return Pdf
      */
-    private function _createPdf($content, $destination = Pdf::DEST_BROWSER)
+    private function _createPdf($content, $destination = Pdf::DEST_BROWSER, $useInlineCss = true)
     {
         //$headerHtml = $this->renderPartial('_pdf_header', ['model' => $modelDatenblatt, 'pdfLogo' => $pdfLogo]);
+        $inlineCss = '
+            .bordertop td { 
+                border-top: 2px solid #cecece;
+            }
+        ';
+        if ($useInlineCss) {
+            $inlineCss .= '
+                    *, body, p {
+                      font-family: \'calibri\',\'serif\',\'couriernew\' !important;
+                    }
+                    tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}
+                ';
+        }
 
         //get your html raw content without layouts
         // $content = $this->renderPartial('view');
@@ -308,12 +321,7 @@ class AbschlagController extends Controller
             'orientation' => Pdf::FORMAT_A4,
             'destination' => $destination,
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-            'cssInline' => '
-                *, body, p {
-                  font-family: \'calibri\',\'serif\',\'couriernew\' !important;
-                }
-                tr:nth-child(odd) {background: #fff;} tr:nth-child(even) {background: #eee;} table{width:100%}
-            ',
+            'cssInline' => $inlineCss,
             //'options'=> ['title'=> 'Datenblatt'],
             'marginBottom' => '40',
             'methods' => [
