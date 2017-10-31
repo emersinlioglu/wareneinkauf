@@ -126,7 +126,7 @@ ol.sortable {
 .sortable li {
     padding: 7px 4px;
 }
-.sortable li .glyphicon {
+.sortable li .glyphicon-move {
     padding-right: 4px;
     cursor: move;
 }

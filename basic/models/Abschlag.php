@@ -217,7 +217,7 @@ class Abschlag extends \yii\db\ActiveRecord
      * @return bool
      */
     public function isDeletable() {
-        return $this->kaufvertrag_angefordert ? true : false;
+        return $this->kaufvertrag_angefordert ? false : true;
     }
 
 }

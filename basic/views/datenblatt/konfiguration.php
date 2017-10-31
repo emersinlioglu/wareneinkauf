@@ -7,9 +7,14 @@ use \yii\helpers\Html;
 $this->title = 'Datenblatt-Abschläge konfigurieren';
 /** @var \app\models\Datenblatt $datenblatt */
 /** @var \app\models\Projekt $projekt */
-/** @var \app\models\ProjektAbschlag $abschlag */
+/** @var \app\models\Abschlag $abschlag */
+/** @var \app\models\ProjektAbschlag $abschlagAbschlag */
 ?>
-
+<style>
+    .abschlag-tabelle.table > tbody > tr > td {
+        vertical-align: middle;
+    }
+</style>
 <div class="row">
 
     <div class="box-group col-sm-6" id="accordion">
@@ -29,13 +34,10 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                         <table class="table table-bordered abschlag-tabelle">
                             <thead>
                                 <tr>
-                                    <th style="">Name</th>
-                                    <th style="">Prozent-Summe (%)</th>
-                                    <th style="">Meilensteine</th>
+                                    <th>Name</th>
+                                    <th>Prozent-Summe (%)</th>
+                                    <th>Meilensteine</th>
                                     <th style="width: 5%;">
-<!--                                        --><?php //echo Html::a('<span class="fa fa-plus"> </span>',
-//                                            Yii::$app->urlManager->createUrl(["projekt/add-projekt-abschlag", 'id' => $projekt->id]),
-//                                            ['class' => 'add-button add-projekt-abschlag btn btn-success btn-xl']) ?>
                                         <?php echo Html::a('<span class="fa fa-plus"> </span>',
                                             Yii::$app->urlManager->createUrl(["datenblatt/addabschlag", 'datenblattId' => $datenblatt->id]),
                                             ['class' => 'add-button add-zahlung btn btn-success btn-xl']) ?>
@@ -44,7 +46,7 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                             </thead>
                             <tbody>
                                 <?php foreach ($datenblatt->abschlags as $key => $abschlag): ?>
-                                    <tr>
+                                    <tr data-is-editable="<?= $abschlag->isDeletable() ? 1 : 0 ?>">
                                         <td>
                                             <div class="hide">
                                                 <?= $form->field($abschlag, "[$key]id")->hiddenInput() ?>
@@ -55,10 +57,11 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                                             <?php echo Yii::$app->formatter->asDecimal($abschlag->kaufvertrag_prozent, 2); ?>
                                         </td>
                                         <td style="width: 150px;">
-                                            <ol class="meilenstein sortable zuordnung">
+                                            <ol class="sortable zuordnung <?= $abschlag->isDeletable() ? 'meilenstein' : '' ?>">
                                                 <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein): ?>
                                                     <li data-meilenstein-id="<?= $abschlagMeilenstein->meilenstein->id ?>" data-prozent="<?= $abschlagMeilenstein->meilenstein->kaufvertrag_prozent ?>">
-                                                        <i class="glyphicon glyphicon-move"></i><?= $abschlagMeilenstein->meilenstein->name ?>
+                                                        <i class="glyphicon <?= $abschlag->isDeletable() ? 'glyphicon-move' : 'glyphicon-ok' ?>"></i>
+                                                        <?= $abschlagMeilenstein->meilenstein->name ?>
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ol>
@@ -70,12 +73,15 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                                             </div>
                                         </td>
                                         <td>
-<!--                                            --><?php //echo Html::a('<span class="fa fa-minus"></span>',
-//                                                Yii::$app->urlManager->createUrl(["projekt/delete-projekt-abschlag", 'id' => $abschlag->id]),
-//                                                ['class' => 'delete-button delete-projekt-abschlag btn btn-danger btn-xl']) ?>
-                                            <?php echo Html::a('<span class="fa fa-minus"></span>',
-                                                Yii::$app->urlManager->createUrl(["datenblatt/deleteabschlag", 'datenblattId' => $datenblatt->id , 'abschlagId' => $abschlag->id]),
-                                                ['class' => 'delete-button btn btn-danger btn-xl']) ?>
+                                            <?php
+                                                if($abschlag->isDeletable()) {
+                                                    echo Html::a('<span class="fa fa-minus"></span>',
+                                                        Yii::$app->urlManager->createUrl(["datenblatt/deleteabschlag", 'datenblattId' => $datenblatt->id , 'abschlagId' => $abschlag->id]),
+                                                        ['class' => 'delete-button btn btn-danger btn-xl']);
+                                                } else {
+                                                    echo Yii::$app->formatter->asDate($abschlag->kaufvertrag_angefordert);
+                                                }
+                                            ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -102,21 +108,24 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                 $(".abschlag-tabelle tbody tr").each(function () {
                     var elm = $(this);
                     
-                    var prozentSumme = 0;
+                    if (elm.attr("data-is-editable") == 1) {
+                        var prozentSumme = 0;
+                        
+                        // get meilenstein ids
+                        var meilensteinIds = new Array();
+                        elm.find(".meilenstein.zuordnung li").each(function() {
+                            meilensteinIds.push($(this).attr("data-meilenstein-id"));
+                            prozentSumme += parseFloat($(this).attr("data-prozent"));
+                        });
+                        
+                        elm.find(".prozent-summe").html(prozentSumme.toFixed(2));
+                        
+                        // set meileinstein ids
+                        elm.find(".abschlag-zuordnungen").val(
+                            meilensteinIds
+                        );
+                    }
                     
-                    // get meilenstein ids
-                    var meilensteinIds = new Array();
-                    elm.find(".meilenstein.zuordnung li").each(function() {
-                        meilensteinIds.push($(this).attr("data-meilenstein-id"));
-                        prozentSumme += parseFloat($(this).attr("data-prozent"));
-                    });
-                    
-                    elm.find(".prozent-summe").html(prozentSumme.toFixed(2));
-                    
-                    // set meileinstein ids
-                    elm.find(".abschlag-zuordnungen").val(
-                        meilensteinIds
-                    );
                     
                 });
             }
