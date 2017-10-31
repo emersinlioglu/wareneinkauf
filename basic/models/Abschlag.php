@@ -174,6 +174,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[einheitstypname-garage]' => $einheitstypGarage->name,
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
+            '[aktuelles-datum]' => date('d.m.Y'),
         ];
 
         $content = $projekt->mail_header;

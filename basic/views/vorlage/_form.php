@@ -57,6 +57,7 @@ $this->registerJs('
                     { text: "[einheitstypname-aussenstellplatz]", value: "[einheitstypname-aussenstellplatz]" },
                     { text: "[einheitstypname-keller]", value: "[einheitstypname-keller]" },
                     { text: "[sonderwuensche-zusammenfassung]", value: "[sonderwuensche-zusammenfassung]" },
+                    { text: "[aktuelles-datum]", value: "[aktuelles-datum]" },
                 ]
             });
         },

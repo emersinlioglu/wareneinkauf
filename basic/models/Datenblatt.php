@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Faker\Provider\DateTime;
 use Yii;
 
 /**
@@ -655,6 +656,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
             '[sonderwuensche-zusammenfassung]' => $datenblatt->getSonderwunschZusammenfassungTabelle(),
+            '[aktuelles-datum]' => date('d.m.Y'),
         ];
 
         return $replaceData;
