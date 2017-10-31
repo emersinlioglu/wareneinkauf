@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\AbschlagMeilenstein;
 use app\models\Kunde;
 use app\models\Meilenstein;
+use app\models\Teileigentumseinheit;
 use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -392,7 +393,7 @@ class DatenblattController extends Controller
 
         // calculate kaufpreis
         $kaufpreisTotal = 0;
-        /* @var $teileh app\models\Teileigentumseinheit */
+        /* @var $teileh Teileigentumseinheit */
         if ($modelDatenblatt->haus) {
             foreach ($modelDatenblatt->haus->teileigentumseinheits as $item) {
                 $kaufpreisTotal += (float)$item->kaufpreis;
@@ -401,7 +402,7 @@ class DatenblattController extends Controller
 
         // calculate sonderwünche
         $sonderwuenscheTotal = 0;
-        /* @var $item app\models\Sonderwunsch */
+        /* @var $item Sonderwunsch */
         foreach ($modelDatenblatt->sonderwunsches as $item) {
             $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
         }
@@ -453,22 +454,27 @@ class DatenblattController extends Controller
 
                 /** @var Abschlag $abschlag */
                 $abschlag = Abschlag::findOne($abschlagId);
-                foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
-                    $abschlagMeilenstein->delete();
-                }
 
-                $meilensteinIds = explode(',', $meilensteinIdsAsString);
-                foreach ($meilensteinIds as $meilensteinId) {
-                    if ($meilenstein = Meilenstein::findOne($meilensteinId)) {
-                        $abschlagMeilenstein = new AbschlagMeilenstein();
-                        $abschlagMeilenstein->abschlag_id = $abschlag->id;
-                        $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
-                        $abschlagMeilenstein->save();
+                if ($abschlag->isDeletable()) {
+
+                    foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                        $abschlagMeilenstein->delete();
                     }
+
+                    $meilensteinIds = explode(',', $meilensteinIdsAsString);
+                    foreach ($meilensteinIds as $meilensteinId) {
+                        if ($meilenstein = Meilenstein::findOne($meilensteinId)) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                            $abschlagMeilenstein->save();
+                        }
+                    }
+
+                    $abschlag->refresh();
+                    $abschlag->updateKaufvertragProzent();
                 }
 
-                $abschlag->refresh();
-                $abschlag->updateKaufvertragProzent();
             }
 
             $datenblatt->refresh();
@@ -611,15 +617,16 @@ class DatenblattController extends Controller
      */
     public function actionDeleteabschlag($datenblattId, $abschlagId)
     {
-        $this->actionUpdate($datenblattId);
+        //$this->actionUpdate($datenblattId);
 
         $model = $this->findModel($datenblattId);
-        if ($modelAbschlag = Abschlag::findOne($abschlagId)) {
+        $modelAbschlag = Abschlag::findOne($abschlagId);
+        if ($modelAbschlag && $modelAbschlag->isDeletable()) {
             $modelAbschlag->delete();
         }
 
         //return $this->actionUpdate($datenblattId, true);
-        return $this->redirect(['konfiguration', 'id' => $datenblattId]);
+        return $this->redirect(['konfiguration', 'id' => $model->id]);
     }
 
     /**

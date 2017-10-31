@@ -213,4 +213,11 @@ class Abschlag extends \yii\db\ActiveRecord
         return $content;
     }
 
+    /**
+     * @return bool
+     */
+    public function isDeletable() {
+        return $this->kaufvertrag_angefordert ? true : false;
+    }
+
 }
