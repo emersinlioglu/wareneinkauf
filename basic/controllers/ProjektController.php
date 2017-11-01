@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Meilenstein;
+use app\models\ProjektAbschlag;
 use kartik\mpdf\Pdf;
 use Yii;
 use app\models\Projekt;
@@ -269,6 +271,104 @@ class ProjektController extends Controller
         ]);
 
         return $pdf->render();
+    }
+
+    public function actionKonfiguration($id) {
+
+        $projekt =  $this->findModel($id);
+
+        if (Yii::$app->request->isPost) {
+
+            // ProjektAbschlag
+            $projektAbschlagData = Yii::$app->request->post('ProjektAbschlag', []);
+            foreach ($projektAbschlagData as $data) {
+
+                $projektAbschlag = ProjektAbschlag::findOne($data['id']);
+                $projektAbschlag->load($data, '');
+                $projektAbschlag->save();
+            }
+
+            // Meilenstein Zuordnungen
+            $projektAbschlagZuordnungData = Yii::$app->request->post('ProjektAbschlagZuordnung', []);
+            foreach ($projektAbschlagZuordnungData as $projektAbschlagId => $meilensteinIdsAsString) {
+
+                $projektAbschlag = ProjektAbschlag::findOne($projektAbschlagId);
+                foreach ($projektAbschlag->meilensteins as $meilenstein) {
+                    $meilenstein->projekt_abschlag_id = null;
+                    $meilenstein->save();
+                }
+
+                $meilensteinIds = explode(',', $meilensteinIdsAsString);
+                foreach ($meilensteinIds as $meilensteinId) {
+                    if ($meilenstein = Meilenstein::findOne($meilensteinId)) {
+                        $meilenstein->projekt_abschlag_id = $projektAbschlag->id;
+                        $meilenstein->save();
+                    }
+                }
+            }
+
+            $projekt->refresh();
+        }
+
+        return $this->render('konfiguration', [
+            'projekt' => $projekt,
+        ]);
+    }
+
+    public function actionUpdateMeilensteine($id) {
+        $projekt =  $this->findModel($id);
+
+        if (Yii::$app->request->isPost) {
+
+            // Meilensteine
+            $meileinsteinData = Yii::$app->request->post('Meilenstein', []);
+            foreach ($meileinsteinData as $data) {
+
+                $meileinstein = Meilenstein::findOne($data['id']);
+                $meileinstein->load($data, '');
+                $meileinstein->save();
+            }
+        }
+
+        return $this->redirect(['konfiguration', 'id' => $projekt->id]);
+    }
+
+    public function actionAddMeilenstein($id) {
+        $projekt =  $this->findModel($id);
+
+        $meilenstein = new Meilenstein();
+        $meilenstein->projekt_id = $projekt->id;
+        $meilenstein->save();
+
+        return $this->redirect(['konfiguration', 'id' => $projekt->id]);
+    }
+
+    public function actionDeleteMeilenstein($id) {
+
+        $meilenstein = Meilenstein::findOne($id);
+        $projektId = $meilenstein->projekt_id;
+        $meilenstein->delete();
+
+        return $this->redirect(['konfiguration', 'id' => $projektId]);
+    }
+
+    public function actionAddProjektAbschlag($id) {
+        $projekt =  $this->findModel($id);
+
+        $projektAbschlag = new ProjektAbschlag();
+        $projektAbschlag->projekt_id = $projekt->id;
+        $projektAbschlag->save();
+
+        return $this->redirect(['konfiguration', 'id' => $projekt->id]);
+    }
+
+    public function actionDeleteProjektAbschlag($id) {
+
+        $projektAbschlag = ProjektAbschlag::findOne($id);
+        $projektId = $projektAbschlag->projekt_id;
+        $projektAbschlag->delete();
+
+        return $this->redirect(['konfiguration', 'id' => $projektId]);
     }
 
     /**

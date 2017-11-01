@@ -394,7 +394,7 @@ class Datenblatt extends \yii\db\ActiveRecord
         return implode('/ ', $teNummers);
     }
 
-    public function getSonderwunschAngebotSumme() {
+    public function getSonderwunschSumme() {
 
         $total = 0;
         foreach ($this->sonderwunsches as $sonderwunsch) {
@@ -569,6 +569,60 @@ class Datenblatt extends \yii\db\ActiveRecord
         $this->intern_debitor_nr = $internDebitorNr;
 
         $this->save();
+    }
+
+    public function istAngefordert() {
+        $result = false;
+        foreach ($this->abschlags as $abschlag) {
+            $result |= !empty($abschlag->kaufvertrag_angefordert);
+        }
+        return $result;
+    }
+
+    public function kannAbschlaegeAusProjektErstellen() {
+        return $this->projekt && !$this->istAngefordert();
+    }
+
+    public function getBenutzteMeilensteinIds() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                $result[$abschlagMeilenstein->meilenstein_id] = $abschlagMeilenstein->meilenstein_id;
+            }
+        }
+        return $result;
+    }
+
+    public function getAngeforderteAbschlagIds() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                $result[$abschlag->id] = $abschlag->id;
+            }
+        }
+        return $result;
+    }
+
+    public function getAngeforderteAbschlagNamen() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                $result[$abschlag->name] = $abschlag->name;
+            }
+        }
+        return $result;
+    }
+
+    public function getAngeforderteMeilensteine() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                    $result[$abschlagMeilenstein->meilenstein_id] = $abschlagMeilenstein->meilenstein->name;
+                }
+            }
+        }
+        return $result;
     }
 
     public function hasAngeforderteSonderwuensche() {

@@ -429,7 +429,11 @@ echo DynaGrid::widget([
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
             'before' => '{dynagridFilter} {dynagridSort} {dynagrid} '
-                . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+                . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>'
+                . '<a id="" data-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
+                            class="btn btn-default abschlag-massenbearbeitung" title="Abschlagkonfiguration">
+                        <i class="fa fa-list"></i> Abschlagkonfiguration
+                   </a>',
         ],
         'toolbar' =>  [
             'before' => '{pager} {toggleData} {export}'
@@ -479,8 +483,7 @@ echo DynaGrid::widget([
 <?php ActiveForm::end(); ?>
 
 <?php
-$this->registerJs(
-    "
+$this->registerJs("
     $(function() {
         $('.serienbrief').click(function() {
             
@@ -495,10 +498,27 @@ $this->registerJs(
             });
             
             $('.datenblatt-selection-form button').click();
+        });
+        
+        $('.abschlag-massenbearbeitung').click(function() {
+            
+            var datenblattIds = $('#DatenblattSearch-container [name=\"selection[]\"]:checked');
+            var ids = datenblattIds
+                .map(function () {return this.value;})
+                .get()
+                .join(\",\");
+     
+            if (ids && ids.includes(',')) {
+                console.log(ids);
+                
+                window.location = $(this).attr('data-url') + ids;     
+            } else {
+                alert('Bitte wählen Sie erst Datenblätter aus!');
+            }
+            
         })
     });
-    "
-);
+");
 ?>
 
 <?php

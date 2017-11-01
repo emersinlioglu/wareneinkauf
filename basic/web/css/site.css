@@ -118,3 +118,15 @@ a.desc:after {
     overflow: hidden;
     overflow-y: scroll;
 }
+
+ol.sortable {
+    list-style: none;
+    padding-left: 0;
+}
+.sortable li {
+    padding: 7px 4px;
+}
+.sortable li .glyphicon-move {
+    padding-right: 4px;
+    cursor: move;
+}

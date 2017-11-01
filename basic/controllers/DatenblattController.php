@@ -2,13 +2,17 @@
 
 namespace app\controllers;
 
+use app\models\AbschlagMeilenstein;
 use app\models\Kunde;
+use app\models\Meilenstein;
+use app\models\Teileigentumseinheit;
 use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
 use app\models\Datenblatt;
 use app\models\DatenblattSearch;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -199,22 +203,22 @@ class DatenblattController extends Controller
         $model->creator_user_id = Yii::$app->user->getId();
         $model->save();
 
-        $abschlags = [
-            'Abschlag 1' => 25.0,
-            'Abschlag 2' => 28.0,
-            'Abschlag 3' => 16.8,
-            'Abschlag 4' => 8.4,
-            'Abschlag 5' => 18.3,
-            //  'Abschlag 6' => 0.0,
-            'Schlussrechnung' => 3.5
-        ];
-        foreach ($abschlags as $name => $percentage) {
-            $abschlag = new Abschlag();
-            $abschlag->datenblatt_id = $model->id;
-            $abschlag->name = $name;
-            $abschlag->kaufvertrag_prozent = $percentage;
-            $abschlag->save();
-        }
+//        $abschlags = [
+//            'Abschlag 1' => 25.0,
+//            'Abschlag 2' => 28.0,
+//            'Abschlag 3' => 16.8,
+//            'Abschlag 4' => 8.4,
+//            'Abschlag 5' => 18.3,
+//            //  'Abschlag 6' => 0.0,
+//            'Schlussrechnung' => 3.5
+//        ];
+//        foreach ($abschlags as $name => $percentage) {
+//            $abschlag = new Abschlag();
+//            $abschlag->datenblatt_id = $model->id;
+//            $abschlag->name = $name;
+//            $abschlag->kaufvertrag_prozent = $percentage;
+//            $abschlag->save();
+//        }
 
         $this->redirect(['datenblatt/update', 'id' => $model->id]);
     }
@@ -245,6 +249,27 @@ class DatenblattController extends Controller
         if (!$preventPost && $modelDatenblatt->load($data) && $modelDatenblatt->save()) {
 
             $modelDatenblatt->updateInternDebitorNr();
+
+            if (count($modelDatenblatt->abschlags) == 0 && !empty($modelDatenblatt->projekt_id)) {
+
+                if ($modelDatenblatt->projekt && !$modelDatenblatt->istAngefordert()) {
+                    foreach ($modelDatenblatt->projekt->projektAbschlags as $projektAbschlag) {
+                        $abschlag = new Abschlag();
+                        $abschlag->datenblatt_id = $modelDatenblatt->id;
+                        $abschlag->name = $projektAbschlag->name;
+                        $abschlag->kaufvertrag_prozent = $projektAbschlag->getKaufvertragProzentSumme();
+                        $abschlag->save();
+
+                        foreach ($projektAbschlag->meilensteins as $meilenstein) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->save();
+                        }
+                    }
+                }
+            }
+
 
 //            // Käufer
 //            if ($modelKaeufer->load(Yii::$app->request->post())) {
@@ -358,6 +383,8 @@ class DatenblattController extends Controller
 
 //            $modelDatenblatt = $this->findModel($modelDatenblatt->id);
 //            $modelKaeufer = $modelDatenblatt->kaeufer;
+
+            $modelDatenblatt->refresh();
         }
 
         $modelKaeufer = new Kaeufer();
@@ -367,7 +394,7 @@ class DatenblattController extends Controller
 
         // calculate kaufpreis
         $kaufpreisTotal = 0;
-        /* @var $teileh app\models\Teileigentumseinheit */
+        /* @var $teileh Teileigentumseinheit */
         if ($modelDatenblatt->haus) {
             foreach ($modelDatenblatt->haus->teileigentumseinheits as $item) {
                 $kaufpreisTotal += (float)$item->kaufpreis;
@@ -376,7 +403,7 @@ class DatenblattController extends Controller
 
         // calculate sonderwünche
         $sonderwuenscheTotal = 0;
-        /* @var $item app\models\Sonderwunsch */
+        /* @var $item Sonderwunsch */
         foreach ($modelDatenblatt->sonderwunsches as $item) {
             $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
         }
@@ -409,6 +436,185 @@ class DatenblattController extends Controller
         ]);
     }
 
+    public function actionKonfiguration($id) {
+        $datenblatt = $this->findModel($id);
+
+        if (Yii::$app->request->isPost) {
+
+            // ProjektAbschlag
+            $projektAbschlagData = Yii::$app->request->post('Abschlag', []);
+            foreach ($projektAbschlagData as $data) {
+                $projektAbschlag = Abschlag::findOne($data['id']);
+                $projektAbschlag->load($data, '');
+                $projektAbschlag->save();
+            }
+
+            // Meilenstein Zuordnungen
+            $abschlagMeilensteinZuordnungData = Yii::$app->request->post('AbschlagMeilensteinZuordnung', []);
+            foreach ($abschlagMeilensteinZuordnungData as $abschlagId => $meilensteinIdsAsString) {
+
+                /** @var Abschlag $abschlag */
+                $abschlag = Abschlag::findOne($abschlagId);
+
+                if ($abschlag->isDeletable()) {
+
+                    foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                        $abschlagMeilenstein->delete();
+                    }
+
+                    $meilensteinIds = explode(',', $meilensteinIdsAsString);
+                    foreach ($meilensteinIds as $meilensteinId) {
+                        if ($meilenstein = Meilenstein::findOne($meilensteinId)) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->meilenstein_id = $meilenstein->id;
+                            $abschlagMeilenstein->save();
+                        }
+                    }
+
+                    $abschlag->refresh();
+                    $abschlag->updateKaufvertragProzent();
+                }
+
+            }
+
+            $datenblatt->refresh();
+        }
+
+        return $this->render('konfiguration', [
+            'datenblatt' => $datenblatt,
+            'projekt' => $datenblatt->projekt,
+        ]);
+    }
+
+    public function actionAbschlagMassenbearbeitung($ids) {
+
+        $selectedDatenblatts = Datenblatt::find()->where(['in', 'id', explode(',', $ids)])->all();
+        $datenblatts = $this->_getDatenblattsZumBearbeiten($selectedDatenblatts);
+        $valideDatenblattIds = [];
+        foreach ($datenblatts as $key => $datenblatt) {
+            $valideDatenblattIds[] = $datenblatt->id;
+        }
+        $ignorierteDatenblattIds = [];
+        foreach ($selectedDatenblatts as $key => $datenblatt) {
+            if (!in_array($datenblatt->id, $valideDatenblattIds)) {
+                $ignorierteDatenblattIds[] = $datenblatt->id;
+            }
+        }
+
+        /** @var Datenblatt $datenblatt */
+        $angeforderteAbschlagNamen = $angeforderteMeilensteine = [];
+        foreach ($datenblatts as $datenblatt) {
+            $angeforderteMeilensteine += $datenblatt->getAngeforderteMeilensteine();
+            $angeforderteAbschlagNamen += $datenblatt->getAngeforderteAbschlagNamen();
+        }
+
+        $existingAbschlagCount = count($angeforderteAbschlagNamen);
+        $maxAbschlagCount = $this->_getMaxCountAbschlag($datenblatts);
+        $abschlags = [];
+        for ($i = $existingAbschlagCount + 1; $i <= $maxAbschlagCount; $i++) {
+            $abschlag = new Abschlag();
+            if ($i == $maxAbschlagCount) {
+                $abschlag->name = "Schlussrechnung";
+            } else {
+                $abschlag->name = "Abschlag " . $i;
+            }
+            $abschlag->id = $i;
+
+            $abschlags[] = $abschlag;
+        }
+
+        if (Yii::$app->request->isPost) {
+
+            $datenblattUrls = [];
+
+//            print_r(Yii::$app->request->post('Abschlag', []));
+//            print_r(Yii::$app->request->post('AbschlagMeilensteinZuordnung', []));
+
+            $abschlagsData = Yii::$app->request->post('Abschlag', []);
+            $abschlagMeilensteinsData = Yii::$app->request->post('AbschlagMeilensteinZuordnung', []);
+
+            /** @var Datenblatt $datenblatt */
+            foreach ($datenblatts as $datenblatt) {
+
+                // Alle Abschlags mit Zuordnungen löschen, die nicht angefordert sind
+                foreach ($datenblatt->abschlags as $abschlag) {
+                    if ($abschlag->isDeletable()) {
+                        foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                            $abschlagMeilenstein->delete();
+                        }
+                        $abschlag->delete();
+                    }
+                }
+
+                foreach ($abschlagsData as $abschlagIndex => $abschlagData) {
+                    $abschlagMeilensteinData = $abschlagMeilensteinsData[$abschlagIndex];
+
+                    $abschlag = new Abschlag();
+                    $abschlag->datenblatt_id = $datenblatt->id;
+                    $abschlag->name = $abschlagData['name'];
+                    $abschlag->save();
+
+                    if ($abschlagMeilensteinData) {
+                        foreach (explode(',', $abschlagMeilensteinData) as $meilensteinId) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->meilenstein_id = $meilensteinId;
+                            $abschlagMeilenstein->save();
+                        }
+                        $abschlag->updateKaufvertragProzent();
+                    }
+                }
+
+                $datenblattUrls[$datenblatt->id] = Yii::$app->urlManager->createUrl(["datenblatt/update", 'id' => $datenblatt->id]);
+            }
+
+            return Json::encode(['result' => 'ok', 'datenblattUrls' => $datenblattUrls]);
+        }
+
+        return $this->render('abschlag-massenbearbeitung', [
+            'datenblatts' => $datenblatts,
+            'valideDatenblattIds' => $valideDatenblattIds,
+            'ignorierteDatenblattIds' => $ignorierteDatenblattIds,
+            'abschlags' => $abschlags,
+            'projekt' => $datenblatts[0]->projekt,
+            'angeforderteAbschlagNamen' => $angeforderteAbschlagNamen,
+            'angeforderteMeilensteine' => $angeforderteMeilensteine,
+            'existingAbschlagCount' => $existingAbschlagCount,
+            'selectedDatenblatts' => $selectedDatenblatts,
+        ]);
+    }
+
+    /**
+     * Returns Datenblätter, die zum gleichen Projekt gehören und gleiche Anzahl von angeforderten Meilensteine haben.
+     * @param $datenblatts
+     * @return mixed
+     */
+    private function _getDatenblattsZumBearbeiten($datenblatts) {
+        $datenblattsZumBearbeiten = [];
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+            $datenblattsZumBearbeiten[$datenblatt->projekt_id][count($datenblatt->getAngeforderteAbschlagIds())][] = $datenblatt;
+        }
+
+//        foreach ($datenblatts as $datenblatt) {
+//            $datenblattsZumBearbeiten[$datenblatt->projekt_id][count($datenblatt->getAngeforderteAbschlagIds())][] = $datenblatt->id;
+//        }
+//        echo "<pre>";
+//        print_r($datenblattsZumBearbeiten);
+//        exit();
+
+        return array_shift(array_shift($datenblattsZumBearbeiten));
+    }
+
+    private function _getMaxCountAbschlag($datenblatts) {
+        $cnt = 0;
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+            $cnt = max(count($datenblatt->abschlags), $cnt);
+        }
+        return $cnt;
+    }
 
     /**
      * Add new datenblatt
@@ -416,7 +622,6 @@ class DatenblattController extends Controller
      */
     public function actionAddsonderwunsch($datenblattId)
     {
-
         $new = new Sonderwunsch();
         $new->datenblatt_id = $datenblattId;
         $new->save();
@@ -431,13 +636,12 @@ class DatenblattController extends Controller
      */
     public function actionAddabschlag($datenblattId)
     {
-
         $new = new Abschlag();
         $new->datenblatt_id = $datenblattId;
         $new->save();
 
-        return $this->actionUpdate($datenblattId);
-//        $this->redirect(['update', 'id' => $datenblattId]);
+        //return $this->actionUpdate($datenblattId);
+        $this->redirect(['konfiguration', 'id' => $datenblattId]);
     }
 
     /**
@@ -446,7 +650,6 @@ class DatenblattController extends Controller
      */
     public function actionAddzahlung($datenblattId)
     {
-
         $new = new Zahlung();
         $new->datenblatt_id = $datenblattId;
         $new->save();
@@ -544,15 +747,16 @@ class DatenblattController extends Controller
      */
     public function actionDeleteabschlag($datenblattId, $abschlagId)
     {
-        $this->actionUpdate($datenblattId);
+        //$this->actionUpdate($datenblattId);
 
         $model = $this->findModel($datenblattId);
-        if ($modelAbschlag = Abschlag::findOne($abschlagId)) {
+        $modelAbschlag = Abschlag::findOne($abschlagId);
+        if ($modelAbschlag && $modelAbschlag->isDeletable()) {
             $modelAbschlag->delete();
         }
 
-        return $this->actionUpdate($datenblattId, true);
-//        return $this->redirect(['update', 'id' => $datenblattId]);
+        //return $this->actionUpdate($datenblattId, true);
+        return $this->redirect(['konfiguration', 'id' => $model->id]);
     }
 
     /**
@@ -809,4 +1013,10 @@ class DatenblattController extends Controller
 
         return 'Aktualisiert';
     }
+
+    public function actionMassenbearbeitung() {
+
+        return $this->render('massenbearbeitung', []);
+    }
+
 }
