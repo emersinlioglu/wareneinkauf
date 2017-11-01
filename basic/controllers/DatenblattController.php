@@ -555,14 +555,15 @@ class DatenblattController extends Controller
                     $abschlag->name = $abschlagData['name'];
                     $abschlag->save();
 
-                    foreach (explode(',', $abschlagMeilensteinData) as $meilensteinId) {
-                        $abschlagMeilenstein = new AbschlagMeilenstein();
-                        $abschlagMeilenstein->abschlag_id = $abschlag->id;
-                        $abschlagMeilenstein->meilenstein_id = $meilensteinId;
-                        $abschlagMeilenstein->save();
+                    if ($abschlagMeilensteinData) {
+                        foreach (explode(',', $abschlagMeilensteinData) as $meilensteinId) {
+                            $abschlagMeilenstein = new AbschlagMeilenstein();
+                            $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                            $abschlagMeilenstein->meilenstein_id = $meilensteinId;
+                            $abschlagMeilenstein->save();
+                        }
+                        $abschlag->updateKaufvertragProzent();
                     }
-
-                    $abschlag->updateKaufvertragProzent();
                 }
 
                 $datenblattUrls[$datenblatt->id] = Yii::$app->urlManager->createUrl(["datenblatt/update", 'id' => $datenblatt->id]);
