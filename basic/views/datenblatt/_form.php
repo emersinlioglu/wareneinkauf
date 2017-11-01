@@ -54,7 +54,8 @@ $this->registerJs('
     'options' => array(
         'data-pjax' => true,
         //'class' => 'datenblatt-form',
-        'id' => 'datenblatt-form'
+        'id' => 'datenblatt-form',
+        'data-datenblatt-id' => $modelDatenblatt->id,
     )
 ]); ?>
 

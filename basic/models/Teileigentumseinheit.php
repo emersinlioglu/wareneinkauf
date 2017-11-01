@@ -19,6 +19,10 @@ use Yii;
  * @property double $kaufpreis
  * @property double $kp_einheit
  *
+ * @property double $forecast_preis
+ * @property double $verkaufspreis
+ * @property string $verkaufspreis_begruendung
+ *
  * @property Einheitstyp $einheitstyp
  * @property Haus $haus
  */
@@ -38,12 +42,20 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['haus_id', 'einheitstyp_id'], 'required'],
+            [['te_nummer', 'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['kaufpreis', 'kp_einheit', 'wohnflaeche'], 'number'],
+            [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
-            [['geschoss', 'zimmer', 'me_anteil', ], 'string', 'max' => 45]
+            [['geschoss', 'zimmer', 'me_anteil', ], 'string', 'max' => 45],
+            [['forecast_preis', 'verkaufspreis', 'verkaufspreis_begruendung'], 'checkRequirement'],
         ];
+    }
+
+    public function checkRequirement($attribute, $params)
+    {
+        if ($this->forecast_preis != $this->verkaufspreis && strlen($this->verkaufspreis_begruendung) == 0) {
+            $this->addError('verkaufspreis_begruendung', 'Das Feld "Begründung" darf nicht leer sein');
+        }
     }
 
     /**
@@ -63,6 +75,9 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
             'wohnflaeche' => Yii::t('app', 'Wohnflaeche'),
             'kaufpreis' => Yii::t('app', 'Kaufpreis'),
             'kp_einheit' => Yii::t('app', 'Kp Einheit'),
+            'forecast_price' => Yii::t('app', 'Forecast'),
+            'verkaufspreis' => Yii::t('app', 'Verkaufspreis'),
+            'verkaufspreis_begruendung' => Yii::t('app', 'Begründung'),
         ];
     }
 

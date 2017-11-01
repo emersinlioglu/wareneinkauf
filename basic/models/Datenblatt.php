@@ -763,4 +763,16 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $sonderwuenscheZusammenfassung;
     }
 
+    public function isAbschlagAngefordert() {
+        $istAngefordert = false;
+        /** @var Abschlag $abschlag */
+        foreach ($this->abschlags as $abschlag) {
+            if (strlen($abschlag->kaufvertrag_angefordert) > 0) {
+                $istAngefordert = true;
+            }
+        }
+
+        return $istAngefordert;
+    }
+
 }
