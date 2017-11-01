@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Datenblatt;
 use app\models\DatenblattSearch;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -523,6 +524,52 @@ class DatenblattController extends Controller
             $abschlags[] = $abschlag;
         }
 
+        if (Yii::$app->request->isPost) {
+
+            $datenblattUrls = [];
+
+//            print_r(Yii::$app->request->post('Abschlag', []));
+//            print_r(Yii::$app->request->post('AbschlagMeilensteinZuordnung', []));
+
+            $abschlagsData = Yii::$app->request->post('Abschlag', []);
+            $abschlagMeilensteinsData = Yii::$app->request->post('AbschlagMeilensteinZuordnung', []);
+
+            /** @var Datenblatt $datenblatt */
+            foreach ($datenblatts as $datenblatt) {
+
+                // Alle Abschlags mit Zuordnungen löschen, die nicht angefordert sind
+                foreach ($datenblatt->abschlags as $abschlag) {
+                    if ($abschlag->isDeletable()) {
+                        foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                            $abschlagMeilenstein->delete();
+                        }
+                        $abschlag->delete();
+                    }
+                }
+
+                foreach ($abschlagsData as $abschlagIndex => $abschlagData) {
+                    $abschlagMeilensteinData = $abschlagMeilensteinsData[$abschlagIndex];
+
+                    $abschlag = new Abschlag();
+                    $abschlag->datenblatt_id = $datenblatt->id;
+                    $abschlag->name = $abschlagData['name'];
+                    $abschlag->save();
+
+                    foreach (explode(',', $abschlagMeilensteinData) as $meilensteinId) {
+                        $abschlagMeilenstein = new AbschlagMeilenstein();
+                        $abschlagMeilenstein->abschlag_id = $abschlag->id;
+                        $abschlagMeilenstein->meilenstein_id = $meilensteinId;
+                        $abschlagMeilenstein->save();
+                    }
+
+                    $abschlag->updateKaufvertragProzent();
+                }
+
+                $datenblattUrls[$datenblatt->id] = Yii::$app->urlManager->createUrl(["datenblatt/update", 'id' => $datenblatt->id]);
+            }
+
+            return Json::encode(['result' => 'ok', 'datenblattUrls' => $datenblattUrls]);
+        }
 
         return $this->render('abschlag-massenbearbeitung', [
             'datenblatts' => $datenblatts,
@@ -533,16 +580,30 @@ class DatenblattController extends Controller
             'angeforderteAbschlagNamen' => $angeforderteAbschlagNamen,
             'angeforderteMeilensteine' => $angeforderteMeilensteine,
             'existingAbschlagCount' => $existingAbschlagCount,
+            'selectedDatenblatts' => $selectedDatenblatts,
         ]);
     }
 
+    /**
+     * Returns Datenblätter, die zum gleichen Projekt gehören und gleiche Anzahl von angeforderten Meilensteine haben.
+     * @param $datenblatts
+     * @return mixed
+     */
     private function _getDatenblattsZumBearbeiten($datenblatts) {
         $datenblattsZumBearbeiten = [];
         /** @var Datenblatt $datenblatt */
         foreach ($datenblatts as $datenblatt) {
-            $datenblattsZumBearbeiten[$datenblatt->projekt_id][] = $datenblatt;
+            $datenblattsZumBearbeiten[$datenblatt->projekt_id][count($datenblatt->getAngeforderteAbschlagIds())][] = $datenblatt;
         }
-        return array_shift($datenblattsZumBearbeiten);
+
+//        foreach ($datenblatts as $datenblatt) {
+//            $datenblattsZumBearbeiten[$datenblatt->projekt_id][count($datenblatt->getAngeforderteAbschlagIds())][] = $datenblatt->id;
+//        }
+//        echo "<pre>";
+//        print_r($datenblattsZumBearbeiten);
+//        exit();
+
+        return array_shift(array_shift($datenblattsZumBearbeiten));
     }
 
     private function _getMaxCountAbschlag($datenblatts) {

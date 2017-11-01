@@ -17,6 +17,12 @@ $this->registerJs('
     .abschlag-tabelle.table > tbody > tr > td {
         vertical-align: middle;
     }
+    .abschlag-tabelle tbody tr td:nth-child(3n) {
+        width: 250px;
+    }
+    .projekt-meilensteine tr td:nth-child(2) {
+        width: 250px;
+    }
 </style>
 
 <div class="row">
@@ -57,7 +63,10 @@ $this->registerJs('
             <div id="collapse-abschlag" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
 
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php $form = ActiveForm::begin([
+                        'id' => 'abschlag-meileinstein-form',
+                        'enableClientScript' => false,
+                    ]); ?>
 
                         <table class="table table-bordered abschlag-tabelle" data-existing-abschlag-count="<?= $existingAbschlagCount ?>">
                             <thead>
@@ -94,10 +103,11 @@ $this->registerJs('
                                     </td>
                                 </tr>
 
+                                <?php $startIndex = $existingAbschlagCount; ?>
                                 <?php foreach ($abschlags as $key => $abschlag): ?>
                                     <tr data-is-editable="<?= $abschlag->isDeletable() ? 1 : 0 ?>">
                                         <td>
-                                            <?= $form->field($abschlag, "[$key]name")->textInput([])->label(false) ?>
+                                            <?= $form->field($abschlag, "[$startIndex]name")->textInput([])->label(false) ?>
                                         </td>
                                         <td class="prozent-summe" style="text-align: right;">
                                             <?php echo Yii::$app->formatter->asDecimal($abschlag->kaufvertrag_prozent, 2); ?>
@@ -107,10 +117,8 @@ $this->registerJs('
 
                                             </ol>
 
-                                            <div class="hide">
-                                                <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$abschlag->id]", $abschlag->getZuordnungenAsString(),
-                                                    ['class' => 'abschlag-zuordnungen'])
-                                                ?>
+                                            <div class="">
+                                                <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$startIndex]", '', ['class' => 'abschlag-zuordnungen']) ?>
                                             </div>
                                         </td>
                                         <td>
@@ -119,6 +127,7 @@ $this->registerJs('
                                             </span>
                                         </td>
                                     </tr>
+                                    <?php $startIndex++; ?>
                                 <?php endforeach; ?>
                             </tbody>
 
@@ -222,3 +231,76 @@ $this->registerJs('
         </td>
     </tr>
 </table>
+
+<div class="row">
+    <div class="box-group col-sm-6" id="accordion">
+        <div class="panel box box-primary">
+            <div class="box-header with-border">
+                <h4 class="box-title">
+                    <a data-toggle="collapse" data-parent="#collapse-selected-entities" href="#collapse-selected-entities" aria-expanded="true" class="">
+                        Zusammenfassung der ausgewählten Datenblätter:
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse-selected-entities" class="panel-collapse collapse in" aria-expanded="false">
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            (j) => Angefordert<br>
+                            (n) => Nicht Angefordert
+                        </div>
+                    </div>
+
+                    <?php foreach ($selectedDatenblatts as $datenblatt) { ?>
+                        <div class="col-sm-3">
+                            <?= '<b>Datenblatt: ' . $datenblatt->id . '</b>' ?>
+                            <ul>
+                                <?php foreach ($datenblatt->abschlags as $abschlag) { ?>
+                                    <li>
+                                        <?= $abschlag->name ?> <b><?= $abschlag->kaufvertrag_angefordert ? '(j)' : '(n)' ?></b>
+                                        <ul>
+                                            <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) { ?>
+                                                <li><?= $abschlagMeilenstein->meilenstein->name ?></li>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                    <?php } ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal large fade" role="dialog">
+    <div class="modal-dialog" style="width: 900px;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bearbeitete Datenblätter</h4>
+            </div>
+            <div class="modal-body">
+                <div class="links">
+
+                </div>
+                <br>
+                <br>
+                <p>
+                    <a href="index.php?r=datenblatt/index"> >> Datenblätter</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
