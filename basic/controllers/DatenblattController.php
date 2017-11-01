@@ -486,6 +486,74 @@ class DatenblattController extends Controller
         ]);
     }
 
+    public function actionAbschlagMassenbearbeitung($ids) {
+
+        $selectedDatenblatts = Datenblatt::find()->where(['in', 'id', explode(',', $ids)])->all();
+        $datenblatts = $this->_getDatenblattsZumBearbeiten($selectedDatenblatts);
+        $valideDatenblattIds = [];
+        foreach ($datenblatts as $key => $datenblatt) {
+            $valideDatenblattIds[] = $datenblatt->id;
+        }
+        $ignorierteDatenblattIds = [];
+        foreach ($selectedDatenblatts as $key => $datenblatt) {
+            if (!in_array($datenblatt->id, $valideDatenblattIds)) {
+                $ignorierteDatenblattIds[] = $datenblatt->id;
+            }
+        }
+
+        /** @var Datenblatt $datenblatt */
+        $angeforderteAbschlagNamen = $angeforderteMeilensteine = [];
+        foreach ($datenblatts as $datenblatt) {
+            $angeforderteMeilensteine += $datenblatt->getAngeforderteMeilensteine();
+            $angeforderteAbschlagNamen += $datenblatt->getAngeforderteAbschlagNamen();
+        }
+
+        $existingAbschlagCount = count($angeforderteAbschlagNamen);
+        $maxAbschlagCount = $this->_getMaxCountAbschlag($datenblatts);
+        $abschlags = [];
+        for ($i = $existingAbschlagCount + 1; $i <= $maxAbschlagCount; $i++) {
+            $abschlag = new Abschlag();
+            if ($i == $maxAbschlagCount) {
+                $abschlag->name = "Schlussrechnung";
+            } else {
+                $abschlag->name = "Abschlag " . $i;
+            }
+            $abschlag->id = $i;
+
+            $abschlags[] = $abschlag;
+        }
+
+
+        return $this->render('abschlag-massenbearbeitung', [
+            'datenblatts' => $datenblatts,
+            'valideDatenblattIds' => $valideDatenblattIds,
+            'ignorierteDatenblattIds' => $ignorierteDatenblattIds,
+            'abschlags' => $abschlags,
+            'projekt' => $datenblatts[0]->projekt,
+            'angeforderteAbschlagNamen' => $angeforderteAbschlagNamen,
+            'angeforderteMeilensteine' => $angeforderteMeilensteine,
+            'existingAbschlagCount' => $existingAbschlagCount,
+        ]);
+    }
+
+    private function _getDatenblattsZumBearbeiten($datenblatts) {
+        $datenblattsZumBearbeiten = [];
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+            $datenblattsZumBearbeiten[$datenblatt->projekt_id][] = $datenblatt;
+        }
+        return array_shift($datenblattsZumBearbeiten);
+    }
+
+    private function _getMaxCountAbschlag($datenblatts) {
+        $cnt = 0;
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+            $cnt = max(count($datenblatt->abschlags), $cnt);
+        }
+        return $cnt;
+    }
+
     /**
      * Add new datenblatt
      * @param int $datenblattId

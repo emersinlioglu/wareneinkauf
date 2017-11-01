@@ -582,4 +582,36 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $result;
     }
 
+    public function getAngeforderteAbschlagIds() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                $result[$abschlag->id] = $abschlag->id;
+            }
+        }
+        return $result;
+    }
+
+    public function getAngeforderteAbschlagNamen() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                $result[$abschlag->name] = $abschlag->name;
+            }
+        }
+        return $result;
+    }
+
+    public function getAngeforderteMeilensteine() {
+        $result = [];
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) {
+                    $result[$abschlagMeilenstein->meilenstein_id] = $abschlagMeilenstein->meilenstein->name;
+                }
+            }
+        }
+        return $result;
+    }
+
 }
