@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\AbschlagMeilenstein;
+use app\models\Haus;
 use app\models\Kunde;
 use app\models\Meilenstein;
 use app\models\Teileigentumseinheit;
@@ -983,7 +984,19 @@ class DatenblattController extends Controller
 
     public function actionAddTeileigentumseinheit($datenblattId, $teId) {
 
+        /** @var Datenblatt $model */
         $model = $this->findModel($datenblattId);
+
+        if (!$model->haus_id) {
+            $haus = new Haus();
+            $haus->projekt_id = $model->projekt_id;
+            $haus->firma_id = $model->firma_id;
+            $haus->creator_user_id = User::getCurrentUser()->id;
+            $haus->save();
+
+            $model->haus_id = $haus->id;
+            $model->save();
+        }
 
         if (!$model->isAbschlagAngefordert()) {
 
