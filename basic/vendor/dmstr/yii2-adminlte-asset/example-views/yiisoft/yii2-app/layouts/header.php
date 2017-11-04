@@ -33,6 +33,11 @@ use yii\helpers\Html;
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li> -->
 
+                <?php if (getenv('APPLICATION_ENV') != 'live'): ?>
+                    <li>
+                        <a style="color: black; font-weight: bold; font-size:17px;">ENV: <?= getenv('APPLICATION_ENV') ?></a>
+                    </li>
+                <?php endif; ?>
                 <li>
                     <?= Html::a('<i class="fa fa-fw fa-sign-out"></i>Logout', ['/user-management/auth/logout'], ['class' => 'btn btn-default btn-primary']) ?>
                 </li>
