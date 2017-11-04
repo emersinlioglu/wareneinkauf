@@ -23,11 +23,11 @@ CREATE TABLE `meilenstein` (
   INDEX `FK_meilenstein_projekt_abschlag` (`projekt_id`),
   INDEX `FK_meilenstein_projekt_abschlag_2` (`projekt_abschlag_id`),
   CONSTRAINT `FK_meilenstein_projekt_abschlag` FOREIGN KEY (`projekt_id`) REFERENCES `projekt` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_meilenstein_projekt_abschlag_2` FOREIGN KEY (`projekt_abschlag_id`) REFERENCES `projekt_abschlag` (`id`)
+  CONSTRAINT `FK_meilenstein_projekt_abschlag_2` FOREIGN KEY (`projekt_abschlag_id`) REFERENCES `projekt_abschlag` (`id`) ON DELETE SET NULL
 )
   COLLATE='utf8_general_ci'
   ENGINE=InnoDB
-  AUTO_INCREMENT=7
+  AUTO_INCREMENT=11
 ;
 
 CREATE TABLE `abschlag_meilenstein` (

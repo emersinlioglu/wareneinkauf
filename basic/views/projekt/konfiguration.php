@@ -23,7 +23,9 @@ $this->title = 'Projekt-Abschläge konfigurieren';
             <div id="collapse-abschlag" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
 
-                    <?php $form = ActiveForm::begin(['options' => []]); ?>
+                    <?php $form = ActiveForm::begin([
+                        'enableClientScript' => false,
+                    ]); ?>
 
                         <table class="table table-bordered abschlag-tabelle">
                             <thead>
@@ -77,7 +79,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                         </table>
 
                         <div class="form-group" style="text-align: right;">
-                            <?= Html::submitButton('Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+                            <?= Html::submitButton('Aktualisieren', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
                         </div>
 
                     <?php ActiveForm::end(); ?>
@@ -148,6 +150,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
 
                     <?php $form = ActiveForm::begin([
                         'action' => ['projekt/update-meilensteine', 'id' => $projekt->id],
+                        'enableClientScript' => false,
                         'options' => []
                     ]); ?>
 
@@ -155,7 +158,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                         <tr>
                             <th style="">Drag&Drop</th>
                             <th style="">Name</th>
-                            <th style="">Nummer</th>
+<!--                            <th style="">Nummer</th>-->
                             <th>Prozent-Summe (%)</th>
                             <th style="width: 5%;">
                                 <?= Html::a('<span class="fa fa-plus"> </span>',
@@ -180,9 +183,9 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                                     </div>
                                     <?= $form->field($meilenstein, "[$key]name")->textInput([])->label(false) ?>
                                 </td>
-                                <td>
-                                    <?= $form->field($meilenstein, "[$key]number")->textInput([])->label(false) ?>
-                                </td>
+<!--                                <td>-->
+<!--                                    --><?php //echo $form->field($meilenstein, "[$key]number")->textInput([])->label(false) ?>
+<!--                                </td>-->
                                 <td>
                                     <?= $form->field($meilenstein, "[$key]kaufvertrag_prozent")
                                         ->widget(\kartik\money\MaskMoney::classname(), [
@@ -204,7 +207,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                         <tr>
                             <td>Summe</td>
                             <td></td>
-                            <td></td>
+<!--                            <td></td>-->
                             <td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($projekt->getProzentSummeMeilensteine(), 2) ?></td>
                         </tr>
 
@@ -212,7 +215,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
 
 
                     <div class="form-group" style="text-align: right;">
-                        <?= Html::submitButton('Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+                        <?= Html::submitButton('Aktualisieren', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>

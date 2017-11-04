@@ -136,7 +136,7 @@ $this->registerJs('
                         </table>
 
                         <div class="form-group" style="text-align: right;">
-                            <?= Html::submitButton('Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+                            <?= Html::submitButton('Aktualisieren', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
                         </div>
 
                     <?php ActiveForm::end(); ?>
