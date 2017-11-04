@@ -16,14 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sim-create">
 
-
-<!--    <div class="pad margin no-print">-->
-        <div class="callout callout-info" style="margin-bottom: 0!important;">
-            <h4><i class="fa fa-info"></i> Vorlage:</h4>
-            Klicken Sie bitte auf <a href="/file/te-liste.xlsx">Download</a>, um die Import-Vorlage herunterzuladen.
-        </div>
-<!--    </div>-->
-
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+        <h4><i class="fa fa-info"></i> Vorlage:</h4>
+        Klicken Sie bitte auf <a href="/file/te-liste.xlsx">Download</a>, um die Import-Vorlage herunterzuladen.
+    </div>
 
     <div class="panel panel-default" style="overflow-x: auto;">
         <div class="panel-body">

@@ -4,3 +4,5 @@ protected/data/*.db
 themes/classic/views/
 
 .idea
+
+basic/vendor/kartik-v/mpdf/ttfontdata/*
