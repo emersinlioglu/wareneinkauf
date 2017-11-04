@@ -18,14 +18,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
 
         $columns = [
-            ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
+            ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
 //            ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
-
             [
                 'attribute' => 'einheitstyp_id',
                 'value' => 'einheitstyp.name',
                 'label' => 'Einheitstyp',
-                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name')
+                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
+
             ],
             'te_nummer',
             [
@@ -45,10 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'me_anteil',
             'wohnflaeche',
-            'kaufpreis',
+            [
+                'attribute' => 'kaufpreis',
+                'pageSummary'=>true
+            ],
             'kp_einheit',
-            'forecast_preis',
-            'verkaufspreis',
+            [
+                'attribute' => 'forecast_preis',
+                'pageSummary'=>true
+            ],
+            [
+                'attribute' => 'verkaufspreis',
+                'pageSummary'=>true
+            ],
             [
                 'attribute' => 'verkaufspreis_begruendung',
                 'width'=>'250px',
@@ -65,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'id' => 'ForecastSearch',
+                'showPageSummary'=>true,
                 'panel' => [
                     'heading' => '<h3 class="panel-title">Forecast</h3>',
                     'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
