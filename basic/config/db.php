@@ -12,7 +12,16 @@ switch (getenv('APPLICATION_ENV')) {
             'charset' => 'utf8',
         ];
         break;
-    default:
+    case 'staging':
+        $dbConfig = [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=abgproject-staging',
+            'username' => 'root',
+            'password' => 'Sicher4uns',
+            'charset' => 'utf8',
+        ];
+        break;
+    case 'live':
         $dbConfig = [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=abgproject',
