@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         $columns = [
             ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
-            ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
+//            ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
 
             [
                 'attribute' => 'einheitstyp_id',
