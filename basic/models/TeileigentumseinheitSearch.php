@@ -75,7 +75,6 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
         return $dataProvider;
     }
 
-
     /**
      * Creates data provider instance with search query applied
      *
