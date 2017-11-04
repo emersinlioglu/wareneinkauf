@@ -7,6 +7,9 @@ use \yii\helpers\Html;
 $this->title = 'Projekt-Abschläge konfigurieren';
 /** @var \app\models\Projekt $projekt */
 /** @var \app\models\ProjektAbschlag $projektAbschlag */
+
+//$this->registerJsFile('@web/js/jquery-sortable.js', ['position' => \yii\web\View::POS_BEGIN]);
+
 ?>
 
 <div class="row">
@@ -116,7 +119,7 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                 });
             }
             
-            $(".meilenstein").sortable({
+            $(".meilenstein").sortable2({
                 group: "meilenstein",
                 onDrop: function ($item, container, _super) {
                     updateMeilensteinZuordnungen();

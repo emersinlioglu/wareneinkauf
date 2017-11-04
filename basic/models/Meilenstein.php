@@ -77,4 +77,13 @@ class Meilenstein extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ProjektAbschlag::className(), ['id' => 'projekt_abschlag_id']);
     }
+
+    public static function getProzentSumme($meilensteineIds) {
+        $result = self::find()
+            ->where(
+                ['in', 'id', $meilensteineIds]
+            )
+            ->sum('kaufvertrag_prozent');
+        return $result;
+    }
 }

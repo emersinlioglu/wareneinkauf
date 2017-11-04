@@ -17,7 +17,7 @@ var DatenblattMassenbearbeitungForm = function () {
 
         abschlagTable.on("click", ".delete-button", function () {
             var tr = $(this).closest("tr");
-            tr.find('.sortable.meilenstein').sortable("destroy");
+            tr.find('.sortable.meilenstein').sortable2("destroy");
             $(".projekt-meilensteine .sortable:first").append(tr.find(".sortable.meilenstein li"));
             tr.remove();
 
@@ -51,7 +51,7 @@ var DatenblattMassenbearbeitungForm = function () {
     }
 
     _.initSortables = function (container) {
-        container.find(".meilenstein").sortable({
+        container.find(".meilenstein").sortable2({
             group: "meilenstein",
             onDrop: function ($item, container, _super) {
                 _updateMeilensteinZuordnungen();

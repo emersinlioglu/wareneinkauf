@@ -132,7 +132,7 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                 });
             }
             
-            $(".meilenstein").sortable({
+            $(".meilenstein").sortable2({
                 group: "meilenstein",
                 onDrop: function ($item, container, _super) {
                     updateMeilensteinZuordnungen();

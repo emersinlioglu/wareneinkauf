@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use \yii\helpers\Html;
+use \app\models\Meilenstein;
 
 $this->title = 'Massenbearbeitung - Abschläge konfigurieren';
 
@@ -90,8 +91,12 @@ $this->registerJs('
                                             <?php } ?>
                                         </ul>
                                     </td>
-                                    <td>
-
+                                    <td style="text-align: right;">
+                                        <?= Yii::$app->formatter->asDecimal(
+                                                Meilenstein::getProzentSumme(array_keys($angeforderteMeilensteine)),
+                                                2
+                                            )
+                                        ?>
                                     </td>
                                     <td>
                                         <ul>
@@ -119,7 +124,7 @@ $this->registerJs('
 
                                             </ol>
 
-                                            <div class="">
+                                            <div class="hide">
                                                 <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$startIndex]", '', ['class' => 'abschlag-zuordnungen']) ?>
                                             </div>
                                         </td>
