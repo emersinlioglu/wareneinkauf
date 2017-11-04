@@ -4,6 +4,8 @@ use yii\widgets\ActiveForm;
 use \yii\helpers\Html;
 
 $this->title = 'Massenbearbeitung - Abschläge konfigurieren';
+
+/** @var DAtenblatt $datenblatt */
 ?>
 
 <?php
@@ -26,7 +28,7 @@ $this->registerJs('
 </style>
 
 <div class="row">
-    <div class="box-group col-sm-6" id="accordion">
+    <div class="box-group col-sm-12" id="accordion">
         <div class="panel box box-primary">
             <div class="box-header with-border">
                 <h4 class="box-title">
@@ -37,11 +39,11 @@ $this->registerJs('
             </div>
             <div id="collapse-datenblatts-zum-bearbeiten" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
-                    <div class="alert alert-success">
-                        <strong>Valide Ids:</strong> <?php echo implode(', ', $valideDatenblattIds)?>
+                    <div class="alert alert-success col-sm-6">
+                        <strong>Valide Datenblätter: </strong> <?php echo implode(', ', $valideDatenblattIds)?>
                     </div>
-                    <div class="alert alert-warning">
-                        <strong>Ignorierte Ids:</strong> <?php echo implode(', ', $ignorierteDatenblattIds)?>
+                    <div class="alert alert-danger col-sm-6">
+                        <strong>Ignorierte Datenblätter: </strong> <?php echo implode(', ', $ignorierteDatenblattIds)?>
                     </div>
                 </div>
             </div>
@@ -233,7 +235,7 @@ $this->registerJs('
 </table>
 
 <div class="row">
-    <div class="box-group col-sm-6" id="accordion">
+    <div class="box-group col-sm-12" id="accordion">
         <div class="panel box box-primary">
             <div class="box-header with-border">
                 <h4 class="box-title">
@@ -246,27 +248,43 @@ $this->registerJs('
                 <div class="box-body">
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            (j) => Angefordert<br>
-                            (n) => Nicht Angefordert
+                        <?php
+                            $dangerIcon = '<i class="fa fa-times text-danger" aria-hidden="true"></i>';
+                            $checkIcon = '<i class="fa fa-check text-success" aria-hidden="true"></i>';
+                        ?>
+                        <div class="col-sm-6" style="font-size: 16px; font-weight: bold;">
+                            <?= $dangerIcon ?> => Angefordert    <?= $checkIcon ?> => Nicht Angefordert
                         </div>
                     </div>
+                    <br>
 
-                    <?php foreach ($selectedDatenblatts as $datenblatt) { ?>
-                        <div class="col-sm-3">
-                            <?= '<b>Datenblatt: ' . $datenblatt->id . '</b>' ?>
-                            <ul>
-                                <?php foreach ($datenblatt->abschlags as $abschlag) { ?>
-                                    <li>
-                                        <?= $abschlag->name ?> <b><?= $abschlag->kaufvertrag_angefordert ? '(j)' : '(n)' ?></b>
-                                        <ul>
-                                            <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) { ?>
-                                                <li><?= $abschlagMeilenstein->meilenstein->name ?></li>
-                                            <?php } ?>
-                                        </ul>
-                                    </li>
-                                <?php } ?>
-                            </ul>
+                    <?php foreach (array_chunk($selectedDatenblatts, 6) as $datenblattGroup) { ?>
+                        <div class="row">
+                            <?php foreach ($datenblattGroup as $datenblatt) { ?>
+                                <div class="col-sm-2">
+                                    <div class="box <?= in_array($datenblatt->id, $valideDatenblattIds) ? 'box-success' : 'box-danger' ?>">
+                                        <div class="box-header with-border">
+                                            <h5>
+                                                <?= '<b>Datenblatt:</b> ' . $datenblatt->id . ' <br> <b>TE-Nummer:</b> ' . $datenblatt->getTenummerHtml() ?>
+                                            </h5>
+                                        </div>
+                                        <div class="box-body">
+                                            <ul>
+                                                <?php foreach ($datenblatt->abschlags as $abschlag) { ?>
+                                                    <li>
+                                                        <b><?= $abschlag->name ?> <?= $abschlag->kaufvertrag_angefordert ? $dangerIcon : $checkIcon ?></b>
+                                                        <ul>
+                                                            <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein) { ?>
+                                                                <li><?= $abschlagMeilenstein->meilenstein->name ?></li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
                         </div>
                     <?php } ?>
 
