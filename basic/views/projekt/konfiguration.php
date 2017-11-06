@@ -52,7 +52,7 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
                                         <td class="prozent-summe" style="text-align: right;">
                                             <?php echo Yii::$app->formatter->asDecimal($projektAbschlag->getKaufvertragProzentSumme(), 2); ?>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td style="width: 300px;">
                                             <ol class="meilenstein sortable zuordnung">
                                                 <?php foreach ($projektAbschlag->meilensteins as $meilensteinKey => $meilenstein): ?>
                                                     <li data-meilenstein-id="<?= $meilenstein->id ?>" data-prozent="<?= $meilenstein->kaufvertrag_prozent ?>">
@@ -181,18 +181,29 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
                                     <div class="hide">
                                         <?= $form->field($meilenstein, "[$key]id")->hiddenInput() ?>
                                     </div>
-                                    <?= $form->field($meilenstein, "[$key]name")->textInput([])->label(false) ?>
+                                    <?php
+                                    $options = [];
+                                    if (!$meilenstein->isDeletable()) {
+                                        $options['disabled'] = 'disabled';
+                                    }
+                                    echo $form->field($meilenstein, "[$key]name")->textInput($options)->label(false)
+                                    ?>
                                 </td>
 <!--                                <td>-->
 <!--                                    --><?php //echo $form->field($meilenstein, "[$key]number")->textInput([])->label(false) ?>
 <!--                                </td>-->
                                 <td>
-                                    <?= $form->field($meilenstein, "[$key]kaufvertrag_prozent")
+                                    <?php
+                                    $options = [
+                                        'id' => $key . '-kaufvertrag_prozent-id',
+                                        'style' => 'text-align: right'
+                                    ];
+                                    if (!$meilenstein->isDeletable()) {
+                                        $options['disabled'] = 'disabled';
+                                    }
+                                    echo $form->field($meilenstein, "[$key]kaufvertrag_prozent")
                                         ->widget(\kartik\money\MaskMoney::classname(), [
-                                            'options' => [
-                                                'id' => $key . '-kaufvertrag_prozent-id',
-                                                'style' => 'text-align: right'
-                                            ],
+                                            'options' => $options,
                                         ])->label(false)
                                     ?>
                                 </td>
