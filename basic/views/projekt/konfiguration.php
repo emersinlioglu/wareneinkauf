@@ -140,7 +140,7 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
             <div id="collapse-meilenstein" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
 
-                    <?php if(strval($projekt->getProzentSummeMeilensteine()) != '100'): ?>
+                    <?php if(strval($projekt->getProzentSummeMeilensteine()) != strval('100')): ?>
                         <div class="alert alert-danger fade in alert-dismissable">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
                             <strong>Wichtig!</strong> Die Summe von Prozent-Angaben müssen 100 sein.<br>
@@ -182,11 +182,7 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
                                         <?= $form->field($meilenstein, "[$key]id")->hiddenInput() ?>
                                     </div>
                                     <?php
-                                    $options = [];
-                                    if (!$meilenstein->isDeletable()) {
-                                        $options['disabled'] = 'disabled';
-                                    }
-                                    echo $form->field($meilenstein, "[$key]name")->textInput($options)->label(false)
+                                    echo $form->field($meilenstein, "[$key]name")->textInput([])->label(false)
                                     ?>
                                 </td>
 <!--                                <td>-->
@@ -198,7 +194,7 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
                                         'id' => $key . '-kaufvertrag_prozent-id',
                                         'style' => 'text-align: right'
                                     ];
-                                    if (!$meilenstein->isDeletable()) {
+                                    if ($meilenstein->istAngefordert()) {
                                         $options['disabled'] = 'disabled';
                                     }
                                     echo $form->field($meilenstein, "[$key]kaufvertrag_prozent")

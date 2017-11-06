@@ -94,4 +94,13 @@ class Meilenstein extends \yii\db\ActiveRecord
 //        }
         return count($this->abschlagMeilensteins) == 0;
     }
+
+    public function istAngefordert() {
+        $result = false;
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            $result |= !empty($abschlagMeilenstein->abschlag->kaufvertrag_angefordert);
+            if ($result) {break;}
+        }
+        return $result;
+    }
 }
