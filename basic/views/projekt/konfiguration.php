@@ -140,7 +140,7 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
             <div id="collapse-meilenstein" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
 
-                    <?php if($projekt->getProzentSummeMeilensteine() != 100): ?>
+                    <?php if(strval($projekt->getProzentSummeMeilensteine()) != '100'): ?>
                         <div class="alert alert-danger fade in alert-dismissable">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
                             <strong>Wichtig!</strong> Die Summe von Prozent-Angaben müssen 100 sein.<br>
