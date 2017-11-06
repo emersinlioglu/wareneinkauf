@@ -4,12 +4,9 @@ use yii\widgets\ActiveForm;
 use \yii\helpers\Html;
 
 
-$this->title = 'Projekt-Abschläge konfigurieren';
+$this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
 /** @var \app\models\Projekt $projekt */
 /** @var \app\models\ProjektAbschlag $projektAbschlag */
-
-//$this->registerJsFile('@web/js/jquery-sortable.js', ['position' => \yii\web\View::POS_BEGIN]);
-
 ?>
 
 <div class="row">
@@ -200,9 +197,14 @@ $this->title = 'Projekt-Abschläge konfigurieren';
                                     ?>
                                 </td>
                                 <td>
-                                    <?= Html::a('<span class="fa fa-minus"></span>',
-                                        Yii::$app->urlManager->createUrl(["projekt/delete-meilenstein", 'id' => $meilenstein->id]),
-                                        ['class' => 'delete-button delete-meilenstein btn btn-danger btn-xl']) ?>
+                                    <?php
+                                        if ($meilenstein->isDeletable()) {
+                                            echo Html::a('<span class="fa fa-minus"></span>',
+                                                Yii::$app->urlManager->createUrl(["projekt/delete-meilenstein", 'id' => $meilenstein->id]),
+                                                ['class' => 'delete-button delete-meilenstein btn btn-danger btn-xl']
+                                            );
+                                        }
+                                    ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

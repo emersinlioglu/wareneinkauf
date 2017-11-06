@@ -346,8 +346,10 @@ class ProjektController extends Controller
     public function actionDeleteMeilenstein($id) {
 
         $meilenstein = Meilenstein::findOne($id);
-        $projektId = $meilenstein->projekt_id;
-        $meilenstein->delete();
+        if (count($meilenstein->abschlagMeilensteins) == 0) {
+            $projektId = $meilenstein->projekt_id;
+            $meilenstein->delete();
+        }
 
         return $this->redirect(['konfiguration', 'id' => $projektId]);
     }

@@ -86,4 +86,12 @@ class Meilenstein extends \yii\db\ActiveRecord
             ->sum('kaufvertrag_prozent');
         return $result;
     }
+
+    public function isDeletable() {
+//        $result = true;
+//        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+//            $result &= empty($abschlagMeilenstein->abschlag->kaufvertrag_angefordert);
+//        }
+        return count($this->abschlagMeilensteins) == 0;
+    }
 }
