@@ -518,7 +518,7 @@ $this->registerJs("
                 console.log('aaaaa');
                 console.log(ids);
                 
-                if (ids.includes(',')) {
+                if (ids.indexOf(',') > -1) {
                    // bulk-edit                
                     window.location = $(this).attr('data-bulk-edit-url') + ids;
                 } else {
