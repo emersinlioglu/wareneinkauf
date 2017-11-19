@@ -284,7 +284,7 @@ var DatenblattForm = function () {
                 }
             })
             .autocomplete({
-                source: "index.php?r=teileigentumseinheit/autocomplete",
+                source: "index.php?r=teileigentumseinheit/autocomplete&datenblattId=" + $('#datenblatt-form').data('datenblatt-id'),
                 minLength: 1,
                 select: function (event, ui) {
 

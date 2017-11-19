@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Datenblatt;
 use app\models\Einheitstyp;
+use app\models\Projekt;
 use Yii;
 use app\models\Teileigentumseinheit;
 use app\models\TeileigentumseinheitSearch;
@@ -133,17 +135,22 @@ class TeileigentumseinheitController extends Controller
     {
         $errors = [];
         $fehlgeschlageneTeileigentumseinheiten = [];
+        $projekt_id = Yii::$app->request->post('projekt_id');
         $einheitstyp_id = Yii::$app->request->post('einheitstyp_id');
 
         if (Yii::$app->request->isPost) {
 
             $einheitstyp = Einheitstyp::findOne($einheitstyp_id);
+            $projekt = Projekt::findOne($projekt_id);
 
             if (!$einheitstyp) {
                 $errors[] = 'Bitte einen Einheitstyp auswählen';
             }
+            if (!$projekt) {
+                $errors[] = 'Bitte ein Projekt auswählen';
+            }
 
-            if ($einheitstyp) {
+            if ($einheitstyp && $projekt) {
 
                 // import card numbers file
                 if (isset($_FILES['file']) && !empty($_FILES['file']['tmp_name'])) {
@@ -185,15 +192,23 @@ class TeileigentumseinheitController extends Controller
                             $teileigentumseinheit = new Teileigentumseinheit();
                         }
 
+                        if ($teileigentumseinheit->haus && $teileigentumseinheit->haus->hatDatenblattMitAngefodertemAbschlag) {
+                            $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
+                            continue;
+                        }
+
                         //gefoerdert //$teileigentumseinheit->gefoerdert = $sheet->getCellByColumnAndRow($row, ???)->getValue();
                         //$teileigentumseinheit->verkuafpreis = $sheet->getCellByColumnAndRow($row, ????)->getValue();
                         //haus //$teileigentumseinheit->???? = $sheet->getCellByColumnAndRow($row, ????)->getValue();
                         $teileigentumseinheit->einheitstyp_id = $einheitstyp->id;
+                        $teileigentumseinheit->projekt_id = $projekt->id;
                         $teileigentumseinheit->te_nummer = $teNummer;
                         $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(2, $row)->getValue());
                         $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(3, $row)->getValue());
                         $teileigentumseinheit->wohnflaeche = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
-                        $teileigentumseinheit->kaufpreis = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
+                        $teileigentumseinheit->kaufpreis =
+                            $teileigentumseinheit->verkaufspreis =
+                            $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
                         $teileigentumseinheit->me_anteil = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
 
                         if (!$teileigentumseinheit->validate() || !$teileigentumseinheit->save()) {
@@ -204,13 +219,14 @@ class TeileigentumseinheitController extends Controller
 
             }
 
-            if (count($fehlgeschlageneTeileigentumseinheiten) == 0) {
+            if (count($errors) + count($fehlgeschlageneTeileigentumseinheiten) == 0) {
                 return $this->redirect(['haus/index']);
             }
         }
 
         return $this->render('import', [
             'errors' => $errors,
+            'projekt_id' => $projekt_id,
             'einheitstyp_id' => $einheitstyp_id,
             'fehlgeschlageneTeileigentumseinheiten' => $fehlgeschlageneTeileigentumseinheiten,
         ]);
@@ -219,36 +235,45 @@ class TeileigentumseinheitController extends Controller
     /**
      * Search for autocomplete
      */
-    public function actionAutocomplete()
+    public function actionAutocomplete($datenblattId = '', $term = '')
     {
+        $results = [];
+
         if (isset($_GET['term'])) {
 
-            $kaeufers = Teileigentumseinheit::find()
-                ->where(['like', 'te_nummer', $_GET['term']])
-                ->andWhere("(haus_id IS NULL OR haus_id = '')")
-                ->orderBy('CAST(te_nummer AS DECIMAL)')
-                ->all();
+//            var_dump($datenblattId);
 
-            $results = array();
-            $results[] = array(
-                'id' => 0,
-                'value' => '',
-                'label' => '',
-                'debitor_nr' => 'Debitor-Nr.',
-                'vorname' => 'Vorname',
-                'nachname' => 'Nachname'
-            );
+            $datenblatt = Datenblatt::findOne($datenblattId);
 
-            foreach ($kaeufers as $kaeufer) {
-                $data = $kaeufer->attributes;
-                $results[] = $data;
+            if ($datenblatt && $datenblatt->projekt) {
+
+                $kaeufers = Teileigentumseinheit::find()
+                    ->where(['like', 'te_nummer', $_GET['term']])
+                    ->andWhere("(haus_id IS NULL OR haus_id = '')")
+                    ->andWhere("projekt_id = " . $datenblatt->projekt->id)
+                    ->orderBy('CAST(te_nummer AS DECIMAL)')
+                    ->all();
+
+                $results[] = array(
+                    'id' => 0,
+                    'value' => '',
+                    'label' => '',
+                    'debitor_nr' => 'Debitor-Nr.',
+                    'vorname' => 'Vorname',
+                    'nachname' => 'Nachname'
+                );
+
+                foreach ($kaeufers as $kaeufer) {
+                    $data = $kaeufer->attributes;
+                    $results[] = $data;
+                }
             }
 
             echo Json::encode($results);
             return;
         }
 
-        echo Json::encode([]);
+        echo Json::encode($results);
     }
 
 

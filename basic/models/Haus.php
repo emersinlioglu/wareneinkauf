@@ -166,4 +166,13 @@ class Haus extends \yii\db\ActiveRecord
         return $tenummer;
     }
 
+    public function hatDatenblattMitAngefodertemAbschlag() {
+        $result = false;
+        /** @var Datenblatt $datenblatt */
+        foreach ($this->datenblatts as $datenblatt) {
+            $result |= $datenblatt->istAngefordert();
+        }
+        return $result;
+    }
+
 }

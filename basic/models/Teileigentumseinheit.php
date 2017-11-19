@@ -10,6 +10,7 @@ use Yii;
  * @property string $id
  * @property integer $haus_id
  * @property integer $einheitstyp_id
+ * @property integer $projekt_id
  * @property string $te_nummer
  * @property integer $gefoerdert
  * @property string $geschoss
@@ -24,6 +25,7 @@ use Yii;
  * @property string $verkaufspreis_begruendung
  *
  * @property Einheitstyp $einheitstyp
+ * @property Projekt $projekt
  * @property Haus $haus
  */
 class Teileigentumseinheit extends \yii\db\ActiveRecord
@@ -87,6 +89,14 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function getEinheitstyp()
     {
         return $this->hasOne(Einheitstyp::className(), ['id' => 'einheitstyp_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjekt()
+    {
+        return $this->hasOne(Projekt::className(), ['id' => 'projekt_id']);
     }
 
     /**

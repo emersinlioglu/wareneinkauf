@@ -43,6 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group field-customer_id">
+                            <label class="control-label" for="projekt">Projekt</label>
+                            <?= Html::dropDownList(
+                                'projekt_id',
+                                $projekt_id,
+                                ArrayHelper::map(\app\models\Projekt::find()->all(), 'id', 'name'),
+                                ['prompt' => 'Bitte wählen', 'class' => "form-control"]
+                            )
+                            ?>
+                        </div>
+                        <div class="form-group field-customer_id">
                             <label class="control-label" for="sim-card_number">Einheitstyp</label>
                             <?= Html::dropDownList(
                                 'einheitstyp_id',
