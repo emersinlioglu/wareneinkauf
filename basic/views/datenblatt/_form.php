@@ -132,80 +132,107 @@ $this->registerJs('
         </div>
     </div>
 
-    <?= $this->render('_hausdetails', [
-        'form' => $form,
-        'modelDatenblatt' => $modelDatenblatt,
-    ]) ?>
-
-    <?= $this->render('_teileigentumseinheiten', [
-        'form' => $form,
-        'modelDatenblatt' => $modelDatenblatt,
-    ]) ?>
-
-    <?= $this->render('_zaehlerangaben', [
-        'form' => $form,
-        'modelDatenblatt' => $modelDatenblatt
-    ]) ?>
-
-    <?php //if ($modelDatenblatt->kaeufer): ?>
-        <?= $this->render('_kaeuferdaten', [
-            'form' => $form,
-            'modelKaeufer' => $modelKaeufer,
-            'modelDatenblatt' => $modelDatenblatt,
-            'canEditBasicData' => $canEditBasicData,
-        ]) ?>
-    <?php //endif; ?>
-
-    <div class="row">
-        <div class="col-sm-10">
-            <?= $form->field($modelDatenblatt, 'besondere_regelungen_kaufvertrag')->textarea(['rows' => '5']) ?>
-        </div>
-    </div>
-
-    <?= $this->render('_sonderwuensche', [
-        'form' => $form,
-        'modelDatenblatt' => $modelDatenblatt,
-    ]) ?>
-<div class="form-group" style="text-align: right;">
-    <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
-</div>
-    <?= $this->render('_kaufpreisabrechnung', [
-        'form' => $form,
-        'modelDatenblatt' => $modelDatenblatt,
-        'kaufpreisTotal' => $kaufpreisTotal,
-        'sonderwuenscheTotal' => $sonderwuenscheTotal,
-    ]) ?>
-<div class="form-group" style="text-align: right;">
-    <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
-</div>
-    <div class="row">
-        <div class="col-md-12">
-
-            <?= $this->render('_nachlass', [
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-te-details" data-toggle="tab">Teileigentumseinheiten</a></li>
+        <li class=""><a href="#tab-kaeuferdaten" data-toggle="tab">Käuferdaten</a></li>
+        <li class=""><a href="#tab-sonderwuensche" data-toggle="tab">Sonderwünsche</a></li>
+        <li class=""><a href="#tab-kaufpreisabrechnung" data-toggle="tab">Kaufpreisabrechnung/Abschlag-Emails</a></li>
+        <li class=""><a href="#tab-minderungen" data-toggle="tab">Minderungen/Zahlungen/Verzugszins</a></li>
+    </ul>
+    <div id="" class="tab-content">
+        <div id="tab-te-details" class="tab-pane active">
+            <?= $this->render('_hausdetails', [
                 'form' => $form,
                 'modelDatenblatt' => $modelDatenblatt,
             ]) ?>
 
-            <?= $this->render('_zahlung', [
-                'form' => $form,
-                'modelDatenblatt' => $modelDatenblatt,
-            ]) ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-
-            <?= $this->render('_zinsverzug', [
+            <?= $this->render('_teileigentumseinheiten', [
                 'form' => $form,
                 'modelDatenblatt' => $modelDatenblatt,
             ]) ?>
 
+            <?= $this->render('_zaehlerangaben', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt
+            ]) ?>
         </div>
-    </div>
+        <div id="tab-kaeuferdaten" class="tab-pane">
 
-    <div class="row">
-        <div class="col-sm-8">
-            <?= $form->field($modelDatenblatt, 'sonstige_anmerkungen')->textarea(['rows' => '5']) ?>
+            <?php //if ($modelDatenblatt->kaeufer): ?>
+            <?= $this->render('_kaeuferdaten', [
+                'form' => $form,
+                'modelKaeufer' => $modelKaeufer,
+                'modelDatenblatt' => $modelDatenblatt,
+                'canEditBasicData' => $canEditBasicData,
+            ]) ?>
+            <?php //endif; ?>
+
+            <div class="row">
+                <div class="col-sm-10">
+                    <?= $form->field($modelDatenblatt, 'besondere_regelungen_kaufvertrag')->textarea(['rows' => '5']) ?>
+                </div>
+            </div>
+
+        </div>
+        <div id="tab-sonderwuensche" class="tab-pane">
+            <?= $this->render('_sonderwuensche', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt,
+            ]) ?>
+<!--            <div class="form-group" style="text-align: right;">-->
+<!--                --><?php //echo Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+<!--            </div>-->
+        </div>
+        <div id="tab-kaufpreisabrechnung" class="tab-pane">
+
+            <?= $this->render('_kaufpreisabrechnung', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt,
+                'kaufpreisTotal' => $kaufpreisTotal,
+                'sonderwuenscheTotal' => $sonderwuenscheTotal,
+            ]) ?>
+            <div class="form-group" style="text-align: right;">
+                <?= Html::submitButton($modelDatenblatt->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+            </div>
+
+            <?= $this->render('_abschlag_mails', [
+                'modelDatenblatt' => $modelDatenblatt,
+            ]) ?>
+
+        </div>
+        <div id="tab-minderungen" class="tab-pane">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <?= $this->render('_nachlass', [
+                        'form' => $form,
+                        'modelDatenblatt' => $modelDatenblatt,
+                    ]) ?>
+
+                    <?= $this->render('_zahlung', [
+                        'form' => $form,
+                        'modelDatenblatt' => $modelDatenblatt,
+                    ]) ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    <?= $this->render('_zinsverzug', [
+                        'form' => $form,
+                        'modelDatenblatt' => $modelDatenblatt,
+                    ]) ?>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <?= $form->field($modelDatenblatt, 'sonstige_anmerkungen')->textarea(['rows' => '5']) ?>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -219,8 +246,6 @@ $this->registerJs('
 <?php ActiveForm::end(); ?>
 <?php //yii\widgets\Pjax::end() ?>
 
-<?= $this->render('_abschlag_mails', [
-    'modelDatenblatt' => $modelDatenblatt,
-]) ?>
+
 
 <div style="clear: both;"></div>

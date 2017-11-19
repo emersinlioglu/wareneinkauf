@@ -724,8 +724,11 @@ class DatenblattController extends Controller
     {
         $model = $this->findModel($id);
         $name = $model->id;
-
+        $haus = $model->haus;
         if ($model->delete()) {
+            if ($haus) {
+                $haus->delete();
+            }
             Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
         }
 
@@ -1007,7 +1010,7 @@ class DatenblattController extends Controller
             $model->save();
         }
 
-        if (!$model->haus->strasse) {
+        if ($model->haus && !$model->haus->strasse) {
             $model->refresh();
             $model->updateAddresseVonProjekt();
         }
