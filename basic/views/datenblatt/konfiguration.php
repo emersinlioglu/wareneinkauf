@@ -33,7 +33,8 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                         'enableClientScript' => false,
                     ]); ?>
 
-                        <table class="table table-bordered abschlag-tabelle">
+                        <table class="table table-bordered abschlag-tabelle"
+                               data-angeforderte-prozent-summe="<?= $angeforderteProzentSumme ?>">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -87,6 +88,19 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
+
+                                <tr>
+                                    <td></td>
+                                    <td class="prozent-summe-zugewiesen" style="text-align: right;">
+                                        <?= Yii::$app->formatter->asDecimal(
+                                            $datenblatt->getZugewieseneMeilensteinProzentSumme(),
+                                            2
+                                        )
+                                        ?>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                             </tbody>
 
                         </table>
@@ -107,6 +121,7 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
         $(function(){
         
             function updateMeilensteinZuordnungen() {
+                var totalProzentSumme = parseFloat($(".abschlag-tabelle").attr("data-angeforderte-prozent-summe")) | 0;
                 $(".abschlag-tabelle tbody tr").each(function () {
                     var elm = $(this);
                     
@@ -120,6 +135,8 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                             prozentSumme += parseFloat($(this).attr("data-prozent"));
                         });
                         
+                        totalProzentSumme += prozentSumme;
+                        
                         elm.find(".prozent-summe").html(prozentSumme.toFixed(2));
                         
                         // set meileinstein ids
@@ -128,8 +145,11 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                         );
                     }
                     
-                    
                 });
+                
+                console.log(totalProzentSumme);
+                                
+                $(".prozent-summe-zugewiesen").html(totalProzentSumme.toFixed(2));
             }
             
             $(".meilenstein").sortable2({

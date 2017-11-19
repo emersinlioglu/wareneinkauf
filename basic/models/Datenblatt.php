@@ -479,6 +479,28 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public function getAngeforderteAbschlagProzentSumme() {
+
+        $total = 0;
+        foreach ($this->abschlags as $abschlag) {
+            if ($abschlag->kaufvertrag_angefordert) {
+                $total += $abschlag->kaufvertrag_prozent;
+            }
+        }
+
+        return $total;
+    }
+
+    public function getZugewieseneMeilensteinProzentSumme() {
+
+        $total = 0;
+        foreach ($this->abschlags as $abschlag) {
+            $total += $abschlag->kaufvertrag_prozent;
+        }
+
+        return $total;
+    }
+
 
     public function calculate()
     {

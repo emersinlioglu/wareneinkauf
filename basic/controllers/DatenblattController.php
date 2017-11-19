@@ -485,6 +485,7 @@ class DatenblattController extends Controller
         return $this->render('konfiguration', [
             'datenblatt' => $datenblatt,
             'projekt' => $datenblatt->projekt,
+            'angeforderteProzentSumme' => $datenblatt->getAngeforderteAbschlagProzentSumme(),
         ]);
     }
 
