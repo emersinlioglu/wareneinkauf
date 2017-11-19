@@ -71,7 +71,9 @@ $this->registerJs('
                         'enableClientScript' => false,
                     ]); ?>
 
-                        <table class="table table-bordered abschlag-tabelle" data-existing-abschlag-count="<?= $existingAbschlagCount ?>">
+                        <table class="table table-bordered abschlag-tabelle"
+                               data-angeforderte-prozent-summe="<?= $angeforderteProzentSumme ?>"
+                               data-existing-abschlag-count="<?= $existingAbschlagCount ?>">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -92,11 +94,7 @@ $this->registerJs('
                                         </ul>
                                     </td>
                                     <td style="text-align: right;">
-                                        <?= Yii::$app->formatter->asDecimal(
-                                                Meilenstein::getProzentSumme(array_keys($angeforderteMeilensteine)),
-                                                2
-                                            )
-                                        ?>
+                                        <?= Yii::$app->formatter->asDecimal($angeforderteProzentSumme, 2) ?>
                                     </td>
                                     <td>
                                         <ul>
@@ -136,6 +134,19 @@ $this->registerJs('
                                     </tr>
                                     <?php $startIndex++; ?>
                                 <?php endforeach; ?>
+
+                            <tr>
+                                <td></td>
+                                <td class="prozent-summe-zugewiesen" style="text-align: right;">
+                                    <?= Yii::$app->formatter->asDecimal(
+                                        $angeforderteProzentSumme,
+                                        2
+                                    )
+                                    ?>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                             </tbody>
 
                         </table>

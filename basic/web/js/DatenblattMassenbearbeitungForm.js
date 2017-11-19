@@ -27,11 +27,13 @@ var DatenblattMassenbearbeitungForm = function () {
     }
 
     function _updateMeilensteinZuordnungen() {
+
+        var totalProzentSumme = parseFloat($('.abschlag-tabelle').attr('data-angeforderte-prozent-summe')) | 0;
         abschlagTable.find("tbody tr").each(function () {
             var elm = $(this);
 
+            var prozentSumme = 0;
             if (elm.attr("data-is-editable") == 1) {
-                var prozentSumme = 0;
 
                 // get meilenstein ids
                 var meilensteinIds = new Array();
@@ -42,12 +44,16 @@ var DatenblattMassenbearbeitungForm = function () {
 
                 elm.find(".prozent-summe").html(prozentSumme.toFixed(2));
 
+                totalProzentSumme += prozentSumme;
+
                 // set meileinstein ids
                 elm.find(".abschlag-zuordnungen").val(
                     meilensteinIds
                 );
             }
         });
+
+        $('.prozent-summe-zugewiesen').text(totalProzentSumme.toFixed(2));
     }
 
     _.initSortables = function (container) {

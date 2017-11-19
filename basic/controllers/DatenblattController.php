@@ -573,6 +573,8 @@ class DatenblattController extends Controller
             return Json::encode(['result' => 'ok', 'datenblattUrls' => $datenblattUrls]);
         }
 
+        $angeforderteProzentSumme = Meilenstein::getProzentSumme(array_keys($angeforderteMeilensteine));
+
         return $this->render('abschlag-massenbearbeitung', [
             'datenblatts' => $datenblatts,
             'valideDatenblattIds' => $valideDatenblattIds,
@@ -583,6 +585,7 @@ class DatenblattController extends Controller
             'angeforderteMeilensteine' => $angeforderteMeilensteine,
             'existingAbschlagCount' => $existingAbschlagCount,
             'selectedDatenblatts' => $selectedDatenblatts,
+            'angeforderteProzentSumme' => $angeforderteProzentSumme,
         ]);
     }
 
