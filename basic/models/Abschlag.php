@@ -124,6 +124,21 @@ class Abschlag extends \yii\db\ActiveRecord
         return $projekt->mail_footer;
     }
 
+    public function getMeilensteineHtml() {
+        $result = '';
+        /** @var AbschlagMeilenstein $abschlagMeilenstein */
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            /** @var Meilenstein $meilenstein */
+            $meilenstein = $abschlagMeilenstein->meilenstein;
+            $result .= sprintf(
+                '%1$s %% %2$s<br>',
+                Yii::$app->formatter->asDecimal($meilenstein->kaufvertrag_prozent,2),
+                $meilenstein->name
+            );
+        }
+        return $result;
+    }
+
     public function getPdfContent()
     {
         $text = $this->vorlage ? $this->vorlage->text : '';
@@ -171,6 +186,8 @@ class Abschlag extends \yii\db\ActiveRecord
         $einheitstypAussenstellplatz = Einheitstyp::findOne(Einheitstyp::TYP_AUSSENSTELLPLATZ);
         $einheitstypKeller = Einheitstyp::findOne(Einheitstyp::TYP_KELLER);
 
+        $meilensteine = $this->getMeilensteineHtml();
+
         $replaceData = [
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
@@ -202,6 +219,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
             '[aktuelles-datum]' => date('d.m.Y'),
+            '[meilensteine]' => $meilensteine,
         ];
 
         $content = $projekt->mail_header;
