@@ -117,6 +117,21 @@ $gridColumns = [
 //        'label' => 'Käufer Name'
 //    ],
     [
+        'attribute' => 'kaeufer_email',
+        'value'=>'kaeufer.email',
+        'label' => 'Käufer-Email'
+    ],
+    [
+        'attribute' => 'kaeufer_festnetz',
+        'value'=>'kaeufer.festnetz',
+        'label' => 'Käufer-Festnetznummer'
+    ],
+    [
+        'attribute' => 'kaeufer_handy',
+        'value'=>'kaeufer.handy',
+        'label' => 'Käufer-Handynummer'
+    ],
+    [
         'attribute' => 'kaeufer_vorname2',
         'value'=>'kaeufer.vorname2',
         'label' => '2. Käufer Vorname'
