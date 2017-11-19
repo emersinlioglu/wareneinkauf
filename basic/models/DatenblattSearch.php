@@ -22,6 +22,7 @@ class DatenblattSearch extends Datenblatt
     public $haus_plz;
     public $haus_hausnr;
     public $kaeufer;
+    public $kaeufer_email;
     public $kaeufer_debitornr;
     public $kaeufer_nachname;
     public $kaeufer_vorname;
@@ -40,7 +41,7 @@ class DatenblattSearch extends Datenblatt
             [['id', 'firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
             [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'safe'],
             [['haus', 'haus_strasse', 'haus_plz', 'haus_ort', 'haus_hausnr', 'te_nummer'], 'safe'],
-            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2', 'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
+            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_email', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2', 'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr'], 'safe'],
         ];
     }
@@ -112,6 +113,10 @@ class DatenblattSearch extends Datenblatt
             'asc' => ['haus.plz' => SORT_ASC],
             'desc' => ['haus.plz' => SORT_DESC],
         ];
+        $dataProvider->sort->attributes['kaeufer_email'] = [
+            'asc' => ['kaeufer.email' => SORT_ASC],
+            'desc' => ['kaeufer.email' => SORT_DESC],
+        ];
         $dataProvider->sort->attributes['kaeufer_nachname'] = [
             'asc' => ['kaeufer.nachname' => SORT_ASC],
             'desc' => ['kaeufer.nachname' => SORT_DESC],
@@ -181,6 +186,7 @@ class DatenblattSearch extends Datenblatt
             ->andFilterWhere(['like', 'haus.hausnr', $this->haus_hausnr])
             ->andFilterWhere(['like', 'haus.plz', $this->haus_plz])
             ->andFilterWhere(['like', 'kaeufer.debitor_nr', $this->kaeufer_debitornr])
+            ->andFilterWhere(['like', 'kaeufer.email', $this->kaeufer_email])
             ->andFilterWhere(['like', 'kaeufer.nachname', $this->kaeufer_nachname])
             ->andFilterWhere(['like', 'kaeufer.vorname', $this->kaeufer_vorname])
             ->andFilterWhere(['like', 'kaeufer.nachname2', $this->kaeufer_nachname2])
