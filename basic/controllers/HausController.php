@@ -130,14 +130,6 @@ class HausController extends Controller
 
         }
 
-//        foreach ($model->teileigentumseinheits as $te) {
-//            if ($te->wohnflaeche > 0) {
-//                $te->kp_einheit = (float)$te->kaufpreis / (float)$te->wohnflaeche;
-//            } else {
-//                $te->kp_einheit = 0;
-//            }
-//        }
-
         return $this->render('update', [
             'model' => $model,
         ]);
