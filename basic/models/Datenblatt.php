@@ -797,4 +797,17 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $istAngefordert;
     }
 
+    public function updateAddresseVonProjekt() {
+
+        if ($this->projekt) {
+            if ($this->haus) {
+                $this->haus->strasse = $this->projekt->strasse;
+                //$this->haus->hausnr = $this->projekt->hausnr;
+                $this->haus->plz = $this->projekt->plz;
+                $this->haus->ort = $this->projekt->ort;
+                $this->haus->save();
+            }
+        }
+    }
+
 }

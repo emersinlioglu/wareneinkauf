@@ -247,6 +247,8 @@ class DatenblattController extends Controller
 //    $data['Datenblatt']['kaeufer_id'] = 0;
 //}
 
+        $oldProjektId = $modelDatenblatt->projekt_id;
+
         if (!$preventPost && $modelDatenblatt->load($data) && $modelDatenblatt->save()) {
 
             $modelDatenblatt->updateInternDebitorNr();
@@ -271,6 +273,9 @@ class DatenblattController extends Controller
                 }
             }
 
+            if ($modelDatenblatt->projekt_id && $oldProjektId != $modelDatenblatt->projekt_id) {
+                $modelDatenblatt->updateAddresseVonProjekt();
+            }
 
 //            // Käufer
 //            if ($modelKaeufer->load(Yii::$app->request->post())) {
@@ -1000,6 +1005,11 @@ class DatenblattController extends Controller
 
             $model->haus_id = $haus->id;
             $model->save();
+        }
+
+        if (!$model->haus->strasse) {
+            $model->refresh();
+            $model->updateAddresseVonProjekt();
         }
 
         if (!$model->isAbschlagAngefordert()) {

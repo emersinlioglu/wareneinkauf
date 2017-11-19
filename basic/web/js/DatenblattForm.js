@@ -295,6 +295,8 @@ var DatenblattForm = function () {
                             function(data) {
                                 $('.table.te-einheiten').replaceWith($(data).find('.table.te-einheiten'));
 
+                                location.reload();
+
                                 _.initPlusMinusIcons('#collapse-te');
                             }
                         );
