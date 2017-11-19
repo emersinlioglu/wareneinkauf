@@ -727,6 +727,10 @@ class DatenblattController extends Controller
         $haus = $model->haus;
         if ($model->delete()) {
             if ($haus) {
+                foreach ($haus->teileigentumseinheits as $te) {
+                    $te->haus_id = null;
+                    $te->save();
+                }
                 $haus->delete();
             }
             Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
@@ -1010,8 +1014,8 @@ class DatenblattController extends Controller
             $model->save();
         }
 
+        $model->refresh();
         if ($model->haus && !$model->haus->strasse) {
-            $model->refresh();
             $model->updateAddresseVonProjekt();
         }
 

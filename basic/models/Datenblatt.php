@@ -506,7 +506,7 @@ class Datenblatt extends \yii\db\ActiveRecord
     {
         // calculate kaufpreis
         $kaufpreisTotal = 0;
-        /* @var $teileh app\models\Teileigentumseinheit */
+        /* @var $teileh Teileigentumseinheit */
         if ($this->haus) {
             foreach ($this->haus->teileigentumseinheits as $item) {
                 $kaufpreisTotal += (float)$item->kaufpreis;
@@ -515,7 +515,7 @@ class Datenblatt extends \yii\db\ActiveRecord
 
         // calculate sonderwünche
         $sonderwuenscheTotal = 0;
-        /* @var $item app\models\Sonderwunsch */
+        /* @var $item Sonderwunsch */
         foreach ($this->sonderwunsches as $item) {
             $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
         }
@@ -800,14 +800,29 @@ class Datenblatt extends \yii\db\ActiveRecord
     public function updateAddresseVonProjekt() {
 
         if ($this->projekt) {
-            if ($this->haus) {
-                $this->haus->strasse = $this->projekt->strasse;
-                //$this->haus->hausnr = $this->projekt->hausnr;
-                $this->haus->plz = $this->projekt->plz;
-                $this->haus->ort = $this->projekt->ort;
-                $this->haus->save();
+
+            if (!$this->haus_id) {
+                $haus = new Haus();
+                $haus->projekt_id = $this->projekt_id;
+                $haus->firma_id = $this->firma_id;
+                $haus->creator_user_id = User::getCurrentUser()->id;
+                $haus->save();
+
+                $this->haus_id = $haus->id;
+                $this->save();
+            } else {
+                $haus = $this->haus;
             }
+
+//            if ($this->haus) {
+                $haus->strasse = $this->projekt->strasse;
+                //$this->haus->hausnr = $this->projekt->hausnr;
+                $haus->plz = $this->projekt->plz;
+                $haus->ort = $this->projekt->ort;
+                $haus->save();
+//            }
         }
+
     }
 
 }
