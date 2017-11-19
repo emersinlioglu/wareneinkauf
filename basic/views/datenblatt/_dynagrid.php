@@ -430,7 +430,8 @@ echo DynaGrid::widget([
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
             'before' => '{dynagridFilter} {dynagridSort} {dynagrid} '
                 . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>'
-                . '<a id="" data-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
+                . '<a id="" data-bulk-edit-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
+                            data-single-edit-url="'.\yii\helpers\Url::to(['datenblatt/konfiguration', 'id' => '']).'"
                             class="btn btn-default abschlag-massenbearbeitung" title="Abschlagkonfiguration">
                         <i class="fa fa-list"></i> Abschlagkonfiguration
                    </a>',
@@ -508,10 +509,17 @@ $this->registerJs("
                 .get()
                 .join(\",\");
      
-            if (ids && ids.includes(',')) {
+            if (ids) {
+                console.log('aaaaa');
                 console.log(ids);
                 
-                window.location = $(this).attr('data-url') + ids;     
+                if (ids.includes(',')) {
+                   // bulk-edit                
+                    window.location = $(this).attr('data-bulk-edit-url') + ids;
+                } else {
+                   // single-edit                
+                    window.location = $(this).attr('data-single-edit-url') + ids;     
+                }
             } else {
                 alert('Bitte wählen Sie erst Datenblätter aus!');
             }
