@@ -132,7 +132,7 @@ $this->registerJs('
         </div>
     </div>
 
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs well">
         <li class="active"><a href="#tab-te-details" data-toggle="tab">Teileigentumseinheiten</a></li>
         <li class=""><a href="#tab-kaeuferdaten" data-toggle="tab">Käuferdaten</a></li>
         <li class=""><a href="#tab-sonderwuensche" data-toggle="tab">Sonderwünsche</a></li>
