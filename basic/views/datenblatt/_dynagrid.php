@@ -515,9 +515,6 @@ $this->registerJs("
                 .join(\",\");
      
             if (ids) {
-                console.log('aaaaa');
-                console.log(ids);
-                
                 if (ids.indexOf(',') > -1) {
                    // bulk-edit                
                     window.location = $(this).attr('data-bulk-edit-url') + ids;
