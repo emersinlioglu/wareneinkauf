@@ -60,7 +60,7 @@
 
         <?php
         $datenblattItems = [];
-        $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : User::getCurrentUser()->projekts;
+        $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : \app\models\User::getCurrentUser()->projekts;
         /** @var Projekt $projekt */
         foreach ($projekts as $projekt) {
             $datenblattItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
