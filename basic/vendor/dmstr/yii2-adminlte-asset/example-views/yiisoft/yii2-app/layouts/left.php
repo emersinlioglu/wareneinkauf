@@ -57,6 +57,17 @@
         ]);
         */
         ?>
+
+        <?php
+        $datenblattItems = [];
+        $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : User::getCurrentUser()->projekts;
+        /** @var Projekt $projekt */
+        foreach ($projekts as $projekt) {
+            $datenblattItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
+                    'url' => ['/datenblatt', 'DatenblattSearch[projekt_name]' => $projekt->name],
+                ];
+        }
+        ?>
         
         <!-- /.search form -->
 
@@ -98,8 +109,13 @@
                     ['label' => 'Projekte', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
                     ['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
                     ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
-                    ['label' => 'Datenblätter', 'icon' => 'fa fa-file-text text-blue','url' => ['/datenblatt/index']],
-                   
+                    [
+                        'label' => 'Datenblätter',
+                        'icon' => 'fa fa-file-text text-blue',
+//                        'url' => ['/datenblatt/index']
+                        'url' => '#',
+                        'items' => $datenblattItems,
+                    ],
                     [
                         'label' => 'Einstellungen',
                         'icon' => 'fa fa-share',

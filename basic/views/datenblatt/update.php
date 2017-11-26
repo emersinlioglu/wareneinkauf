@@ -9,7 +9,11 @@ $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'Datenblatt',
 ]) . ' ' . $modelDatenblatt->id;
 //$this->title = '';
-$this->params['breadcrumbs'][] = ['label' => 'Datenblätter', 'url' => ['index']];
+$url = ['/datenblatt'];
+if ($modelDatenblatt->projekt) {
+    $url['DatenblattSearch[projekt_name]'] = $modelDatenblatt->projekt->name;
+}
+$this->params['breadcrumbs'][] = ['label' => 'Datenblätter'];
 $this->params['breadcrumbs'][] = ['label' => $modelDatenblatt->id, 'url' => ['view', 'id' => $modelDatenblatt->id]];
 
 ?>

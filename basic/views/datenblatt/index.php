@@ -10,7 +10,7 @@ use yii\helpers\Html;
 /* @var $searchModel app\models\DatenblattSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Datenblätter';
+$this->title = 'Datenblätter in ' . $projekt->name;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="datenblatt-index">
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php if (User::hasPermission('write_datasheets')): ?>
         <p>
-            <?= Html::a('Datenblatt erstellen', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Datenblatt erstellen', ['create', 'projektId' => $projekt->id], ['class' => 'btn btn-success']) ?>
         </p>
     <?php endif; ?>
 

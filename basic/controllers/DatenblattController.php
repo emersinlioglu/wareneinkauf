@@ -110,6 +110,11 @@ class DatenblattController extends Controller
             $maxCountZahlungs = max($maxCountZahlungs, $count);
         }
 
+        $projekt = null;
+        if(isset($_GET['DatenblattSearch']['projekt_name'])) {
+            $projekt = Projekt::findOne(['name' => $_GET['DatenblattSearch']['projekt_name']]);
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -119,6 +124,7 @@ class DatenblattController extends Controller
             'maxCountNachlasses' => $maxCountNachlasses,
             'maxCountZinsverzugs' => $maxCountZinsverzugs,
             'maxCountZahlungs' => $maxCountZahlungs,
+            'projekt' => $projekt,
         ]);
     }
 
@@ -193,10 +199,11 @@ class DatenblattController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($projektId = null)
     {
         $model = new Datenblatt;
         $model->creator_user_id = Yii::$app->user->getId();
+        $model->projekt_id = $projektId;
         $model->save();
 
         $abschlags = [
@@ -367,7 +374,7 @@ class DatenblattController extends Controller
 
         // calculate kaufpreis
         $kaufpreisTotal = 0;
-        /* @var $teileh app\models\Teileigentumseinheit */
+        /* @var $teileh Teileigentumseinheit */
         if ($modelDatenblatt->haus) {
             foreach ($modelDatenblatt->haus->teileigentumseinheits as $item) {
                 $kaufpreisTotal += (float)$item->kaufpreis;
@@ -376,7 +383,7 @@ class DatenblattController extends Controller
 
         // calculate sonderwünche
         $sonderwuenscheTotal = 0;
-        /* @var $item app\models\Sonderwunsch */
+        /* @var $item Sonderwunsch */
         foreach ($modelDatenblatt->sonderwunsches as $item) {
             $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
         }
