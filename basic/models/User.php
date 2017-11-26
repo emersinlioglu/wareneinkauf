@@ -105,4 +105,12 @@ class User extends \webvimark\modules\UserManagement\models\User
 //    {
 //        return $this->password_hash === $password;
 //    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjekts() {
+        return $this->hasMany(Projekt::className(), ['id' => 'projekt_id'])
+            ->viaTable('projekt_user', ['user_id' => 'id']);
+    }
 }

@@ -9,7 +9,9 @@ use webvimark\modules\UserManagement\models\User;
 /* @var $model app\models\Datenblatt */
 
 $this->title = 'Datenblatt ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Datenblätter', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => 'Datenblätter', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => 'Datenblätter', 'url' => ['/datenblatt', 'DatenblattSearch[projekt_name]' => $model->projekt->name]];
+$this->params['breadcrumbs'][] = ['label' => 'Datenblätter'];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="datenblatt-view">

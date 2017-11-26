@@ -255,6 +255,8 @@ class AbschlagController extends Controller
             $pdfContents
         );
 
+        file_put_contents('abschlag.html', $html);
+
         return $this->_createPdf($html);
     }
 
@@ -282,6 +284,8 @@ class AbschlagController extends Controller
             '<div class="wrapper" style="page-break-before:always;"></div>',
             $pdfContents
         );
+
+        file_put_contents('sonderwunsch.html', $html);
 
         return $this->_createPdf($html, Pdf::DEST_BROWSER, false);
     }

@@ -72,7 +72,8 @@ $gridColumns = [
     [
         'attribute' => 'projekt_name',
         'value'=>'projekt.name',
-        'label' => 'Projekt'
+        'label' => 'Projekt',
+        'filter' => false
     ],
     [
         'attribute' => 'haus_strasse',
