@@ -125,6 +125,7 @@ class DatenblattController extends Controller
             'maxCountZinsverzugs' => $maxCountZinsverzugs,
             'maxCountZahlungs' => $maxCountZahlungs,
             'projekt' => $projekt,
+            'dynagridProfileId' => \app\models\User::getCurrentUser()->getAktiveDynagridProfileId(),
         ]);
     }
 

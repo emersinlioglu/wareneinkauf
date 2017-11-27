@@ -32,6 +32,7 @@ class AppAsset extends AssetBundle
         'js/jquery-ui-1.11.4.custom/jquery-ui.min.js',
         'js/DatenblattForm.js',
         'js/HausForm.js',
+        'js/DynagridProfileForm.js',
         'js/ProjektForm.js',
         'js/Serienbrief.js',
         'js/tinymce/tinymce.min.js',

@@ -426,7 +426,6 @@ $gridColumns[] = [
     'order'=>DynaGrid::ORDER_FIX_LEFT
 ];
 
-
 echo DynaGrid::widget([
     
     //'columns'=>$columns,
@@ -436,12 +435,16 @@ echo DynaGrid::widget([
     'userSpecific'=>true,
     'enableMultiSort' => true,
 
-    'gridOptions'=>[
-        'dataProvider'=>$dataProvider,
+    'options'=>[
+        // !!!! WICHTIG !!!! a unique identifier is important
+        'id' => 'dynagrid-datenblatt-' . $dynagridProfileId,
+        'class' => User::hasPermission('export') ? '' : 'no-export'
+        //'defaultPageSize' => 0,
+    ],
 
-        'filterModel'=>$searchModel,
-        //'id' => 'ttt',
-        'id'=>'DatenblattSearch',
+    'gridOptions'=>[
+        'dataProvider' => $dataProvider,
+        'filterModel'  => $searchModel,
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
             'before' => '{dynagridFilter} {dynagridSort} {dynagrid} '
@@ -471,12 +474,7 @@ echo DynaGrid::widget([
             ]
             */
         ],
-        'options'=>[
-            'id' => 'dynagrid-datenblatt',
-            'class' => User::hasPermission('export') ? '' : 'no-export'
 
-            //'defaultPageSize' => 0,
-        ] // a unique identifier is important
     ]
 );
 

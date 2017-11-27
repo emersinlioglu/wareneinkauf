@@ -101,7 +101,7 @@ var DatenblattForm = function () {
         });
     }
 
-    _.postPluMinusIcon = function(elm) {
+    _.initPlusIcon = function(elm) {
 
         var panelId     = elm.closest('.panel-collapse').attr('id');
 
@@ -151,10 +151,10 @@ var DatenblattForm = function () {
                 $("#myModal").modal('show');
 
                 $("#myModal").on("click",".btn-primary",function(){
-                    _.postPluMinusIcon(elm)
+                    _.initPlusIcon(elm)
                 });
             } else {
-                _.postPluMinusIcon(elm)
+                _.initPlusIcon(elm)
             }
 
             return false;
