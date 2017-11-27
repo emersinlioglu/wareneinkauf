@@ -99,7 +99,7 @@ var HausForm = function () {
         });
     }
 
-    _.postPluMinusIcon = function(elm) {
+    _.initPlusIcon = function(elm) {
 
         var container = elm.closest('.container-table');
         var containerId = container.attr('id');
@@ -152,10 +152,10 @@ var HausForm = function () {
                 $("#myModal").modal('show');
 
                 $("#myModal").on("click",".btn-primary",function(){
-                    _.postPluMinusIcon(elm)
+                    _.initPlusIcon(elm)
                 });
             } else {
-                _.postPluMinusIcon(elm)
+                _.initPlusIcon(elm)
             }
 
             return false;

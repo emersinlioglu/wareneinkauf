@@ -2,6 +2,7 @@
 
 use webvimark\modules\UserManagement\models\User;
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 //use yii\grid\GridView;
 
@@ -13,6 +14,15 @@ use yii\helpers\Html;
 $this->title = 'Datenblätter in ' . $projekt->name;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php
+$this->registerJs('
+    $(function(){
+        new DynagridProfileForm();
+    });
+');
+?>
+
 <div class="datenblatt-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -22,6 +32,31 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('Datenblatt erstellen', ['create', 'projektId' => $projekt->id], ['class' => 'btn btn-success']) ?>
         </p>
     <?php endif; ?>
+
+    <div class="row">
+        <div class="form-group field-dynagrid_profile_id col-sm-2">
+            <label class="control-label" for="projekt">Profile</label>
+            <?= Html::dropDownList(
+                'dynagridProfileId',
+                $dynagridProfileId,
+                ArrayHelper::map(\app\models\DynagridProfile::find()->all(), 'id', 'name'),
+                [
+                    //'prompt' => 'Bitte wählen',
+                    'class' => "form-control"
+                ]
+            )
+            ?>
+        </div>
+        <div class="form-group col-sm-2 profile">
+            <label class="control-label">&nbsp;</label><br>
+            <?= Html::a('<span class="fa fa-plus"> </span>',
+                Yii::$app->urlManager->createUrl(["dynagrid-profile/create"]),
+                ['class' => 'add-dyngrid-profile btn btn-success']) ?>
+            <?= Html::a('<span class="fa fa-minus"></span>',
+                Yii::$app->urlManager->createUrl(["dynagrid-profile/delete", 'id' => '']),
+                ['class' => 'remove-dynagrid-profile btn btn-danger']) ?>
+        </div>
+    </div>
 
 <!--
         <div class="col-md-5 col-sm-6 col-xs-12" style="float: none;">
@@ -78,8 +113,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'maxCountNachlasses' => $maxCountNachlasses,
         'maxCountZinsverzugs' => $maxCountZinsverzugs,
         'maxCountZahlungs' => $maxCountZahlungs,
+        'dynagridProfileId' => $dynagridProfileId,
     ]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
+</div>
 
+<!-- Modal -->
+<div id="dynagrid-profile-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            </div>
+        </div>
+
+    </div>
 </div>
