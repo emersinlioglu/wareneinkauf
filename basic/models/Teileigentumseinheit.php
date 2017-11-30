@@ -74,7 +74,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
             'geschoss' => Yii::t('app', 'Geschoss'),
             'zimmer' => Yii::t('app', 'Zimmer'),
             'me_anteil' => Yii::t('app', 'Me Anteil'),
-            'wohnflaeche' => Yii::t('app', 'Wohnflaeche'),
+            'wohnflaeche' => Yii::t('app', 'Wohnfläche'),
             'kaufpreis' => Yii::t('app', 'Kaufpreis'),
             'kp_einheit' => Yii::t('app', 'Kp Einheit'),
             'forecast_price' => Yii::t('app', 'Forecast'),

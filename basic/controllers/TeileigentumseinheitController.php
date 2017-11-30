@@ -209,7 +209,8 @@ class TeileigentumseinheitController extends Controller
                         $teileigentumseinheit->kaufpreis =
                             $teileigentumseinheit->verkaufspreis =
                             $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
-                        $teileigentumseinheit->me_anteil = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
+                        $teileigentumseinheit->me_anteil =
+                            str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue()));
 
                         if (!$teileigentumseinheit->validate() || !$teileigentumseinheit->save()) {
                             $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;

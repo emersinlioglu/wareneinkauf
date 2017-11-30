@@ -34,7 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'gefoerdert',
                 'label' => 'Gefördert',
             ],
-            'geschoss',
             [
                 'attribute' => 'geschoss',
                 'width'=>'50px',
@@ -43,20 +42,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'zimmer',
                 'width'=>'50px',
             ],
-            'me_anteil',
-            'wohnflaeche',
+            [
+                'attribute' => 'me_anteil',
+//                'format'=>['decimal',2]
+            ],
+            [
+                'attribute' => 'wohnflaeche',
+                'format'=>['decimal',2]
+            ],
             [
                 'attribute' => 'kaufpreis',
-                'pageSummary'=>true
+                'pageSummary'=>true,
+                'format'=>['decimal',2]
             ],
-            'kp_einheit',
+            [
+                'attribute' => 'kp_einheit',
+                'format'=>['decimal',2]
+            ],
             [
                 'attribute' => 'forecast_preis',
-                'pageSummary'=>true
+                'pageSummary'=>true,
+                'format'=>['decimal',2]
             ],
             [
                 'attribute' => 'verkaufspreis',
-                'pageSummary'=>true
+                'pageSummary'=>true,
+                'format'=>['decimal',2]
             ],
             [
                 'attribute' => 'verkaufspreis_begruendung',
