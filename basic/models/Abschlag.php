@@ -175,6 +175,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
             '[aktuelles-datum]' => date('d.m.Y'),
+            '[offene-posten]' => Yii::$app->formatter->asDecimal($datenblatt->getOffenePosten(), 2),
         ];
 
         $content = $projekt->mail_header;
