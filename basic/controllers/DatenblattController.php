@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Kunde;
+use app\models\Projekt;
 use app\models\Zinsverzug;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -24,7 +25,7 @@ use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
 use webvimark\modules\UserManagement\models\User;
 
-use kartik\dynagrid\DynaGridStore;
+
 
 
 /**
