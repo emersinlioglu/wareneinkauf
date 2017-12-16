@@ -108,6 +108,7 @@
                     ['label' => 'Firmen', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
                     ['label' => 'Projekte', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
                     ['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
+                    ['label' => 'Forecast', 'icon' => 'fa fa-home text-green','url' => ['/teileigentumseinheit/forecast']],
                     ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
                     [
                         'label' => 'Datenblätter',

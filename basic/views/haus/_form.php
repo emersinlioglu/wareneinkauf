@@ -96,19 +96,22 @@ $this->registerJs('
     </div>
     
     
-    <div class="container teileigentumseinheiten" id='teileigentumseinheiten-id'>
+    <div class="container-table teileigentumseinheiten" id='teileigentumseinheiten-id'>
         <h2>Teileigentumseinheiten</h2>
 
         <table class="table no-label">
             <tr>
-                <th style="width: 15%;">Typ</th>
-                <th style="width: 10%;">TE-Nummer</th>
-                <th style="width: 10%;">Gefördert</th>
+                <th style="width: 10%;">Typ</th>
+                <th style="width: 6%;">TE-Nummer</th>
+                <th style="width: 6%;">Gefördert</th>
                 <th style="width: 5%;">Geschoss</th>
                 <th style="width: 5%;">Zimmer</th>
-                <th style="width: 10%;">ME-Anteil</th>
-                <th style="width: 10%;">Wohnfläche</th>
-                <th style="width: 15%;">Kaufpreis</th>
+                <th style="width: 5%;">ME-Anteil</th>
+                <th style="width: 5%;">Wohnfläche</th>
+                <th style="width: 10%;">Kaufpreis</th>
+                <th style="width: 10%;">Forecast</th>
+                <th style="width: 10%;">Verkaufspreis</th>
+                <th style="width: 15%;">Begründung</th>
                 <th style="width: 15%;">KP-Einheit</th>
                 <th>
                     <?php if (!$model->isNewRecord): ?>
@@ -163,8 +166,36 @@ $this->registerJs('
 //                                'decimal' => '.',
 //                            ],
                         ])
-                ?>
+                    ?>
                 </td>
+
+                <td>
+                    <?php
+                    echo $form->field($modelTeilieigentum, 'forecast_preis')
+                        ->widget(MaskMoney::classname(), [
+                            'options' => [
+                                'id' => $key . '-forecast-preis-id',
+                                'name' => "Teileigentumseinheiten[$key][forecast_preis]",
+                            ],
+                        ]);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    echo $form->field($modelTeilieigentum, 'verkaufspreis')
+                        ->widget(MaskMoney::classname(), [
+                            'options' => [
+                                'id' => $key . '-verkaufspreis-id',
+                                'name' => "Teileigentumseinheiten[$key][verkaufspreis]",
+                            ],
+                        ]);
+                    ?>
+                </td>
+
+                <td>
+                    <?php echo $form->field($modelTeilieigentum, 'verkaufspreis_begruendung')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][verkaufspreis_begruendung]"]) ?>
+                </td>
+
                 <td><?=
 
                     $form->field($modelTeilieigentum, 'kp_einheit')
@@ -197,7 +228,7 @@ $this->registerJs('
         </table>
     </div>
 
-    <div class="container zaehlerstand" id='zaehlerstand-id'>
+    <div class="container-table zaehlerstand" id='zaehlerstand-id'>
         <h2>Zählerstand-Angaben:</h2>
 
         <table class="table no-label">

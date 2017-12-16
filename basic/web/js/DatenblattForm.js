@@ -118,13 +118,18 @@ var DatenblattForm = function () {
             //_.initBetragValidation(newContent);
 
             // set html
-            _form.find('#' + panelId + ' .box-body').replaceWith(newContent);
+            var boxBody = _form.find('#' + panelId + ' .box-body');
+            boxBody.replaceWith(newContent);
 
             // init datepickers
             _.initDatepickers(panelId);
 
             // init maskmoney
             _.initMaskmoney(panelId);
+
+            if (boxBody.find('#search-teileigentumseinheit').length) {
+                _.initAutocompleteTeileigentumseinheiten();
+            }
 
             $("#myModal").modal('hide');
 
@@ -244,6 +249,65 @@ var DatenblattForm = function () {
                     // 'debitor_nr',
                     'vorname',
                     'nachname'
+                ];
+
+                var a = $('<a>');
+                for (var i in columns) {
+                    var columnName = columns[i];
+                    a.append(
+                        $('<span>')
+                            .css('width', '100px')
+                            .css('display', 'inline-block')
+                            .text(item[columnName])
+                    );
+                }
+
+                return $( "<li>" )
+                    .data( "item.autocomplete", item )
+                    .append( a )
+                    .appendTo( ul );
+            };
+    }
+
+    /**
+     * init autocomplete kunden
+     */
+    _.initAutocompleteTeileigentumseinheiten = function() {
+
+        var self = this;
+
+        $('#search-teileigentumseinheit')
+            .keydown(function(e){
+                if(e.which == 13) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            })
+            .autocomplete({
+                source: "index.php?r=teileigentumseinheit/autocomplete",
+                minLength: 1,
+                select: function (event, ui) {
+
+                    if (ui.item && ui.item.id) {
+
+                        $.get(
+                            'index.php?r=datenblatt/add-teileigentumseinheit&datenblattId=' + $('#datenblatt-form').data('datenblatt-id')  + '&teId=' + ui.item.id,
+                            function(data) {
+                                $('.table.te-einheiten').replaceWith($(data).find('.table.te-einheiten'));
+
+                                _.initPlusMinusIcons('#collapse-te');
+                            }
+                        );
+
+                    }
+
+                    $(this).val(' ');
+                }
+            })
+            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+
+                var columns = [
+                    'te_nummer',
                 ];
 
                 var a = $('<a>');
@@ -448,6 +512,7 @@ var DatenblattForm = function () {
         
         _.initFirmaProjektHausDropdown();
         _.initAutocompleteKunden();
+        _.initAutocompleteTeileigentumseinheiten();
         _.initPlusMinusIcons();
 
         _.initUpdateAbschlagDatum();

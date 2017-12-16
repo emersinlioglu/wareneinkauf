@@ -15,12 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="haus-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php if (User::hasPermission('write_ownership')): ?>
         <p>
-            <?= Html::a('Teileigentumseinheit erstellen', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Erstellen', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Importieren', ['teileigentumseinheit/import'], ['class' => 'btn btn-primary']) ?>
         </p>
     <?php endif; ?>
 

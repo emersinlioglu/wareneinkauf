@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Einheitstyp;
 use Yii;
 use app\models\Teileigentumseinheit;
 use app\models\TeileigentumseinheitSearch;
@@ -10,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Haus;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 
 /**
  * TeileigentumseinheitController implements the CRUD actions for Teileigentumseinheit model.
@@ -41,6 +43,21 @@ class TeileigentumseinheitController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Teileigentumseinheit models.
+     * @return mixed
+     */
+    public function actionForecast()
+    {
+        $searchModel = new TeileigentumseinheitSearch();
+        $dataProvider = $searchModel->searchForecast(Yii::$app->request->queryParams);
+
+        return $this->render('forecast', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -107,6 +124,133 @@ class TeileigentumseinheitController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    /**
+     * Imports teileigentumseinheiten
+     * @return mixed
+     */
+    public function actionImport()
+    {
+        $errors = [];
+        $fehlgeschlageneTeileigentumseinheiten = [];
+        $einheitstyp_id = Yii::$app->request->post('einheitstyp_id');
+
+        if (Yii::$app->request->isPost) {
+
+            $einheitstyp = Einheitstyp::findOne($einheitstyp_id);
+
+            if (!$einheitstyp) {
+                $errors[] = 'Bitte einen Einheitstyp auswählen';
+            }
+
+            if ($einheitstyp) {
+
+                // import card numbers file
+                if (isset($_FILES['file']) && !empty($_FILES['file']['tmp_name'])) {
+                    $tmpName = $_FILES['file']['tmp_name'];
+
+                    try {
+                        $inputFileType = \PHPExcel_IOFactory::identify($tmpName);
+                        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+                        $objPHPExcel = $objReader->load($tmpName);
+                    } catch(Exception $e) {
+                        die('Error loading file "'.pathinfo($tmpName,PATHINFO_BASENAME).'": '.$e->getMessage());
+                    }
+
+                    $sheet = $objPHPExcel->getSheet(0);
+                    $highestRow = $sheet->getHighestRow();
+
+                    for ($row = 2; $row <= $highestRow; $row++){
+
+                        //* @property integer $haus_id
+                        //* @property integer $einheitstyp_id
+                        //* @property string $te_nummer
+                        //* @property integer $gefoerdert
+                        //* @property string $geschoss
+                        //* @property string $zimmer
+                        //* @property string $me_anteil
+                        //* @property double $wohnflaeche
+                        //* @property double $kaufpreis
+                        //* @property double $kp_einheit
+                        //* @property double $forecast_preis
+                        //* @property double $verkaufspreis
+                        //* @property string $verkaufspreis_begruendung
+
+                        $teNummer = strval($sheet->getCellByColumnAndRow(0, $row)->getValue());
+                        $teileigentumseinheit = Teileigentumseinheit::findOne([
+                            'te_nummer' => $teNummer
+                        ]);
+
+                        if (!$teileigentumseinheit) {
+                            $teileigentumseinheit = new Teileigentumseinheit();
+                        }
+
+                        //gefoerdert //$teileigentumseinheit->gefoerdert = $sheet->getCellByColumnAndRow($row, ???)->getValue();
+                        //$teileigentumseinheit->verkuafpreis = $sheet->getCellByColumnAndRow($row, ????)->getValue();
+                        //haus //$teileigentumseinheit->???? = $sheet->getCellByColumnAndRow($row, ????)->getValue();
+                        $teileigentumseinheit->einheitstyp_id = $einheitstyp->id;
+                        $teileigentumseinheit->te_nummer = $teNummer;
+                        $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(2, $row)->getValue());
+                        $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(3, $row)->getValue());
+                        $teileigentumseinheit->wohnflaeche = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
+                        $teileigentumseinheit->kaufpreis = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
+                        $teileigentumseinheit->me_anteil = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
+
+                        if (!$teileigentumseinheit->validate() || !$teileigentumseinheit->save()) {
+                            $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
+                        }
+                    }
+                }
+
+            }
+
+            if (count($fehlgeschlageneTeileigentumseinheiten) == 0) {
+                return $this->redirect(['haus/index']);
+            }
+        }
+
+        return $this->render('import', [
+            'errors' => $errors,
+            'einheitstyp_id' => $einheitstyp_id,
+            'fehlgeschlageneTeileigentumseinheiten' => $fehlgeschlageneTeileigentumseinheiten,
+        ]);
+    }
+
+    /**
+     * Search for autocomplete
+     */
+    public function actionAutocomplete()
+    {
+        if (isset($_GET['term'])) {
+
+            $kaeufers = Teileigentumseinheit::find()
+                ->where(['like', 'te_nummer', $_GET['term']])
+                ->andWhere("(haus_id IS NULL OR haus_id = '')")
+                ->orderBy('CAST(te_nummer AS DECIMAL)')
+                ->all();
+
+            $results = array();
+            $results[] = array(
+                'id' => 0,
+                'value' => '',
+                'label' => '',
+                'debitor_nr' => 'Debitor-Nr.',
+                'vorname' => 'Vorname',
+                'nachname' => 'Nachname'
+            );
+
+            foreach ($kaeufers as $kaeufer) {
+                $data = $kaeufer->attributes;
+                $results[] = $data;
+            }
+
+            echo Json::encode($results);
+            return;
+        }
+
+        echo Json::encode([]);
+    }
+
 
     /**
      * Finds the Teileigentumseinheit model based on its primary key value.

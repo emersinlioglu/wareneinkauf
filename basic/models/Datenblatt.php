@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Faker\Provider\DateTime;
 use Yii;
 
 /**
@@ -569,6 +568,18 @@ class Datenblatt extends \yii\db\ActiveRecord
         $this->intern_debitor_nr = $internDebitorNr;
 
         $this->save();
+    }
+
+    public function isAbschlagAngefordert() {
+        $istAngefordert = false;
+        /** @var Abschlag $abschlag */
+        foreach ($this->abschlags as $abschlag) {
+            if (strlen($abschlag->kaufvertrag_angefordert) > 0) {
+                $istAngefordert = true;
+            }
+        }
+
+        return $istAngefordert;
     }
 
     public function hasAngeforderteSonderwuensche() {

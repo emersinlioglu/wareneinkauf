@@ -1,5 +1,5 @@
 <?php
-
+/** @var \app\models\Datenblatt $modelDatenblatt */
 ?>
 
 <div class="box-group" id="accordion">
@@ -14,6 +14,18 @@
         </div>
         <div id="collapse-te" class="panel-collapse collapse in" aria-expanded="false">
             <div class="box-body">
+
+                <div class="row <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
+                    <div class="col-sm-3">
+                        <div class="form-group field-search-teileigentumseinheit">
+                            <label class="control-label" for="search-teileigentumseinheit">Suche</label>
+                            <input type="text"
+                                   id="search-teileigentumseinheit"
+                                   class="form-control ui-autocomplete-input"
+                                   name="suche" value="" maxlength="255">
+                        </div>
+                    </div>
+                </div>
     
                 <table class="table te-einheiten">
                     <thead>
@@ -27,6 +39,7 @@
                             <th>Wohnfläche</th>
                             <th class="text-align-right">Kaufpreis</th>
                             <th class="text-align-right">KP/Einheit</th>
+                            <th class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>" style="width: 5%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +59,11 @@
                                 <td><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
+                                <td class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
+                                    <?= \yii\helpers\Html::a('<span class="fa fa-minus"></span>',
+                                        Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id]),
+                                        ['class' => 'delete-button delete-zahlung btn btn-danger btn-xl']) ?>
+                                </td>
                             </tr>
                         <?php
                         endforeach;
