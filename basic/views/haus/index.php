@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (User::hasPermission('write_ownership')): ?>
         <p>
             <?= Html::a('Erstellen', ['create'], ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Importieren', ['teileigentumseinheit/import'], ['class' => 'btn btn-primary']) ?>
+<!--            --><?php //echo Html::a('Importieren', ['teileigentumseinheit/import'], ['class' => 'btn btn-primary']) ?>
         </p>
     <?php endif; ?>
 

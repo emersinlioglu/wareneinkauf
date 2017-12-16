@@ -42,7 +42,9 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['te_nummer', 'einheitstyp_id'], 'required'],
+            [[
+                'te_nummer',
+                'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
