@@ -18,105 +18,106 @@ $this->params['breadcrumbs'][] = $this->title;
             text-align: right;
         }
     </style>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?php
 
-    <?php
+            $columns = [
+                ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
+                [
+                    'attribute' => 'einheitstyp_id',
+                    'value' => 'einheitstyp.name',
+                    'label' => 'Einheitstyp',
+                    'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
 
-    $columns = [
-        ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
-//            ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
-        [
-            'attribute' => 'einheitstyp_id',
-            'value' => 'einheitstyp.name',
-            'label' => 'Einheitstyp',
-            'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
+                ],
+                'te_nummer',
+                [
+                    'class'=>'kartik\grid\BooleanColumn',
+                    'attribute'=>'gefoerdert',
+                    'value'=>'gefoerdert',
+                    'label' => 'Gefördert',
+                ],
+                [
+                    'attribute' => 'geschoss',
+                    'width'=>'50px',
+                ],
+                [
+                    'attribute' => 'zimmer',
+                    'width'=>'50px',
+                ],
+                [
+                    'attribute' => 'me_anteil',
+                    'contentOptions' => ['class' => 'text-right'],
+        //                'format'=>['decimal',2]
+                ],
+                [
+                    'attribute' => 'wohnflaeche',
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'kaufpreis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'kp_einheit',
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'forecast_preis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'verkaufspreis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'verkaufspreis_begruendung',
+                    'width'=>'250px',
+                ],
+            ];
 
-        ],
-        'te_nummer',
-        [
-            'class'=>'kartik\grid\BooleanColumn',
-            'attribute'=>'gefoerdert',
-            'value'=>'gefoerdert',
-            'label' => 'Gefördert',
-        ],
-        [
-            'attribute' => 'geschoss',
-            'width'=>'50px',
-        ],
-        [
-            'attribute' => 'zimmer',
-            'width'=>'50px',
-        ],
-        [
-            'attribute' => 'me_anteil',
-            'contentOptions' => ['class' => 'text-right'],
-//                'format'=>['decimal',2]
-        ],
-        [
-            'attribute' => 'wohnflaeche',
-            'format'=>['decimal',2],
-            'contentOptions' => ['class' => 'text-right'],
-        ],
-        [
-            'attribute' => 'kaufpreis',
-            'pageSummary'=>true,
-            'format'=>['decimal',2],
-            'contentOptions' => ['class' => 'text-right'],
-        ],
-        [
-            'attribute' => 'kp_einheit',
-            'format'=>['decimal',2],
-            'contentOptions' => ['class' => 'text-right'],
-        ],
-        [
-            'attribute' => 'forecast_preis',
-            'pageSummary'=>true,
-            'format'=>['decimal',2],
-            'contentOptions' => ['class' => 'text-right'],
-        ],
-        [
-            'attribute' => 'verkaufspreis',
-            'pageSummary'=>true,
-            'format'=>['decimal',2],
-            'contentOptions' => ['class' => 'text-right'],
-        ],
-        [
-            'attribute' => 'verkaufspreis_begruendung',
-            'width'=>'250px',
-        ],
-    ];
+            echo DynaGrid::widget([
+                'columns' => $columns,
+        //            'storage' => DynaGrid::TYPE_DB,
+        //            'userSpecific' => true,
+        //            'enableMultiSort' => true,
 
-    echo DynaGrid::widget([
-        'columns' => $columns,
-//            'storage' => DynaGrid::TYPE_DB,
-//            'userSpecific' => true,
-//            'enableMultiSort' => true,
+                'gridOptions' => [
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'id' => 'ForecastSearch',
+                    'showPageSummary'=>true,
+                    'panel' => [
+                        'heading' => '<h3 class="panel-title">Forecast</h3>',
+                        'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+                    ],
+                    'toolbar' => [
+                        'before' => '{pager} {toggleData} {export}'
+                    ],
+                    'autoXlFormat' => true,
+                    'export' => [
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => '_BLANK'
+                    ],
+                ],
+                'options' => [
+                    'id' => 'dynagrid-forecast',
+                    'class' => User::hasPermission('export') ? '' : 'no-export'
+                ]
+            ]);
+            ?>
 
-        'gridOptions' => [
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'id' => 'ForecastSearch',
-            'showPageSummary'=>true,
-            'panel' => [
-                'heading' => '<h3 class="panel-title">Forecast</h3>',
-                'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
-            ],
-            'toolbar' => [
-                'before' => '{pager} {toggleData} {export}'
-            ],
-            'autoXlFormat' => true,
-            'export' => [
-                'fontAwesome' => true,
-                'showConfirmAlert' => false,
-                'target' => '_BLANK'
-            ],
-        ],
-        'options' => [
-            'id' => 'dynagrid-forecast',
-            'class' => User::hasPermission('export') ? '' : 'no-export'
-        ]
-    ]);
-    ?>
-
+        </div>
+    </div>
 </div>

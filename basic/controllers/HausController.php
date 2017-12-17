@@ -118,6 +118,7 @@ class HausController extends Controller
                 && Teileigentumseinheit::validateMultiple($model->teileigentumseinheits)) {
 
                 foreach ($model->teileigentumseinheits as $item) {
+                    $item->kaufpreis = $item->verkaufspreis;
                     $item->save();
                 }
             }
