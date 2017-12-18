@@ -60,11 +60,15 @@
 
         <?php
         $datenblattItems = [];
+        $teItems =[];
         $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : \app\models\User::getCurrentUser()->projekts;
         /** @var Projekt $projekt */
         foreach ($projekts as $projekt) {
             $datenblattItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
                     'url' => ['/datenblatt', 'DatenblattSearch[projekt_name]' => $projekt->name],
+                ];
+            $teItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
+                    'url' => ['/haus', 'HausSearch[projekt_name]' => $projekt->name],
                 ];
         }
         ?>
@@ -107,7 +111,14 @@
                     
                     ['label' => 'Firmen', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
                     ['label' => 'Projekte', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
+                    //['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
+                    [
+                        'label' => 'Teileigentumseinheiten',
+                        'icon' => 'fa fa-file-text text-green',
+//                        'url' => ['/datenblatt/index']
+                        'url' => '#',
+                        'items' => $teItems,
+                    ],
                     ['label' => 'Forecast', 'icon' => 'fa fa-home text-green','url' => ['/teileigentumseinheit/forecast']],
                     ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
                     [
