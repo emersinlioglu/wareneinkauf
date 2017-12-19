@@ -43,7 +43,7 @@ class DatenblattSearch extends Datenblatt
             [['id', 'firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id'], 'integer'],
             [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen'], 'safe'],
             [['haus', 'haus_strasse', 'haus_plz', 'haus_ort', 'haus_hausnr', 'te_nummer'], 'safe'],
-            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_email', 'kaeufer_festnetz', 'kaeufer_handy', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_nachname2', 'kaeufer_vorname2', 'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
+            [['kaeufer', 'kaeufer_debitornr', 'kaeufer_email', 'kaeufer_festnetz', 'kaeufer_handy', 'kaeufer_anrede','kaeufer_titel','kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_anrede2','kaeufer_titel2','kaeufer_nachname2', 'kaeufer_vorname2', 'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr'], 'safe'],
         ];
     }
@@ -131,6 +131,14 @@ class DatenblattSearch extends Datenblatt
             'asc' => ['kaeufer.handy' => SORT_ASC],
             'desc' => ['kaeufer.handy' => SORT_DESC],
         ];
+        $dataProvider->sort->attributes['kaeufer_anrede'] = [
+            'asc' => ['kaeufer.anrede' => SORT_ASC],
+            'desc' => ['kaeufer.anrede' => SORT_DESC],
+        ];
+          $dataProvider->sort->attributes['kaeufer_titel'] = [
+            'asc' => ['kaeufer.titel' => SORT_ASC],
+            'desc' => ['kaeufer.titel' => SORT_DESC],
+        ];
         $dataProvider->sort->attributes['kaeufer_nachname'] = [
             'asc' => ['kaeufer.nachname' => SORT_ASC],
             'desc' => ['kaeufer.nachname' => SORT_DESC],
@@ -140,6 +148,14 @@ class DatenblattSearch extends Datenblatt
             'desc' => ['kaeufer.vorname' => SORT_DESC],
         ];
 
+         $dataProvider->sort->attributes['kaeufer_anrede2'] = [
+            'asc' => ['kaeufer.anrede2' => SORT_ASC],
+            'desc' => ['kaeufer.anrede2' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_titel2'] = [
+            'asc' => ['kaeufer.titel2' => SORT_ASC],
+            'desc' => ['kaeufer.titel2' => SORT_DESC],
+        ];
         $dataProvider->sort->attributes['kaeufer_nachname2'] = [
             'asc' => ['kaeufer.nachname2' => SORT_ASC],
             'desc' => ['kaeufer.nachname2' => SORT_DESC],
@@ -205,6 +221,10 @@ class DatenblattSearch extends Datenblatt
             ->andFilterWhere(['like', 'kaeufer.handy', $this->kaeufer_handy])
             ->andFilterWhere(['like', 'kaeufer.nachname', $this->kaeufer_nachname])
             ->andFilterWhere(['like', 'kaeufer.vorname', $this->kaeufer_vorname])
+            ->andFilterWhere(['like', 'kaeufer.anrede', $this->kaeufer_anrede])
+            ->andFilterWhere(['like', 'kaeufer.anrede2', $this->kaeufer_anrede2])
+            ->andFilterWhere(['like', 'kaeufer.titel', $this->kaeufer_titel])
+            ->andFilterWhere(['like', 'kaeufer.titel2', $this->kaeufer_titel2])
             ->andFilterWhere(['like', 'kaeufer.nachname2', $this->kaeufer_nachname2])
             ->andFilterWhere(['like', 'kaeufer.vorname2', $this->kaeufer_vorname2])
             ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])

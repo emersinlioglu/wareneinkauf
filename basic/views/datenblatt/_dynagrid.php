@@ -138,6 +138,11 @@ $gridColumns = [
         'label' => '2. Käufer Vorname'
     ],
     [
+        'attribute' => 'kaeufer_titel2',
+        'value'=>'kaeufer.titel2',
+        'label' => '2. Käufer Titel'
+    ],
+    [
         'attribute' => 'kaeufer_nachname2',
         'value'=>'kaeufer.nachname2',
         'label' => '2. Käufer Name'
@@ -196,6 +201,12 @@ $gridColumns = array_merge($gridColumns, [
         //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
         'label' => 'Käufer Anrede'
     ],
+    [
+        'attribute' => 'kaeufer_titel',
+        'value'=>'kaeufer.titel',
+        'label' => 'Käufer Titel'
+    ],
+    
     [
         'attribute' => 'kaeufer_vorname',
         'value'=>'kaeufer.vorname',
