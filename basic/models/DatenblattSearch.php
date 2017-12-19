@@ -22,12 +22,14 @@ class DatenblattSearch extends Datenblatt
     public $haus_plz;
     public $haus_hausnr;
     public $kaeufer;
+    public $kaeufer_titel;
     public $kaeufer_email;
     public $kaeufer_festnetz;
     public $kaeufer_handy;
     public $kaeufer_debitornr;
     public $kaeufer_nachname;
     public $kaeufer_vorname;
+    public $kaeufer_titel2;
     public $kaeufer_nachname2;
     public $kaeufer_vorname2;
     public $projekt;
