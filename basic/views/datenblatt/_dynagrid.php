@@ -133,6 +133,11 @@ $gridColumns = [
         'label' => 'Käufer-Handynummer'
     ],
     [
+        'value'=>'kaeufer.anrede2Label',
+        //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+        'label' => '2. Käufer Anrede'
+    ],
+    [
         'attribute' => 'kaeufer_vorname2',
         'value'=>'kaeufer.vorname2',
         'label' => '2. Käufer Vorname'
