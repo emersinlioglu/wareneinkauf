@@ -20,6 +20,16 @@ class User extends \webvimark\modules\UserManagement\models\User {
             ->viaTable('projekt_user', ['user_id' => 'id']);
     }
 
+    public static function getProjktsFromCurrentUser() {
+        $projekts = [];
+        $currentUser = self::getCurrentUser();
+        if ($currentUser) {
+            $user = User::findOne($currentUser->id);
+            $projekts = $user->projekts;
+        }
+        return $projekts;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
