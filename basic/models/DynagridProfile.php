@@ -56,4 +56,10 @@ class DynagridProfile extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public static function getProfilesForCurrentUser() {
+        return self::findAll([
+            'user_id' => User::getCurrentUser()->id
+        ]);
+    }
 }
