@@ -720,4 +720,12 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $sonderwuenscheZusammenfassung;
     }
 
+    public function getAbschlagKaufvertragSumme() {
+        $kaufvertragSumme = .0;
+        foreach($this->abschlags as $abschlag) {
+            $kaufvertragSumme += (float) $abschlag->kaufvertrag_betrag;
+        }
+        return $kaufvertragSumme;
+    }
+
 }

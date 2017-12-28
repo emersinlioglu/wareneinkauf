@@ -46,7 +46,6 @@ use kartik\money\MaskMoney;
                     <?php 
 
                     $kvSummeProzent = 0;
-                    $kvSummeBetrag = 0;
                     $swSummeProzent = 0;
                     $swSummeBetrag = 0;
                     $kaufvertragProzentTotal  = 0;
@@ -82,8 +81,7 @@ use kartik\money\MaskMoney;
                             <?php 
                             if($modelAbschlag->kaufvertrag_angefordert) {
                                 $kaufvertragBetragTotal += (float)$modelAbschlag->kaufvertrag_betrag;
-                            } 
-                            $kvSummeBetrag += (float)$modelAbschlag->kaufvertrag_betrag;
+                            }
                             ?>
                         </td>
                         <td>
@@ -154,7 +152,7 @@ use kartik\money\MaskMoney;
                     <tr>
                         <td>Summe</td>
                         <td><?= $kaufvertragProzentTotal ?> %</td>
-                        <td class="text-align-right"><?=  number_format($kvSummeBetrag, 2, ',', '.') ?> €</td>
+                        <td class="text-align-right"><?=  number_format($modelDatenblatt->getAbschlagKaufvertragSumme(), 2, ',', '.') ?> €</td>
                         <td></td>
                         <td><?= $sonderwunschProzentTotal ?> %</td>
                         <td class="text-align-right"><?= number_format($swSummeBetrag, 2, ',', '.') ?> €</td>

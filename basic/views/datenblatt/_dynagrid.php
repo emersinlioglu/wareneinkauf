@@ -60,6 +60,11 @@ $gridColumns = [
     */
 
     [
+        'attribute' => 'abschlagKaufvertragSumme',
+        'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
+        'format' => ['currency'],
+    ],
+    [
         'attribute' => 'firma_name',
         'value'=>'firma.name',
         'label' => 'Firma'
