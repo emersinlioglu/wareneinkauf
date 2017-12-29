@@ -464,6 +464,10 @@ echo DynaGrid::widget([
     ],
 
     'gridOptions'=>[
+        'floatHeader' => true,
+        'floatHeaderOptions' => [
+            'position' => 'absolute',
+        ],
         'dataProvider' => $dataProvider,
         'filterModel'  => $searchModel,
         'panel'=>[
