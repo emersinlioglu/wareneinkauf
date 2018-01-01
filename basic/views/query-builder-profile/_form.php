@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-<!--    <div class="hidden">-->
-        <?= $form->field($model, 'filter_rules')->textInput() ?>
-<!--    </div>-->
+    <div class="hidden">
+        <?= $form->field($model, 'filter_rules')->hiddenInput() ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

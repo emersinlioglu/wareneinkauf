@@ -90,11 +90,11 @@ $this->registerJs("
                 Yii::$app->urlManager->createUrl(["query-builder-profile/delete", 'id' => '']),
                 ['class' => 'remove-query-builder-profile btn btn-danger']) ?>
 
-            <span>&nbsp;|&nbsp;</span>
             <?php
                 $queryBuilderProfileModel = QueryBuilderProfile::getAktiveProfile();
             ?>
             <?php if ($queryBuilderProfileModel): ?>
+                <span>&nbsp;|&nbsp;</span>
                 <?php $form = ActiveForm::begin([
                     'action' => ['query-builder-profile/update', 'id' => QueryBuilderProfile::getAktiveProfileId()],
                     'options' => array(
