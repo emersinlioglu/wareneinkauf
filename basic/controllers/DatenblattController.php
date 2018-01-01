@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\models\AbschlagMeilenstein;
+use app\models\DynagridProfile;
 use app\models\Haus;
 use app\models\Kunde;
 use app\models\Meilenstein;
 use app\models\Projekt;
+use app\models\QueryBuilderProfile;
 use app\models\Teileigentumseinheit;
 use app\models\Zinsverzug;
 use Yii;
@@ -60,8 +62,11 @@ class DatenblattController extends Controller
     public function actionIndex()
     {
         $searchModel = new DatenblattSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $projektName = Yii::$app->request->get('DatenblattSearch')['projekt_name'];
 
+        // new dataprovider
+        $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
+        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektName);
 
         $modelsToDelete = DatenblattSearch::findAll(['aktiv' => 0]);
         foreach ($modelsToDelete as $modelToDelete) {

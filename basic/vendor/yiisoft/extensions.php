@@ -389,4 +389,11 @@ return array(
             '@miloschuman/yii2-highcharts-widget' => $vendorDir . 'miloschuman/yii2-highcharts-widget',
         ),
     ),
+    'leandrogehlen/querybuilder' => array(
+        'name' => 'leandrogehlen/querybuilder',
+        'version' => '1.0.1',
+        'alias' => array(
+            '@leandrogehlen/querybuilder' => $vendorDir . '/leandrogehlen/querybuilder',
+        ),
+    ),
 );

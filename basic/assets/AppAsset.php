@@ -21,6 +21,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/forms.css',
+        'css/query-builder.default.min.css',
 //        'font-awesome-4.5.0/css/font-awesome.css',
         'font-awesome-4.5.0/css/font-awesome.min.css',
         'js/jquery-ui-1.11.4.custom/jquery-ui.min.css',
@@ -35,9 +36,13 @@ class AppAsset extends AssetBundle
         'js/jquery-sortable.js',
         'js/HausForm.js',
         'js/DynagridProfileForm.js',
+        'js/QueryBuilderProfileForm.js',
         'js/ProjektForm.js',
         'js/Serienbrief.js',
         'js/tinymce/tinymce.min.js',
+        'js/query-builder.standalone.min.js',
+
+        'i18n/query-builder.de.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

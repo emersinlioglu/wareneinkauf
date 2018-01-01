@@ -443,11 +443,15 @@ echo DynaGrid::widget([
     ],
 
     'gridOptions'=>[
+        'floatHeader' => true,
+        'floatHeaderOptions' => [
+            'position' => 'absolute',
+        ],
         'dataProvider' => $dataProvider,
-        'filterModel'  => $searchModel,
+//        'filterModel'  => $searchModel,
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
-            'before' => '{dynagridFilter} {dynagridSort} {dynagrid} '
+            'before' => '{dynagridSort} {dynagrid} '
                 . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>'
                 . '<a id="" data-bulk-edit-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
                             data-single-edit-url="'.\yii\helpers\Url::to(['datenblatt/konfiguration', 'id' => '']).'"

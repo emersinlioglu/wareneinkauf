@@ -7,6 +7,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Datenblatt;
 use yii\helpers\ArrayHelper;
+use leandrogehlen\querybuilder\Translator;
+
 
 /**
  * DatenblattSearch represents the model behind the search form about `app\models\Datenblatt`.
@@ -67,7 +69,7 @@ class DatenblattSearch extends Datenblatt
     public function search($params)
     {
         $query = Datenblatt::find();
-        $query->joinWith(['haus', 'kaeufer', 'projekt', 'firma', 'haus.teileigentumseinheits']);
+        $query->joinWith(['haus', 'kaeufer', 'kaeufer.anrede2', 'projekt', 'firma', 'haus.teileigentumseinheits']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -208,6 +210,134 @@ class DatenblattSearch extends Datenblatt
             ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
             ->andFilterWhere(['like', 'sonstige_anmerkungen', $this->sonstige_anmerkungen])
             ->andFilterWhere(['like', 'te_nummer', $this->te_nummer]);
+
+        $query->groupBy([
+            'datenblatt.id'
+        ]);
+
+        return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchByQueryBuilder($rules, $projektName)
+    {
+        $query = Datenblatt::find();
+        $query->joinWith(['haus', 'kaeufer', 'projekt', 'firma', 'haus.teileigentumseinheits']);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10 // in case you want a default pagesize
+            ]
+        ]);
+
+        $query->where(['projekt.name' => $projektName]);
+
+        if ($rules) {
+            $translator = new Translator($rules);
+            $query->andWhere($translator->where())
+                ->addParams($translator->params());
+        }
+
+//        // toggle display all
+//        $toggleDataKey = '_tog' . hash('crc32', 'DatenblattSearch');
+//        $isShowAll = ArrayHelper::getValue($_GET, $toggleDataKey) === 'all';
+//        if ($isShowAll) {
+//            $dataProvider->pagination = false;
+//        }
+
+//        // filter by creator_user_id or projekt_user assignments
+//        if (!Yii::$app->user->isSuperadmin) {
+//            $query->leftJoin('projekt_user pu', 'pu.projekt_id = projekt.id');
+//            $query->andFilterWhere(['or',
+//                ['projekt.creator_user_id' => Yii::$app->user->identity->getId()],
+//                ['pu.user_id' => Yii::$app->user->identity->getId()],
+//                ['datenblatt.creator_user_id' => Yii::$app->user->identity->getId()],
+//            ]);
+//        }
+
+        //$a = ArrayHelper::getValue($_GET, 'toolbar');
+        //$b = ArrayHelper::getValue($_GET, 'tag');
+        //error_log(print_r($_GET, 1));
+        //error_log(print_r($_POST, 1));
+        //return $dataProvider
+
+        $dataProvider->sort->attributes['haus_strasse'] = [
+            'asc' => ['haus.strasse' => SORT_ASC],
+            'desc' => ['haus.strasse' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['haus_ort'] = [
+            'asc' => ['haus.ort' => SORT_ASC],
+            'desc' => ['haus.ort' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['haus_hausnr'] = [
+            'asc' => ['haus.hausnr' => SORT_ASC],
+            'desc' => ['haus.hausnr' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['haus_plz'] = [
+            'asc' => ['haus.plz' => SORT_ASC],
+            'desc' => ['haus.plz' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_email'] = [
+            'asc' => ['kaeufer.email' => SORT_ASC],
+            'desc' => ['kaeufer.email' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_festnetz'] = [
+            'asc' => ['kaeufer.festnetz' => SORT_ASC],
+            'desc' => ['kaeufer.festnetz' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_handy'] = [
+            'asc' => ['kaeufer.handy' => SORT_ASC],
+            'desc' => ['kaeufer.handy' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_nachname'] = [
+            'asc' => ['kaeufer.nachname' => SORT_ASC],
+            'desc' => ['kaeufer.nachname' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_vorname'] = [
+            'asc' => ['kaeufer.vorname' => SORT_ASC],
+            'desc' => ['kaeufer.vorname' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['kaeufer_nachname2'] = [
+            'asc' => ['kaeufer.nachname2' => SORT_ASC],
+            'desc' => ['kaeufer.nachname2' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['kaeufer_vorname2'] = [
+            'asc' => ['kaeufer.vorname2' => SORT_ASC],
+            'desc' => ['kaeufer.vorname2' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['kaeufer_debitornr'] = [
+            'asc' => ['kaeufer.debitor_nr' => SORT_ASC],
+            'desc' => ['kaeufer.debitor_nr' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['projekt_name'] = [
+            'asc' => ['projekt.name' => SORT_ASC],
+            'desc' => ['projekt.name' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['firma_name'] = [
+            'asc' => ['firma.name' => SORT_ASC],
+            'desc' => ['firma.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['firma_nr'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['firma.nr' => SORT_ASC],
+            'desc' => ['firma.nr' => SORT_DESC],
+        ];
+
+        $teNummercolumn = 'min((te_nummer * 1))';
+        $dataProvider->sort->attributes['te_nummer'] = [
+            'asc' => [$teNummercolumn => SORT_ASC],
+            'desc' => [$teNummercolumn => SORT_DESC],
+        ];
 
         $query->groupBy([
             'datenblatt.id'

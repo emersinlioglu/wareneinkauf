@@ -7,6 +7,7 @@ namespace app\models;
  *
  * @property Projekt[] $projekts
  * @property DynagridProfile[] $dynagridProfiles
+ * @property QueryBuilderProfile[] $queryBuilderProfiles
  *
  * @package app\models
  */
@@ -25,6 +26,14 @@ class User extends \webvimark\modules\UserManagement\models\User {
      */
     public function getDynagridProfiles() {
         return $this->hasMany(DynagridProfile::className(), ['user_id' => 'id']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQueryBuilderProfiles() {
+        return $this->hasMany(QueryBuilderProfile::className(), ['user_id' => 'id']);
     }
 
     /**
