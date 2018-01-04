@@ -395,7 +395,7 @@ class DatenblattController extends Controller
         /* @var $item \app\models\Abschlag */
         foreach ($modelDatenblatt->abschlags as $item) {
 
-            $zeilenSumme = 0;
+            $zeilenSumme = .0;
             if ($item->kaufvertrag_angefordert) {
                 $zeilenSumme += ((float)$item->kaufvertrag_prozent * $kaufpreisTotal / 100);
             }

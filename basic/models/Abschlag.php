@@ -144,12 +144,15 @@ class Abschlag extends \yii\db\ActiveRecord
         $einheitstypAussenstellplatz = Einheitstyp::findOne(Einheitstyp::TYP_AUSSENSTELLPLATZ);
         $einheitstypKeller = Einheitstyp::findOne(Einheitstyp::TYP_KELLER);
 
+        $kaufpreisabrechnungKaufvertragInProzent = number_format($this->kaufvertrag_prozent, 2, ',', '.');
+        $kaufpreisabrechnungKaufvertragInProzent = str_replace(',00', '', $kaufpreisabrechnungKaufvertragInProzent);
+
         $replaceData = [
             '[projekt-name]' => $projekt->name,
-            '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
+            '[projekt-strasse]' => $projekt->strasse . ' ' . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,
             '[wohnung-nr]' => $datenblatt->haus->tenummer,
-            '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => number_format($this->kaufvertrag_prozent, 2, ',', '.'),
+            '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => $kaufpreisabrechnungKaufvertragInProzent,
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
