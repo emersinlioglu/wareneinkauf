@@ -1,30 +1,30 @@
 var QueryBuilderProfileForm = function (filters, rules) {
     var _ = this;
 
-    _modal = $('#query-builder-profile-modal');
-    _plusIcon = $('.add-query-builder-profile');
-    _minusIcon = $('.remove-query-builder-profile');
-    _profileDropdown = $('[name="queryBuilderProfileId"]');
+    _.modal = $('#query-builder-profile-modal');
+    _.plusIcon = $('.add-query-builder-profile');
+    _.minusIcon = $('.remove-query-builder-profile');
+    _.profileDropdown = $('[name="queryBuilderProfileId"]');
 
-    var form = $('.query-builder-form');
-    var builder = $('#querybuilder');
+    _.form = $('.query-builder-form');
+    _.builder = $('#querybuilder');
     _filters = filters;
     _rules = (rules) ? rules : [];
 
     _.initQueryBuilder = function() {
 
-        builder.queryBuilder({
+        _.builder.queryBuilder({
             lang_code: 'de',
             allow_empty: true,
             filters: _filters
         });
-        builder.queryBuilder('setRules', _rules);
+        _.builder.queryBuilder('setRules', _rules);
 
-        form.find('[type=\"reset\"]').on('click', function(){
-            builder.queryBuilder('reset');
+        _.form.find('[type=\"reset\"]').on('click', function(){
+            _.builder.queryBuilder('reset');
         });
-        form.on('submit', function(){
-            var rules = builder.queryBuilder('getRules');
+        _.form.on('submit', function(){
+            var rules = _.builder.queryBuilder('getRules');
             var input = $(this).find("input[name='QueryBuilderProfile[filter_rules]']");
             input.val(JSON.stringify(rules));
         });
@@ -32,31 +32,31 @@ var QueryBuilderProfileForm = function (filters, rules) {
 
     _.initDropdown = function () {
 
-        _profileDropdown.change(function () {
+        _.profileDropdown.change(function () {
             location.href = 'index.php?r=query-builder-profile/set-active&id=' + this.value;
         });
     }
 
     _.initPlusIcon = function() {
 
-        _plusIcon.click(function(e) {
+        _.plusIcon.click(function(e) {
             e.preventDefault();
 
-            _modal.find(".modal-body").load(_plusIcon.attr('href'), function() {
-                _modal.modal('show');
+            _.modal.find(".modal-body").load(_.plusIcon.attr('href'), function() {
+                _.modal.modal('show');
 
                 console.log('rules: ');
-                console.log(builder.queryBuilder('getRules'));
+                console.log(_.builder.queryBuilder('getRules'));
                 console.log('hidden element: ');
                 console.log($(this).find('[name="QueryBuilderProfile[filter_rules]"]'));
 
                 $(this).find('[name="QueryBuilderProfile[filter_rules]"]')
-                    .val(JSON.stringify(builder.queryBuilder('getRules')));
+                    .val(JSON.stringify(_.builder.queryBuilder('getRules')));
             });
         });
 
         // // form submit
-        // _modal.on('form', 'submit', function(e) {
+        // _.modal.on('form', 'submit', function(e) {
         //     e.preventDefault();
         //
         //     // POST Request
@@ -66,7 +66,7 @@ var QueryBuilderProfileForm = function (filters, rules) {
         //
         //         if (jsonData.result == 'ok') {
         //             // location.reload(true);
-        //             // _modal.modal('hide');
+        //             // _.modal.modal('hide');
         //         }
         //     });
         //
@@ -76,15 +76,15 @@ var QueryBuilderProfileForm = function (filters, rules) {
 
     _.initMinusIcon = function() {
 
-        _minusIcon.click(function(e) {
+        _.minusIcon.click(function(e) {
             e.preventDefault();
-            var url = _minusIcon.attr('href') + _profileDropdown.val();
+            var url = _.minusIcon.attr('href') + _.profileDropdown.val();
             $.get(url, function (data) {
                 var jsonData = JSON.parse(data);
 
                 if (jsonData.result == 'ok') {
                     location.reload(true);
-                    // _modal.modal('hide');
+                    // _.modal.modal('hide');
                 }
             });
         });

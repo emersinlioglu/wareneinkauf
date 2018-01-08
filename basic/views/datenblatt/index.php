@@ -15,14 +15,6 @@ $this->title = 'Datenblätter in ' . $projekt->name;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?php
-$this->registerJs('
-    $(function(){
-        new DynagridProfileForm();
-    });
-');
-?>
-
 <div class="datenblatt-index">
 
     <?php if (User::hasPermission('write_datasheets')): ?>

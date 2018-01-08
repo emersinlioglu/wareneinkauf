@@ -2,17 +2,26 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 ?>
+
+<?php
+$this->registerJs('
+    $(function(){
+        new DynagridProfileForm();
+    });
+');
+?>
+
 <div class="box-group" id="accordion">
     <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
     <div class="panel box box-primary">
         <div class="box-header with-border">
             <h4 class="box-title">
-                <a data-toggle="collapse" data-parent="#collapse-querybuilder" href="#collapse-querybuilder" aria-expanded="true" class="">
+                <a data-toggle="collapse" data-parent="#collapse-dynagrid-profile" href="#collapse-dynagrid-profile" aria-expanded="true" class="">
                     Profile
                 </a>
             </h4>
         </div>
-        <div id="collapse-querybuilder" class="panel-collapse collapse in" aria-expanded="false">
+        <div id="collapse-dynagrid-profile" class="panel-collapse collapse in" aria-expanded="false">
             <div class="box-body">
 
 

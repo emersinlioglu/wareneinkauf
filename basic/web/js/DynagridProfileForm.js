@@ -47,7 +47,8 @@ var DynagridProfileForm = function () {
 
         _minusIcon.click(function(e) {
             e.preventDefault();
-            var url = _minusIcon.attr('href') + _profileDropdown.val();
+            console.log(_profileDropdown);
+            var url = $(this) .attr('href') + _profileDropdown.val();
             $.get(url, function (data) {
                 console.log(data);
                 var jsonData = JSON.parse(data);
