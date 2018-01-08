@@ -47,6 +47,7 @@ $this->registerJs('
                     { text: "[kaeufer-ort]", value: "[kaeufer-ort]" },
                     
                     { text: "[tenummer-stellplatz]", value: "[tenummer-stellplatz]" },
+                    { text: "[tenummer-stellplatz-2]", value: "[tenummer-stellplatz-2]" },
                     { text: "[tenummer-lagerraum]", value: "[tenummer-lagerraum]" },
                     { text: "[tenummer-garage]", value: "[tenummer-garage]" },
                     { text: "[tenummer-aussenstellplatz]", value: "[tenummer-aussenstellplatz]" },

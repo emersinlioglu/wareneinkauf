@@ -155,12 +155,16 @@ class Haus extends \yii\db\ActiveRecord
         return $teNummer;
     }
 
-    public function getTenummerForEinheitstyp($einheitstypId) {
+    public function getTenummerForEinheitstyp($einheitstypId, $nth = 1) {
         $tenummer = '';
+        $found = 0;
         foreach ($this->teileigentumseinheits as $te) {
             if ($te->einheitstyp_id == $einheitstypId) {
-                $tenummer = $te->te_nummer;
-                break;
+                $found++;
+                if ($found == $nth) {
+                    $tenummer = $te->te_nummer;
+                    break;
+                }
             }
         }
         return $tenummer;

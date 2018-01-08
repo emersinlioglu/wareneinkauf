@@ -168,6 +168,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
             '[tenummer-stellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ),
+            '[tenummer-stellplatz-2]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ, 2),
             '[tenummer-lagerraum]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_LAGERRAUM),
             '[tenummer-garage]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_GARAGE),
             '[tenummer-aussenstellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_AUSSENSTELLPLATZ),
