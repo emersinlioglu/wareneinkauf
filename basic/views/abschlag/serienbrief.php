@@ -98,7 +98,7 @@ $this->registerJs('
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <?= Html::submitButton('Speichern', ['name' => 'submit', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Speichern', ['name' => 'post', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@ $this->registerJs('
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <?= Html::submitButton('Drucken', ['name' => 'submit', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Drucken', ['name' => 'post', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
                     </div>
                 </div>
 
@@ -230,7 +230,7 @@ $this->registerJs('
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <?= Html::submitButton('Abschicken', ['name' => 'submit', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Abschicken', ['name' => 'post', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
                     </div>
                 </div>
 
@@ -333,7 +333,7 @@ $this->registerJs('
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <?= Html::submitButton('Drucken', ['name' => 'submit', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Drucken', ['name' => 'post', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
                     </div>
                 </div>
 

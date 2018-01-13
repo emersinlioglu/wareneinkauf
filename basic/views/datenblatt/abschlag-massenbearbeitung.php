@@ -240,7 +240,7 @@ $this->registerJs('
             <ol class="sortable zuordnung meilenstein">
             </ol>
 
-            <div class="">
+            <div class="hide">
                 <input type="text" class="abschlag-zuordnungen" name="AbschlagMeilensteinZuordnung[<<placeholder>>]" value="">
             </div>
         </td>

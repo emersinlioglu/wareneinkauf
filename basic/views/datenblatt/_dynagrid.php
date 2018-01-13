@@ -518,7 +518,7 @@ echo DynaGrid::widget([
         'class' => 'datenblatt-selection-form hide',
     )
 ]); ?>
-    <?= Html::submitButton('submit', ['name' => 'submit', 'value' => 'selection']) ?>
+    <?= Html::submitButton('submitSelection', ['name' => 'submitSelection', 'value' => 'selection']) ?>
 <?php ActiveForm::end(); ?>
 
 <?php
@@ -528,15 +528,15 @@ $this->registerJs(<<<JS
             e.preventDefault();
             
             $('[name="selection[]"]:checked').each(function(i, elm) {
-                
+               
                 var input = $('<input>')
                     .attr('type', 'hidden')
                     .attr('name', 'datenblatts[]')
                     .val(elm.value);
-                    
+                   
                 $('.datenblatt-selection-form').prepend(input);
             });
-            
+
             $('.datenblatt-selection-form button').click();
         });
         

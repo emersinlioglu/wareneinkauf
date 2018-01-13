@@ -8,7 +8,6 @@ use app\models\Haus;
 use app\models\Kunde;
 use app\models\Projekt;
 use app\models\Meilenstein;
-use app\models\Projekt;
 use app\models\QueryBuilderProfile;
 use app\models\Teileigentumseinheit;
 use app\models\Zinsverzug;

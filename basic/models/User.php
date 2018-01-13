@@ -38,13 +38,6 @@ class User extends \webvimark\modules\UserManagement\models\User {
         return $projekts;
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDynagridProfiles() {
-        return $this->hasMany(DynagridProfile::className(), ['user_id' => 'id']);
-    }
-
     public function getQueryBuilderProfiles() {
         return $this->hasMany(QueryBuilderProfile::className(), ['user_id' => 'id']);
     }

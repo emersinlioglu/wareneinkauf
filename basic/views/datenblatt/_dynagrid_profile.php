@@ -31,7 +31,7 @@ $this->registerJs('
                     echo Html::dropDownList(
                         'dynagridProfileId',
                         $dynagridProfileId,
-                        ArrayHelper::map(\app\models\DynagridProfile::find()->all(), 'id', 'name'),
+                        ArrayHelper::map(\app\models\DynagridProfile::getProfilesForCurrentUser(), 'id', 'name'),
                         [
                             //'prompt' => 'Bitte wählen',
                             'class' => "form-control"

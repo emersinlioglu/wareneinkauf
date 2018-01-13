@@ -47,7 +47,7 @@ class AbschlagController extends Controller
         $data = array();
         if (Yii::$app->request->isPost) {
 
-            $submit = Yii::$app->request->post('submit', null);
+            $submit = Yii::$app->request->post('submitSelection', null);
             $datenblattIds = array_unique(Yii::$app->request->post('datenblatts', []));
 
             switch ($submit) {
@@ -255,8 +255,6 @@ class AbschlagController extends Controller
             $pdfContents
         );
 
-        file_put_contents('abschlag.html', $html);
-
         return $this->_createPdf($html);
     }
 
@@ -284,8 +282,6 @@ class AbschlagController extends Controller
             '<div class="wrapper" style="page-break-before:always;"></div>',
             $pdfContents
         );
-
-        file_put_contents('sonderwunsch.html', $html);
 
         return $this->_createPdf($html, Pdf::DEST_BROWSER, false);
     }
