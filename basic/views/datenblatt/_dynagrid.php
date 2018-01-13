@@ -502,11 +502,12 @@ echo DynaGrid::widget([
 <?php ActiveForm::end(); ?>
 
 <?php
-$this->registerJs("
+$this->registerJs(<<<JS
     $(function() {
-        $('.serienbrief').click(function() {
+        $('.serienbrief').click(function(e) {
+            e.preventDefault();
             
-            $('#DatenblattSearch-container [name=\"selection[]\"]:checked').each(function(i, elm) {
+            $('[name=\"selection[]\"]:checked').each(function(i, elm) {
                 
                 var input = $('<input>')
                     .attr('type', 'hidden')
@@ -519,13 +520,14 @@ $this->registerJs("
             $('.datenblatt-selection-form button').click();
         });
         
-        $('.abschlag-massenbearbeitung').click(function() {
+        $('.abschlag-massenbearbeitung').click(function(e) {
+            e.preventDefault();
             
-            var datenblattIds = $('#DatenblattSearch-container [name=\"selection[]\"]:checked');
+            var datenblattIds = $('[name="selection[]"]:checked');
             var ids = datenblattIds
                 .map(function () {return this.value;})
                 .get()
-                .join(\",\");
+                .join(",");
      
             if (ids) {
                 if (ids.indexOf(',') > -1) {
@@ -541,7 +543,8 @@ $this->registerJs("
             
         })
     });
-");
+JS
+);
 ?>
 
 <?php
