@@ -118,6 +118,7 @@ class HausController extends Controller
                 && Teileigentumseinheit::validateMultiple($model->teileigentumseinheits)) {
 
                 foreach ($model->teileigentumseinheits as $item) {
+                    $item->kaufpreis = $item->verkaufspreis;
                     $item->save();
                 }
             }
@@ -144,10 +145,10 @@ class HausController extends Controller
         $new = new Teileigentumseinheit();
         $new->haus_id = $hausId;
         $new->einheitstyp_id = 1;
-        $new->save();
+        $new->save(false);
 
-        return $this->actionUpdate($hausId);
-//        $this->redirect(['update', 'id' => $datenblattId]);
+        $this->actionUpdate($hausId);
+        return $this->redirect(['update', 'id' => $hausId]);
     }
     
     /**
@@ -193,8 +194,8 @@ class HausController extends Controller
             $teileigentumseinheit->delete();
         }
         
-        return $this->actionUpdate($hausId, true);
-        //return $this->redirect(['update', 'id' => $hausId]);
+        $this->actionUpdate($hausId, true);
+        return $this->redirect(['update', 'id' => $hausId]);
     }
     
     /**

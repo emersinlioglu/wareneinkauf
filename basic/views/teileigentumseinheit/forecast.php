@@ -13,13 +13,18 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="teileigentumseinheit-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <style>
+        #ForecastSearch-container tfoot {
+            text-align: right;
+        }
+    </style>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
         <?php
 
         $columns = [
             ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
-//            ['class'=>'kartik\grid\CheckboxColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
             [
                 'attribute' => 'einheitstyp_id',
                 'value' => 'einheitstyp.name',
@@ -44,30 +49,36 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'me_anteil',
+                'contentOptions' => ['class' => 'text-right'],
 //                'format'=>['decimal',2]
             ],
             [
                 'attribute' => 'wohnflaeche',
-                'format'=>['decimal',2]
+                'format'=>['decimal',2],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             [
                 'attribute' => 'kaufpreis',
                 'pageSummary'=>true,
-                'format'=>['decimal',2]
+                'format'=>['decimal',2],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             [
                 'attribute' => 'kp_einheit',
-                'format'=>['decimal',2]
+                'format'=>['decimal',2],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             [
                 'attribute' => 'forecast_preis',
                 'pageSummary'=>true,
-                'format'=>['decimal',2]
+                'format'=>['decimal',2],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             [
                 'attribute' => 'verkaufspreis',
                 'pageSummary'=>true,
-                'format'=>['decimal',2]
+                'format'=>['decimal',2],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             [
                 'attribute' => 'verkaufspreis_begruendung',
@@ -75,36 +86,38 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ];
 
-        echo DynaGrid::widget([
-            'columns' => $columns,
-//            'storage' => DynaGrid::TYPE_DB,
-//            'userSpecific' => true,
-//            'enableMultiSort' => true,
+            echo DynaGrid::widget([
+                'columns' => $columns,
+        //            'storage' => DynaGrid::TYPE_DB,
+        //            'userSpecific' => true,
+        //            'enableMultiSort' => true,
 
-            'gridOptions' => [
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'id' => 'ForecastSearch',
-                'showPageSummary'=>true,
-                'panel' => [
-                    'heading' => '<h3 class="panel-title">Forecast</h3>',
-                    'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+                'gridOptions' => [
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'id' => 'ForecastSearch',
+                    'showPageSummary'=>true,
+                    'panel' => [
+                        'heading' => '<h3 class="panel-title">Forecast</h3>',
+                        'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+                    ],
+                    'toolbar' => [
+                        'before' => '{pager} {toggleData} {export}'
+                    ],
+                    'autoXlFormat' => true,
+                    'export' => [
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => '_BLANK'
+                    ],
                 ],
-                'toolbar' => [
-                    'before' => '{pager} {toggleData} {export}'
-                ],
-                'autoXlFormat' => true,
-                'export' => [
-                    'fontAwesome' => true,
-                    'showConfirmAlert' => false,
-                    'target' => '_BLANK'
-                ],
-            ],
-            'options' => [
-                'id' => 'dynagrid-forecast',
-                'class' => User::hasPermission('export') ? '' : 'no-export'
-            ]
-        ]);
-        ?>
+                'options' => [
+                    'id' => 'dynagrid-forecast',
+                    'class' => User::hasPermission('export') ? '' : 'no-export'
+                ]
+            ]);
+            ?>
 
+        </div>
+    </div>
 </div>

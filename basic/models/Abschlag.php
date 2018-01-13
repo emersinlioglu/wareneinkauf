@@ -186,14 +186,17 @@ class Abschlag extends \yii\db\ActiveRecord
         $einheitstypAussenstellplatz = Einheitstyp::findOne(Einheitstyp::TYP_AUSSENSTELLPLATZ);
         $einheitstypKeller = Einheitstyp::findOne(Einheitstyp::TYP_KELLER);
 
+        $kaufpreisabrechnungKaufvertragInProzent = number_format($this->kaufvertrag_prozent, 2, ',', '.');
+        $kaufpreisabrechnungKaufvertragInProzent = str_replace(',00', '', $kaufpreisabrechnungKaufvertragInProzent);
+
         $meilensteine = $this->getMeilensteineHtml();
 
         $replaceData = [
             '[projekt-name]' => $projekt->name,
-            '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
+            '[projekt-strasse]' => $projekt->strasse . ' ' . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,
             '[wohnung-nr]' => $datenblatt->haus->tenummer,
-            '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => number_format($this->kaufvertrag_prozent, 2, ',', '.'),
+            '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => $kaufpreisabrechnungKaufvertragInProzent,
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
@@ -209,6 +212,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
             '[tenummer-stellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ),
+            '[tenummer-stellplatz-2]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_STELLPLATZ, 2),
             '[tenummer-lagerraum]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_LAGERRAUM),
             '[tenummer-garage]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_GARAGE),
             '[tenummer-aussenstellplatz]' => $datenblatt->haus->getTenummerForEinheitstyp(Einheitstyp::TYP_AUSSENSTELLPLATZ),
@@ -219,6 +223,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
             '[aktuelles-datum]' => date('d.m.Y'),
+            '[offene-posten]' => Yii::$app->formatter->asDecimal($datenblatt->getOffenePosten(), 2),
             '[meilensteine]' => $meilensteine,
         ];
 

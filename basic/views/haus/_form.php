@@ -108,7 +108,7 @@ $this->registerJs('
                 <th style="width: 5%;">Zimmer</th>
                 <th style="width: 5%;">ME-Anteil</th>
                 <th style="width: 5%;">Wohnfläche</th>
-                <th style="width: 10%;">Kaufpreis</th>
+<!--                <th style="width: 10%;">Kaufpreis</th>-->
                 <th style="width: 10%;">Forecast</th>
                 <th style="width: 10%;">Verkaufspreis</th>
                 <th style="width: 15%;">Begründung</th>
@@ -152,22 +152,17 @@ $this->registerJs('
                         ]);
                     ?>
                 </td>
-                <td><?=
-                    $form->field($modelTeilieigentum, 'kaufpreis')
-//                        ->textInput(['name' => "Teileigentumseinheiten[$key][kaufpreis]"])
-                        ->widget(MaskMoney::classname(), [
-                            'options' => [
-                                'id' => $key . '-kaufpreis-id',
-                                'name' => "Teileigentumseinheiten[$key][kaufpreis]",
-                            ],
-//                            'pluginOptions' => [
-//                                'suffix' => ' €',
-//                                'thousands' => ',',
-//                                'decimal' => '.',
+<!--                <td>-->
+<!--                    --><?php
+//                    echo $form->field($modelTeilieigentum, 'kaufpreis')
+//                        ->widget(MaskMoney::classname(), [
+//                            'options' => [
+//                                'id' => $key . '-kaufpreis-id',
+//                                'name' => "Teileigentumseinheiten[$key][kaufpreis]",
 //                            ],
-                        ])
-                    ?>
-                </td>
+//                        ]);
+//                    ?>
+<!--                </td>-->
 
                 <td>
                     <?php

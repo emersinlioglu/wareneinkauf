@@ -56,14 +56,13 @@ use kartik\money\MaskMoney;
                         </tr>
                         <?php
 
-                        $kvSummeProzent = 0;
-                        $kvSummeBetrag = 0;
-                        $swSummeProzent = 0;
-                        $swSummeBetrag = 0;
-                        $kaufvertragProzentTotal  = 0;
-                        $kaufvertragBetragTotal   = 0;
-                        $sonderwunschProzentTotal = 0;
-                        $sonderwunschBetragTotal  = 0;
+                    $kvSummeProzent = .0;
+                    $swSummeProzent = .0;
+                    $swSummeBetrag = .0;
+                    $kaufvertragProzentTotal  = .0;
+                    $kaufvertragBetragTotal   = .0;
+                    $sonderwunschProzentTotal = .0;
+                    $sonderwunschBetragTotal  = .0;
 
                         foreach($modelDatenblatt->abschlags as $key => $modelAbschlag): ?>
                         <tr class="sonderwunsch">

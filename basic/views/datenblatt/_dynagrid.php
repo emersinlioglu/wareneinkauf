@@ -60,6 +60,11 @@ $gridColumns = [
     */
 
     [
+        'attribute' => 'abschlagKaufvertragSumme',
+        'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
+        'format' => ['currency'],
+    ],
+    [
         'attribute' => 'firma_name',
         'value'=>'firma.name',
         'label' => 'Firma'
@@ -133,9 +138,19 @@ $gridColumns = [
         'label' => 'Käufer-Handynummer'
     ],
     [
+        'value'=>'kaeufer.anrede2Label',
+        //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+        'label' => '2. Käufer Anrede'
+    ],
+    [
         'attribute' => 'kaeufer_vorname2',
         'value'=>'kaeufer.vorname2',
         'label' => '2. Käufer Vorname'
+    ],
+    [
+        'attribute' => 'kaeufer_titel2',
+        'value'=>'kaeufer.titel2',
+        'label' => '2. Käufer Titel'
     ],
     [
         'attribute' => 'kaeufer_nachname2',
@@ -195,6 +210,11 @@ $gridColumns = array_merge($gridColumns, [
         'value'=>'kaeufer.anredeLabel',
         //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
         'label' => 'Käufer Anrede'
+    ],
+    [
+        'attribute' => 'kaeufer_titel',
+        'value'=>'kaeufer.titel',
+        'label' => 'Käufer Titel'
     ],
     [
         'attribute' => 'kaeufer_vorname',
@@ -507,7 +527,7 @@ $this->registerJs(<<<JS
         $('.serienbrief').click(function(e) {
             e.preventDefault();
             
-            $('[name=\"selection[]\"]:checked').each(function(i, elm) {
+            $('[name="selection[]"]:checked').each(function(i, elm) {
                 
                 var input = $('<input>')
                     .attr('type', 'hidden')

@@ -28,10 +28,23 @@ class User extends \webvimark\modules\UserManagement\models\User {
         return $this->hasMany(DynagridProfile::className(), ['user_id' => 'id']);
     }
 
+    public static function getProjktsFromCurrentUser() {
+        $projekts = [];
+        $currentUser = self::getCurrentUser();
+        if ($currentUser) {
+            $user = User::findOne($currentUser->id);
+            $projekts = $user->projekts;
+        }
+        return $projekts;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getDynagridProfiles() {
+        return $this->hasMany(DynagridProfile::className(), ['user_id' => 'id']);
+    }
+
     public function getQueryBuilderProfiles() {
         return $this->hasMany(QueryBuilderProfile::className(), ['user_id' => 'id']);
     }

@@ -6,6 +6,7 @@ use app\models\AbschlagMeilenstein;
 use app\models\DynagridProfile;
 use app\models\Haus;
 use app\models\Kunde;
+use app\models\Projekt;
 use app\models\Meilenstein;
 use app\models\Projekt;
 use app\models\QueryBuilderProfile;
@@ -32,7 +33,7 @@ use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
 use webvimark\modules\UserManagement\models\User;
 
-use kartik\dynagrid\DynaGridStore;
+
 
 
 /**
@@ -432,7 +433,7 @@ class DatenblattController extends Controller
         /* @var $item \app\models\Abschlag */
         foreach ($modelDatenblatt->abschlags as $item) {
 
-            $zeilenSumme = 0;
+            $zeilenSumme = .0;
             if ($item->kaufvertrag_angefordert) {
                 $zeilenSumme += ((float)$item->kaufvertrag_prozent * $kaufpreisTotal / 100);
             }

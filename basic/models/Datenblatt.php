@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Faker\Provider\DateTime;
 use Yii;
 
 /**
@@ -283,9 +282,9 @@ class Datenblatt extends \yii\db\ActiveRecord
 
             'beurkundung_am' => Yii::t('app', 'Beurkundung am'),
             'verbindliche_fertigstellung' => Yii::t('app', 'Verbindliche Fertigstellung'),
-            'uebergang_bnl' => Yii::t('app', 'Lasten'),
-            'abnahme_se' => Yii::t('app', 'Abnahme Sondereigentum / Abnahme  '),
-            'abnahme_ge' => Yii::t('app', 'Gemeinschaftseigentum / Übergang Besitz Nutzen'),
+            'uebergang_bnl' => Yii::t('app', 'Übergang Besitz Nutzen Lasten'),
+            'abnahme_se' => Yii::t('app', 'Abnahme Sondereigentum'),
+            'abnahme_ge' => Yii::t('app', 'Abnahme Gemeinschaftseigentum'),
             'auflassung' => Yii::t('app', 'Auflassung'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
             'sap_debitor_nr' => Yii::t('app', 'SAP-Debitor Nr.'),
@@ -394,7 +393,7 @@ class Datenblatt extends \yii\db\ActiveRecord
         return implode('/ ', $teNummers);
     }
 
-    public function getSonderwunschSumme() {
+    public function getSonderwunschAngebotSumme() {
 
         $total = 0;
         foreach ($this->sonderwunsches as $sonderwunsch) {
@@ -823,6 +822,14 @@ class Datenblatt extends \yii\db\ActiveRecord
 //            }
         }
 
+    }
+
+    public function getAbschlagKaufvertragSumme() {
+        $kaufvertragSumme = .0;
+        foreach($this->abschlags as $abschlag) {
+            $kaufvertragSumme += (float) $abschlag->kaufvertrag_betrag;
+        }
+        return $kaufvertragSumme;
     }
 
 }

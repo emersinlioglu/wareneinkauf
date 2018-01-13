@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php  echo $this->render('_dynagrid', [
-        'dataProvider' => $dataProvider, 
+        'dataProvider' => $dataProvider,
         'searchModel' => $searchModel,
         'maxCountTEEinheits' => $maxCountTEEinheits,
         'maxCountSonderwunsches' => $maxCountSonderwunsches,
