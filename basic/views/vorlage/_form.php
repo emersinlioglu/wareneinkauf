@@ -36,6 +36,7 @@ $this->registerJs('
                     { text: "[wohnung-nr]", value: "[wohnung-nr]" },
                     { text: "[kaufpreisabrechnung-kaufvertrag-in-prozent]", value: "[kaufpreisabrechnung-kaufvertrag-in-prozent]" },
                     { text: "[kaufpreisabrechnung-kaufvertrag-betrag]", value: "[kaufpreisabrechnung-kaufvertrag-betrag]" },
+                    { text: "[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]", value: "[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]" },
                     { text: "[erstell-datum]", value: "[erstell-datum]" },
                     { text: "[abschlag-nr]", value: "[abschlag-nr]" },
                     { text: "[debitor-nr]", value: "[debitor-nr]" },

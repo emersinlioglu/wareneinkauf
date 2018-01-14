@@ -105,7 +105,8 @@ $config = [
         
     ],
     'components' => [
-        'formatter' => [ 
+        'formatter' => [
+            'class' => '\app\models\CustomFormatter',
             //'dateFormat' => 'dd.mm.yyyy', 
             'dateFormat' => 'php:d.m.Y',
             'datetimeFormat' => 'php:d.m.Y H:i:s',
