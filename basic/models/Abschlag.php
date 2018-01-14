@@ -200,7 +200,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[wohnung-nr]' => $datenblatt->haus->tenummer,
             '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => $kaufpreisabrechnungKaufvertragInProzent,
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
-            '[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]' => Yii::$app->formatter->number2text(round($this->kaufvertrag_betrag)),
+            '[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]' => Yii::$app->formatter->number2text(round($this->kaufvertrag_betrag, 2)),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
             '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
