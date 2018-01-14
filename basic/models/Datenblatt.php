@@ -654,6 +654,52 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $result;
     }
 
+    public function getKaeuferDaten() {
+        $kaeuferDaten = array();
+        $kaeufer = $this->kaeufer;
+        if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
+            $kaeuferDaten[] = [
+                'anrede' => $kaeufer->anrede,
+                'vorname' => $kaeufer->vorname,
+                'nachname' => $kaeufer->nachname
+            ];
+        }
+        if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
+            $kaeuferDaten[] = [
+                'anrede' => $kaeufer->anrede2,
+                'vorname' => $kaeufer->vorname2,
+                'nachname' => $kaeufer->nachname2
+            ];
+        }
+        if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
+            $kaeuferDaten = array_reverse($kaeuferDaten);
+        }
+        return $kaeuferDaten;
+    }
+
+    public function getBriefanrede() {
+        return 'Sehr geehrte Damen und Herren,<br>';
+    }
+    public function getPersoenlicheBriefanrede() {
+        //Sehr geehrte Frau XXX,
+        //Sehr geehrter Herr XXX,
+        //Sehr geehrte Frau XXX, sehr geehrter Herr XXX,
+        //Sehr geehrter Herr XXX, sehr geehrter Herr XXX
+        //Sehr geehrte Frau XXX, sehr geehrter Frau XXX,
+
+        $persoenlicheBriefanrede = '';
+        foreach ($this->getKaeuferDaten() as $key => $data) {
+            $anredeSatz = $data['anrede'] == 1 ? 'sehr geehrte Frau' : 'sehr geehrter Herr';
+            if ($key == 0) {
+                $anredeSatz = ucfirst($anredeSatz);
+            }
+            $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['vorname'] . ' ' . $data['nachname'] . ', ';
+        }
+        $persoenlicheBriefanrede .= '<br>';
+
+        return $persoenlicheBriefanrede;
+    }
+
     /**
      * @return array
      */
@@ -701,6 +747,8 @@ class Datenblatt extends \yii\db\ActiveRecord
 
 
         $replaceData = [
+            '[briefanrede]' => $this->getBriefanrede(),
+            '[persoenliche-briefanrede]' => $this->getPersoenlicheBriefanrede(),
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,

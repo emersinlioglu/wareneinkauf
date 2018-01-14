@@ -192,6 +192,8 @@ class Abschlag extends \yii\db\ActiveRecord
         $meilensteine = $this->getMeilensteineHtml();
 
         $replaceData = [
+            '[briefanrede]' => $datenblatt->getBriefanrede(),
+            '[persoenliche-briefanrede]' => $datenblatt->getPersoenlicheBriefanrede(),
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . ' ' . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,

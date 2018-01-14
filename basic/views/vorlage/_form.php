@@ -28,6 +28,8 @@ $this->registerJs('
                     editor.insertContent(this.value());
                 },
                 values: [
+                    { text: "[briefanrede]", value: "[briefanrede]" },
+                    { text: "[persoenliche-briefanrede]", value: "[persoenliche-briefanrede]" },
                     { text: "[projekt-name]", value: "[projekt-name]" },
                     { text: "[projekt-strasse]", value: "[projekt-strasse]" },
                     { text: "[projekt-ort]", value: "[projekt-ort]" },
