@@ -19,7 +19,7 @@ $lTenner = array('', '', 'zwanzig', 'dreißig', 'vierzig',
 
 /* Die Gruppen-Suffixe. */
 $lGroupSuffix = array(array('s', ''),
-    array('tausend ', 'tausend '),
+    array('tausend ', 'tausend'),
     array('e Million ', ' Millionen '),
     array('e Milliarde ', ' Milliarden '),
     array('e Billion ', ' Billionen '),
