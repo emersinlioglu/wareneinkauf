@@ -218,20 +218,14 @@ class AbschlagController extends Controller
 
     public function actionDownloadAlsPdf()
     {
-        $abschlagNr = Yii::$app->request->getQueryParam('abschlag', null);
-//        $vorlageId = Yii::$app->request->getQueryParam('vorlage', null);
-        $datenblattIds = Yii::$app->request->getQueryParam('datenblatt', []);
+        $abschlagNr = Yii::$app->request->get('abschlag', null);
+        $datenblattIds = Yii::$app->request->get('datenblatt', []);
         $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
 
         if ($abschlagNr == '') {
             echo "Bitte wählen Sie einen Abschlag";
             return;
         }
-
-//        if (!$vorlageId) {
-//            echo "Bitte wählen Sie eine Vorlage";
-//            return;
-//        }
 
         $pdfContents = [];
         /** @var Datenblatt $datenblatt */
@@ -256,6 +250,86 @@ class AbschlagController extends Controller
         );
 
         return $this->_createPdf($html);
+    }
+
+    public function actionExportPlatzhalter() {
+
+        $abschlagNr = Yii::$app->request->get('abschlag', null);
+        $datenblattIds = Yii::$app->request->get('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        if ($abschlagNr == '') {
+            echo "Bitte wählen Sie einen Abschlag";
+            return;
+        }
+
+        $data = [];
+        $platzhalterNamen = [];
+        if (count($datenblatts) > 0) {
+            $datenblatt = $datenblatts[0];
+            $abschlag = $datenblatt->abschlags[$abschlagNr];
+            if (isset($datenblatt->abschlags[$abschlagNr])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr];
+                $text = $abschlag->vorlage ? $abschlag->vorlage->text : '';
+                preg_match_all("/\[[a-zA-Z-]*\]/", $text, $platzhalterNamen);
+                if (count($platzhalterNamen) > 0) {
+                    $platzhalterNamen = $platzhalterNamen[0];
+                } else {
+                    $platzhalterNamen = [];
+                }
+            }
+        }
+        $data[] = $platzhalterNamen;
+
+        /** @var Datenblatt $datenblatt */
+        foreach($datenblatts as $datenblatt) {
+
+            if (isset($datenblatt->abschlags[$abschlagNr])) {
+                $abschlag = $datenblatt->abschlags[$abschlagNr];
+
+                $rowData = [];
+                $replaceData = $abschlag->getReplaceData();
+                foreach ($platzhalterNamen as $platzhalterName) {
+                    if (isset($replaceData[$platzhalterName])) {
+                        $rowData[$platzhalterName] = $replaceData[$platzhalterName];
+                    }
+                }
+                $data[] = $rowData;
+            }
+        }
+
+        return $this->array_to_csv_download($data, 'platzhalter.csv');
+    }
+
+    function array_to_csv_download($array, $filename = "export.csv", $delimiter=";") {
+        // open raw memory as file so no temp files needed, you might run out of memory though
+        $f = fopen('php://memory', 'w');
+        fprintf($f, chr(0xEF).chr(0xBB).chr(0xBF));
+        // loop over the input array
+        foreach ($array as $line) {
+            // generate csv lines from the inner arrays
+            fputcsv($f, $line, $delimiter);
+        }
+        // reset the file pointer to the start of the file
+        rewind($f);
+
+//        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+//        header("Cache-Control: post-check=0, pre-check=0", false);
+//        header("Pragma: no-cache");
+        header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+        header("Connection: close");
+
+
+        // tell the browser it's going to be a csv file
+        header('Content-Type: application/csv; charset=UTF-8');
+        // tell the browser we want to save it instead of displaying it
+        header('Content-Disposition: attachment; filename="'.$filename.'";');
+        // make php send the generated csv lines to the browser
+        fpassthru($f);
     }
 
     public function actionDownloadSonderwunschAlsPdf()
