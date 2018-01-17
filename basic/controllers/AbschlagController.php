@@ -277,6 +277,8 @@ class AbschlagController extends Controller
                 } else {
                     $platzhalterNamen = [];
                 }
+
+                $platzhalterNamen = array_unique($platzhalterNamen);
             }
         }
         $data[] = $platzhalterNamen;
@@ -292,6 +294,8 @@ class AbschlagController extends Controller
                 foreach ($platzhalterNamen as $platzhalterName) {
                     if (isset($replaceData[$platzhalterName])) {
                         $rowData[$platzhalterName] = $replaceData[$platzhalterName];
+                    } else {
+                        $rowData[$platzhalterName] = '';
                     }
                 }
                 $data[] = $rowData;
