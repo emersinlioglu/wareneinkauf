@@ -104,7 +104,10 @@ class QueryBuilderProfileController extends Controller
         var_dump($model->load(Yii::$app->request->post()));
         var_dump($model->errors);
         var_dump($model->save());
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (isset($_POST['reset'])) {
+            QueryBuilderProfile::updateAll(['aktive' => 0]);
+            return $this->redirect($_SERVER['HTTP_REFERER']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect($_SERVER['HTTP_REFERER']);
         } else {
             return $this->render('update', [
@@ -134,16 +137,20 @@ class QueryBuilderProfileController extends Controller
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function actionSetActive($id)
+    public function actionSetActive($id = '')
     {
-        $model = $this->findModel($id);
+        $model = QueryBuilderProfile::findOne($id);
 
-        foreach ($model->user->queryBuilderProfiles as $profile) {
-            $profile->aktive = 0;
-            $profile->save();
+        if ($model) {
+            foreach ($model->user->queryBuilderProfiles as $profile) {
+                $profile->aktive = 0;
+                $profile->save();
+            }
+            $model->aktive = 1;
+            $model->save();
+        } else {
+            QueryBuilderProfile::updateAll(['aktive' => 0]);
         }
-        $model->aktive = 1;
-        $model->save();
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }

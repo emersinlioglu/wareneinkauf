@@ -79,7 +79,7 @@ $this->registerJs("
                 'queryBuilderProfileId',
                 QueryBuilderProfile::getAktiveProfileId(),
                 ArrayHelper::map(QueryBuilderProfile::getProfilesForCurrentUser(), 'id', 'name'),
-                ['class' => "form-control"]
+                ['class' => "form-control", 'prompt' => 'Bitte wählen']
             )
             ?>
 
@@ -105,7 +105,7 @@ $this->registerJs("
                         <?= $form->field($queryBuilderProfileModel, 'filter_rules')->hiddenInput() ?>
                     </div>
                     <?= Html::submitButton('Speichern', ['class' => 'btn btn-success']); ?>
-                    <?= Html::resetButton('Zurücksetzen', ['class' => 'btn btn-danger']); ?>
+                    <?= Html::submitButton('Zurücksetzen', ['class' => 'btn btn-danger', 'name' => 'reset']); ?>
                 <?php ActiveForm::end(); ?>
             <?php endif; ?>
         </div>

@@ -20,9 +20,10 @@ var QueryBuilderProfileForm = function (filters, rules) {
         });
         _.builder.queryBuilder('setRules', _rules);
 
-        _.form.find('[type=\"reset\"]').on('click', function(){
-            _.builder.queryBuilder('reset');
-        });
+        // _.form.find('[type=\"reset\"]').on('click', function(){
+        //     _.builder.queryBuilder('reset');
+        // });
+
         _.form.on('submit', function(){
             var rules = _.builder.queryBuilder('getRules');
             var input = $(this).find("input[name='QueryBuilderProfile[filter_rules]']");
