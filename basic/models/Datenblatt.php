@@ -880,4 +880,15 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $kaufvertragSumme;
     }
 
+    public function getAbschlagSonderwunschSummeAngefordert() {
+        $summe = .0;
+        /** @var Abschlag $abschlag */
+        foreach($this->abschlags as $abschlag) {
+//            if ($abschlag->sonderwunsch_angefordert) {
+            $summe += (float) $abschlag->sonderwunsch_betrag;
+//            }
+        }
+        return $summe;
+    }
+
 }

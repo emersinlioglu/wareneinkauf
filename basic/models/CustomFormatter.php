@@ -141,4 +141,10 @@ class CustomFormatter extends \yii\i18n\Formatter
         return num2text($pNumber);
     }
 
+    public function asCommercialPercent($value) {
+        $value = number_format($value, 2, ',', '.');
+        $value = str_replace(',00', '', $value);
+        return $value;
+    }
+
 }
