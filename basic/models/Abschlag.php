@@ -23,6 +23,7 @@ use Yii;
  *
  * @property Datenblatt $datenblatt
  * @property Vorlage $vorlage
+ * @property AbschlagMeilensteins[] $abschlagMeilensteins
  */
 class Abschlag extends \yii\db\ActiveRecord
 {
@@ -85,6 +86,32 @@ class Abschlag extends \yii\db\ActiveRecord
         return $this->hasOne(Vorlage::className(), ['id' => 'vorlage_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbschlagMeilensteins()
+    {
+        return $this->hasMany(AbschlagMeilenstein::className(), ['abschlag_id' => 'id']);
+    }
+
+    public function getZuordnungenAsString() {
+        $ids = [];
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            $ids[] = $abschlagMeilenstein->meilenstein_id;
+        }
+        return implode(',', $ids);
+    }
+
+    public function updateKaufvertragProzent() {
+        $kaufvertragProzent = .0;
+        /** @var AbschlagMeilenstein $abschlagMeilenstein */
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            $kaufvertragProzent += $abschlagMeilenstein->meilenstein->kaufvertrag_prozent;
+        }
+        $this->kaufvertrag_prozent = $kaufvertragProzent;
+        return $this->update();
+    }
+
     public function getPdfHeader()
     {
         $projekt = $this->datenblatt->projekt;
@@ -95,6 +122,21 @@ class Abschlag extends \yii\db\ActiveRecord
     {
         $projekt = $this->datenblatt->projekt;
         return $projekt->mail_footer;
+    }
+
+    public function getMeilensteineHtml() {
+        $result = '';
+        /** @var AbschlagMeilenstein $abschlagMeilenstein */
+        foreach ($this->abschlagMeilensteins as $abschlagMeilenstein) {
+            /** @var Meilenstein $meilenstein */
+            $meilenstein = $abschlagMeilenstein->meilenstein;
+            $result .= sprintf(
+                '%1$s %% %2$s<br>',
+                Yii::$app->formatter->asDecimal($meilenstein->kaufvertrag_prozent,2),
+                $meilenstein->name
+            );
+        }
+        return $result;
     }
 
     public function getReplaceData()
@@ -147,6 +189,8 @@ class Abschlag extends \yii\db\ActiveRecord
         $kaufpreisabrechnungKaufvertragInProzent = number_format($this->kaufvertrag_prozent, 2, ',', '.');
         $kaufpreisabrechnungKaufvertragInProzent = str_replace(',00', '', $kaufpreisabrechnungKaufvertragInProzent);
 
+        $meilensteine = $this->getMeilensteineHtml();
+
         $replaceData = [
             '[briefanrede]' => $datenblatt->getBriefanrede(),
             '[persoenliche-briefanrede]' => $datenblatt->getPersoenlicheBriefanrede(),
@@ -186,7 +230,8 @@ class Abschlag extends \yii\db\ActiveRecord
             '[sonderwunsch-prozent]' => Yii::$app->formatter->asCommercialPercent($abschlag->sonderwunsch_prozent),
             '[sonderwunsch-betrag]' => number_format($abschlag->sonderwunsch_betrag, 2, ',', '.'),
             '[sonderwuensche-gesamtbetrag]' => number_format($datenblatt->getAbschlagSonderwunschSummeAngefordert(), 2, ',', '.'),
-            '[abschlag-sonderwunsch-betrag]' => number_format($abschlag->kaufvertrag_betrag + $abschlag->sonderwunsch_betrag, 2, ',', '.')
+            '[abschlag-sonderwunsch-betrag]' => number_format($abschlag->kaufvertrag_betrag + $abschlag->sonderwunsch_betrag, 2, ',', '.'),
+            '[meilensteine]' => $meilensteine,
         ];
 
         return $replaceData;
