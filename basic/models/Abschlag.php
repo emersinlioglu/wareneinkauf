@@ -97,7 +97,7 @@ class Abschlag extends \yii\db\ActiveRecord
         return $projekt->mail_footer;
     }
 
-    public function getReplaceData() {
+    public function getReplaceData()
     {
         $text = $this->vorlage ? $this->vorlage->text : '';
 
