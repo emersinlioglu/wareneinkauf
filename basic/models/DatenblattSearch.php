@@ -256,6 +256,17 @@ class DatenblattSearch extends Datenblatt
             ]
         ]);
 
+        if (in_array('all', $_GET)) {
+            $dataProvider->pagination = false;
+        }
+
+//        // toggle display all
+//        $toggleDataKey = '_tog' . hash('crc32', 'DatenblattSearch');
+//        $isShowAll = ArrayHelper::getValue($_GET, $toggleDataKey) === 'all';
+//        if ($isShowAll) {
+//            $dataProvider->pagination = false;
+//        }
+
         $query->where(['projekt.name' => $projektName]);
 
         if ($rules) {
