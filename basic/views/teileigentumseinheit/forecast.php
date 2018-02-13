@@ -25,6 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $columns = [
                 ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
+                [
+                    'attribute' => 'projekt_name',
+                    'value' => 'haus.projekt.name',
+                    'label' => 'Projekt'
+                ],
                 'hausnr',
                 [
                     'attribute' => 'einheitstyp_id',
