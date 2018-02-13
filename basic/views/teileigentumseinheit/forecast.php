@@ -21,70 +21,71 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel panel-default">
         <div class="panel-body">
 
-        <?php
+            <?php
 
-        $columns = [
-            ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
-            [
-                'attribute' => 'einheitstyp_id',
-                'value' => 'einheitstyp.name',
-                'label' => 'Einheitstyp',
-                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
+            $columns = [
+                ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe',],
+                'hausnr',
+                [
+                    'attribute' => 'einheitstyp_id',
+                    'value' => 'einheitstyp.name',
+                    'label' => 'Einheitstyp',
+                    'filter' => \yii\helpers\ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
 
-            ],
-            'te_nummer',
-            [
-                'class'=>'kartik\grid\BooleanColumn',
-                'attribute'=>'gefoerdert',
-                'value'=>'gefoerdert',
-                'label' => 'Gefördert',
-            ],
-            [
-                'attribute' => 'geschoss',
-                'width'=>'50px',
-            ],
-            [
-                'attribute' => 'zimmer',
-                'width'=>'50px',
-            ],
-            [
-                'attribute' => 'me_anteil',
-                'contentOptions' => ['class' => 'text-right'],
-//                'format'=>['decimal',2]
-            ],
-            [
-                'attribute' => 'wohnflaeche',
-                'format'=>['decimal',2],
-                'contentOptions' => ['class' => 'text-right'],
-            ],
-            [
-                'attribute' => 'kaufpreis',
-                'pageSummary'=>true,
-                'format'=>['decimal',2],
-                'contentOptions' => ['class' => 'text-right'],
-            ],
-            [
-                'attribute' => 'kp_einheit',
-                'format'=>['decimal',2],
-                'contentOptions' => ['class' => 'text-right'],
-            ],
-            [
-                'attribute' => 'forecast_preis',
-                'pageSummary'=>true,
-                'format'=>['decimal',2],
-                'contentOptions' => ['class' => 'text-right'],
-            ],
-            [
-                'attribute' => 'verkaufspreis',
-                'pageSummary'=>true,
-                'format'=>['decimal',2],
-                'contentOptions' => ['class' => 'text-right'],
-            ],
-            [
-                'attribute' => 'verkaufspreis_begruendung',
-                'width'=>'250px',
-            ],
-        ];
+                ],
+                'te_nummer',
+                [
+                    'class'=>'kartik\grid\BooleanColumn',
+                    'attribute'=>'gefoerdert',
+                    'value'=>'gefoerdert',
+                    'label' => 'Gefördert',
+                ],
+                [
+                    'attribute' => 'geschoss',
+                    'width'=>'50px',
+                ],
+                [
+                    'attribute' => 'zimmer',
+                    'width'=>'50px',
+                ],
+                [
+                    'attribute' => 'me_anteil',
+                    'contentOptions' => ['class' => 'text-right'],
+        //                'format'=>['decimal',2]
+                ],
+                [
+                    'attribute' => 'wohnflaeche',
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'kaufpreis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'kp_einheit',
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'forecast_preis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'verkaufspreis',
+                    'pageSummary'=>true,
+                    'format'=>['decimal',2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'verkaufspreis_begruendung',
+                    'width'=>'250px',
+                ],
+            ];
 
             echo DynaGrid::widget([
                 'columns' => $columns,

@@ -101,7 +101,8 @@ $this->registerJs('
 
         <table class="table no-label">
             <tr>
-                <th style="width: 10%;">Typ</th>
+                <th style="width: 10%;">Hausnr.</th>
+                <th style="width: 10%;">TE-Typ</th>
                 <th style="width: 6%;">TE-Nummer</th>
                 <th style="width: 6%;">Gefördert</th>
                 <th style="width: 5%;">Geschoss</th>
@@ -124,6 +125,7 @@ $this->registerJs('
             </tr>
         <?php foreach($model->teileigentumseinheits as $key => $modelTeilieigentum): ?>
             <tr>
+                <td><?= $form->field($modelTeilieigentum, 'hausnr')->textInput(["maxlength" => true, 'name' => "Teileigentumseinheiten[$key][hausnr]"]) ?></td>
                 <td>
                     <span class="hide">
                         <?= $form->field($modelTeilieigentum, 'id')

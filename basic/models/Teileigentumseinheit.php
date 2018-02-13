@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $id
  * @property integer $haus_id
+ * @property string $hausnr
  * @property integer $einheitstyp_id
  * @property integer $projekt_id
  * @property string $te_nummer
@@ -44,13 +45,12 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[
-                'te_nummer',
-                'einheitstyp_id'], 'required'],
+            [['hausnr',], 'default'],
+            [['te_nummer', 'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
-            [['geschoss', 'zimmer', 'me_anteil', ], 'string', 'max' => 45],
+            [['hausnr', 'geschoss', 'zimmer', 'me_anteil'], 'string', 'max' => 45],
             [['forecast_preis', 'verkaufspreis', 'verkaufspreis_begruendung'], 'checkRequirement'],
         ];
     }

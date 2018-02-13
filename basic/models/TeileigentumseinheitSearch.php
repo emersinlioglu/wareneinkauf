@@ -19,7 +19,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     {
         return [
             [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
+            [['hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
             [['kaufpreis', 'kp_einheit', 'forecast_preis', 'verkaufspreis'], 'number'],
         ];
     }
@@ -65,7 +65,9 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'kp_einheit' => $this->kp_einheit,
         ]);
 
-        $query->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
+        $query
+            ->andFilterWhere(['like', 'hausnr', $this->hausnr])
+            ->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
             ->andFilterWhere(['like', 'geschoss', $this->geschoss])
             ->andFilterWhere(['like', 'zimmer', $this->zimmer])
             ->andFilterWhere(['like', 'me_anteil', $this->me_anteil])
@@ -111,7 +113,9 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
 
         $query->andWhere('forecast_preis <> verkaufspreis');
 
-        $query->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
+        $query
+            ->andFilterWhere(['like', 'hausnr', $this->hausnr])
+            ->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
             ->andFilterWhere(['like', 'geschoss', $this->geschoss])
             ->andFilterWhere(['like', 'zimmer', $this->zimmer])
             ->andFilterWhere(['like', 'me_anteil', $this->me_anteil])

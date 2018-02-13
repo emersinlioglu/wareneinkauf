@@ -30,7 +30,8 @@
                 <table class="table te-einheiten">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Hausnr.</th>
+                            <th>TE-Typ</th>
                             <th>TE</th>
                             <th>gefördert</th>
                             <th>Geschoss</th>
@@ -50,6 +51,7 @@
                             <tr
                                 data-prefix-debitor-nr="<?= $teileigentumseinheit->einheitstyp->prefix_debitor_nr ?>"
                                 data-te-nummer="<?= $teileigentumseinheit->te_nummer ?>">
+                                <td><?= $teileigentumseinheit->hausnr ?></td>
                                 <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
                                 <td><?= $teileigentumseinheit->te_nummer ?></td>
                                 <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
