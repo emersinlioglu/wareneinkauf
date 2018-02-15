@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php /** @var $te \app\models\Teileigentumseinheit */ ?>
                                 <?php foreach ($fehlgeschlageneTeileigentumseinheiten as $te): ?>
                                     <tr>
-                                        <td><?= $te->hausnr ?> - <?= $te->hausnr ?></td>
+                                        <td><?= $te->hausnr ?></td>
                                         <td><?= $te->te_nummer ?></td>
                                         <td><?= $te->geschoss ?></td>
                                         <td><?= $te->zimmer ?></td>

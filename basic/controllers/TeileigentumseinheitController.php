@@ -187,7 +187,7 @@ class TeileigentumseinheitController extends Controller
                         //* @property double $verkaufspreis
                         //* @property string $verkaufspreis_begruendung
 
-                        $teNummer = strval($sheet->getCellByColumnAndRow(1, $row)->getValue());
+                        $teNummer = trim(strval($sheet->getCellByColumnAndRow(1, $row)->getValue()));
                         $teileigentumseinheit = Teileigentumseinheit::findOne([
                             'te_nummer' => $teNummer
                         ]);
@@ -228,6 +228,10 @@ class TeileigentumseinheitController extends Controller
                         $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
                         $wohflaeche = $sheet->getCellByColumnAndRow(6, $row)->getValue();
                         $teileigentumseinheit->wohnflaeche = floatval($wohflaeche);
+
+                        $kpEinheit = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue())));
+                        $teileigentumseinheit->kp_einheit = round($kpEinheit, 2);
+
                         $teileigentumseinheit->kaufpreis =
                             $teileigentumseinheit->verkaufspreis =
                             $teileigentumseinheit->forecast_preis = round(floatval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue()), 2);
