@@ -52,16 +52,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             )
                             ?>
                         </div>
-                        <div class="form-group field-customer_id">
-                            <label class="control-label" for="sim-card_number">Einheitstyp</label>
-                            <?= Html::dropDownList(
-                                'einheitstyp_id',
-                                $einheitstyp_id,
-                                ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
-                                ['prompt' => 'Bitte wählen', 'class' => "form-control"]
-                            )
-                            ?>
-                        </div>
+<!--                        <div class="form-group field-customer_id">-->
+<!--                            <label class="control-label" for="sim-card_number">Einheitstyp</label>-->
+<!--                            --><?php //echo Html::dropDownList(
+//                                'einheitstyp_id',
+//                                $einheitstyp_id,
+//                                ArrayHelper::map(\app\models\Einheitstyp::find()->all(), 'id', 'name'),
+//                                ['prompt' => 'Bitte wählen', 'class' => "form-control"]
+//                            )
+//                            ?>
+<!--                        </div>-->
                         <div class="form-group field-numbers">
                             <label class="control-label" for="sim-card_number">Datei</label>
                             <?= Html::fileInput('file', null, ['class' => 'form-control']) ?>
@@ -77,18 +77,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Hausnr.</th>
                                         <th>TE-Nummer</th>
                                         <th>Geschoss</th>
                                         <th>Zimmer</th>
                                         <th>Wohnfläche</th>
                                         <th>Kaufspreis</th>
                                         <th>ME-Anteil</th>
-                                        <th>Importiert</th>
+                                        <th>Valide</th>
                                     </tr>
                                 </thead>
                                 <?php /** @var $te \app\models\Teileigentumseinheit */ ?>
                                 <?php foreach ($fehlgeschlageneTeileigentumseinheiten as $te): ?>
                                     <tr>
+                                        <td><?= $te->hausnr ?> - <?= $te->hausnr ?></td>
                                         <td><?= $te->te_nummer ?></td>
                                         <td><?= $te->geschoss ?></td>
                                         <td><?= $te->zimmer ?></td>

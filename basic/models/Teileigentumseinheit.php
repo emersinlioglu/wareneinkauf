@@ -45,12 +45,11 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['hausnr',], 'default'],
             [['te_nummer', 'einheitstyp_id'], 'required'],
             [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis'], 'number'],
+            [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis', 'me_anteil'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
-            [['hausnr', 'geschoss', 'zimmer', 'me_anteil'], 'string', 'max' => 45],
+            [['hausnr', 'geschoss', 'zimmer'], 'string', 'max' => 45],
             [['forecast_preis', 'verkaufspreis', 'verkaufspreis_begruendung'], 'checkRequirement'],
         ];
     }

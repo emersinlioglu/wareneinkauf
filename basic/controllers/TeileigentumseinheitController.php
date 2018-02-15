@@ -143,14 +143,15 @@ class TeileigentumseinheitController extends Controller
             $einheitstyp = Einheitstyp::findOne($einheitstyp_id);
             $projekt = Projekt::findOne($projekt_id);
 
-            if (!$einheitstyp) {
-                $errors[] = 'Bitte einen Einheitstyp auswählen';
-            }
+//            if (!$einheitstyp) {
+//                $errors[] = 'Bitte einen Einheitstyp auswählen';
+//            }
             if (!$projekt) {
                 $errors[] = 'Bitte ein Projekt auswählen';
             }
 
-            if ($einheitstyp && $projekt) {
+//            if ($einheitstyp && $projekt) {
+            if ($projekt) {
 
                 // import card numbers file
                 if (isset($_FILES['file']) && !empty($_FILES['file']['tmp_name'])) {
@@ -166,6 +167,9 @@ class TeileigentumseinheitController extends Controller
 
                     $sheet = $objPHPExcel->getSheet(0);
                     $highestRow = $sheet->getHighestRow();
+                    $hausnr = null;
+
+                    $teileigentumseinheitenZumSpeichern = [];
 
                     for ($row = 2; $row <= $highestRow; $row++){
 
@@ -183,7 +187,7 @@ class TeileigentumseinheitController extends Controller
                         //* @property double $verkaufspreis
                         //* @property string $verkaufspreis_begruendung
 
-                        $teNummer = strval($sheet->getCellByColumnAndRow(0, $row)->getValue());
+                        $teNummer = strval($sheet->getCellByColumnAndRow(1, $row)->getValue());
                         $teileigentumseinheit = Teileigentumseinheit::findOne([
                             'te_nummer' => $teNummer
                         ]);
@@ -192,27 +196,48 @@ class TeileigentumseinheitController extends Controller
                             $teileigentumseinheit = new Teileigentumseinheit();
                         }
 
-                        if ($teileigentumseinheit->haus && $teileigentumseinheit->haus->hatDatenblattMitAngefodertemAbschlag) {
-                            $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
+                        if ($teileigentumseinheit->haus && $teileigentumseinheit->haus->hatDatenblattMitAngefodertemAbschlag()) {
+                            //$fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
                             continue;
                         }
 
-                        //gefoerdert //$teileigentumseinheit->gefoerdert = $sheet->getCellByColumnAndRow($row, ???)->getValue();
-                        //$teileigentumseinheit->verkuafpreis = $sheet->getCellByColumnAndRow($row, ????)->getValue();
-                        //haus //$teileigentumseinheit->???? = $sheet->getCellByColumnAndRow($row, ????)->getValue();
-                        $teileigentumseinheit->einheitstyp_id = $einheitstyp->id;
+                        $einheitstyp = Einheitstyp::findOne([
+                            'name' => strval($sheet->getCellByColumnAndRow(2, $row)->getValue())
+                        ]);
+
+                        switch($sheet->getCellByColumnAndRow($row, 3)->getValue()) {
+                            case 'JA':
+                                $teileigentumseinheit->gefoerdert = 1;
+                                break;
+                            case 'NEIN':
+                                $teileigentumseinheit->gefoerdert = 0;
+                                break;
+                        }
+
+                        $teileigentumseinheit->einheitstyp_id = $einheitstyp ? $einheitstyp->id : null;
+
+                        $newHausnr = trim(strval($sheet->getCellByColumnAndRow(0, $row)->getValue()));
+                        if (strlen($newHausnr) > 0) {
+                            $hausnr = $newHausnr;
+                        }
+                        $teileigentumseinheit->hausnr = (string) $hausnr;
+
                         $teileigentumseinheit->projekt_id = $projekt->id;
                         $teileigentumseinheit->te_nummer = $teNummer;
-                        $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(2, $row)->getValue());
-                        $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(3, $row)->getValue());
-                        $teileigentumseinheit->wohnflaeche = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
+                        $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
+                        $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
+                        $wohflaeche = $sheet->getCellByColumnAndRow(6, $row)->getValue();
+                        $teileigentumseinheit->wohnflaeche = floatval($wohflaeche);
                         $teileigentumseinheit->kaufpreis =
                             $teileigentumseinheit->verkaufspreis =
-                            $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
-                        $teileigentumseinheit->me_anteil =
-                            str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue()));
+                            $teileigentumseinheit->forecast_preis = round(floatval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue()), 2);
 
-                        if (!$teileigentumseinheit->validate() || !$teileigentumseinheit->save()) {
+                        $meAnteil = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(9, $row)->getValue())));
+                        $teileigentumseinheit->me_anteil = round($meAnteil, 2);
+
+                        $teileigentumseinheitenZumSpeichern[] = $teileigentumseinheit;
+
+                        if (!$teileigentumseinheit->validate()) {
                             $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
                         }
                     }
@@ -221,6 +246,9 @@ class TeileigentumseinheitController extends Controller
             }
 
             if (count($errors) + count($fehlgeschlageneTeileigentumseinheiten) == 0) {
+                foreach ($teileigentumseinheitenZumSpeichern as $te) {
+                    $te->save();
+                }
                 return $this->redirect(['haus/index']);
             }
         }
