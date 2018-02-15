@@ -34,7 +34,7 @@ $gridColumns = [
         'value'=>'firma.nr',
         'label' => 'Firmen Nr.'
     ],
-    
+
     [
         //'attribute' => 'haus_strasse',
         'value'=>'haus.strasse',
@@ -45,7 +45,7 @@ $gridColumns = [
         'value'=>'haus.hausnr',
         'label' => 'Haus Nr.'
     ],
-    
+
     [
         //'attribute' => 'haus_plz',
         'value'=>'haus.plz',
@@ -468,7 +468,7 @@ echo DynaGrid::widget([
             'position' => 'absolute',
         ],
         'dataProvider' => $dataProvider,
-//        'filterModel'  => $searchModel,
+        'filterModel'  => $searchModel,
         'panel'=>[
             'heading'=>'<h3 class="panel-title">Datenblätter</h3>',
             'before' => '{dynagridSort} {dynagrid} '

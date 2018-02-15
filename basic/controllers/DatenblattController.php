@@ -66,7 +66,7 @@ class DatenblattController extends Controller
 
         // new dataprovider
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
-        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektName);
+        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektName, Yii::$app->request->queryParams);
 
         $modelsToDelete = DatenblattSearch::findAll(['aktiv' => 0]);
         foreach ($modelsToDelete as $modelToDelete) {

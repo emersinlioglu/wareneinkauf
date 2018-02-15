@@ -245,7 +245,7 @@ class DatenblattSearch extends Datenblatt
      *
      * @return ActiveDataProvider
      */
-    public function searchByQueryBuilder($rules, $projektName)
+    public function searchByQueryBuilder($rules, $projektName, $params)
     {
         $query = Datenblatt::find();
         $query->joinWith(['haus', 'kaeufer', 'projekt', 'firma', 'haus.teileigentumseinheits']);
@@ -297,6 +297,8 @@ class DatenblattSearch extends Datenblatt
         //error_log(print_r($_GET, 1));
         //error_log(print_r($_POST, 1));
         //return $dataProvider
+
+        $this->load($params);
 
         $dataProvider->sort->attributes['haus_strasse'] = [
             'asc' => ['haus.strasse' => SORT_ASC],
@@ -369,6 +371,38 @@ class DatenblattSearch extends Datenblatt
             'asc' => [$teNummercolumn => SORT_ASC],
             'desc' => [$teNummercolumn => SORT_DESC],
         ];
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'firma_id' => $this->firma_id,
+            'projekt_id' => $this->projekt_id,
+            'haus_id' => $this->haus_id,
+            'nummer' => $this->nummer,
+            'kaeufer_id' => $this->kaeufer_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'besondere_regelungen_kaufvertrag', $this->besondere_regelungen_kaufvertrag])
+            ->andFilterWhere(['like', 'sap_debitor_nr', $this->sap_debitor_nr])
+            ->andFilterWhere(['like', 'intern_debitor_nr', $this->intern_debitor_nr])
+            ->andFilterWhere(['like', 'haus.strasse', $this->haus_strasse])
+            ->andFilterWhere(['like', 'haus.ort', $this->haus_ort])
+            ->andFilterWhere(['like', 'haus.hausnr', $this->haus_hausnr])
+            ->andFilterWhere(['like', 'haus.plz', $this->haus_plz])
+            ->andFilterWhere(['like', 'kaeufer.debitor_nr', $this->kaeufer_debitornr])
+            ->andFilterWhere(['like', 'kaeufer.email', $this->kaeufer_email])
+            ->andFilterWhere(['like', 'kaeufer.festnetz', $this->kaeufer_festnetz])
+            ->andFilterWhere(['like', 'kaeufer.handy', $this->kaeufer_handy])
+            ->andFilterWhere(['like', 'kaeufer.nachname', $this->kaeufer_nachname])
+            ->andFilterWhere(['like', 'kaeufer.vorname', $this->kaeufer_vorname])
+            ->andFilterWhere(['like', 'kaeufer.titel', $this->kaeufer_titel])
+            ->andFilterWhere(['like', 'kaeufer.titel2', $this->kaeufer_titel2])
+            ->andFilterWhere(['like', 'kaeufer.nachname2', $this->kaeufer_nachname2])
+            ->andFilterWhere(['like', 'kaeufer.vorname2', $this->kaeufer_vorname2])
+            ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])
+            ->andFilterWhere(['like', 'firma.name', $this->firma_name])
+            ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
+            ->andFilterWhere(['like', 'sonstige_anmerkungen', $this->sonstige_anmerkungen])
+            ->andFilterWhere(['like', 'te_nummer', $this->te_nummer]);
 
         $query->groupBy([
             'datenblatt.id'
