@@ -140,17 +140,11 @@ class TeileigentumseinheitController extends Controller
 
         if (Yii::$app->request->isPost) {
 
-            $einheitstyp = Einheitstyp::findOne($einheitstyp_id);
             $projekt = Projekt::findOne($projekt_id);
-
-//            if (!$einheitstyp) {
-//                $errors[] = 'Bitte einen Einheitstyp auswählen';
-//            }
             if (!$projekt) {
                 $errors[] = 'Bitte ein Projekt auswählen';
             }
 
-//            if ($einheitstyp && $projekt) {
             if ($projekt) {
 
                 // import card numbers file
@@ -173,23 +167,10 @@ class TeileigentumseinheitController extends Controller
 
                     for ($row = 2; $row <= $highestRow; $row++){
 
-                        //* @property integer $haus_id
-                        //* @property integer $einheitstyp_id
-                        //* @property string $te_nummer
-                        //* @property integer $gefoerdert
-                        //* @property string $geschoss
-                        //* @property string $zimmer
-                        //* @property string $me_anteil
-                        //* @property double $wohnflaeche
-                        //* @property double $kaufpreis
-                        //* @property double $kp_einheit
-                        //* @property double $forecast_preis
-                        //* @property double $verkaufspreis
-                        //* @property string $verkaufspreis_begruendung
-
                         $teNummer = trim(strval($sheet->getCellByColumnAndRow(1, $row)->getValue()));
                         $teileigentumseinheit = Teileigentumseinheit::findOne([
-                            'te_nummer' => $teNummer
+                            'te_nummer' => $teNummer,
+                            'projekt_id' => $projekt->id,
                         ]);
 
                         if (!$teileigentumseinheit) {
@@ -215,12 +196,7 @@ class TeileigentumseinheitController extends Controller
                         }
 
                         $teileigentumseinheit->einheitstyp_id = $einheitstyp ? $einheitstyp->id : null;
-
-                        $newHausnr = trim(strval($sheet->getCellByColumnAndRow(0, $row)->getValue()));
-                        if (strlen($newHausnr) > 0) {
-                            $hausnr = $newHausnr;
-                        }
-                        $teileigentumseinheit->hausnr = (string) $hausnr;
+                        $teileigentumseinheit->hausnr = trim(strval($sheet->getCellByColumnAndRow(0, $row)->getValue()));
 
                         $teileigentumseinheit->projekt_id = $projekt->id;
                         $teileigentumseinheit->te_nummer = $teNummer;
