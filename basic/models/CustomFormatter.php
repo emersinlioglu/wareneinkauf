@@ -73,6 +73,7 @@ function num2text_group($pNumber, $pGroupLevel = 0)
     /* Zahlengruppe dieser Runde bestimmen */
     $lGroupNumber = $pNumber % 1000;
 
+    $lResult = '';
     /* Zahl der Zahlengruppe ist Eins */
     if ($lGroupNumber == 1) {
         $lResult = $lNumeral[1] . $lGroupSuffix[$pGroupLevel][0]; // „eine Milliarde“
