@@ -31,7 +31,7 @@ class Haus extends \yii\db\ActiveRecord
 
     public static function statusOptions() {
         return [
-            Haus::STATUS_FREI=> 'Frei',
+            Haus::STATUS_FREI => 'Frei',
             Haus::STATUS_RESERVIERT => 'Reserviert',
             Haus::STATUS_VERKAUFT => 'Verkauft'
         ];

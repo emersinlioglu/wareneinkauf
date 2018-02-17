@@ -12,6 +12,11 @@ use app\models\Teileigentumseinheit;
  */
 class TeileigentumseinheitSearch extends Teileigentumseinheit
 {
+    public $firma_name;
+    public $firma_nr;
+    public $haus_status;
+    public $haus_rechnung_vertrieb;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +24,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     {
         return [
             [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
+            [['haus_rechnung_vertrieb', 'haus_status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
             [['kaufpreis', 'kp_einheit', 'forecast_preis', 'verkaufspreis'], 'number'],
         ];
     }
@@ -43,6 +48,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     public function search($params)
     {
         $query = Teileigentumseinheit::find();
+        $query->joinWith(['projekt', 'projekt.firma', 'haus']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,6 +62,23 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['firma_name'] = [
+            'asc' => ['firma.name' => SORT_ASC],
+            'desc' => ['firma.name' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['firma_nr'] = [
+            'asc' => ['firma.nr' => SORT_ASC],
+            'desc' => ['firma.nr' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['haus_status'] = [
+            'asc' => ['haus.status' => SORT_ASC],
+            'desc' => ['haus.status' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['haus_rechnung_vertrieb'] = [
+            'asc' => ['haus.rechnung_vertrieb' => SORT_ASC],
+            'desc' => ['haus.rechnung_vertrieb' => SORT_DESC],
+        ];
+
         $query->andFilterWhere([
             'id' => $this->id,
             'haus_id' => $this->haus_id,
@@ -66,6 +89,10 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
         ]);
 
         $query
+            ->andFilterWhere(['like', 'firma.name', $this->firma_name])
+            ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
+            ->andFilterWhere(['like', 'haus.status', $this->haus_status])
+            ->andFilterWhere(['like', 'haus.rechnung_vertrieb', $this->haus_rechnung_vertrieb])
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
             ->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
             ->andFilterWhere(['like', 'geschoss', $this->geschoss])
