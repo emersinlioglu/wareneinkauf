@@ -229,7 +229,7 @@ class TeileigentumseinheitController extends Controller
                 foreach ($teileigentumseinheitenZumSpeichern as $te) {
                     $te->save();
                 }
-                return $this->redirect(['haus/index']);
+                return $this->redirect(['teileigentumseinheit/index', ['TeileigentumseinheitSearch[projekt_name]' => $projekt->name]]);
             }
         }
 
