@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Datenblatt */
+/* @var $modelDatenblatt app\models\Datenblatt */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Datenblatt',
-]) . ' ' . $modelDatenblatt->id;
+$this->title = Yii::t('app', '{modelClass}-ID: ', [
+        'modelClass' => 'Datenblatt',
+    ]) . ' ' . $modelDatenblatt->id . ', Debitorennummer: ' . $modelDatenblatt->intern_debitor_nr;
 //$this->title = '';
 $url = ['/datenblatt'];
 if ($modelDatenblatt->projekt) {

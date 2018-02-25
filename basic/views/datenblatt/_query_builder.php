@@ -42,6 +42,8 @@ $filters = [
 ];
 $filters = Json::encode($filters);
 
+$rules = $rules ? $rules : "''";
+
 $this->registerJs("
     $(function() {
         new QueryBuilderProfileForm({$filters}, {$rules});
