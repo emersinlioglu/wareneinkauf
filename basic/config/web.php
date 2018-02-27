@@ -116,13 +116,14 @@ $config = [
             'currencyCode' => 'EUR',
         ],
 
-//        'assetManager' => [
+        'assetManager' => [
+            'appendTimestamp' => true,
 //            'bundles' => [
 //                'dmstr\web\AdminLteAsset' => [
 //                    'skin' => 'skin-black',
 //                ],
 //            ],
-//        ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'abljh234kjbsdkfuh234',
