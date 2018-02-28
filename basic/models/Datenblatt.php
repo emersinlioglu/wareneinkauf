@@ -693,7 +693,8 @@ class Datenblatt extends \yii\db\ActiveRecord
             if ($key == 0) {
                 $anredeSatz = ucfirst($anredeSatz);
             }
-            $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['vorname'] . ' ' . $data['nachname'] . ', ';
+//            $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['vorname'] . ' ' . $data['nachname'] . ', ';
+            $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['nachname'] . ', ';
         }
         $persoenlicheBriefanrede .= '<br>';
 
