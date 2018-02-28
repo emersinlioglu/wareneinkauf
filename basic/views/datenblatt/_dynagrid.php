@@ -65,6 +65,11 @@ $gridColumns = [
         'format' => ['currency'],
     ],
     [
+        'value' => 'schlussrechnung',
+        'label' => 'Schlussrechnung',
+        'format' => ['currency'],
+    ],
+    [
         'attribute' => 'firma_name',
         'value'=>'firma.name',
         'label' => 'Firma'
