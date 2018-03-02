@@ -65,8 +65,13 @@ $gridColumns = [
         'format' => ['currency'],
     ],
     [
-        'value' => 'schlussrechnung',
-        'label' => 'Schlussrechnung',
+        'value' => 'schlussrechnungKaufvertragBetrag',
+        'label' => 'Schlussrechnung - Kaufvertrag Betrag',
+        'format' => ['currency'],
+    ],
+    [
+        'value' => 'schlussrechnungSonderwunschBetrag',
+        'label' => 'Schlussrechnung - Sonderwunsch Betrag',
         'format' => ['currency'],
     ],
     [

@@ -892,11 +892,21 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $summe;
     }
 
-    public function getSchlussrechnung() {
+    public function getSchlussrechnungKaufvertragBetrag() {
         $cnt = count($this->abschlags)-1;
         foreach ($this->abschlags as $key => $abschlag) {
             if ($key == $cnt) {
                 return $abschlag->kaufvertrag_betrag;
+            }
+        }
+        return '';
+    }
+
+    public function getSchlussrechnungSonderwunschBetrag() {
+        $cnt = count($this->abschlags)-1;
+        foreach ($this->abschlags as $key => $abschlag) {
+            if ($key == $cnt) {
+                return $abschlag->sonderwunsch_betrag;
             }
         }
         return '';
