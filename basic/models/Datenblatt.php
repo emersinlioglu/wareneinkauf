@@ -103,7 +103,7 @@ class Datenblatt extends \yii\db\ActiveRecord
                 switch($attributeName) {
 
                 	case 'kaufpreis':
-                        $value = number_format((float)$te->{$attributeName}, 2, ',', '.') . ' €';
+                        $value = (float)$te->{$attributeName};
                         break;
                     case 'te_name':
                         $value = $te->einheitstyp ? $te->einheitstyp->name : '';

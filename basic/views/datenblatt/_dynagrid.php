@@ -63,16 +63,19 @@ $gridColumns = [
         'attribute' => 'abschlagKaufvertragSumme',
         'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
         'format' => ['currency'],
+        'pageSummary' => true
     ],
     [
         'value' => 'schlussrechnungKaufvertragBetrag',
         'label' => 'Schlussrechnung - Kaufvertrag Betrag',
         'format' => ['currency'],
+        'pageSummary' => true
     ],
     [
         'value' => 'schlussrechnungSonderwunschBetrag',
         'label' => 'Schlussrechnung - Sonderwunsch Betrag',
         'format' => ['currency'],
+        'pageSummary' => true
     ],
     [
         'attribute' => 'firma_name',
@@ -93,22 +96,22 @@ $gridColumns = [
     [
         'attribute' => 'haus_strasse',
         'value'=>'haus.strasse',
-        'label' => 'Straße'
+        'label' => 'TE-Straße'
     ],
      [
         'attribute' => 'haus_hausnr',
         'value'=>'haus.hausnr',
-        'label' => 'Haus Nr.'
+        'label' => 'TE-Haus Nr.'
     ],
      [
         'attribute' => 'haus_plz',
         'value'=>'haus.plz',
-        'label' => 'Plz'
+        'label' => 'TE-Plz'
     ],
     [
         'attribute' => 'haus_ort',
         'value'=>'haus.ort',
-        'label' => 'Ort'
+        'label' => 'TE-Ort'
     ],
     [
         'attribute' => 'sap_debitor_nr',
@@ -206,11 +209,15 @@ for ($i = 0; $i < $maxCountTEEinheits; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "teeinheit__{$i}__wohnflaeche",
-        'label' => "{$cnt}. TE-Wohnfläche"
+        'label' => "{$cnt}. TE-Wohnfläche",
+        'format' => ['decimal'],
+        'pageSummary' => true
     ];
     $gridColumns[] = [
         'value'=> "teeinheit__{$i}__kaufpreis",
-        'label' => "{$cnt}. TE-Kaufpreis"
+        'label' => "{$cnt}. TE-Kaufpreis",
+        'format' => ['currency'],
+        'pageSummary' => true
     ];
 }
 
@@ -226,6 +233,7 @@ $gridColumns = array_merge($gridColumns, [
         'value'=>'kaeufer.titel',
         'label' => 'Käufer Titel'
     ],
+
     [
         'attribute' => 'kaeufer_vorname',
         'value'=>'kaeufer.vorname',
@@ -254,19 +262,19 @@ $gridColumns = array_merge($gridColumns, [
     ],
     [
         'value'=>'kaeufer.strasse',
-        'label' => 'Straße'
+        'label' => 'Käufer Straße'
     ],
     [
         'value'=>'kaeufer.hausnr',
-        'label' => 'Hausnr.'
+        'label' => 'Käufer Hausnr.'
     ],
     [
         'value'=>'kaeufer.plz',
-        'label' => 'PLZ'
+        'label' => 'Käufer PLZ'
     ],
     [
         'value'=>'kaeufer.ort',
-        'label' => 'Ort'
+        'label' => 'Käufer Ort'
     ],
 ]);
 
@@ -278,7 +286,9 @@ for ($i = 0; $i < $maxCountSonderwunsches; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "sonderwunsch__{$i}__rechnungsstellung_betrag",
-        'label' => "{$cnt}. SW-Rechnungsstellungsbetrag"
+        'label' => "{$cnt}. SW-Rechnungsstellungsbetrag",
+        'format' => ['currency'],
+        'pageSummary' => true
     ];
     $gridColumns[] = [
         'value'=> "sonderwunsch__{$i}__rechnungsstellung_rg_nr",
@@ -298,7 +308,9 @@ for ($i = 0; $i < $maxCountAbschlags; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "abschlag__{$i}__kaufvertrag_betrag",
-        'label' => "{$cnt}. Abschlag-Betrag"
+        'label' => "{$cnt}. Abschlag-Betrag",
+        'format' => ['currency'],
+        'pageSummary' => true
     ];
     $gridColumns[] = [
         'value'=> "abschlag__{$i}__kaufvertrag_angefordert",
@@ -322,17 +334,20 @@ for ($i = 0; $i < $maxCountZinsverzugs; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "zinsverzug__{$i}__betrag",
-        'label' => "{$cnt}. Zinsverzug-Betrag:"
+        'label' => "{$cnt}. Zinsverzug-Betrag:",
+        'pageSummary' => true
     ];
 }
 
 $gridColumns[] = [
     'value'=> "nachlassSumme",
-    'label' => "Minderungen/Nachlaß-Summe:"
+    'label' => "Minderungen/Nachlaß-Summe:",
+    'pageSummary' => true
 ];
 $gridColumns[] = [
     'value'=> "zinsverzugSumme",
-    'label' => "Zinsverzugs-Summe:"
+    'label' => "Zinsverzugs-Summe:",
+    'pageSummary' => true
 ];
 
 for ($i = 0; $i < $maxCountZahlungs; $i++) {
@@ -343,7 +358,9 @@ for ($i = 0; $i < $maxCountZahlungs; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "zahlung__{$i}__betrag",
-        'label' => "{$cnt}. Zahlung-betrag:"
+        'label' => "{$cnt}. Zahlung-betrag:",
+        'format' => ['currency'],
+        'pageSummary' => true
     ];
 }
 
@@ -363,6 +380,7 @@ $gridColumns[] = [
     //'contentOptions' => ['style' => 'width:200px;'],
     //'header'=>'Actions',
     'order'=>DynaGrid::ORDER_FIX_LEFT,
+    'pageSummary'=>'Seitensumme',
     'template' => '{view}{update}{report}{delete} ',
     'buttons' => [
         'view' => function ($url, $model) {
@@ -474,6 +492,7 @@ echo DynaGrid::widget([
 
     'gridOptions'=>[
         'floatHeader' => true,
+        'showPageSummary'=>true,
         'floatHeaderOptions' => [
             'position' => 'absolute',
         ],
