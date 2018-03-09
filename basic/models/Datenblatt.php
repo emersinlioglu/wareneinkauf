@@ -881,6 +881,16 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $kaufvertragSumme;
     }
 
+    public function getSonderwuenscheBetragSumme() {
+        // calculate sonderwünche
+        $sonderwuenscheTotal = 0;
+        /* @var $item Sonderwunsch */
+        foreach ($this->sonderwunsches as $item) {
+            $sonderwuenscheTotal += (float)$item->rechnungsstellung_betrag;
+        }
+        return $sonderwuenscheTotal;
+    }
+
     public function getAbschlagSonderwunschSummeAngefordert() {
         $summe = .0;
         /** @var Abschlag $abschlag */

@@ -103,7 +103,7 @@ class HausSearch extends Haus
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'projekt_id' => $this->projekt_id,
+            'haus.projekt_id' => $this->projekt_id,
             'status' => $this->status,
             'rechnung_vertrieb' => $this->rechnung_vertrieb,
         ]);
@@ -120,7 +120,7 @@ class HausSearch extends Haus
             ->andFilterWhere(['like', 'haus.ort', $this->ort])
             ->andFilterWhere(['like', 'haus.strasse', $this->strasse])
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
-            ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])
+//            ->andFilterWhere(['like', 'projekt.name', $this->projekt_name])
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
             ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
             ->andFilterWhere(['like', 'te_nummer', $this->te_nummer])

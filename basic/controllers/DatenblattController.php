@@ -30,7 +30,7 @@ use app\models\Sonderwunsch;
 use app\models\Abschlag;
 use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
-use webvimark\modules\UserManagement\models\User;
+use app\models\User;
 
 
 
@@ -62,7 +62,7 @@ class DatenblattController extends Controller
     public function actionIndex()
     {
         $searchModel = new DatenblattSearch();
-        $projektName = Yii::$app->request->get('DatenblattSearch')['projekt_name'];
+        $projektId = User::getActiveProjekt() ? User::getActiveProjekt()->id : null;
 
         if (!User::hasAccessToProject()) {
             return $this->redirect(['site/project-access-error']);
@@ -70,7 +70,7 @@ class DatenblattController extends Controller
 
         // new dataprovider
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
-        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektName, Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
 
         $modelsToDelete = DatenblattSearch::findAll(['aktiv' => 0]);
         foreach ($modelsToDelete as $modelToDelete) {
@@ -125,11 +125,6 @@ class DatenblattController extends Controller
             $maxCountZahlungs = max($maxCountZahlungs, $count);
         }
 
-        $projekt = null;
-        if(isset($_GET['DatenblattSearch']['projekt_name'])) {
-            $projekt = Projekt::findOne(['name' => $_GET['DatenblattSearch']['projekt_name']]);
-        }
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -139,7 +134,7 @@ class DatenblattController extends Controller
             'maxCountNachlasses' => $maxCountNachlasses,
             'maxCountZinsverzugs' => $maxCountZinsverzugs,
             'maxCountZahlungs' => $maxCountZahlungs,
-            'projekt' => $projekt,
+            'projekt' => User::getActiveProjekt(),
             'dynagridProfileId' => \app\models\User::getCurrentUser()->getAktiveDynagridProfileId(),
         ]);
     }

@@ -34,6 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     //'projekt_id',
 
                     [
+//                        'attribute' => 'projekt_name',
+                        'value' => 'projekt.name',
+                        'label' => 'Projekt'
+                    ],
+                    [
                         'attribute' => 'firma_name',
                         'value' => 'projekt.firma.name',
                         'label' => 'Firma'
@@ -42,11 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'firma_nr',
                         'value' => 'projekt.firma.nr',
                         'label' => 'Firmen Nr.'
-                    ],
-                    [
-                        'attribute' => 'projekt_name',
-                        'value' => 'projekt.name',
-                        'label' => 'Projekt'
                     ],
                     [
                         'attribute' => 'status',

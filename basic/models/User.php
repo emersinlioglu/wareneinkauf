@@ -28,7 +28,7 @@ class User extends \webvimark\modules\UserManagement\models\User {
         return $this->hasMany(DynagridProfile::className(), ['user_id' => 'id']);
     }
 
-    public static function getProjktsFromCurrentUser() {
+    public static function getProjektsFromCurrentUser() {
         $projekts = [];
         $currentUser = self::getCurrentUser();
         if ($currentUser) {

@@ -245,7 +245,7 @@ class DatenblattSearch extends Datenblatt
      *
      * @return ActiveDataProvider
      */
-    public function searchByQueryBuilder($rules, $projektName, $params)
+    public function searchByQueryBuilder($rules, $projektId, $params)
     {
         $query = Datenblatt::find();
         $query->joinWith(['haus', 'kaeufer', 'projekt', 'firma', 'haus.teileigentumseinheits']);
@@ -267,7 +267,7 @@ class DatenblattSearch extends Datenblatt
 //            $dataProvider->pagination = false;
 //        }
 
-        $query->where(['projekt.name' => $projektName]);
+        $query->where(['projekt.id' => $projektId]);
 
         if ($rules) {
             $translator = new Translator($rules);

@@ -115,6 +115,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     public function searchForecast($params)
     {
         $query = Teileigentumseinheit::find();
+        $query->joinWith(['haus', 'haus.projekt']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -126,6 +127,15 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        // filter by creator_user_id or projekt_user assignments
+        if (!Yii::$app->user->isSuperadmin) {
+            $query->leftJoin('projekt_user pu', 'pu.projekt_id = projekt.id');
+            $query->andFilterWhere(['or',
+                ['projekt.creator_user_id' => Yii::$app->user->identity->getId()],
+                ['pu.user_id' => Yii::$app->user->identity->getId()]
+            ]);
         }
 
         $query->andFilterWhere([

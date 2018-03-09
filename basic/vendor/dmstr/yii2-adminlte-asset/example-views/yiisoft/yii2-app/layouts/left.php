@@ -31,7 +31,7 @@
         <?php
         use webvimark\modules\UserManagement\components\GhostMenu;
         use webvimark\modules\UserManagement\UserManagementModule;
-        use webvimark\modules\UserManagement\models\User;
+        use app\models\User;
         /*
 
         echo GhostMenu::widget([
@@ -59,21 +59,18 @@
         ?>
 
         <?php
-        $datenblattItems = [];
-        $teItems =[];
-        $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : \app\models\User::getProjktsFromCurrentUser();
-        /** @var Projekt $projekt */
-        foreach ($projekts as $projekt) {
-            $datenblattItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
-                    'url' => ['/datenblatt', 'DatenblattSearch[projekt_name]' => $projekt->name],
-                ];
+//        $datenblattItems = [];
+//        $teItems =[];
+//        $projekts = User::getProjects();
+//        /** @var Projekt $projekt */
+//        foreach ($projekts as $projekt) {
+//            $datenblattItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
+//                    'url' => ['/datenblatt', 'DatenblattSearch[projekt_name]' => $projekt->name],
+//                ];
 //            $teItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
 //                    'url' => ['/haus', 'HausSearch[projekt_name]' => $projekt->name],
 //                ];
-            $teItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
-                    'url' => ['/teileigentumseinheit', 'TeileigentumseinheitSearch[projekt_id]' => $projekt->id],
-                ];
-        }
+//        }
         ?>
 
         <!-- /.search form -->
@@ -118,18 +115,18 @@
                     [
                         'label' => 'Teileigentumseinheiten',
                         'icon' => 'fa fa-file-text text-green',
-//                        'url' => ['/datenblatt/index']
-                        'url' => '#',
-                        'items' => $teItems,
+                        'url' => ['/haus/index']
+//                        'url' => '#',
+//                        'items' => $teItems,
                     ],
                     ['label' => 'Forecast', 'icon' => 'fa fa-home text-green','url' => ['/teileigentumseinheit/forecast']],
                     ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
                     [
                         'label' => 'Datenblätter',
                         'icon' => 'fa fa-file-text text-blue',
-//                        'url' => ['/datenblatt/index']
-                        'url' => '#',
-                        'items' => $datenblattItems,
+                        'url' => ['/datenblatt/index']
+//                        'url' => '#',
+//                        'items' => $datenblattItems,
                     ],
                     [
                         'label' => 'Einstellungen',
