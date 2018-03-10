@@ -64,6 +64,10 @@ class DatenblattController extends Controller
         $searchModel = new DatenblattSearch();
         $projektName = Yii::$app->request->get('DatenblattSearch')['projekt_name'];
 
+        if (!User::hasAccessToProject()) {
+            return $this->redirect(['site/project-access-error']);
+        }
+
         // new dataprovider
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
         $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektName, Yii::$app->request->queryParams);

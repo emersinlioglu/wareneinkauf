@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Meilenstein;
 use app\models\ProjektAbschlag;
+use app\models\User;
 use kartik\mpdf\Pdf;
 use Yii;
 use app\models\Projekt;
@@ -46,6 +47,15 @@ class ProjektController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionSetActiveProjekt($projektId) {
+        User::setActiveProjekt($projektId);
+        $httpReferer = $_SERVER['HTTP_REFERER'];
+        if (strpos($httpReferer, 'project-access-error')) {
+            $httpReferer = ['datenblatt/index'];
+        }
+        return $this->redirect($httpReferer);
     }
 
     /**

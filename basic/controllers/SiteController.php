@@ -15,6 +15,8 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
+
     public function behaviors()
     {
         return [
@@ -123,5 +125,9 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionProjectAccessError() {
+        return $this->render('projectAccessError');
     }
 }

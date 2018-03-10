@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Haus;
 use app\models\Firma;
@@ -40,7 +41,15 @@ class HausController extends Controller
     public function actionIndex()
     {
         $searchModel = new HausSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $activeProjekt = User::getActiveProjekt();
+
+        if (!User::hasAccessToProject()) {
+            return $this->redirect(['site/project-access-error']);
+        }
+
+        $queryParams = Yii::$app->request->queryParams;
+        $queryParams['HausSearch']['projekt_id'] = $activeProjekt ? $activeProjekt->id : '';
+        $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

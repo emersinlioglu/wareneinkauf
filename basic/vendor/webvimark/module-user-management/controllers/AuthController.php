@@ -55,6 +55,8 @@ class AuthController extends BaseController
 
 		if ( $model->load(Yii::$app->request->post()) AND $model->login() )
 		{
+		    // set active projekt id in session
+            \app\models\User::setActiveProjekt(Yii::$app->request->post('projekt_id'));
 			return $this->goBack();
 		}
 
