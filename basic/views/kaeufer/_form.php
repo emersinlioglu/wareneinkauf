@@ -10,54 +10,67 @@ use yii\widgets\ActiveForm;
 
 <div class="kaeufer-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <div class="panel panel-default">
+        <div class="panel-body" >
 
-    <?php //echo $form->field($model, 'debitor_nr')->textInput(['maxlength' => true]) ?>
+            <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'anrede')->dropDownList([0 => 'Herr', 1 => 'Frau'], ['prompt' => 'Auswählen']) ?>
+            <div class="row">
+                <div class="col-lg-6">
 
-    <?= $form->field($model, 'titel')->textInput(['maxlength' => true]) ?>
+                    <h3>Kontaktdaten</h3>
 
-    <?= $form->field($model, 'vorname')->textInput(['maxlength' => true]) ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <?php //echo $form->field($model, 'debitor_nr')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'anrede')->dropDownList([0 => 'Herr', 1 => 'Frau'], ['prompt' => 'Auswählen']) ?>
+                            <?= $form->field($model, 'titel')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'vorname')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'nachname')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-sm-6">
+                            <?= $form->field($model, 'anrede2')->dropDownList([0 => 'Herr', 1 => 'Frau'], ['prompt' => 'Auswählen']) ?>
+                            <?= $form->field($model, 'titel2')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'vorname2')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'nachname2')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
 
-    <?= $form->field($model, 'nachname')->textInput(['maxlength' => true]) ?>
+                    <h3>Adresse</h3>
 
-    <?= $form->field($model, 'anrede2')->dropDownList([0 => 'Herr', 1 => 'Frau'], ['prompt' => 'Auswählen']) ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <?= $form->field($model, 'strasse')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'plz')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'land')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\Land::$laender, 'code', 'name'), ['prompt' => 'Auswählen']) ?>
+                        </div>
+                        <div class="col-sm-6">
+                            <?= $form->field($model, 'hausnr')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'ort')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
 
-    <?= $form->field($model, 'titel2')->textInput(['maxlength' => true]) ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <?= $form->field($model, 'festnetz')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                                'mask' => '09999-9[9][9][9][9][9][9][9][9]',
+                            ]) ?>
+                            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-sm-6">
+                            <?= $form->field($model, 'handy')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
 
-    <?= $form->field($model, 'vorname2')->textInput(['maxlength' => true]) ?>
+                </div>
+            </div>
 
-    <?= $form->field($model, 'nachname2')->textInput(['maxlength' => true]) ?>
+            <div class="form-group">
+                <?= Html::submitButton($model->isNewRecord ? 'Erstellen' : 'Aktualisieren', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            </div>
 
-    <?= $form->field($model, 'strasse')->textInput(['maxlength' => true]) ?>
+            <?php ActiveForm::end(); ?>
 
-    <?= $form->field($model, 'hausnr')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'plz')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'ort')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'festnetz')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-        'mask' => '09999-9[9][9][9][9][9][9][9][9]',
-    ]) ?>
-
-    <?= $form->field($model, 'handy')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-<!--
-    <?= $form->field($model, 'anrede2')->textInput() ?>
-
-    <?= $form->field($model, 'titel2')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'vorname2')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'nachname2')->textInput(['maxlength' => true]) ?>
--->
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

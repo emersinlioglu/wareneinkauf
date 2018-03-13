@@ -19,7 +19,7 @@ class KaeuferSearch extends Kaeufer
     {
         return [
             [['id', 'auflassung', 'anrede', 'anrede2'], 'integer'],
-            [['debitor_nr', 'beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'safe'],
+            [['debitor_nr', 'beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'land', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'safe'],
         ];
     }
 
@@ -75,6 +75,7 @@ class KaeuferSearch extends Kaeufer
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
             ->andFilterWhere(['like', 'plz', $this->plz])
             ->andFilterWhere(['like', 'ort', $this->ort])
+            ->andFilterWhere(['like', 'land', $this->land])
             ->andFilterWhere(['like', 'festnetz', $this->festnetz])
             ->andFilterWhere(['like', 'handy', $this->handy])
             ->andFilterWhere(['like', 'email', $this->email])

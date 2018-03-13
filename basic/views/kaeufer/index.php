@@ -6,15 +6,12 @@ use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use webvimark\modules\UserManagement\models\User;
 
-
-
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\KaeuferSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Käufer';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 <div class="kaeufer-index">
 
@@ -106,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
 
                     //'id',
-        //            'debitor_nr',
+                    //'debitor_nr',
                     //'beurkundung_am',
                     //'verbindliche_fertigstellung',
                     //'uebergang_bnl',
@@ -126,6 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'hausnr',
                     'plz',
                     'ort',
+                    'land',
                     // 'festnetz',
                     // 'handy',
                     'email:email',

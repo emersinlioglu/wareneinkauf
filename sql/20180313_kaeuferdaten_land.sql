@@ -1,0 +1,2 @@
+ALTER TABLE `kaeufer`
+    ADD COLUMN `land` VARCHAR(255) NULL DEFAULT NULL AFTER `ort`;

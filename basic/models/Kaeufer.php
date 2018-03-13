@@ -23,6 +23,7 @@ use Yii;
  * @property string $hausnr
  * @property string $plz
  * @property string $ort
+ * @property string $land
  * @property string $festnetz
  * @property string $handy
  * @property string $email
@@ -51,7 +52,7 @@ class Kaeufer extends \yii\db\ActiveRecord
         return [
             [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
             [['auflassung', 'anrede', 'anrede2'], 'integer'],
-            [['debitor_nr', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
+            [['land', 'debitor_nr', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
         ];
     }
 
@@ -77,6 +78,7 @@ class Kaeufer extends \yii\db\ActiveRecord
             'hausnr' => Yii::t('app', 'Hausnr'),
             'plz' => Yii::t('app', 'Plz'),
             'ort' => Yii::t('app', 'Ort'),
+            'land' => Yii::t('app', 'Land'),
             'festnetz' => Yii::t('app', 'Festnetz'),
             'handy' => Yii::t('app', 'Handy'),
             'email' => Yii::t('app', 'Email'),
