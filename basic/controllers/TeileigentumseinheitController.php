@@ -137,6 +137,7 @@ class TeileigentumseinheitController extends Controller
         $fehlgeschlageneTeileigentumseinheiten = [];
         $projekt_id = Yii::$app->request->post('projekt_id');
         $einheitstyp_id = Yii::$app->request->post('einheitstyp_id');
+        $teileigentumseinheitenZumSpeichern = [];
 
         if (Yii::$app->request->isPost) {
 
@@ -162,8 +163,6 @@ class TeileigentumseinheitController extends Controller
                     $sheet = $objPHPExcel->getSheet(0);
                     $highestRow = $sheet->getHighestRow();
                     $hausnr = null;
-
-                    $teileigentumseinheitenZumSpeichern = [];
 
                     for ($row = 2; $row <= $highestRow; $row++){
 
@@ -203,17 +202,24 @@ class TeileigentumseinheitController extends Controller
                         $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
                         $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
                         $wohflaeche = $sheet->getCellByColumnAndRow(6, $row)->getValue();
-                        $teileigentumseinheit->wohnflaeche = floatval($wohflaeche);
+                        $teileigentumseinheit->wohnflaeche = strval($wohflaeche);
 
-                        $kpEinheit = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue())));
-                        $teileigentumseinheit->kp_einheit = round($kpEinheit, 2);
+//                        $kpEinheit = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue())));
+//                        $kpEinheit = round($kpEinheit, 2);
+                        $kpEinheit = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
+                        $teileigentumseinheit->kp_einheit = $kpEinheit;
 
+//                        $teileigentumseinheit->kaufpreis =
+//                            $teileigentumseinheit->verkaufspreis =
+//                            $teileigentumseinheit->forecast_preis = round(floatval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue()), 2);
                         $teileigentumseinheit->kaufpreis =
                             $teileigentumseinheit->verkaufspreis =
-                            $teileigentumseinheit->forecast_preis = round(floatval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue()), 2);
+                            $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(8, $row)->getValue());
 
-                        $meAnteil = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(9, $row)->getValue())));
-                        $teileigentumseinheit->me_anteil = round($meAnteil, 2);
+//                        $meAnteil = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(9, $row)->getValue())));
+//                        $meAnteil = round($meAnteil, 2);
+                        $meAnteil = strval($sheet->getCellByColumnAndRow(9, $row)->getValue());
+                        $teileigentumseinheit->me_anteil = $meAnteil;
 
                         $teileigentumseinheitenZumSpeichern[] = $teileigentumseinheit;
 

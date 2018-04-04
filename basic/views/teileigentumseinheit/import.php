@@ -82,7 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <th>Geschoss</th>
                                         <th>Zimmer</th>
                                         <th>Wohnfläche</th>
-                                        <th>Kaufspreis</th>
+                                        <th>KP-Einheit (€/m²)</th>
+                                        <th>Kaufspreis (Gesamt)</th>
                                         <th>ME-Anteil</th>
                                         <th>Valide</th>
                                     </tr>
@@ -95,6 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= $te->geschoss ?></td>
                                         <td><?= $te->zimmer ?></td>
                                         <td><?= $te->wohnflaeche ?></td>
+                                        <td><?= $te->kp_einheit ?></td>
                                         <td><?= $te->kaufpreis ?></td>
                                         <td><?= $te->me_anteil ?></td>
                                         <td>
