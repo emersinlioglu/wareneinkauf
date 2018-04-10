@@ -167,6 +167,11 @@ class TeileigentumseinheitController extends Controller
                     for ($row = 2; $row <= $highestRow; $row++){
 
                         $teNummer = trim(strval($sheet->getCellByColumnAndRow(1, $row)->getValue()));
+
+                        if ($teNummer == '') {
+                            continue;
+                        }
+
                         $teileigentumseinheit = Teileigentumseinheit::findOne([
                             'te_nummer' => $teNummer,
                             'projekt_id' => $projekt->id,
@@ -174,6 +179,8 @@ class TeileigentumseinheitController extends Controller
 
                         if (!$teileigentumseinheit) {
                             $teileigentumseinheit = new Teileigentumseinheit();
+                        } else if ($teileigentumseinheit->haus_id > 0) {
+                            continue;
                         }
 
                         if ($teileigentumseinheit->haus && $teileigentumseinheit->haus->hatDatenblattMitAngefodertemAbschlag()) {
@@ -199,14 +206,15 @@ class TeileigentumseinheitController extends Controller
 
                         $teileigentumseinheit->projekt_id = $projekt->id;
                         $teileigentumseinheit->te_nummer = $teNummer;
+
                         $teileigentumseinheit->geschoss = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
                         $teileigentumseinheit->zimmer = strval($sheet->getCellByColumnAndRow(5, $row)->getValue());
-                        $wohflaeche = $sheet->getCellByColumnAndRow(6, $row)->getValue();
-                        $teileigentumseinheit->wohnflaeche = strval($wohflaeche);
+                        $wohnflaeche = (float) $sheet->getCellByColumnAndRow(6, $row)->getValue();
+                        $teileigentumseinheit->wohnflaeche =  $wohnflaeche == 0 ? null : $wohnflaeche;
 
 //                        $kpEinheit = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(7, $row)->getValue())));
 //                        $kpEinheit = round($kpEinheit, 2);
-                        $kpEinheit = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
+                        $kpEinheit = (float) strval($sheet->getCellByColumnAndRow(7, $row)->getCalculatedValue());
                         $teileigentumseinheit->kp_einheit = $kpEinheit;
 
 //                        $teileigentumseinheit->kaufpreis =
@@ -214,17 +222,18 @@ class TeileigentumseinheitController extends Controller
 //                            $teileigentumseinheit->forecast_preis = round(floatval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue()), 2);
                         $teileigentumseinheit->kaufpreis =
                             $teileigentumseinheit->verkaufspreis =
-                            $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(8, $row)->getValue());
+                            $teileigentumseinheit->forecast_preis = strval($sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue());
 
 //                        $meAnteil = floatval(str_replace(',', '.', strval($sheet->getCellByColumnAndRow(9, $row)->getValue())));
 //                        $meAnteil = round($meAnteil, 2);
                         $meAnteil = strval($sheet->getCellByColumnAndRow(9, $row)->getValue());
                         $teileigentumseinheit->me_anteil = $meAnteil;
 
-                        $teileigentumseinheitenZumSpeichern[] = $teileigentumseinheit;
 
                         if (!$teileigentumseinheit->validate()) {
-                            $fehlgeschlageneTeileigentumseinheiten[] = $teileigentumseinheit;
+                            $fehlgeschlageneTeileigentumseinheiten[$row] = $teileigentumseinheit;
+                        } else {
+                            $teileigentumseinheitenZumSpeichern[] = $teileigentumseinheit;
                         }
                     }
                 }
@@ -235,7 +244,7 @@ class TeileigentumseinheitController extends Controller
                 foreach ($teileigentumseinheitenZumSpeichern as $te) {
                     $te->save();
                 }
-                return $this->redirect(['teileigentumseinheit/index', ['TeileigentumseinheitSearch[projekt_name]' => $projekt->name]]);
+                return $this->redirect(['teileigentumseinheit/index', ['TeileigentumseinheitSearch[projekt_id]' => $projekt->id]]);
             }
         }
 

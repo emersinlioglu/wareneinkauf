@@ -23,8 +23,8 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     public function rules()
     {
         return [
-            [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
-            [['haus_rechnung_vertrieb', 'haus_status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
+            [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert', 'projekt_id'], 'integer'],
+            [['projekt_id', 'haus_rechnung_vertrieb', 'haus_status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
             [['kaufpreis', 'kp_einheit', 'forecast_preis', 'verkaufspreis'], 'number'],
         ];
     }
@@ -86,6 +86,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'gefoerdert' => $this->gefoerdert,
             'kaufpreis' => $this->kaufpreis,
             'kp_einheit' => $this->kp_einheit,
+            'teileigentumseinheit.projekt_id' => $this->projekt_id,
         ]);
 
         $query

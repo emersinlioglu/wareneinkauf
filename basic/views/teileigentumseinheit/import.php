@@ -77,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Zeile</th>
                                         <th>Hausnr.</th>
                                         <th>TE-Nummer</th>
                                         <th>Geschoss</th>
@@ -89,8 +90,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </tr>
                                 </thead>
                                 <?php /** @var $te \app\models\Teileigentumseinheit */ ?>
-                                <?php foreach ($fehlgeschlageneTeileigentumseinheiten as $te): ?>
+                                <?php foreach ($fehlgeschlageneTeileigentumseinheiten as $row => $te): ?>
                                     <tr>
+                                        <td><?= $row ?></td>
                                         <td><?= $te->hausnr ?></td>
                                         <td><?= $te->te_nummer ?></td>
                                         <td><?= $te->geschoss ?></td>

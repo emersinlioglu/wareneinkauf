@@ -71,7 +71,7 @@
 //                    'url' => ['/haus', 'HausSearch[projekt_name]' => $projekt->name],
 //                ];
             $teItems[] = ['label' => $projekt->name, 'icon' => 'fa fa-dot-circle-o',
-                    'url' => ['/teileigentumseinheit', 'TeileigentumseinheitSearch[projekt_name]' => $projekt->name],
+                    'url' => ['/teileigentumseinheit', 'TeileigentumseinheitSearch[projekt_id]' => $projekt->id],
                 ];
         }
         ?>
