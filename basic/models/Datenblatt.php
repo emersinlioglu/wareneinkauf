@@ -873,12 +873,16 @@ class Datenblatt extends \yii\db\ActiveRecord
 
     }
 
-    public function getAbschlagKaufvertragSumme() {
+    public function getKaufpreisSumme() {
         $kaufvertragSumme = .0;
         foreach($this->abschlags as $abschlag) {
             $kaufvertragSumme += (float) $abschlag->kaufvertrag_betrag;
         }
         return $kaufvertragSumme;
+    }
+
+    public function getKaufpreisSummeFormatted() {
+        return number_format($this->getKaufpreisSumme(), 2, ',', '.') . ' €';
     }
 
     public function getSonderwuenscheBetragSumme() {
@@ -912,6 +916,10 @@ class Datenblatt extends \yii\db\ActiveRecord
         return '';
     }
 
+    public function getSchlussrechnungKaufvertragBetragFormatted() {
+        return number_format($this->getSchlussrechnungKaufvertragBetrag(), 2, ',', '.') . ' €';
+    }
+
     public function getSchlussrechnungSonderwunschBetrag() {
         $cnt = count($this->abschlags)-1;
         foreach ($this->abschlags as $key => $abschlag) {
@@ -920,6 +928,40 @@ class Datenblatt extends \yii\db\ActiveRecord
             }
         }
         return '';
+    }
+
+    public function getSchlussrechnungSonderwunschBetragFormatted() {
+        return number_format($this->getSchlussrechnungSonderwunschBetrag(), 2, ',', '.') . ' €';
+    }
+
+    public function getGesamtforderung() {
+
+        // Gesamtforderung = Kaufpreis + Summe Sonderzahlungen +- Minderungen/Nachlass + Verzugszins Abzüglich Zahlungen
+
+        $abschlagKaufvertragSumme = $this->getKaufpreisSumme();
+        // +
+        $abschlagSonderwunschSummeAngefordert = $this->getAbschlagSonderwunschSummeAngefordert();
+        // -
+        $minderungenNachlassSumme = $this->getNachlassSumme();
+        // +
+        $verzugszinsSumme = $this->getZinsverzugSumme();
+        // -
+        $zahlungSumme = $this->getZahlungSumme();
+//        var_dump('$abschlagKaufvertragSumme: ' . $abschlagKaufvertragSumme);
+//        var_dump('$abschlagSonderwunschSummeAngefordert: ' . $abschlagSonderwunschSummeAngefordert);
+//        var_dump('$minderungenNachlassSumme: ' . $minderungenNachlassSumme);
+//        var_dump('$verzugszinsSumme: ' . $verzugszinsSumme);
+//        var_dump('$zahlungSumme: ' . $zahlungSumme);
+//        exit();
+
+        $gesamtforderung =
+            $abschlagKaufvertragSumme
+            + $abschlagSonderwunschSummeAngefordert
+            - $minderungenNachlassSumme
+            + $verzugszinsSumme
+            - $zahlungSumme;
+
+        return $gesamtforderung;
     }
 
 }

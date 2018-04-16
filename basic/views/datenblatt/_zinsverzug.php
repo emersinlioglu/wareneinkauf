@@ -16,13 +16,7 @@ use kartik\money\MaskMoney;
             <h4 class="box-title">
                 <a data-toggle="collapse" data-parent="#collapse-zinsverzug" href="#collapse-zinsverzug" aria-expanded="true" class="">
                     Verzugszins:
-                    
-                    <?php 
-                    $total = 0;
-                    foreach($modelDatenblatt->zinsverzugs as $item) {
-                        $total += $item->betrag;
-                    } ?>
-                    (Summe: <?= Yii::$app->formatter->asCurrency($total) ?>)
+                    (Summe: <?= Yii::$app->formatter->asCurrency($modelDatenblatt->getZinsverzugSumme()) ?>)
                 </a>
             </h4>
         </div>

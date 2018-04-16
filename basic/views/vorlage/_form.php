@@ -34,6 +34,11 @@ $this->registerJs('
                     { text: "[projekt-strasse]", value: "[projekt-strasse]" },
                     { text: "[projekt-ort]", value: "[projekt-ort]" },
                     { text: "[wohnung-nr]", value: "[wohnung-nr]" },
+                    
+                    { text: "[nachlass-summe]", value: "[nachlass-summe]" },
+                    { text: "[kaufpreis-gesamt]", value: "[kaufpreis-gesamt]" },
+                    { text: "[gesamtforderung]", value: "[gesamtforderung]" },
+                    
                     { text: "[kaufpreisabrechnung-kaufvertrag-in-prozent]", value: "[kaufpreisabrechnung-kaufvertrag-in-prozent]" },
                     { text: "[kaufpreisabrechnung-kaufvertrag-betrag]", value: "[kaufpreisabrechnung-kaufvertrag-betrag]" },
                     { text: "[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]", value: "[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]" },

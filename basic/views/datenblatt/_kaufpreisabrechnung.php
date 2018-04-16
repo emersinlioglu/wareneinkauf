@@ -178,13 +178,9 @@ use kartik\money\MaskMoney;
                         <tr>
                             <td colspan="7">Minderungen/Nachlass</td>
                             <td class="text-align-right">
-                            <?php
-                                $totalNachlass = .0;
-                                foreach($modelDatenblatt->nachlasses as $nachlass) {
-                                    $totalNachlass += (float) $nachlass->betrag;
-                                }
-                                echo number_format($totalNachlass, 2, ',', '.');
-                            ?> €
+                                <?php
+                                    echo number_format($modelDatenblatt->getNachlassSumme(), 2, ',', '.');
+                                ?> €
                             </td>
                             <td></td>
                         </tr>
@@ -192,11 +188,7 @@ use kartik\money\MaskMoney;
                             <td colspan="7">Verzugszins</td>
                             <td class="text-align-right">
                             <?php
-                                $totalZinsverzug = .0;
-                                foreach($modelDatenblatt->zinsverzugs as $zinsverzug) {
-                                    $totalZinsverzug += (float) $zinsverzug->betrag;
-                                }
-                                echo number_format($totalZinsverzug, 2, ',', '.');
+                                echo number_format($modelDatenblatt->getZinsverzugSumme(), 2, ',', '.');
                             ?> €
                             </td>
                             <td></td>
@@ -214,12 +206,7 @@ use kartik\money\MaskMoney;
                             <td colspan="7">Zahlungen</td>
                             <td class="text-align-right">
                                 <?php
-                                    //echo $kaufvertragBetragTotal + $sonderwunschBetragTotal - $totalNachlass;
-                                    $totalZahlungen = 0;
-                                    foreach($modelDatenblatt->zahlungs as $zahlung) {
-                                        $totalZahlungen += (float) $zahlung->betrag;
-                                    }
-                                    echo number_format($totalZahlungen, 2, ',', '.');
+                                    echo number_format($modelDatenblatt->getZahlungSumme(), 2, ',', '.');
                                 ?> €
                             </td>
                             <td></td>

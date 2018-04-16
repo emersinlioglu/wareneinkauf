@@ -16,13 +16,7 @@ use kartik\money\MaskMoney;
             <h4 class="box-title">
                 <a data-toggle="collapse" data-parent="#collapse-nachlass" href="#collapse-nachlass" aria-expanded="true" class="">
                     Minderungen/Nachlass:
-                    
-                    <?php 
-                    $total = 0;
-                    foreach($modelDatenblatt->nachlasses as $item) {
-                        $total += $item->betrag;
-                    } ?>
-                    (Summe: <?= Yii::$app->formatter->asCurrency($total) ?>)
+                    (Summe: <?= Yii::$app->formatter->asCurrency($modelDatenblatt->getNachlassSumme()) ?>)
                 </a>
             </h4>
         </div>

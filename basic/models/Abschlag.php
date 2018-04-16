@@ -232,6 +232,9 @@ class Abschlag extends \yii\db\ActiveRecord
             '[sonderwuensche-gesamtbetrag]' => number_format($datenblatt->getAbschlagSonderwunschSummeAngefordert(), 2, ',', '.'),
             '[abschlag-sonderwunsch-betrag]' => number_format($abschlag->kaufvertrag_betrag + $abschlag->sonderwunsch_betrag, 2, ',', '.'),
             '[meilensteine]' => $meilensteine,
+            '[nachlass-summe]' => number_format($datenblatt->getNachlassSumme(), 2, ',', '.'),
+            '[kaufpreis-gesamt]' => number_format($datenblatt->getKaufpreisSumme(), 2, ',', '.'),
+            '[gesamtforderung]' => number_format($datenblatt->getGesamtforderung(), 2, ',', '.'),
         ];
 
         return $replaceData;

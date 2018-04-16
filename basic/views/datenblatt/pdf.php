@@ -570,11 +570,7 @@ $this->params['breadcrumbs'][] = $this->title;
            
             <td width="70%" align="right">
                 <?php
-                    $totalZinsverzug = .0;
-                    foreach($model->zinsverzugs as $zinsverzug) {
-                        $totalZinsverzug += (float) $zinsverzug->betrag;
-                    }
-                    echo number_format($totalZinsverzug,2, ',', '.');
+                    echo number_format($model->getZinsverzugSumme(),2, ',', '.');
                 ?>  €
             </td>
         </tr>
