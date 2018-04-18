@@ -167,7 +167,7 @@ use kartik\money\MaskMoney;
                         <tr>
                             <td>Summe</td>
                             <td><?= $kaufvertragProzentTotal ?> %</td>
-                            <td class="text-align-right"><?=  number_format($modelDatenblatt->getAbschlagKaufvertragSumme(), 2, ',', '.') ?> €</td>
+                            <td class="text-align-right"><?=  number_format($modelDatenblatt->getKaufpreisSumme(), 2, ',', '.') ?> €</td>
                             <td></td>
                             <td><?= $sonderwunschProzentTotal ?> %</td>
                             <td class="text-align-right"><?= number_format($swSummeBetrag, 2, ',', '.') ?> €</td>
