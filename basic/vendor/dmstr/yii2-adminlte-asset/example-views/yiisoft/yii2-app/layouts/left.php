@@ -115,7 +115,8 @@
                     [
                         'label' => 'Teileigentumseinheiten',
                         'icon' => 'fa fa-file-text text-green',
-                        'url' => ['/haus/index']
+                        'url' => ['/teileigentumseinheit/index']
+//                        'url' => ['/haus/index']
 //                        'url' => '#',
 //                        'items' => $teItems,
                     ],
