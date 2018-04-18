@@ -134,7 +134,7 @@ class Datenblatt extends \yii\db\ActiveRecord
                 $sonerwunsch = $this->sonderwunsches[$nth];
                 switch($attributeName) {
                     case 'rechnungsstellung_betrag':
-                        $value = number_format((float)$sonerwunsch->{$attributeName}, 2, ',', '.') . ' €';
+                        $value = (float)$sonerwunsch->{$attributeName};
                         break;
                     default:                
                         $value = $sonerwunsch->{$attributeName};
@@ -161,7 +161,7 @@ class Datenblatt extends \yii\db\ActiveRecord
                         $value = $abschlag->{$attributeName} . ' %';
                         break;
                     case 'kaufvertrag_betrag':
-                        $value = number_format((float)$abschlag->{$attributeName}, 2, ',', '.') . ' €';
+                        $value = (float)$abschlag->{$attributeName};
                         break;
                     default:                
                         $value = $abschlag->{$attributeName};
