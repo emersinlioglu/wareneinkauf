@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Datenblatt;
 use app\models\Einheitstyp;
+use app\models\Kaeufer;
 use app\models\Projekt;
 use Yii;
 use app\models\Teileigentumseinheit;
@@ -48,6 +49,72 @@ class TeileigentumseinheitController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+
+    public function actionExportZaehler($datenblattIds) {
+        $datenblattIds = explode(',', $datenblattIds);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+
+        $dataArray = [];
+        $dataArray[] = [
+            'Datenblatt-ID',
+            'TE-Nummer',
+            'Anrede 1',
+            'Vorname 1',
+            'Nachname 1',
+            'Anrede 2',
+            'Vorname 2',
+            'Nachname 2',
+            'Strasse',
+            'Haus-Nr.',
+            'PLZ',
+            'Ort',
+            'Medium-Name',
+            'Medium-Nr.',
+            'Zählerstand',
+            'Datum',
+        ];
+
+        /** @var Datenblatt $datenblatt */
+        foreach ($datenblatts as $datenblatt) {
+
+            foreach ($datenblatt->haus->zaehlerstands as $zaehlerstand) {
+                $kaeufer = $datenblatt->kaeufer ? $datenblatt->kaeufer : new Kaeufer();
+                $dataArray[] = [
+                    $datenblatt->id,
+                    implode('/ ', $datenblatt->getTenummerList()),
+                    $kaeufer->getAnredeLabel(),
+                    $kaeufer->vorname,
+                    $kaeufer->nachname,
+                    $kaeufer->getAnrede2Label(),
+                    $kaeufer->vorname2,
+                    $kaeufer->nachname2,
+                    $kaeufer->strasse,
+                    $kaeufer->hausnr,
+                    $kaeufer->plz,
+                    $kaeufer->ort,
+                    $zaehlerstand->name,
+                    $zaehlerstand->nummer,
+                    $zaehlerstand->stand,
+                    $zaehlerstand->datum ? Yii::$app->formatter->asDate($zaehlerstand->datum) : '',
+                ];
+            }
+        }
+
+        $doc = new \PHPExcel();
+        $doc->setActiveSheetIndex(0);
+        $doc->getActiveSheet()->fromArray($dataArray);
+        $filename = 'Zaehlerangaben_'.date('d.m.Y').'.xls';
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0'); //no cache
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($doc, 'Excel5');
+        $objWriter->save('php://output');
+
+        return '';
     }
 
     /**

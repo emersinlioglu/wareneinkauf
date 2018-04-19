@@ -17,7 +17,7 @@ use kartik\grid\GridView;
 use webvimark\modules\UserManagement\models\User;
 use kartik\dynagrid\Module;
 use yii\widgets\ActiveForm;
-
+use \yii\helpers\Url;
 
 $gridColumns = [
     //['class' => 'yii\grid\SerialColumn'],
@@ -506,7 +506,12 @@ echo DynaGrid::widget([
                             data-single-edit-url="'.\yii\helpers\Url::to(['datenblatt/konfiguration', 'id' => '']).'"
                             class="btn btn-default abschlag-massenbearbeitung" title="Abschlagkonfiguration">
                         <i class="fa fa-list"></i> Abschlagkonfiguration
-                   </a>',
+                   </a>'
+                . '<span id="" class="btn btn-default export-zaehler" title="Zählerangaben exportieren"
+                        data-export-url="'.Url::to(['teileigentumseinheit/export-zaehler', 'datenblattIds' => '']).'"
+                   >
+                   Zählerangaben exportieren
+               </span>',
         ],
         'toolbar' =>  [
             'before' => '{pager} {toggleData} {export}'
@@ -591,6 +596,24 @@ $this->registerJs(<<<JS
             }
             
         })
+        
+        $('.export-zaehler').click(function(e) {
+            e.preventDefault();
+            var datenblattIds = $('[name="selection[]"]:checked');
+            var ids = datenblattIds
+                .map(function () {return this.value;})
+                .get()
+                .join(",");
+     
+            if (ids) {
+                var url = $(this).attr('data-export-url') + ids;
+                var win = window.open(url, '_blank');
+                win.focus();
+            } else {
+                alert('Bitte wählen Sie mindestens ein Datenblatt aus!');
+            }
+            
+        });
     });
 JS
 );

@@ -393,6 +393,27 @@ class Datenblatt extends \yii\db\ActiveRecord
         return implode('/ ', $teNummers);
     }
 
+    /**
+     * @return string
+     */
+    public function getTenummerList() {
+
+        $wohnungsTenummer = array();
+        $teNummers = array();
+
+        if ($this->haus) {
+            foreach ($this->haus->teileigentumseinheits as $te) {
+                $teNummers[] = $te->te_nummer;
+                if ($te->einheitstyp_id == 1) {
+                    $wohnungsTenummer[] = $te->te_nummer;
+                }
+            }
+            asort($teNummers);
+        }
+
+        return $teNummers;
+    }
+
     public function getSonderwunschAngebotSumme() {
 
         $total = 0;
