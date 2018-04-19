@@ -259,7 +259,7 @@ class TeileigentumseinheitController extends Controller
                             'name' => strval($sheet->getCellByColumnAndRow(2, $row)->getValue())
                         ]);
 
-                        switch($sheet->getCellByColumnAndRow($row, 3)->getValue()) {
+                        switch($sheet->getCellByColumnAndRow(3, $row)->getValue()) {
                             case 'JA':
                                 $teileigentumseinheit->gefoerdert = 1;
                                 break;
