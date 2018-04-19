@@ -79,6 +79,8 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'desc' => ['haus.rechnung_vertrieb' => SORT_DESC],
         ];
 
+        $activeProjekt = User::getActiveProjekt();
+
         $query->andFilterWhere([
             'id' => $this->id,
             'haus_id' => $this->haus_id,
@@ -86,7 +88,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'gefoerdert' => $this->gefoerdert,
             'kaufpreis' => $this->kaufpreis,
             'kp_einheit' => $this->kp_einheit,
-            'teileigentumseinheit.projekt_id' => $this->projekt_id,
+            'teileigentumseinheit.projekt_id' => $activeProjekt ? $activeProjekt->id : 0,
         ]);
 
         $query
