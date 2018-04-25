@@ -69,17 +69,24 @@ class KaeuferController extends Controller
     {
         $model = new Kaeufer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $projektZuweisungFehlt = false;
+        $kaeuferProjektIds = Yii::$app->request->post('KaeuferProjekt');
+        if (Yii::$app->request->isPost && $kaeuferProjektIds == null) {
+            $model->addError('kaeuferProjekts', 'Käufer muss mindestens zu einem Projekt zugewiesen werden!');
+            $projektZuweisungFehlt = true;
+        }
+
+        if ($model->load(Yii::$app->request->post()) && !$projektZuweisungFehlt && $model->save()) {
 
             $kaeuferProjekts = Yii::$app->request->post('KaeuferProjekt');
             $this->saveKaeuferProdukts($model, $kaeuferProjekts);
 
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -92,31 +99,40 @@ class KaeuferController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            $kaeuferProjekts = Yii::$app->request->post('KaeuferProjekt');
-            $this->saveKaeuferProdukts($model, $kaeuferProjekts);
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        $projektZuweisungFehlt = false;
+        $kaeuferProjektIds = Yii::$app->request->post('KaeuferProjekt');
+        if (Yii::$app->request->isPost && $kaeuferProjektIds == null) {
+            $model->addError('kaeuferProjekts', 'Käufer muss mindestens zu einem Projekt zugewiesen werden!');
+            $projektZuweisungFehlt = true;
         }
+
+        if ($model->load(Yii::$app->request->post()) && !$projektZuweisungFehlt && $model->save()) {
+
+            $result = $this->saveKaeuferProdukts($model, $kaeuferProjektIds);
+
+            if ($result) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
-    private function saveKaeuferProdukts($model, $kaeuferProjekts = array()) {
-        $existingProjektIds = [];
+    private function saveKaeuferProdukts($model, $kaeuferProjektIds = array()) {
 
-        if ($kaeuferProjekts == null) {
-            $kaeuferProjekts = [];
+        if ($kaeuferProjektIds == null) {
+            $model->addError('kaeuferProjekts', 'Käufer muss mindestens zu einem Projekt zugewiesen werden!');
+            return false;
         }
 
+        $existingProjektIds = [];
         $accesableProjektIds = User::getAccessableProjektIds();
 
         // delete not existing assignments
         foreach ($model->kaeuferProjekts as $kaeuferProjekt) {
-            if (!in_array($kaeuferProjekt->projekt_id, $kaeuferProjekts) && in_array($kaeuferProjekt->projekt_id, $accesableProjektIds)) {
+            if (!in_array($kaeuferProjekt->projekt_id, $kaeuferProjektIds) && in_array($kaeuferProjekt->projekt_id, $accesableProjektIds)) {
                 $kaeuferProjekt->delete();
             } else {
                 $existingProjektIds[] = $kaeuferProjekt->projekt_id;
@@ -124,7 +140,7 @@ class KaeuferController extends Controller
         }
 
         // add new assignments
-        foreach ($kaeuferProjekts as $projektId) {
+        foreach ($kaeuferProjektIds as $projektId) {
             if (!in_array($projektId, $existingProjektIds)) {
                 $kaeuferProjekt = new KaeuferProjekt();
                 $kaeuferProjekt->projekt_id = $projektId;
@@ -132,6 +148,8 @@ class KaeuferController extends Controller
                 $kaeuferProjekt->save();
             }
         }
+
+        return true;
     }
 
     public function actionUpdatedates()

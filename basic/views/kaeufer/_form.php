@@ -68,14 +68,27 @@ use yii\widgets\ActiveForm;
 
                 <div class="col-sm-6">
                     <h2>Projekt-Zuordungen</h2>
-                    <div>
+
+<br>
+                    <?php
+                        $kaeuferProjektErrors = $model->getErrors('kaeuferProjekts');
+                        if (count($kaeuferProjektErrors)):
+                        ?>
+                            <span class="alert alert-danger"><?= $kaeuferProjektErrors[0] ?></span>
+                    <?php endif; ?>
+
+<br>
+<br>
                     <div class="form-group">
                         <?php
                             echo Html::dropDownList('kaeuferProjektId', null,
                                 ArrayHelper::map(User::getProjects(), 'id', 'name'),
                                 ['class' => 'form-control', 'prompt' => 'Projekt auswählen'])
                         ?>
+
                     </div>
+
+
                     <table class="table table-straped kaeufer-projekts">
                         <?php $accessableProjektIds = User::getAccessableProjektIds(); ?>
                         <?php foreach ($model->kaeuferProjekts as $kaeuferProjekt): ?>
