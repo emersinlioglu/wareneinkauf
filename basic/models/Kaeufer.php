@@ -33,6 +33,7 @@ use Yii;
  * @property string $nachname2
  *
  * @property Datenblatt[] $datenblatts
+ * @property KaeuferProjekt[] $kaeuferProjekts
  */
 class Kaeufer extends \yii\db\ActiveRecord
 {
@@ -156,6 +157,14 @@ class Kaeufer extends \yii\db\ActiveRecord
     public function getDatenblatts()
     {
         return $this->hasMany(Datenblatt::className(), ['kaeufer_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getKaeuferProjekts()
+    {
+        return $this->hasMany(KaeuferProjekt::className(), ['kaeufer_id' => 'id']);
     }
 
 }

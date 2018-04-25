@@ -1,5 +1,7 @@
 <?php
 
+use app\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -63,6 +65,34 @@ use yii\widgets\ActiveForm;
                     </div>
 
                 </div>
+
+                <div class="col-sm-6">
+                    <h2>Projekt-Zuordungen</h2>
+                    <div>
+                    <div class="form-group">
+                        <?php
+                            echo Html::dropDownList('kaeuferProjektId', null,
+                                ArrayHelper::map(User::getProjects(), 'id', 'name'),
+                                ['class' => 'form-control', 'prompt' => 'Projekt auswählen'])
+                        ?>
+                    </div>
+                    <table class="table table-straped kaeufer-projekts">
+                        <?php $accessableProjektIds = User::getAccessableProjektIds(); ?>
+                        <?php foreach ($model->kaeuferProjekts as $kaeuferProjekt): ?>
+                            <?php if (!in_array($kaeuferProjekt->projekt_id, $accessableProjektIds)) continue; ?>
+                            <tr>
+                                <td>
+                                    <input name="KaeuferProjekt[]" value="<?= $kaeuferProjekt->projekt->id ?>" type="hidden">
+                                    <?= $kaeuferProjekt->projekt->name ?>
+                                </td>
+                                <td>
+                                    <span class="delete-button btn btn-danger btn-xl"><span class="fa fa-minus"></span></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+
             </div>
 
             <div class="form-group">
@@ -74,3 +104,43 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+
+<?php
+$this->registerJs(<<<EOT
+    $(function(){
+        
+        var table = $('.kaeufer-projekts');
+        
+        $('[name="kaeuferProjektId"]').change(function() {
+            var selectedOption = $(this).find('option:selected');
+            var projektId = this.value;
+            
+            if (projektId == 0) { 
+                return;
+            }
+            
+            var searchProjektId = $('[name="KaeuferProjekt[]"][value="' + projektId + '"]');
+            console.log(searchProjektId);
+            console.log(searchProjektId.length);
+            if (0 == searchProjektId.length) {
+            
+                var tr = $('<tr>');
+                var td = $('<td>')
+                    .append($('<input>').attr('name', 'KaeuferProjekt[]').attr('type', 'hidden').attr('value', projektId))
+                    .append(selectedOption.text());
+                tr.append(td);
+                
+                tr.append($('<td>').html('<span class="delete-button btn btn-danger btn-xl"><span class="fa fa-minus"></span></span>'));
+                    
+                table.append(tr);
+            }
+            
+        });
+        
+        table.on('click', '.delete-button', function(){
+            $(this).closest('tr').remove();
+        });
+    });
+EOT
+);
+?>

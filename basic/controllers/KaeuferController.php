@@ -3,9 +3,12 @@
 namespace app\controllers;
 
 use app\models\Datenblatt;
+use app\models\KaeuferProjekt;
+use app\models\User;
 use Yii;
 use app\models\Kaeufer;
 use app\models\KaeuferSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,6 +70,10 @@ class KaeuferController extends Controller
         $model = new Kaeufer();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $kaeuferProjekts = Yii::$app->request->post('KaeuferProjekt');
+            $this->saveKaeuferProdukts($model, $kaeuferProjekts);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -86,11 +93,44 @@ class KaeuferController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $kaeuferProjekts = Yii::$app->request->post('KaeuferProjekt');
+            $this->saveKaeuferProdukts($model, $kaeuferProjekts);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    private function saveKaeuferProdukts($model, $kaeuferProjekts = array()) {
+        $existingProjektIds = [];
+
+        if ($kaeuferProjekts == null) {
+            $kaeuferProjekts = [];
+        }
+
+        $accesableProjektIds = User::getAccessableProjektIds();
+
+        // delete not existing assignments
+        foreach ($model->kaeuferProjekts as $kaeuferProjekt) {
+            if (!in_array($kaeuferProjekt->projekt_id, $kaeuferProjekts) && in_array($kaeuferProjekt->projekt_id, $accesableProjektIds)) {
+                $kaeuferProjekt->delete();
+            } else {
+                $existingProjektIds[] = $kaeuferProjekt->projekt_id;
+            }
+        }
+
+        // add new assignments
+        foreach ($kaeuferProjekts as $projektId) {
+            if (!in_array($projektId, $existingProjektIds)) {
+                $kaeuferProjekt = new KaeuferProjekt();
+                $kaeuferProjekt->projekt_id = $projektId;
+                $kaeuferProjekt->kaeufer_id = $model->id;
+                $kaeuferProjekt->save();
+            }
         }
     }
 

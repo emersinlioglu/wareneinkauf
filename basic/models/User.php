@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class User
@@ -59,6 +60,10 @@ class User extends \webvimark\modules\UserManagement\models\User {
     public static function getProjects() {
         $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : \app\models\User::getProjektsFromCurrentUser();
         return $projekts;
+    }
+
+    public static function getAccessableProjektIds() {
+        return ArrayHelper::map(User::getProjects(), 'id', 'id');;
     }
 
     public static function setActiveProjekt($projektId) {
