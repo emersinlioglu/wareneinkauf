@@ -10,3 +10,15 @@ CREATE TABLE `kaeufer_projekt` (
 )
     ENGINE=InnoDB
 ;
+
+ALTER TABLE `kaeufer_projekt`
+    ADD UNIQUE INDEX `kaeufer_id_projekt_id` (`kaeufer_id`, `projekt_id`);
+
+
+replace into kaeufer_projekt (kaeufer_id, projekt_id)
+    select
+        db.kaeufer_id, db.projekt_id
+    from datenblatt db
+        left join kaeufer k on k.id = db.kaeufer_id
+    where db.kaeufer_id is not null
+    group by db.kaeufer_id, db.projekt_id

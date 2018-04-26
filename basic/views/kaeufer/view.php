@@ -67,4 +67,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h3>Zugeordnete Projekte</h3>
+    <ul>
+        <?php foreach($model->kaeuferProjekts as $kaeuferProjekt): ?>
+            <li><?= $kaeuferProjekt->projekt->name ?></li>
+        <?php endforeach; ?>
+    </ul>
+
 </div>
