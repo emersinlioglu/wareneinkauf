@@ -42,6 +42,7 @@ class KaeuferSearch extends Kaeufer
     public function search($params)
     {
         $query = Kaeufer::find();
+        $query->joinWith(['kaeuferProjekts']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -66,6 +67,13 @@ class KaeuferSearch extends Kaeufer
             'anrede' => $this->anrede,
             'anrede2' => $this->anrede2,
         ]);
+
+        if (!User::hasRole('admin')) {
+
+            $query->andFilterWhere([
+                'kaeufer_projekt.projekt_id' => User::getAccessableProjektIds(),
+            ]);
+        }
 
         $query->andFilterWhere(['like', 'debitor_nr', $this->debitor_nr])
             ->andFilterWhere(['like', 'titel', $this->titel])

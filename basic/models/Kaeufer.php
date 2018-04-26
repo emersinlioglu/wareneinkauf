@@ -167,4 +167,11 @@ class Kaeufer extends \yii\db\ActiveRecord
         return $this->hasMany(KaeuferProjekt::className(), ['kaeufer_id' => 'id']);
     }
 
+    public function getZugeordneteProjektNamen() {
+        $projektNamen = [];
+        foreach ($this->kaeuferProjekts as $kaeuferProjekt) {
+            $projektNamen[] = $kaeuferProjekt->projekt->name;
+        }
+        return implode(', ', $projektNamen);
+    }
 }

@@ -135,6 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'titel2',
                     'vorname2',
                     'nachname2',
+//                    'zugeordneteProjektNamen',
 
                     [
                         'class' => 'yii\grid\ActionColumn',

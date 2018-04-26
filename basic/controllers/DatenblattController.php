@@ -875,30 +875,24 @@ class DatenblattController extends Controller
         $out = [];
         if (isset($_GET['term'])) {
 
-//        die($_GET['term']);
-//            $kunden = Kunde::findAll(['debitor_nr like "%' . $_GET['term'] . '%"']);
+//            $kaeufers = Kaeufer::find()
+//                ->joinWith(['kaeuferProjekts'])
+//                ->where(['like', 'debitor_nr', $_GET['term']])
+//                ->orWhere(['like', 'vorname', $_GET['term']])
+//                ->orWhere(['like', 'nachname', $_GET['term']])
+//                ->all();
+
             $kaeufers = Kaeufer::find()
-                ->where(['like', 'debitor_nr', $_GET['term']])
-                ->orWhere(['like', 'vorname', $_GET['term']])
-                ->orWhere(['like', 'nachname', $_GET['term']])
+                ->joinWith(['kaeuferProjekts'])
+                ->andFilterWhere(['and',
+                    ['kaeufer_projekt.projekt_id' => User::getActiveProjekt()->id],
+                ])
+                ->andFilterWhere(['or',
+                    ['like', 'debitor_nr', $_GET['term']],
+                    ['like', 'vorname', $_GET['term']],
+                    ['like', 'nachname', $_GET['term']]
+                ])
                 ->all();
-//die('bbbb');
-//            $query = new Query;
-//
-//            $query->select('name')
-//                ->from('country')
-//                ->where('name LIKE "%' . $q .'%"')
-//                ->orderBy('name');
-//            $command = $query->createCommand();
-//            $data = $command->queryAll();
-//            $out = [];
-//            foreach ($data as $d) {
-//                $out[] = ['value' => $d['name']];
-//            }
-//            echo Json::encode($out);
-
-//            var_dump(count($kunden));
-
 
             $labelColumns = array(
                 'debitor_nr' => array('title' => 'Debitor-Nr.'),
@@ -906,8 +900,6 @@ class DatenblattController extends Controller
                 'nachname' => array('title' => 'Nachname'),
             );
             $results = array();
-
-//            '<span style="width: 100px; display: inline-block;">' . $settings['title'] . '</span>';
 
             $row = '';
             foreach ($labelColumns as $columnName => $settings) {
