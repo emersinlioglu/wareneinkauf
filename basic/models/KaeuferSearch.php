@@ -12,6 +12,8 @@ use app\models\Kaeufer;
  */
 class KaeuferSearch extends Kaeufer
 {
+    public $projektId;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class KaeuferSearch extends Kaeufer
     {
         return [
             [['id', 'auflassung', 'anrede', 'anrede2'], 'integer'],
-            [['debitor_nr', 'beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'land', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'safe'],
+            [['projektId', 'debitor_nr', 'beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'land', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'safe'],
         ];
     }
 
@@ -74,6 +76,10 @@ class KaeuferSearch extends Kaeufer
                 'kaeufer_projekt.projekt_id' => User::getAccessableProjektIds(),
             ]);
         }
+
+        $query->andFilterWhere([
+            'kaeufer_projekt.projekt_id' => $this->projektId,
+        ]);
 
         $query->andFilterWhere(['like', 'debitor_nr', $this->debitor_nr])
             ->andFilterWhere(['like', 'titel', $this->titel])

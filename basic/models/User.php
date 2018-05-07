@@ -33,10 +33,29 @@ class User extends \webvimark\modules\UserManagement\models\User {
         $projekts = [];
         $currentUser = self::getCurrentUser();
         if ($currentUser) {
+
             $user = User::findOne($currentUser->id);
-            $projekts = $user->projekts;
+            $projekts = User::hasRole('admin') ? \app\models\Projekt::find()->all() : $user->projekts;
         }
+
         return $projekts;
+    }
+
+    public static function getFirmenFromCurrentUser() {
+        $firmen = [];
+        $currentUser = self::getCurrentUser();
+        if ($currentUser) {
+
+            $user = User::findOne($currentUser->id);
+
+            /** @var Projekt $projekt */
+            $projetks = User::hasRole('admin') ? \app\models\Projekt::find()->all() : $user->projekts;
+            foreach ($projetks as $projekt) {
+                $firmen[$projekt->firma_id] = $projekt->firma;
+            }
+        }
+
+        return $firmen;
     }
 
     public function getQueryBuilderProfiles() {

@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
@@ -72,8 +73,7 @@ $this->registerJs('
         <div class="col-sm-2">
             <?php $htmlOptions = $canEditBasicData ? [] : ['disabled' => 'disabled'] ?>
             <?= $form->field($modelDatenblatt, 'firma_id')
-                ->dropDownList(ArrayHelper::map(
-                    Firma::find()->all(), 'id', 'name'),
+                ->dropDownList(ArrayHelper::map(User::getFirmenFromCurrentUser(), 'id', 'name'),
                     array_merge(
                         ['prompt' => 'Firma auswählen'],
                         $htmlOptions

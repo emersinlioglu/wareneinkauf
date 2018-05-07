@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
-use webvimark\modules\UserManagement\models\User;
+use app\models\User;
+use \yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\KaeuferSearch */
@@ -131,6 +131,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'anrede2',
                         'value' => 'anrede2Label',
                         'filter' => array( 0 => 'Herr', 1 => 'Frau'),
+                    ],
+                    [
+                        'label' => 'Projekt',
+                        'attribute' => 'projektId',
+                        'value' => 'zugeordneteProjektNamen',
+                        'filter' => ArrayHelper::map(User::getProjektsFromCurrentUser(), 'id', 'name'),
+
                     ],
                     'titel2',
                     'vorname2',
