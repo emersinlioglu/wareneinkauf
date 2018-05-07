@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Firma;
+use yii\helpers\ArrayHelper;
 
 /**
  * FirmaSearch represents the model behind the search form about `app\models\Firma`.
@@ -42,6 +43,7 @@ class FirmaSearch extends Firma
     public function search($params)
     {
         $query = Firma::find();
+        $query->joinWith(['projekts']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
