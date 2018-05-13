@@ -21,15 +21,32 @@ $this->params['breadcrumbs'][] = ['label' => $modelDatenblatt->id, 'url' => ['vi
 
     <h3>Datenblatt Details</h3>
 
-    <?= $this->render('_form', [
-        'modelDatenblatt' => $modelDatenblatt,
-        //'modelsZahlung'  => $modelsZahlungs,
-        'modelKaeufer' => $modelKaeufer,
+    <?php if (\app\models\User::hasPermission('nur_sonderwunsch', false)): ?>
 
-        'kaufpreisTotal' => $kaufpreisTotal,
-        'sonderwuenscheTotal' => $sonderwuenscheTotal,
-        'canEditBasicData' => $canEditBasicData,
-    ]) ?>
+        <?= $this->render('_form_nur_sonderwunsch', [
+            'modelDatenblatt' => $modelDatenblatt,
+            //'modelsZahlung'  => $modelsZahlungs,
+            'modelKaeufer' => $modelKaeufer,
+
+            'kaufpreisTotal' => $kaufpreisTotal,
+            'sonderwuenscheTotal' => $sonderwuenscheTotal,
+            'canEditBasicData' => $canEditBasicData,
+        ]) ?>
+
+    <?php else: ?>
+
+        <?= $this->render('_form', [
+            'modelDatenblatt' => $modelDatenblatt,
+            //'modelsZahlung'  => $modelsZahlungs,
+            'modelKaeufer' => $modelKaeufer,
+
+            'kaufpreisTotal' => $kaufpreisTotal,
+            'sonderwuenscheTotal' => $sonderwuenscheTotal,
+            'canEditBasicData' => $canEditBasicData,
+        ]) ?>
+
+    <?php endif; ?>
+
 
 </div>
 
