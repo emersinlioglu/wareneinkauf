@@ -86,8 +86,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                      'geschoss',
                      'zimmer',
-                     'me_anteil:decimal',
-                     'wohnflaeche:decimal',
+                     [
+                         'attribute' => 'me_anteil',
+                         'format' => ['decimal', 2],
+                         'contentOptions' => ['class' => 'text-right'],
+                     ],
+                     [
+                         'attribute' => 'wohnflaeche',
+                         'format' => ['decimal', 2],
+                         'contentOptions' => ['class' => 'text-right'],
+                     ],
                      'kaufpreis:currency',
                      'kp_einheit:currency',
 
