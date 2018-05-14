@@ -37,6 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'wohnflaeche:decimal',
             'kaufpreis:currency',
             'kp_einheit:currency',
+            [
+                'attribute' => 'rechnung_vertrieb',
+                'format' => 'boolean',
+            ],
+            [
+                'attribute' => 'status',
+                'value' => $model->getStatusLabel(),
+            ],
         ],
     ]) ?>
 

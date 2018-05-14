@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \yii\helpers\ArrayHelper;
 use app\models\Einheitstyp;
+use \app\models\Teileigentumseinheit;
 use kartik\money\MaskMoney;
 
 /* @var $this yii\web\View */
@@ -25,6 +26,8 @@ use kartik\money\MaskMoney;
             <?= $form->field($model, 'gefoerdert')->checkbox() ?>
             <?= $form->field($model, 'geschoss')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'zimmer')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'rechnung_vertrieb')->checkbox() ?>
+            <?= $form->field($model, 'status')->dropDownList(Teileigentumseinheit::statusOptions(), ['prompt' => 'Bitte wählen'])->label('Status'); ?>
         </div>
         <div class="col-sm-3">
             <?= $form->field($model, "me_anteil")

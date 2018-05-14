@@ -16,6 +16,8 @@ use Yii;
  * @property integer $gefoerdert
  * @property string $geschoss
  * @property string $zimmer
+ * @property string $status
+ * @property integer $rechnung_vertrieb
  * @property string $me_anteil
  * @property double $wohnflaeche
  * @property double $kaufpreis
@@ -31,6 +33,18 @@ use Yii;
  */
 class Teileigentumseinheit extends \yii\db\ActiveRecord
 {
+    const STATUS_FREI = 'frei';
+    const STATUS_RESERVIERT = 'reserviert';
+    const STATUS_VERKAUFT   = 'verkauft';
+
+    public static function statusOptions() {
+        return [
+            Haus::STATUS_FREI => 'Frei',
+            Haus::STATUS_RESERVIERT => 'Reserviert',
+            Haus::STATUS_VERKAUFT => 'Verkauft'
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -45,11 +59,11 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['te_nummer', 'einheitstyp_id'], 'required'],
-            [['haus_id', 'einheitstyp_id', 'gefoerdert'], 'integer'],
+            [['te_nummer', 'einheitstyp_id', 'status'], 'required'],
+            [['haus_id', 'einheitstyp_id', 'gefoerdert', 'rechnung_vertrieb'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis', 'me_anteil'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
-            [['hausnr', 'geschoss', 'zimmer'], 'string', 'max' => 45],
+            [['hausnr', 'geschoss', 'zimmer', 'status'], 'string', 'max' => 45],
             [['forecast_preis', 'verkaufspreis', 'verkaufspreis_begruendung'], 'checkRequirement'],
         ];
     }
@@ -117,5 +131,13 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function getHaus()
     {
         return $this->hasOne(Haus::className(), ['id' => 'haus_id']);
+    }
+
+    public function getStatusLabel() {
+        $label = '';
+        if (isset(self::statusOptions()[$this->status])) {
+            $label = self::statusOptions()[$this->status];
+        }
+        return $label;
     }
 }
