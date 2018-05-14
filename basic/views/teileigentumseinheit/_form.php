@@ -43,14 +43,6 @@ use kartik\money\MaskMoney;
                     ],
                 ])
             ?>
-            <?= $form->field($model, "kaufpreis")
-                //->textInput([])
-                ->widget(MaskMoney::classname(), [
-                    'options' => [
-                        'style' => 'text-align: right',
-                    ],
-                ])
-            ?>
             <?= $form->field($model, "kp_einheit")
                 //->textInput([])
                 ->widget(MaskMoney::classname(), [
@@ -59,6 +51,25 @@ use kartik\money\MaskMoney;
                     ],
                 ])
             ?>
+
+            <?= $form->field($model, "verkaufspreis")
+                //->textInput([])
+                ->widget(MaskMoney::classname(), [
+                    'options' => [
+                        'style' => 'text-align: right',
+                    ],
+                ])
+            ?>
+            <?= $form->field($model, "forecast_preis")
+                //->textInput([])
+                ->widget(MaskMoney::classname(), [
+                    'options' => [
+                        'style' => 'text-align: right',
+                    ],
+                ])
+            ?>
+            <?= $form->field($model, 'verkaufspreis_begruendung')->textInput(['maxlength' => true]) ?>
+
         </div>
     </div>
 

@@ -404,18 +404,18 @@ class DatenblattController extends Controller
 //            $modelKaeufer = $modelDatenblatt->kaeufer;
 
 
-            // logik für die Staties "reserviert" und "verkauft"
-            $hausModel = $modelDatenblatt->haus;
-            if ($hausModel) {
-                $istAngefordert = $modelDatenblatt->istAngefordert();
-                if ($istAngefordert) {
-                    $hausModel->status = Haus::STATUS_VERKAUFT;
-                    $hausModel->save();
-                } else if ($modelDatenblatt->kaeufer_id) {
-                    $hausModel->status = Haus::STATUS_RESERVIERT;
-                    $hausModel->save();
-                }
-            }
+//            // logik für die Staties "reserviert" und "verkauft"
+//            $hausModel = $modelDatenblatt->haus;
+//            if ($hausModel) {
+//                $istAngefordert = $modelDatenblatt->istAngefordert();
+//                if ($istAngefordert) {
+//                    $hausModel->status = Haus::STATUS_VERKAUFT;
+//                    $hausModel->save();
+//                } else if ($modelDatenblatt->kaeufer_id) {
+//                    $hausModel->status = Haus::STATUS_RESERVIERT;
+//                    $hausModel->save();
+//                }
+//            }
 
             $modelDatenblatt->refresh();
         }
