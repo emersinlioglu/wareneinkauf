@@ -212,9 +212,11 @@ class DatenblattController extends Controller
      */
     public function actionCreate($projektId = null)
     {
+        $aktivProjekt = User::getActiveProjekt();
         $model = new Datenblatt;
         $model->creator_user_id = Yii::$app->user->getId();
-        $model->projekt_id = $projektId;
+        $model->projekt_id = $aktivProjekt->id;
+        $model->firma_id = $aktivProjekt->firma_id;
         $model->save();
 
 //        $abschlags = [
@@ -1039,9 +1041,11 @@ class DatenblattController extends Controller
         }
 
         if (!$model->isAbschlagAngefordert()) {
-
             $te = Teileigentumseinheit::findOne($teId);
             $te->haus_id = $model->haus_id;
+            if (!$te->status) {
+                $te->status = Teileigentumseinheit::STATUS_RESERVIERT;
+            }
             $te->save();
 
             $model->refresh();

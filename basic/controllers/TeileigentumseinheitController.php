@@ -345,7 +345,7 @@ class TeileigentumseinheitController extends Controller
                 $kaeufers = Teileigentumseinheit::find()
                     ->where(['like', 'te_nummer', $_GET['term']])
                     ->andWhere("(haus_id IS NULL OR haus_id = '')")
-                    ->andWhere("projekt_id = " . $datenblatt->projekt->id)
+                    ->andWhere("projekt_id = " . $datenblatt->projekt_id)
                     ->orderBy('CAST(te_nummer AS DECIMAL)')
                     ->all();
 

@@ -89,6 +89,9 @@ class User extends \webvimark\modules\UserManagement\models\User {
         \Yii::$app->session->set('activeProjektId', $projektId);
     }
 
+    /**
+     * @return null|Projekt
+     */
     public static function getActiveProjekt() {
         $activeProjektId = \Yii::$app->session->get('activeProjektId');
         $activeProjekt = null;
