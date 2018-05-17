@@ -1044,7 +1044,7 @@ class DatenblattController extends Controller
             $te = Teileigentumseinheit::findOne($teId);
             $te->haus_id = $model->haus_id;
             if (!$te->status) {
-                $te->status = Teileigentumseinheit::STATUS_RESERVIERT;
+                $te->status = Teileigentumseinheit::STATUS_VERKAUFT;
             }
             $te->save();
 
