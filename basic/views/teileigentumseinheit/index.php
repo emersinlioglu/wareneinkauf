@@ -52,16 +52,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Firmen Nr.'
                     ],
                     [
-                        'attribute' => 'haus_status',
-                        'value' => 'haus.status',
+                        'attribute' => 'status',
+                        'value' => 'status',
                         'filter' => Html::activeDropDownList(
                             $searchModel,
-                            'haus_status',
-                            Haus::statusOptions(),
+                            'status',
+                            \app\models\Teileigentumseinheit::statusOptions(),
                             ['class'=>'Alle','prompt' => '']
                         ),
                         'label' => 'Status'
                     ],
+//                    [
+//                        'attribute' => 'haus_status',
+//                        'value' => 'haus.status',
+//                        'filter' => Html::activeDropDownList(
+//                            $searchModel,
+//                            'haus_status',
+//                            Haus::statusOptions(),
+//                            ['class'=>'Alle','prompt' => '']
+//                        ),
+//                        'label' => 'Status'
+//                    ],
                     'te_nummer',
                     [
                         'class' => 'kartik\grid\BooleanColumn',
