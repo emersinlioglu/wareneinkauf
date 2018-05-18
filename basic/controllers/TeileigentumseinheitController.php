@@ -250,6 +250,7 @@ class TeileigentumseinheitController extends Controller
 
                         if (!$teileigentumseinheit) {
                             $teileigentumseinheit = new Teileigentumseinheit();
+                            $teileigentumseinheit->status = Teileigentumseinheit::STATUS_FREI;
                         } else if ($teileigentumseinheit->haus_id > 0) {
                             continue;
                         }
