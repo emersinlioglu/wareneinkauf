@@ -14,8 +14,6 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
 {
     public $firma_name;
     public $firma_nr;
-    public $haus_status;
-    public $haus_rechnung_vertrieb;
 
     /**
      * @inheritdoc
@@ -24,7 +22,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     {
         return [
             [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert', 'projekt_id'], 'integer'],
-            [['projekt_id', 'haus_rechnung_vertrieb', 'haus_status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
+            [['projekt_id', 'rechnung_vertrieb', 'status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
             [['kaufpreis', 'kp_einheit', 'forecast_preis', 'verkaufspreis'], 'number'],
         ];
     }
@@ -70,15 +68,6 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'asc' => ['firma.nr' => SORT_ASC],
             'desc' => ['firma.nr' => SORT_DESC],
         ];
-        $dataProvider->sort->attributes['haus_status'] = [
-            'asc' => ['haus.status' => SORT_ASC],
-            'desc' => ['haus.status' => SORT_DESC],
-        ];
-        $dataProvider->sort->attributes['haus_rechnung_vertrieb'] = [
-            'asc' => ['haus.rechnung_vertrieb' => SORT_ASC],
-            'desc' => ['haus.rechnung_vertrieb' => SORT_DESC],
-        ];
-
         $activeProjekt = User::getActiveProjekt();
 
         $query->andFilterWhere([
@@ -88,19 +77,20 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
             'gefoerdert' => $this->gefoerdert,
             'kaufpreis' => $this->kaufpreis,
             'kp_einheit' => $this->kp_einheit,
+//            'cast(me_anteil as decimal(11,2))' => str_replace(',', '.', $this->me_anteil),
+            'teileigentumseinheit.status' => $this->status,
+            'teileigentumseinheit.rechnung_vertrieb' => $this->rechnung_vertrieb,
             'teileigentumseinheit.projekt_id' => $activeProjekt ? $activeProjekt->id : 0,
         ]);
 
         $query
             ->andFilterWhere(['like', 'firma.name', $this->firma_name])
             ->andFilterWhere(['like', 'firma.nr', $this->firma_nr])
-            ->andFilterWhere(['like', 'haus.status', $this->haus_status])
-            ->andFilterWhere(['like', 'haus.rechnung_vertrieb', $this->haus_rechnung_vertrieb])
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
             ->andFilterWhere(['like', 'te_nummer', $this->te_nummer])
             ->andFilterWhere(['like', 'geschoss', $this->geschoss])
             ->andFilterWhere(['like', 'zimmer', $this->zimmer])
-            ->andFilterWhere(['like', 'me_anteil', $this->me_anteil])
+            ->andFilterWhere(['like', 'cast(me_anteil as decimal(11,2))', str_replace(',', '.', $this->me_anteil)])
             ->andFilterWhere(['like', 'verkaufspreis_begruendung', $this->verkaufspreis_begruendung])
             ->andFilterWhere(['like', 'wohnflaeche', $this->wohnflaeche]);
 

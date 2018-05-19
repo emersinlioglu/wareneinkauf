@@ -1,5 +1,6 @@
 <?php
 
+use kartik\money\MaskMoney;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\models\User;
@@ -26,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('Importieren', ['teileigentumseinheit/import'], ['class' => 'btn btn-primary']) ?>
         </p>
     <?php endif; ?>
+
+<!--    <pre>-->
+<!--    --><?php //var_dump($searchModel) ?>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -76,8 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'te_nummer',
                     [
                         'class' => 'kartik\grid\BooleanColumn',
-                        'attribute' => 'haus_rechnung_vertrieb',
-                        'value' => 'haus.rechnung_vertrieb',
+                        'attribute' => 'rechnung_vertrieb',
                         'vAlign' => 'middle',
                         'trueLabel' => 'Ja',
                         'falseLabel' => 'Nein',
