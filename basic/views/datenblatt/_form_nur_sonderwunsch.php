@@ -129,20 +129,6 @@ $this->registerJs('
             ?>
         </div>
 
-        <?php if ($kaeufer = $modelDatenblatt->kaeufer): ?>
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="control-label">Käufer</label>
-                    <p>
-                        <?= $kaeufer->getAnredeLabel() ?> <?= $kaeufer->vorname ?> <?= $kaeufer->nachname ?>
-                        <?php if ($kaeufer->vorname2): ?>
-                            <br><?= $kaeufer->getAnrede2Label() ?> <?= $kaeufer->vorname2 ?> <?= $kaeufer->nachname2 ?>
-                        <?php endif; ?>
-                    </p>
-                </div>
-            </div>
-        <?php endif; ?>
-
     </div>
 
     <ul class="nav nav-tabs well">
