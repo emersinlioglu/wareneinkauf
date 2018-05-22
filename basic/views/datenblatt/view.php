@@ -626,9 +626,14 @@ $this->params['breadcrumbs'][] = $this->title;
         $kaufvertragBetragTotal   = 0;
         $sonderwunschProzentTotal = 0;
         $sonderwunschBetragTotal  = 0;
+
+        $abschlags = [];
+        if (User::hasRole('Sonderwunsch', false)) {
+            $abschlags = $model->abschlags;
+        }
         ?>
         
-        <?php foreach($model->abschlags as $key => $abschlag): ?>
+        <?php foreach($abschlags as $key => $abschlag): ?>
         <tr>
             <td><?= $abschlag->name ?></td>
             <td><?= number_format((float)$abschlag->kaufvertrag_prozent, 2, ',', '.') ?> %</td>

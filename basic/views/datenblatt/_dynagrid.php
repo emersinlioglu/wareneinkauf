@@ -395,7 +395,7 @@ $gridColumns[] = [
             }
         },
         'update' => function ($url, $model) {
-            if (User::hasPermission('write_datasheets')) {
+            if (User::hasPermission('write_datasheets') && !User::hasRole('Sonderwunsch', false)) {
                 return Html::a('<span class=" glyphicon glyphicon-pencil"></span> Bearbeiten', $url, [
                     'title' => Yii::t('app', 'Update'),
                     'class'=>'btn btn-primary btn-xs',
@@ -504,7 +504,7 @@ echo DynaGrid::widget([
                 . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>'
                 . '<a id="" data-bulk-edit-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
                             data-single-edit-url="'.\yii\helpers\Url::to(['datenblatt/konfiguration', 'id' => '']).'"
-                            class="btn btn-default abschlag-massenbearbeitung" title="Abschlagkonfiguration">
+                            class="btn btn-default abschlag-massenbearbeitung '. (User::hasRole('Sonderwunsch') ? 'hide' : '' ) .'" title="Abschlagkonfiguration">
                         <i class="fa fa-list"></i> Abschlagkonfiguration
                    </a>'
                 . '<span id="" class="btn btn-default export-zaehler" title="Zählerangaben exportieren"
