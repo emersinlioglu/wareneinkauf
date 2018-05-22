@@ -36,8 +36,8 @@
                             <th>gefördert</th>
                             <th>Geschoss</th>
                             <th>Zimmer</th>
-                            <th>ME-Anteil</th>
-                            <th>Wohnfläche</th>
+                            <th class="text-align-right">ME-Anteil</th>
+                            <th class="text-align-right">Wohnfläche</th>
                             <th class="text-align-right">Kaufpreis</th>
                             <th class="text-align-right">KP/Einheit</th>
                             <th class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>" style="width: 5%;">Action</th>
@@ -57,8 +57,8 @@
                                 <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
                                 <td><?= $teileigentumseinheit->geschoss ?></td>
                                 <td><?= $teileigentumseinheit->zimmer ?></td>
-                                <td><?= $teileigentumseinheit->me_anteil ?></td>
-                                <td><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
+                                <td class="text-align-right"><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->me_anteil,2) ?></td>
+                                <td class="text-align-right"><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
                                 <?php if(!isset($hideActions)): ?>
