@@ -159,6 +159,7 @@ $this->registerJs('
             <?= $this->render('_teileigentumseinheiten', [
                 'form' => $form,
                 'modelDatenblatt' => $modelDatenblatt,
+                'hideActions' => true,
             ]) ?>
 
             <?= $this->render('_zaehlerangaben', [

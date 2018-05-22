@@ -61,11 +61,13 @@
                                 <td><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
                                 <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
-                                <td class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
-                                    <?= \yii\helpers\Html::a('<span class="fa fa-minus"></span>',
-                                        Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id]),
-                                        ['class' => 'delete-button delete-zahlung btn btn-danger btn-xl']) ?>
-                                </td>
+                                <?php if(!isset($hideActions)): ?>
+                                    <td class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
+                                        <?= \yii\helpers\Html::a('<span class="fa fa-minus"></span>',
+                                            Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id]),
+                                            ['class' => 'delete-button delete-zahlung btn btn-danger btn-xl']) ?>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                         <?php
                         endforeach;
