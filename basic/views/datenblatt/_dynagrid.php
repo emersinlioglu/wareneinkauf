@@ -395,7 +395,7 @@ $gridColumns[] = [
             }
         },
         'update' => function ($url, $model) {
-            if (User::hasPermission('write_datasheets') && !User::hasRole('Sonderwunsch', false)) {
+            if (User::hasPermission('write_datasheets')) {
                 return Html::a('<span class=" glyphicon glyphicon-pencil"></span> Bearbeiten', $url, [
                     'title' => Yii::t('app', 'Update'),
                     'class'=>'btn btn-primary btn-xs',
