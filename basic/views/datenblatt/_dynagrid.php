@@ -380,7 +380,7 @@ $gridColumns[] = [
     //'contentOptions' => ['style' => 'width:200px;'],
     //'header'=>'Actions',
     'order'=>DynaGrid::ORDER_FIX_LEFT,
-    'pageSummary'=>'Seitensumme',
+//    'pageSummary'=>'Seitensumme',
     'template' => '{view}{update}{report}{delete} ',
     'buttons' => [
         'view' => function ($url, $model) {
@@ -492,7 +492,7 @@ echo DynaGrid::widget([
 
     'gridOptions'=>[
         'floatHeader' => true,
-        'showPageSummary'=>true,
+//        'showPageSummary'=>true,
         'floatHeaderOptions' => [
             'position' => 'absolute',
         ],
