@@ -201,7 +201,7 @@ for ($i = 0; $i < $maxCountTEEinheits; $i++) {
     ];
     $gridColumns[] = [
         'value'=> "teeinheit__{$i}__zimmer",
-        'label' => "{$cnt}. TE-Geschoss"
+        'label' => "{$cnt}. TE-Zimmer"
     ];
     $gridColumns[] = [
         'value'=> "teeinheit__{$i}__me_anteil",
