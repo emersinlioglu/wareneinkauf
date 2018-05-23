@@ -125,7 +125,7 @@ $gridColumns[] = [
 //        'label' => 'Käufer Name'
 //    ],
 
-if (!User::hasRole('Sonderwunsch')) {
+if (!User::hasRole('Sonderwunsch', false)) {
     $gridColumns[] =    [
         'attribute' => 'kaufpreisSumme',
         'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
