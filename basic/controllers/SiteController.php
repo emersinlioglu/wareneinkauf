@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Einheitstyp;
 use app\models\Projekt;
 use app\models\TeileigentumseinheitSearch;
+use app\models\User;
 use miloschuman\highcharts\Highcharts;
 use Yii;
 use yii\filters\AccessControl;
@@ -80,6 +81,10 @@ class SiteController extends Controller
 //                ];
 //            }
 //        }
+
+        if (User::hasRole('Sonderwunsch', false)) {
+            $this->redirect(['datenblatt/index']);
+        }
 
         return $this->render('index', [
 //            'verkaufsentwicklungData'           => $verkaufsentwicklungData,
