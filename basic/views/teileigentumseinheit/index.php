@@ -41,6 +41,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
 
                     [
+                        'class' => 'yii\grid\ActionColumn',
+                        'buttons' => [
+                            'update' => function ($url, $model, $key) {
+                                return User::hasPermission('write_ownership') ? Html::a('Update', $url) : '';
+                            },
+                            'delete' => function ($url, $model, $key) {
+
+                                if (User::hasPermission('write_ownership')) {
+                                    /** @var $model \app\models\Haus */
+                                    $haus = $model->haus;
+                                    if ($haus && count($haus->datenblatts) > 0) {
+
+                                        $ids = array();
+                                        foreach ($haus->datenblatts as $datenblatt) {
+                                            $ids[] = $datenblatt->id;
+                                        }
+                                        return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
+                                    } else {
+                                        return Html::a('Delete', $url, [
+                                            'data' => [
+                                                'confirm' => 'Sind Sie sich sicher?',
+                                                'method' => 'post',
+                                            ],
+                                        ]);
+                                    }
+                                }
+
+                            }
+                        ]
+                    ],
+
+                    [
                         'attribute' => 'projekt_name',
                         'value' => 'projekt.name',
                         'label' => 'Projekt'
@@ -127,37 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                     ],
 
-                    [
-                        'class' => 'yii\grid\ActionColumn',
-                        'buttons' => [
-                            'update' => function ($url, $model, $key) {
-                                return User::hasPermission('write_ownership') ? Html::a('Update', $url) : '';
-                            },
-                            'delete' => function ($url, $model, $key) {
 
-                                if (User::hasPermission('write_ownership')) {
-                                    /** @var $model \app\models\Haus */
-                                    $haus = $model->haus;
-                                    if ($haus && count($haus->datenblatts) > 0) {
-
-                                        $ids = array();
-                                        foreach ($haus->datenblatts as $datenblatt) {
-                                            $ids[] = $datenblatt->id;
-                                        }
-                                        return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
-                                    } else {
-                                        return Html::a('Delete', $url, [
-                                            'data' => [
-                                                'confirm' => 'Sind Sie sich sicher?',
-                                                'method' => 'post',
-                                            ],
-                                        ]);
-                                    }
-                                }
-
-                            }
-                        ]
-                    ],
                 ],
             ]); ?>
 

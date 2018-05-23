@@ -26,26 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
-                   // 'id',
-                    'name',
-                   // 'firma_id',
-                    [
-                        'attribute' => 'firma_name',
-                        'value'=>'firma.name',
-                        'label' => 'Firma'
-                    ],
-                    [
-                        'attribute' => 'firma_nr',
-                        'value'=>'firma.nr',
-                        'label' => 'Buchungskr.'
-                    ],
-                    'strasse',
-                    'hausnr',
-                    'plz',
-                    'ort',
-                    //'mail_header',
-                    //'mail_footer',
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'template'=>'{view}<br>{update}<br>{delete}<br>{pdf}',
@@ -70,6 +50,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
 
                     ],
+
+                   // 'id',
+                    'name',
+                   // 'firma_id',
+                    [
+                        'attribute' => 'firma_name',
+                        'value'=>'firma.name',
+                        'label' => 'Firma'
+                    ],
+                    [
+                        'attribute' => 'firma_nr',
+                        'value'=>'firma.nr',
+                        'label' => 'Buchungskr.'
+                    ],
+                    'strasse',
+                    'hausnr',
+                    'plz',
+                    'ort',
+                    //'mail_header',
+                    //'mail_footer',
+
                 ],
             ]); ?>
 

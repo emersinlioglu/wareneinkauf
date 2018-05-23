@@ -24,12 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            'name',
-            'einheit',
-            'prefix_debitor_nr',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{update}{add}{delete}',
@@ -51,7 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     }
                 ]
-            ]
+            ],
+            //'id',
+            'name',
+            'einheit',
+            'prefix_debitor_nr',
+
+
         ],
     ]); ?>
 

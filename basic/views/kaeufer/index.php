@@ -102,6 +102,38 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
 
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'buttons' => [
+                            'update' => function ($url, $model, $key) {
+                                return User::hasPermission('write_customer') ? Html::a('Update', $url) : '';
+                            },
+                            'delete' => function ($url, $model, $key) {
+
+                                if (User::hasPermission('write_customer')) {
+                                    /** @var $model \app\models\Kaeufer */
+                                    if (count($model->datenblatts) > 0) {
+
+                                        $ids = array();
+                                        foreach ($model->datenblatts as $datenblatt) {
+                                            $ids[] = $datenblatt->id;
+                                        }
+                                        return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
+
+                                    } else {
+                                        return Html::a('Delete', $url, [
+                                            'data' => [
+                                                'confirm' => 'Sind Sie sich sicher?',
+                                                'method' => 'post',
+                                            ],
+                                        ]);
+                                    }
+                                }
+
+                            }
+                        ]
+                    ],
+
                     //'id',
                     //'debitor_nr',
                     //'beurkundung_am',
@@ -144,37 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'nachname2',
 //                    'zugeordneteProjektNamen',
 
-                    [
-                        'class' => 'yii\grid\ActionColumn',
-                        'buttons' => [
-                            'update' => function ($url, $model, $key) {
-                                return User::hasPermission('write_customer') ? Html::a('Update', $url) : '';
-                            },
-                            'delete' => function ($url, $model, $key) {
 
-                                if (User::hasPermission('write_customer')) {
-                                    /** @var $model \app\models\Kaeufer */
-                                    if (count($model->datenblatts) > 0) {
-
-                                        $ids = array();
-                                        foreach ($model->datenblatts as $datenblatt) {
-                                            $ids[] = $datenblatt->id;
-                                        }
-                                        return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
-
-                                    } else {
-                                        return Html::a('Delete', $url, [
-                                            'data' => [
-                                                'confirm' => 'Sind Sie sich sicher?',
-                                                'method' => 'post',
-                                            ],
-                                        ]);
-                                    }
-                                }
-
-                            }
-                        ]
-                    ],
                 ],
             ]); ?>
 
