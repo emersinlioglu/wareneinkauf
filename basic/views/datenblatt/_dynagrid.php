@@ -14,10 +14,10 @@
 use yii\helpers\Html;
 use kartik\dynagrid\DynaGrid;
 use kartik\grid\GridView;
-use webvimark\modules\UserManagement\models\User;
 use kartik\dynagrid\Module;
 use yii\widgets\ActiveForm;
 use \yii\helpers\Url;
+use \app\models\User;
 
 $gridColumns = [
     //['class' => 'yii\grid\SerialColumn'],
@@ -58,71 +58,60 @@ $gridColumns = [
     ],
 
     */
+];
 
-    [
-        'attribute' => 'kaufpreisSumme',
-        'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
-        'format' => ['currency'],
-        'pageSummary' => true
-    ],
-    [
-        'value' => 'schlussrechnungKaufvertragBetrag',
-        'label' => 'Schlussrechnung - Kaufvertrag Betrag',
-        'format' => ['currency'],
-        'pageSummary' => true
-    ],
-    [
+$gridColumns[] = [
         'value' => 'schlussrechnungSonderwunschBetrag',
         'label' => 'Schlussrechnung - Sonderwunsch Betrag',
         'format' => ['currency'],
         'pageSummary' => true
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'firma_name',
         'value'=>'firma.name',
         'label' => 'Firma'
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'firma_nr',
         'value'=>'firma.nr',
         'label' => 'Buchungskr.'
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'projekt_name',
         'value'=>'projekt.name',
         'label' => 'Projekt',
         'filter' => false
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'haus_strasse',
         'value'=>'haus.strasse',
         'label' => 'TE-Straße'
-    ],
-     [
+    ];
+$gridColumns[] = [
         'attribute' => 'haus_hausnr',
         'value'=>'haus.hausnr',
         'label' => 'TE-Haus Nr.'
-    ],
-     [
+    ];
+$gridColumns[] = [
         'attribute' => 'haus_plz',
         'value'=>'haus.plz',
         'label' => 'TE-Plz'
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'haus_ort',
         'value'=>'haus.ort',
         'label' => 'TE-Ort'
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'sap_debitor_nr',
         'value'=>'sap_debitor_nr',
         'label' => 'SAP Debitoren Nr.'
-    ],
-    [
+    ];
+$gridColumns[] = [
         'attribute' => 'intern_debitor_nr',
         'value'=>'intern_debitor_nr',
         'label' => 'Interne Debitoren Nr.'
-    ],
+    ];
 
 //    [
 //        'attribute' => 'kaeufer_vorname',
@@ -135,148 +124,240 @@ $gridColumns = [
 //        'value'=>'kaeufer.nachname',
 //        'label' => 'Käufer Name'
 //    ],
-    [
-        'attribute' => 'kaeufer_email',
-        'value'=>'kaeufer.email',
-        'label' => 'Käufer-Email'
-    ],
-    [
-        'attribute' => 'kaeufer_festnetz',
-        'value'=>'kaeufer.festnetz',
-        'label' => 'Käufer-Festnetznummer'
-    ],
-    [
-        'attribute' => 'kaeufer_handy',
-        'value'=>'kaeufer.handy',
-        'label' => 'Käufer-Handynummer'
-    ],
-    [
-        'value'=>'kaeufer.anrede2Label',
-        //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
-        'label' => '2. Käufer Anrede'
-    ],
-    [
-        'attribute' => 'kaeufer_vorname2',
-        'value'=>'kaeufer.vorname2',
-        'label' => '2. Käufer Vorname'
-    ],
-    [
-        'attribute' => 'kaeufer_titel2',
-        'value'=>'kaeufer.titel2',
-        'label' => '2. Käufer Titel'
-    ],
-    [
-        'attribute' => 'kaeufer_nachname2',
-        'value'=>'kaeufer.nachname2',
-        'label' => '2. Käufer Name'
-    ],
-    [
-        //'filter' => Html::activeTextField($model, 'te_nummer'),
-        'format' => 'html',
-        'attribute' => 'te_nummer',
-        'value' => 'tenummerHtml',
-        'label' => 'TE-Nr'
-    ],
 
-];
-
-for ($i = 0; $i < $maxCountTEEinheits; $i++) {
-    $cnt = $i + 1;
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__te_name",
-        'label' => "{$cnt}. TE-Name"
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__te_nummer",
-        'label' => "{$cnt}. TE-Nummer"
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__gefoerdert",
-        'label' => "{$cnt}. TE-Gefoerdert",
-        'filter' => array(0 => Yii::t('app', 'No'), 1 => Yii::t('app', 'Yes')),
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__geschoss",
-        'label' => "{$cnt}. TE-Geschoss"
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__zimmer",
-        'label' => "{$cnt}. TE-Zimmer"
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__me_anteil",
-        'label' => "{$cnt}. TE-ME-Anteil"
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__wohnflaeche",
-        'label' => "{$cnt}. TE-Wohnfläche",
-        'format' => ['decimal'],
-        'pageSummary' => true
-    ];
-    $gridColumns[] = [
-        'value'=> "teeinheit__{$i}__kaufpreis",
-        'label' => "{$cnt}. TE-Kaufpreis",
+if (!User::hasRole('Sonderwunsch')) {
+    $gridColumns[] =    [
+        'attribute' => 'kaufpreisSumme',
+        'label' => 'Gesamtsumme (Wohnung + Sondereigentum)',
         'format' => ['currency'],
         'pageSummary' => true
     ];
+    $gridColumns[] = [
+        'value' => 'schlussrechnungKaufvertragBetrag',
+        'label' => 'Schlussrechnung - Kaufvertrag Betrag',
+        'format' => ['currency'],
+        'pageSummary' => true
+    ];
+    $gridColumns[] =  [
+            'attribute' => 'kaeufer_email',
+            'value'=>'kaeufer.email',
+            'label' => 'Käufer-Email'
+        ];
+    $gridColumns[] = [
+            'attribute' => 'kaeufer_festnetz',
+            'value'=>'kaeufer.festnetz',
+            'label' => 'Käufer-Festnetznummer'
+        ];
+    $gridColumns[] = [
+            'attribute' => 'kaeufer_handy',
+            'value'=>'kaeufer.handy',
+            'label' => 'Käufer-Handynummer'
+        ];
+    $gridColumns[] = [
+            'value'=>'kaeufer.anrede2Label',
+            //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+            'label' => '2. Käufer Anrede'
+        ];
+    $gridColumns[] =  [
+            'attribute' => 'kaeufer_vorname2',
+            'value'=>'kaeufer.vorname2',
+            'label' => '2. Käufer Vorname'
+        ];
+    $gridColumns[] = [
+            'attribute' => 'kaeufer_titel2',
+            'value'=>'kaeufer.titel2',
+            'label' => '2. Käufer Titel'
+        ];
+    $gridColumns[] = [
+            'attribute' => 'kaeufer_nachname2',
+            'value'=>'kaeufer.nachname2',
+            'label' => '2. Käufer Name'
+        ];
+    $gridColumns[] = [
+            //'filter' => Html::activeTextField($model, 'te_nummer'),
+            'format' => 'html',
+            'attribute' => 'te_nummer',
+            'value' => 'tenummerHtml',
+            'label' => 'TE-Nr'
+        ];
+    for ($i = 0; $i < $maxCountTEEinheits; $i++) {
+        $cnt = $i + 1;
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__te_name",
+            'label' => "{$cnt}. TE-Name"
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__te_nummer",
+            'label' => "{$cnt}. TE-Nummer"
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__gefoerdert",
+            'label' => "{$cnt}. TE-Gefoerdert",
+            'filter' => array(0 => Yii::t('app', 'No'), 1 => Yii::t('app', 'Yes')),
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__geschoss",
+            'label' => "{$cnt}. TE-Geschoss"
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__zimmer",
+            'label' => "{$cnt}. TE-Zimmer"
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__me_anteil",
+            'label' => "{$cnt}. TE-ME-Anteil"
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__wohnflaeche",
+            'label' => "{$cnt}. TE-Wohnfläche",
+            'format' => ['decimal'],
+            'pageSummary' => true
+        ];
+        $gridColumns[] = [
+            'value'=> "teeinheit__{$i}__kaufpreis",
+            'label' => "{$cnt}. TE-Kaufpreis",
+            'format' => ['currency'],
+            'pageSummary' => true
+        ];
+    }
+
+    // Kaeufer Daten
+    $gridColumns = array_merge($gridColumns, [
+        [
+            'value'=>'kaeufer.anredeLabel',
+            //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+            'label' => 'Käufer Anrede'
+        ],
+        [
+            'attribute' => 'kaeufer_titel',
+            'value'=>'kaeufer.titel',
+            'label' => 'Käufer Titel'
+        ],
+
+        [
+            'attribute' => 'kaeufer_vorname',
+            'value'=>'kaeufer.vorname',
+            'label' => 'Käufer Vorname'
+        ],
+        [
+            'attribute' => 'kaeufer_nachname',
+            'value'=>'kaeufer.nachname',
+            'label' => 'Käufer Name'
+        ],
+        [
+            'value'=>'beurkundungAmLabel',
+            'label' => 'Beurkundung am:'
+        ],
+        [
+            'value'=>'uebergangBnlLabel',
+            'label' => '-Übergang BNL'
+        ],
+        [
+            'value'=>'abnahmeSeLabel',
+            'label' => '-Abnahme SE'
+        ],
+        [
+            'value'=>'abnahmeGeLabel',
+            'label' => '-Abnahme GE'
+        ],
+        [
+            'value'=>'kaeufer.strasse',
+            'label' => 'Käufer Straße'
+        ],
+        [
+            'value'=>'kaeufer.hausnr',
+            'label' => 'Käufer Hausnr.'
+        ],
+        [
+            'value'=>'kaeufer.plz',
+            'label' => 'Käufer PLZ'
+        ],
+        [
+            'value'=>'kaeufer.ort',
+            'label' => 'Käufer Ort'
+        ],
+    ]);
+
+    for ($i = 0; $i < $maxCountAbschlags; $i++) {
+        $cnt = $i + 1;
+        $gridColumns[] = [
+            'value'=> "abschlag__{$i}__name",
+            'label' => "{$cnt}. Abschlag-Name"
+        ];
+        $gridColumns[] = [
+            'value'=> "abschlag__{$i}__kaufvertrag_prozent",
+            'label' => "{$cnt}. Abschlag-Prozent"
+        ];
+        $gridColumns[] = [
+            'value'=> "abschlag__{$i}__kaufvertrag_betrag",
+            'label' => "{$cnt}. Abschlag-Betrag",
+            'format' => ['currency'],
+            'pageSummary' => true
+        ];
+        $gridColumns[] = [
+            'value'=> "abschlag__{$i}__kaufvertrag_angefordert",
+            'label' => "{$cnt}. Abschlag-Angefordert"
+        ];
+    }
+
+    for ($i = 0; $i < $maxCountNachlasses; $i++) {
+        $cnt = $i + 1;
+        $gridColumns[] = [
+            'value'=> "nachlass__{$i}__schreibenVomLabel",
+            'label' => "{$cnt}. Nachlass-Schreiben vom:"
+        ];
+    }
+
+    for ($i = 0; $i < $maxCountZinsverzugs; $i++) {
+        $cnt = $i + 1;
+        $gridColumns[] = [
+            'value'=> "zinsverzug__{$i}__schreibenVomLabel",
+            'label' => "{$cnt}. Zinsverzug-Schreiben vom:"
+        ];
+        $gridColumns[] = [
+            'value'=> "zinsverzug__{$i}__betrag",
+            'label' => "{$cnt}. Zinsverzug-Betrag:",
+            'pageSummary' => true
+        ];
+    }
+
+    $gridColumns[] = [
+        'value'=> "nachlassSumme",
+        'label' => "Minderungen/Nachlaß-Summe:",
+        'pageSummary' => true
+    ];
+    $gridColumns[] = [
+        'value'=> "zinsverzugSumme",
+        'label' => "Zinsverzugs-Summe:",
+        'pageSummary' => true
+    ];
+
+    for ($i = 0; $i < $maxCountZahlungs; $i++) {
+        $cnt = $i + 1;
+        $gridColumns[] = [
+            'value'=> "zahlung__{$i}__datumLabel",
+            'label' => "{$cnt}. Zahlung-Datum:"
+        ];
+        $gridColumns[] = [
+            'value'=> "zahlung__{$i}__betrag",
+            'label' => "{$cnt}. Zahlung-betrag:",
+            'format' => ['currency'],
+            'pageSummary' => true
+        ];
+    }
+
+    $gridColumns[] = [
+        'value'=> "zahlungSumme",
+        'label' => "Zahlungen- bereits gezahlt:"
+    ];
+
+    $gridColumns[] = [
+        'value'=> "offenePosten",
+        'label' => "Offene Posten:",
+        'format' => ['currency'],
+    ];
+
 }
-
-// Kaeufer Daten
-$gridColumns = array_merge($gridColumns, [
-    [
-        'value'=>'kaeufer.anredeLabel',
-        //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
-        'label' => 'Käufer Anrede'
-    ],
-    [
-        'attribute' => 'kaeufer_titel',
-        'value'=>'kaeufer.titel',
-        'label' => 'Käufer Titel'
-    ],
-
-    [
-        'attribute' => 'kaeufer_vorname',
-        'value'=>'kaeufer.vorname',
-        'label' => 'Käufer Vorname'
-    ],
-    [
-        'attribute' => 'kaeufer_nachname',
-        'value'=>'kaeufer.nachname',
-        'label' => 'Käufer Name'
-    ],
-    [
-        'value'=>'beurkundungAmLabel',
-        'label' => 'Beurkundung am:'
-    ],
-    [
-        'value'=>'uebergangBnlLabel',
-        'label' => '-Übergang BNL'
-    ],
-    [
-        'value'=>'abnahmeSeLabel',
-        'label' => '-Abnahme SE'
-    ],
-    [
-        'value'=>'abnahmeGeLabel',
-        'label' => '-Abnahme GE'
-    ],
-    [
-        'value'=>'kaeufer.strasse',
-        'label' => 'Käufer Straße'
-    ],
-    [
-        'value'=>'kaeufer.hausnr',
-        'label' => 'Käufer Hausnr.'
-    ],
-    [
-        'value'=>'kaeufer.plz',
-        'label' => 'Käufer PLZ'
-    ],
-    [
-        'value'=>'kaeufer.ort',
-        'label' => 'Käufer Ort'
-    ],
-]);
 
 for ($i = 0; $i < $maxCountSonderwunsches; $i++) {
     $cnt = $i + 1;
@@ -296,84 +377,6 @@ for ($i = 0; $i < $maxCountSonderwunsches; $i++) {
     ];
 }
 
-for ($i = 0; $i < $maxCountAbschlags; $i++) {
-    $cnt = $i + 1;
-    $gridColumns[] = [
-        'value'=> "abschlag__{$i}__name",
-        'label' => "{$cnt}. Abschlag-Name"
-    ];
-    $gridColumns[] = [
-        'value'=> "abschlag__{$i}__kaufvertrag_prozent",
-        'label' => "{$cnt}. Abschlag-Prozent"
-    ];
-    $gridColumns[] = [
-        'value'=> "abschlag__{$i}__kaufvertrag_betrag",
-        'label' => "{$cnt}. Abschlag-Betrag",
-        'format' => ['currency'],
-        'pageSummary' => true
-    ];
-    $gridColumns[] = [
-        'value'=> "abschlag__{$i}__kaufvertrag_angefordert",
-        'label' => "{$cnt}. Abschlag-Angefordert"
-    ];
-}
-
-for ($i = 0; $i < $maxCountNachlasses; $i++) {
-    $cnt = $i + 1;
-    $gridColumns[] = [
-        'value'=> "nachlass__{$i}__schreibenVomLabel",
-        'label' => "{$cnt}. Nachlass-Schreiben vom:"
-    ];
-}
-
-for ($i = 0; $i < $maxCountZinsverzugs; $i++) {
-    $cnt = $i + 1;
-    $gridColumns[] = [
-        'value'=> "zinsverzug__{$i}__schreibenVomLabel",
-        'label' => "{$cnt}. Zinsverzug-Schreiben vom:"
-    ];
-    $gridColumns[] = [
-        'value'=> "zinsverzug__{$i}__betrag",
-        'label' => "{$cnt}. Zinsverzug-Betrag:",
-        'pageSummary' => true
-    ];
-}
-
-$gridColumns[] = [
-    'value'=> "nachlassSumme",
-    'label' => "Minderungen/Nachlaß-Summe:",
-    'pageSummary' => true
-];
-$gridColumns[] = [
-    'value'=> "zinsverzugSumme",
-    'label' => "Zinsverzugs-Summe:",
-    'pageSummary' => true
-];
-
-for ($i = 0; $i < $maxCountZahlungs; $i++) {
-    $cnt = $i + 1;
-    $gridColumns[] = [
-        'value'=> "zahlung__{$i}__datumLabel",
-        'label' => "{$cnt}. Zahlung-Datum:"
-    ];
-    $gridColumns[] = [
-        'value'=> "zahlung__{$i}__betrag",
-        'label' => "{$cnt}. Zahlung-betrag:",
-        'format' => ['currency'],
-        'pageSummary' => true
-    ];
-}
-
-$gridColumns[] = [
-    'value'=> "zahlungSumme",
-    'label' => "Zahlungen- bereits gezahlt:"
-];
-
-$gridColumns[] = [
-    'value'=> "offenePosten",
-    'label' => "Offene Posten:",
-    'format' => ['currency'],
-];
 
 $gridColumns[] = [
     'class' => 'kartik\grid\ActionColumn',
