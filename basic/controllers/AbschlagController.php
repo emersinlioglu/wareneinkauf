@@ -293,7 +293,13 @@ class AbschlagController extends Controller
                 $replaceData = $abschlag->getReplaceData();
                 foreach ($platzhalterNamen as $platzhalterName) {
                     if (isset($replaceData[$platzhalterName])) {
-                        $rowData[$platzhalterName] = $replaceData[$platzhalterName];
+                        $value = $replaceData[$platzhalterName];
+                        switch ($platzhalterName) {
+                            case '[kaeufer]':
+                                $value = str_replace('<br>', ', ', $value);
+                                break;
+                        }
+                        $rowData[$platzhalterName] = $value;
                     } else {
                         $rowData[$platzhalterName] = '';
                     }

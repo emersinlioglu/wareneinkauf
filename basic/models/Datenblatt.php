@@ -678,22 +678,25 @@ class Datenblatt extends \yii\db\ActiveRecord
     public function getKaeuferDaten() {
         $kaeuferDaten = array();
         $kaeufer = $this->kaeufer;
-        if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
-            $kaeuferDaten[] = [
-                'anrede' => $kaeufer->anrede,
-                'vorname' => $kaeufer->vorname,
-                'nachname' => $kaeufer->nachname
-            ];
-        }
-        if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
-            $kaeuferDaten[] = [
-                'anrede' => $kaeufer->anrede2,
-                'vorname' => $kaeufer->vorname2,
-                'nachname' => $kaeufer->nachname2
-            ];
-        }
-        if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
-            $kaeuferDaten = array_reverse($kaeuferDaten);
+        if ($kaeufer) {
+
+            if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
+                $kaeuferDaten[] = [
+                    'anrede' => $kaeufer->anrede,
+                    'vorname' => $kaeufer->vorname,
+                    'nachname' => $kaeufer->nachname
+                ];
+            }
+            if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
+                $kaeuferDaten[] = [
+                    'anrede' => $kaeufer->anrede2,
+                    'vorname' => $kaeufer->vorname2,
+                    'nachname' => $kaeufer->nachname2
+                ];
+            }
+            if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
+                $kaeuferDaten = array_reverse($kaeuferDaten);
+            }
         }
         return $kaeuferDaten;
     }

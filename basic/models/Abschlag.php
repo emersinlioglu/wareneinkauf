@@ -154,31 +154,30 @@ class Abschlag extends \yii\db\ActiveRecord
             }
         }
 
+        $kaeuferNamen = '';
         $kaeuferDaten = array();
         $kaeufer = $datenblatt->kaeufer;
-        if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
-            $kaeuferDaten[] = ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
-        }
-        if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
-            $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
-        }
-        if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
-            $kaeuferDaten = array_reverse($kaeuferDaten);
-        }
+        if ($kaeufer) {
+            if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
+                $kaeuferDaten[] = ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+            }
+            if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
+                $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
+            }
+            if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
+                $kaeuferDaten = array_reverse($kaeuferDaten);
+            }
 
-        $kaeuferNamen = '';
-        $cnt = count($kaeuferDaten);
-        //foreach ($kaeuferDaten as $name) {
-        //    $kaeuferNamen .= $name . '<br />';
-        //}
+            $cnt = count($kaeuferDaten);
 
-		if ($cnt==2){
-        	$kaeuferNamen=implode('<br>', $kaeuferDaten);
-        } else {
-			$kaeuferNamen =
-					($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . '<br>'
-					. $kaeufer->vorname . ' ' . $kaeufer->nachname;
-		}
+            if ($cnt==2){
+                $kaeuferNamen=implode('<br>', $kaeuferDaten);
+            } else {
+                $kaeuferNamen =
+                    ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+            }
+
+        }
 
         $einheitstypStellplatz = Einheitstyp::findOne(Einheitstyp::TYP_STELLPLATZ);
         $einheitstypLagerraum = Einheitstyp::findOne(Einheitstyp::TYP_LAGERRAUM);
@@ -203,14 +202,14 @@ class Abschlag extends \yii\db\ActiveRecord
             '[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]' => Yii::$app->formatter->number2text(round($this->kaufvertrag_betrag, 2)),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
-            '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
+            '[debitor-nr]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->debitor_nr : '',
 //            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herrn',
 //            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
 //            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
-            '[kaeufer-strasse]' => $datenblatt->kaeufer->strasse,
-            '[kaeufer-strassen-nr]' => $datenblatt->kaeufer->hausnr,
-            '[kaeufer-plz]' => $datenblatt->kaeufer->plz,
-            '[kaeufer-ort]' => $datenblatt->kaeufer->ort,
+            '[kaeufer-strasse]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->strasse : '',
+            '[kaeufer-strassen-nr]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->hausnr : '',
+            '[kaeufer-plz]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->plz : '',
+            '[kaeufer-ort]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->ort : '',
             '[kaeufer]' => $kaeuferNamen,
             '\r\n' => '<br>',
             '\n\    r' => '<br>',
