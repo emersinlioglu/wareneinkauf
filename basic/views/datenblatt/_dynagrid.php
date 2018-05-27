@@ -500,7 +500,7 @@ echo DynaGrid::widget([
                 . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>'
                 . '<a id="" data-bulk-edit-url="'.\yii\helpers\Url::to(['datenblatt/abschlag-massenbearbeitung', 'ids' => '']).'" 
                             data-single-edit-url="'.\yii\helpers\Url::to(['datenblatt/konfiguration', 'id' => '']).'"
-                            class="btn btn-default abschlag-massenbearbeitung '. (User::hasRole('Sonderwunsch') ? 'hide' : '' ) .'" title="Abschlagkonfiguration">
+                            class="btn btn-default abschlag-massenbearbeitung '. (User::hasRole('Sonderwunsch', false) ? 'hide' : '' ) .'" title="Abschlagkonfiguration">
                         <i class="fa fa-list"></i> Abschlagkonfiguration
                    </a>'
                 . '<span id="" class="btn btn-default export-zaehler" title="Zählerangaben exportieren"
