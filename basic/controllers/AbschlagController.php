@@ -146,7 +146,7 @@ class AbschlagController extends Controller
             $abschlagNr++;
         }
 
-        return $this->renderPartial('updateErstelldatumVorlageForm', [
+        return $this->renderAjax('updateErstelldatumVorlageForm', [
             'model' => $model,
             'abschlagNr' => $abschlagNr,
         ]);
