@@ -113,17 +113,48 @@ $gridColumns[] = [
         'label' => 'Interne Debitoren Nr.'
     ];
 
-//    [
-//        'attribute' => 'kaeufer_vorname',
-//        'value'=>'kaeufer.vorname',
-//        'label' => 'Käufer Vorname'
-//    ],
-//
-//    [
-//        'attribute' => 'kaeufer_nachname',
-//        'value'=>'kaeufer.nachname',
-//        'label' => 'Käufer Name'
-//    ],
+$gridColumns[] = [
+    'value' => 'kaeufer.anredeLabel',
+    //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+    'label' => 'Käufer Anrede'
+];
+$gridColumns[] = [
+    'attribute' => 'kaeufer_titel',
+    'value' => 'kaeufer.titel',
+    'label' => 'Käufer Titel'
+];
+
+$gridColumns[] = [
+    'attribute' => 'kaeufer_vorname',
+    'value' => 'kaeufer.vorname',
+    'label' => 'Käufer Vorname'
+];
+$gridColumns[] = [
+    'attribute' => 'kaeufer_nachname',
+    'value' => 'kaeufer.nachname',
+    'label' => 'Käufer Name'
+];
+
+$gridColumns[] = [
+    'value'=>'kaeufer.anrede2Label',
+    //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
+    'label' => '2. Käufer Anrede'
+];
+$gridColumns[] =  [
+    'attribute' => 'kaeufer_vorname2',
+    'value'=>'kaeufer.vorname2',
+    'label' => '2. Käufer Vorname'
+];
+$gridColumns[] = [
+    'attribute' => 'kaeufer_titel2',
+    'value'=>'kaeufer.titel2',
+    'label' => '2. Käufer Titel'
+];
+$gridColumns[] = [
+    'attribute' => 'kaeufer_nachname2',
+    'value'=>'kaeufer.nachname2',
+    'label' => '2. Käufer Name'
+];
 
 if (!User::hasRole('Sonderwunsch', false)) {
     $gridColumns[] =    [
@@ -153,26 +184,7 @@ if (!User::hasRole('Sonderwunsch', false)) {
             'value'=>'kaeufer.handy',
             'label' => 'Käufer-Handynummer'
         ];
-    $gridColumns[] = [
-            'value'=>'kaeufer.anrede2Label',
-            //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
-            'label' => '2. Käufer Anrede'
-        ];
-    $gridColumns[] =  [
-            'attribute' => 'kaeufer_vorname2',
-            'value'=>'kaeufer.vorname2',
-            'label' => '2. Käufer Vorname'
-        ];
-    $gridColumns[] = [
-            'attribute' => 'kaeufer_titel2',
-            'value'=>'kaeufer.titel2',
-            'label' => '2. Käufer Titel'
-        ];
-    $gridColumns[] = [
-            'attribute' => 'kaeufer_nachname2',
-            'value'=>'kaeufer.nachname2',
-            'label' => '2. Käufer Name'
-        ];
+
     $gridColumns[] = [
             //'filter' => Html::activeTextField($model, 'te_nummer'),
             'format' => 'html',
@@ -223,27 +235,7 @@ if (!User::hasRole('Sonderwunsch', false)) {
 
     // Kaeufer Daten
     $gridColumns = array_merge($gridColumns, [
-        [
-            'value'=>'kaeufer.anredeLabel',
-            //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
-            'label' => 'Käufer Anrede'
-        ],
-        [
-            'attribute' => 'kaeufer_titel',
-            'value'=>'kaeufer.titel',
-            'label' => 'Käufer Titel'
-        ],
 
-        [
-            'attribute' => 'kaeufer_vorname',
-            'value'=>'kaeufer.vorname',
-            'label' => 'Käufer Vorname'
-        ],
-        [
-            'attribute' => 'kaeufer_nachname',
-            'value'=>'kaeufer.nachname',
-            'label' => 'Käufer Name'
-        ],
         [
             'value'=>'beurkundungAmLabel',
             'label' => 'Beurkundung am:'
