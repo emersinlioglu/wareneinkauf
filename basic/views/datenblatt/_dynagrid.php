@@ -217,7 +217,8 @@ if (!User::hasRole('Sonderwunsch', false)) {
         ];
         $gridColumns[] = [
             'value'=> "teeinheit__{$i}__me_anteil",
-            'label' => "{$cnt}. TE-ME-Anteil"
+            'label' => "{$cnt}. TE-ME-Anteil",
+            'format' => ['decimal', 2],
         ];
         $gridColumns[] = [
             'value'=> "teeinheit__{$i}__wohnflaeche",
