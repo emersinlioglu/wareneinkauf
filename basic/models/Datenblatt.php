@@ -988,4 +988,45 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $gesamtforderung;
     }
 
+    public function getStatus() {
+        $status = '';
+        if ($this->haus) {
+            $restlicheStatus = [];
+            foreach ($this->haus->teileigentumseinheits as $te) {
+                if ($te->einheitstyp_id == Einheitstyp::TYPE_HAUS) {
+                    $status = $te->status;
+                } else {
+                    $restlicheStatus[] = $te->status;
+                }
+            }
+
+            if ($status == '') {
+                if (isset($restlicheStatus[Teileigentumseinheit::STATUS_VERKAUFT])) {
+                    $status = Teileigentumseinheit::STATUS_VERKAUFT;
+                } else if(isset($restlicheStatus[Teileigentumseinheit::STATUS_RESERVIERT])) {
+                    $status = Teileigentumseinheit::STATUS_RESERVIERT;
+                } else {
+                    $status = Teileigentumseinheit::STATUS_RESERVIERT;
+                }
+            }
+        }
+        return $status;
+    }
+
+    public function getStatusLabel() {
+        $status = $this->getStatus();
+        return $status > 0 ? Teileigentumseinheit::statusOptions()[$status] : '';
+    }
+
+    public function getRechnungVertrieb() {
+
+        $result = false;
+        if ($this->haus) {
+            foreach ($this->haus->teileigentumseinheits as $te) {
+                $result |= $te->rechnung_vertrieb;
+            }
+        }
+        return $result;
+    }
+
 }

@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><strong>reserviert</strong></td>
             <td>
                 <?php
-                    if ($model->haus && $model->haus->reserviert) {
+                    if ($model->getStatus() == \app\models\Teileigentumseinheit::STATUS_RESERVIERT) {
                         echo 'X';
                     }
                 ?>
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><strong>verkauft</strong></td>
             <td>
                 <?php
-                if ($model->haus && $model->haus->verkauft) {
+                if ($model->getStatus() == \app\models\Teileigentumseinheit::STATUS_VERKAUFT) {
                     echo 'X';
                 }
                 ?>
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><strong>Rechnung Vertrieb</strong></td>
             <td colspan="2">
                 <?php
-                if ($model->haus && $model->haus->rechnung_vertrieb) {
+                if ($model->getRechnungVertrieb()) {
                     echo 'X';
                 }
                 ?>

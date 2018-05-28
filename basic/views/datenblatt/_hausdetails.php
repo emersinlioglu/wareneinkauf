@@ -48,20 +48,20 @@ use kartik\datecontrol\DateControl;
                         reserviert:
                     </div>
                     <div class="col-sm-1">
-                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->reserviert ? 'ja' : 'nein') : '' ?>
+                        <?= $modelDatenblatt->getStatus() == \app\models\Teileigentumseinheit::STATUS_RESERVIERT ? 'ja' : 'nein' ?>
                         <br>
                     </div>
                     <div class="col-sm-1">
                         verkauft:
                     </div>
                     <div class="col-sm-1">
-                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->verkauft ? 'ja' : 'nein') : '' ?>
+                        <?= $modelDatenblatt->getStatus() == \app\models\Teileigentumseinheit::STATUS_VERKAUFT ? 'ja' : 'nein' ?>
                     </div>
                     <div class="col-sm-2">
                         Rechnung/Vertrieb:
                     </div>
                     <div class="col-sm-1">
-                        <?= $modelDatenblatt->haus ? ($modelDatenblatt->haus->rechnung_vertrieb ? 'ja' : 'nein') : '' ?>
+                        <?= $modelDatenblatt->getRechnungVertrieb() ? 'ja' : 'nein' ?>
                     </div>
                 </div>
             </div>
