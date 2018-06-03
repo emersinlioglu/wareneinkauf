@@ -20,7 +20,7 @@ class KaeuferSearch extends Kaeufer
     public function rules()
     {
         return [
-            [['id', 'auflassung', 'anrede', 'anrede2'], 'integer'],
+            [['id', 'auflassung', 'anrede', 'anrede2', 'user_id'], 'integer'],
             [['projektId', 'debitor_nr', 'beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'land', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'safe'],
         ];
     }
@@ -75,6 +75,12 @@ class KaeuferSearch extends Kaeufer
             $query->andFilterWhere([
                 'kaeufer_projekt.projekt_id' => User::getAccessableProjektIds(),
             ]);
+
+            if (User::hasRole('immomarkler')) {
+                $query->andFilterWhere([
+                    'user_id' => User::getCurrentUser()->id,
+                ]);
+            }
         }
 
         $query->andFilterWhere([

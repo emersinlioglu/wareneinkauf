@@ -31,9 +31,12 @@ use Yii;
  * @property string $titel2
  * @property string $vorname2
  * @property string $nachname2
+ * @property integer $user_id
  *
  * @property Datenblatt[] $datenblatts
  * @property KaeuferProjekt[] $kaeuferProjekts
+ * @property User $ersteller
+ * @property Teileigentumseinheit[] $zugewieseneTeileigentumseinheiten
  */
 class Kaeufer extends \yii\db\ActiveRecord
 {
@@ -89,6 +92,23 @@ class Kaeufer extends \yii\db\ActiveRecord
             'nachname2' => Yii::t('app', 'Nachname2'),
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getErsteller()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getZugewieseneTeileigentumseinheiten()
+    {
+        return $this->hasMany(Teileigentumseinheit::className(), ['kaeufer_id' => 'id']);
+    }
+
 
     public function getAnredeLabel()
     {
@@ -173,5 +193,17 @@ class Kaeufer extends \yii\db\ActiveRecord
             $projektNamen[] = $kaeuferProjekt->projekt->name;
         }
         return implode(', ', $projektNamen);
+    }
+
+    public static function getFreieTeileigentumseinheiten() {
+        $projekt = User::getActiveProjekt();
+
+        $teileigentumseinheiten = Teileigentumseinheit::find()
+            ->andWhere("(haus_id IS NULL OR haus_id = '')")
+            ->andWhere("projekt_id = " . $projekt->id)
+            ->orderBy('CAST(te_nummer AS DECIMAL)')
+            ->all();
+
+        return $teileigentumseinheiten;
     }
 }

@@ -343,7 +343,7 @@ class TeileigentumseinheitController extends Controller
 
             if ($datenblatt && $datenblatt->projekt) {
 
-                $kaeufers = Teileigentumseinheit::find()
+                $teileigentumseinheiten = Teileigentumseinheit::find()
                     ->where(['like', 'te_nummer', $_GET['term']])
                     ->andWhere("(haus_id IS NULL OR haus_id = '')")
                     ->andWhere("projekt_id = " . $datenblatt->projekt_id)
@@ -359,8 +359,8 @@ class TeileigentumseinheitController extends Controller
                     'nachname' => 'Nachname'
                 );
 
-                foreach ($kaeufers as $kaeufer) {
-                    $data = $kaeufer->attributes;
+                foreach ($teileigentumseinheiten as $teileigentumseinheit) {
+                    $data = $teileigentumseinheit->attributes;
                     $results[] = $data;
                 }
             }

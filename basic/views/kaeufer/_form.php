@@ -4,6 +4,7 @@ use app\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use \app\models\Kaeufer;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Kaeufer */
@@ -13,9 +14,12 @@ use yii\widgets\ActiveForm;
 <div class="kaeufer-form">
 
     <div class="panel panel-default">
-        <div class="panel-body" >
+        <div class="panel-body">
 
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin([
+                'id' => 'kaeufer-form',
+                'options' => ['data-id' => $model->id],
+            ]); ?>
 
             <div class="row">
                 <div class="col-lg-6">
@@ -67,27 +71,24 @@ use yii\widgets\ActiveForm;
                 </div>
 
                 <div class="col-sm-6">
-                    <h2>Projekt-Zuordungen</h2>
+                    <h3>Projekt-Zuordungen</h3>
 
-<br>
+                    <br>
                     <?php
-                        $kaeuferProjektErrors = $model->getErrors('kaeuferProjekts');
-                        if (count($kaeuferProjektErrors)):
+                    $kaeuferProjektErrors = $model->getErrors('kaeuferProjekts');
+                    if (count($kaeuferProjektErrors)):
                         ?>
-                            <span class="alert alert-danger"><?= $kaeuferProjektErrors[0] ?></span>
+                        <span class="alert alert-danger"><?= $kaeuferProjektErrors[0] ?></span>
                     <?php endif; ?>
 
-<br>
-<br>
                     <div class="form-group">
                         <?php
-                            echo Html::dropDownList('kaeuferProjektId', null,
-                                ArrayHelper::map(User::getProjects(), 'id', 'name'),
-                                ['class' => 'form-control', 'prompt' => 'Projekt auswählen'])
+                        echo Html::dropDownList('kaeuferProjektId', null,
+                            ArrayHelper::map(User::getProjects(), 'id', 'name'),
+                            ['class' => 'form-control', 'prompt' => 'Projekt auswählen'])
                         ?>
 
                     </div>
-
 
                     <table class="table table-straped kaeufer-projekts">
                         <?php $accessableProjektIds = User::getAccessableProjektIds(); ?>
@@ -95,7 +96,8 @@ use yii\widgets\ActiveForm;
                             <?php if (!in_array($kaeuferProjekt->projekt_id, $accessableProjektIds)) continue; ?>
                             <tr>
                                 <td>
-                                    <input name="KaeuferProjekt[]" value="<?= $kaeuferProjekt->projekt->id ?>" type="hidden">
+                                    <input name="KaeuferProjekt[]" value="<?= $kaeuferProjekt->projekt->id ?>"
+                                           type="hidden">
                                     <?= $kaeuferProjekt->projekt->name ?>
                                 </td>
                                 <td>
@@ -104,6 +106,32 @@ use yii\widgets\ActiveForm;
                             </tr>
                         <?php endforeach; ?>
                     </table>
+                </div>
+
+                <div class="row <?= !User::hasRole('immomarkler') ? 'hide' : '' ?>">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Teileigentumseinheiten</label>
+                            <?= Html::dropDownList('teileigentumseinheits', null,
+                                ArrayHelper::map(Kaeufer::getFreieTeileigentumseinheiten(), 'id', 'te_nummer'),
+                                ['prompt' => 'Bitte auswählen', 'class'=>'form-control']
+                            );
+                            ?>
+                        </div>
+
+                        <div class="">
+                            <ul class="list-group">
+                                <?php foreach ($model->zugewieseneTeileigentumseinheiten as $te): ?>
+                                    <li class="list-group-item">
+                                        <?= $te->te_nummer ?>
+                                        <?= Html::a('<span class="fa fa-minus"></span>',
+                                            ["unassign-teileigentumseinheit", 'kaeuferId' => $model->id, 'teId' => $te->id],
+                                            ['class' => 'delete-button unassign-kaeufer pull-right btn btn-danger btn-xs']) ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -121,38 +149,7 @@ use yii\widgets\ActiveForm;
 <?php
 $this->registerJs(<<<EOT
     $(function(){
-        
-        var table = $('.kaeufer-projekts');
-        
-        $('[name="kaeuferProjektId"]').change(function() {
-            var selectedOption = $(this).find('option:selected');
-            var projektId = this.value;
-            
-            if (projektId == 0) { 
-                return;
-            }
-            
-            var searchProjektId = $('[name="KaeuferProjekt[]"][value="' + projektId + '"]');
-            console.log(searchProjektId);
-            console.log(searchProjektId.length);
-            if (0 == searchProjektId.length) {
-            
-                var tr = $('<tr>');
-                var td = $('<td>')
-                    .append($('<input>').attr('name', 'KaeuferProjekt[]').attr('type', 'hidden').attr('value', projektId))
-                    .append(selectedOption.text());
-                tr.append(td);
-                
-                tr.append($('<td>').html('<span class="delete-button btn btn-danger btn-xl"><span class="fa fa-minus"></span></span>'));
-                    
-                table.append(tr);
-            }
-            
-        });
-        
-        table.on('click', '.delete-button', function(){
-            $(this).closest('tr').remove();
-        });
+        new KaeuferForm();
     });
 EOT
 );

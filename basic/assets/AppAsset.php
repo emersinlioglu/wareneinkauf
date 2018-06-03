@@ -35,6 +35,7 @@ class AppAsset extends AssetBundle
         'js/DatenblattForm.js',
         'js/jquery-sortable.js',
         'js/HausForm.js',
+        'js/KaeuferForm.js',
         'js/DynagridProfileForm.js',
         'js/QueryBuilderProfileForm.js',
         'js/ProjektForm.js',

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Datenblatt;
 use app\models\KaeuferProjekt;
+use app\models\Teileigentumseinheit;
 use app\models\User;
 use Yii;
 use app\models\Kaeufer;
@@ -68,6 +69,7 @@ class KaeuferController extends Controller
     public function actionCreate()
     {
         $model = new Kaeufer();
+        $model->user_id = User::getCurrentUser()->id;
 
         $projektZuweisungFehlt = false;
         $kaeuferProjektIds = Yii::$app->request->post('KaeuferProjekt');
@@ -118,6 +120,36 @@ class KaeuferController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionAssignTeileigentumseinheit($kaeuferId, $teId) {
+
+        /** @var $kaeufer Kaeufer */
+        $kaeufer = Kaeufer::findOne($kaeuferId);
+        /** @var $te Teileigentumseinheit  */
+        $te = Teileigentumseinheit::findOne($teId);
+
+        if ($kaeufer && $te) {
+            $te->kaeufer_id = $kaeufer->id;
+            $te->save();
+        }
+
+        return $this->redirect(['update', 'id' => $kaeufer->id]);
+    }
+
+    public function actionUnassignTeileigentumseinheit($kaeuferId, $teId) {
+
+        /** @var $kaeufer Kaeufer */
+        $kaeufer = Kaeufer::findOne($kaeuferId);
+        /** @var $te Teileigentumseinheit  */
+        $te = Teileigentumseinheit::findOne($teId);
+
+        if ($kaeufer && $te && $te->kaeufer_id == $kaeufer->id) {
+            $te->kaeufer_id = null;
+            $te->save();
+        }
+
+        return $this->redirect(['update', 'id' => $kaeufer->id]);
     }
 
     private function saveKaeuferProdukts($model, $kaeuferProjektIds = array()) {

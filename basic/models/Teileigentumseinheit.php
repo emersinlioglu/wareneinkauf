@@ -26,10 +26,12 @@ use Yii;
  * @property double $forecast_preis
  * @property double $verkaufspreis
  * @property string $verkaufspreis_begruendung
+ * @property integer $kaeufer_id
  *
  * @property Einheitstyp $einheitstyp
  * @property Projekt $projekt
  * @property Haus $haus
+ * @property Kaeufer $kaeufer
  */
 class Teileigentumseinheit extends \yii\db\ActiveRecord
 {
@@ -109,12 +111,19 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
         }
     }
 
-        /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getEinheitstyp()
     {
         return $this->hasOne(Einheitstyp::className(), ['id' => 'einheitstyp_id']);
+    }
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getKaeufer()
+    {
+        return $this->hasOne(Kaeufer::className(), ['id' => 'kaeufer_id']);
     }
 
     /**
