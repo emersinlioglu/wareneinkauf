@@ -76,7 +76,7 @@ class KaeuferSearch extends Kaeufer
                 'kaeufer_projekt.projekt_id' => User::getAccessableProjektIds(),
             ]);
 
-            if (User::hasRole('immomakler')) {
+            if (User::hasRole('immomarkler')) {
                 $query->andFilterWhere([
                     'user_id' => User::getCurrentUser()->id,
                 ]);
