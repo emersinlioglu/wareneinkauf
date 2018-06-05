@@ -108,7 +108,7 @@ use \app\models\Kaeufer;
                     </table>
                 </div>
 
-                <div class="row <?= !User::hasRole('immomarkler') ? 'hide' : '' ?>">
+                <div class="row <?= !User::hasRole('immomakler') ? 'hide' : '' ?>">
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label>Teileigentumseinheiten</label>

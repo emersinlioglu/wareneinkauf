@@ -74,7 +74,7 @@ use kartik\money\MaskMoney;
             ?>
             <?= $form->field($model, 'verkaufspreis_begruendung')->textInput(['maxlength' => true]) ?>
 
-            <?php if(User::hasRole('immomarkler')): ?>
+            <?php if(User::hasRole('immomakler')): ?>
                 <?= $form->field($model, 'kaeufer_id')->dropDownList(ArrayHelper::map(User::getEigeneKaeufer(), 'id', 'name'), ['prompt' => 'Bitte wählen'])->label('Käufer'); ?>
             <?php endif; ?>
         </div>
