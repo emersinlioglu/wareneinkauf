@@ -130,16 +130,4 @@ class User extends \webvimark\modules\UserManagement\models\User {
         }
     }
 
-    public static function getEigeneKaeufer() {
-
-        $query = Kaeufer::find()->joinWith(['kaeuferProjekts'])
-            ->andWhere(['kaeufer_projekt.projekt_id' => User::getActiveProjekt()->id]);
-
-        if (!User::hasRole('admin')) {
-            $query->where(['user_id' => User::getCurrentUser()->id]);
-        }
-
-        return $query->all();
-    }
-
 }

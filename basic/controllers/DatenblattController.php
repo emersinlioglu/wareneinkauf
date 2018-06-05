@@ -1070,20 +1070,6 @@ class DatenblattController extends Controller
         return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model]);
     }
 
-    public function actionAssignKaeufer($datenblattId, $kaeuferId) {
-
-        $datenblatt = $this->findModel($datenblattId);
-        $kaeufer = Kaeufer::findOne($kaeuferId);
-
-        if ($datenblatt && $kaeufer && !$datenblatt->isAbschlagAngefordert()) {
-
-            $datenblatt->kaeufer_id = $kaeufer->id;
-            $datenblatt->save();
-        }
-
-        $this->redirect(['datenblatt/update', 'id' => $datenblatt->id]);
-    }
-
     /**
      * Finds the Datenblatt model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

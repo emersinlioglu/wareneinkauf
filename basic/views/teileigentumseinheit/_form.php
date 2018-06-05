@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \yii\helpers\ArrayHelper;
 use app\models\Einheitstyp;
-use app\models\User;
 use \app\models\Teileigentumseinheit;
 use kartik\money\MaskMoney;
 
@@ -73,8 +72,6 @@ use kartik\money\MaskMoney;
                 ])
             ?>
             <?= $form->field($model, 'verkaufspreis_begruendung')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'kaeufer_id')->dropDownList(ArrayHelper::map(User::getEigeneKaeufer(), 'id', 'name'), ['prompt' => 'Bitte wählen'])->label('Käufer'); ?>
 
         </div>
     </div>
