@@ -206,4 +206,8 @@ class Kaeufer extends \yii\db\ActiveRecord
 
         return $teileigentumseinheiten;
     }
+
+    public function getName() {
+        return $this->vorname . ' ' . $this->nachname;
+    }
 }

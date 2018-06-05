@@ -174,6 +174,10 @@ class TeileigentumseinheitController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+            if ($model->status != Teileigentumseinheit::STATUS_VERKAUFT && $model->kaeufer_id > 0) {
+                $model->status = Teileigentumseinheit::STATUS_RESERVIERT;
+            }
+
             $model->kaufpreis = $model->verkaufspreis;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);

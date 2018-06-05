@@ -62,7 +62,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     {
         return [
             [['te_nummer', 'einheitstyp_id', 'status'], 'required'],
-            [['haus_id', 'einheitstyp_id', 'gefoerdert', 'rechnung_vertrieb'], 'integer'],
+            [['haus_id', 'einheitstyp_id', 'gefoerdert', 'rechnung_vertrieb', 'kaeufer_id'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis', 'me_anteil'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
             [['hausnr', 'geschoss', 'zimmer', 'status'], 'string', 'max' => 45],

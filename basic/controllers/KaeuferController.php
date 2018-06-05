@@ -131,6 +131,9 @@ class KaeuferController extends Controller
 
         if ($kaeufer && $te) {
             $te->kaeufer_id = $kaeufer->id;
+            if ($te->status != Teileigentumseinheit::STATUS_VERKAUFT) {
+                $te->status = Teileigentumseinheit::STATUS_RESERVIERT;
+            }
             $te->save();
         }
 
@@ -146,6 +149,9 @@ class KaeuferController extends Controller
 
         if ($kaeufer && $te && $te->kaeufer_id == $kaeufer->id) {
             $te->kaeufer_id = null;
+            if ($te->status != Teileigentumseinheit::STATUS_VERKAUFT) {
+                $te->status = Teileigentumseinheit::STATUS_FREI;
+            }
             $te->save();
         }
 
