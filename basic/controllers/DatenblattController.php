@@ -73,14 +73,13 @@ class DatenblattController extends Controller
         $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
 
         // max count of teileigentumseinheits of filtered datenblatts
-        $models = $dataProvider->getModels();
-        $maxCountTEEinheits = 0;
-        foreach ($models as $datenblatt) {
-            if ($datenblatt->haus) {
-                $count = count($datenblatt->haus->teileigentumseinheits);
-                $maxCountTEEinheits = max($maxCountTEEinheits, $count);
-            }
-        }
+        $maxCountTEEinheits = Haus::find()
+            ->select("COUNT('teileigentumseinheit.id') as cnt")
+            ->joinWith(['teileigentumseinheits'])
+            ->where(['teileigentumseinheit.projekt_id' => $projektId])
+            ->groupBy(['haus.id'])
+            ->max('cnt');
+        $maxCountTEEinheits = intval($maxCountTEEinheits);
 
         // max count of sonderwuensche of filtered datenblatts
         $models = $dataProvider->getModels();    
