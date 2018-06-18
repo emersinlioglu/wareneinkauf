@@ -487,6 +487,18 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public function getOffenePostenSchlussrechnungAbzgNachlass() {
+        $this->calculate();
+
+//        Offener Posten (=3,5 % Schlussrate + 3,5 % SoWu) abzgl. Nachlass
+//        (falls es einen gibt)
+        $total = $this->getSchlussrechnungKaufvertragBetrag()
+        + $this->getSchlussrechnungSonderwunschBetrag()
+        - $this->getNachlassSumme();
+
+        return $total;
+    }
+
     public function getAbschlagSumme() {
         
         $this->calculate();

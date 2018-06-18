@@ -69,6 +69,7 @@ $this->registerJs('
                     { text: "[aktuelles-datum]", value: "[aktuelles-datum]" },
                     { text: "[offene-posten]", value: "[offene-posten]" },
                     { text: "[meilensteine]", value: "[meilensteine]" },
+                    { text: "[offene-posten-schlussrechnung-abzg-nachlass]", value: "[offene-posten-schlussrechnung-abzg-nachlass]" },
                 ]
             });
         },
