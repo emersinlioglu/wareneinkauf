@@ -72,11 +72,6 @@ class DatenblattController extends Controller
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
         $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
 
-        $modelsToDelete = DatenblattSearch::findAll(['aktiv' => 0]);
-        foreach ($modelsToDelete as $modelToDelete) {
-            $modelToDelete->delete();
-        }
-
         // max count of teileigentumseinheits of filtered datenblatts
         $models = $dataProvider->getModels();
         $maxCountTEEinheits = 0;
