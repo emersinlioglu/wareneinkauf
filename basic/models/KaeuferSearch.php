@@ -87,10 +87,17 @@ class KaeuferSearch extends Kaeufer
             'kaeufer_projekt.projekt_id' => $this->projektId,
         ]);
 
+        $query->andFilterWhere(['or',
+            ['like', 'vorname', $this->vorname],
+            ['like', 'vorname2', $this->vorname]
+        ]);
+        $query->andFilterWhere(['or',
+            ['like', 'nachname', $this->nachname],
+            ['like', 'nachname2', $this->nachname]
+        ]);
+
         $query->andFilterWhere(['like', 'debitor_nr', $this->debitor_nr])
             ->andFilterWhere(['like', 'titel', $this->titel])
-            ->andFilterWhere(['like', 'vorname', $this->vorname])
-            ->andFilterWhere(['like', 'nachname', $this->nachname])
             ->andFilterWhere(['like', 'strasse', $this->strasse])
             ->andFilterWhere(['like', 'hausnr', $this->hausnr])
             ->andFilterWhere(['like', 'plz', $this->plz])
@@ -100,8 +107,7 @@ class KaeuferSearch extends Kaeufer
             ->andFilterWhere(['like', 'handy', $this->handy])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'titel2', $this->titel2])
-            ->andFilterWhere(['like', 'vorname2', $this->vorname2])
-            ->andFilterWhere(['like', 'nachname2', $this->nachname2]);
+        ;
 
         return $dataProvider;
     }
