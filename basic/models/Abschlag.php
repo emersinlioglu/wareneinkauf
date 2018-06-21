@@ -235,6 +235,8 @@ class Abschlag extends \yii\db\ActiveRecord
             '[kaufpreis-gesamt]' => number_format($datenblatt->getKaufpreisSumme(), 2, ',', '.'),
             '[gesamtforderung]' => number_format($datenblatt->getGesamtforderung(), 2, ',', '.'),
             '[offene-posten-schlussrechnung-abzg-nachlass]' => number_format($datenblatt->getOffenePostenSchlussrechnungAbzgNachlass(), 2, ',', '.'),
+            '[zahlungen-gesamt]' => number_format($datenblatt->getZahlungSumme(), 2, ',', '.'),
+            '[schlussrechnung-offener-gesamtbetrag]' => number_format($datenblatt->getSchlussrechnungOffenerGesamtbetrag(), 2, ',', '.'),
         ];
 
         return $replaceData;

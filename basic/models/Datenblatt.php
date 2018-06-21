@@ -464,6 +464,14 @@ class Datenblatt extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public function getSchlussrechnungOffenerGesamtbetrag() {
+
+        $total = .0;
+        $total += $this->getAbschlagSumme();
+
+        return $total;
+    }
+
     public function getZwischenSumme() {
 
         $this->calculate();

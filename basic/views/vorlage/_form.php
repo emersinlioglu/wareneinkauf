@@ -71,6 +71,8 @@ $this->registerJs('
                     { text: "[offene-posten]", value: "[offene-posten]" },
                     { text: "[meilensteine]", value: "[meilensteine]" },
                     { text: "[offene-posten-schlussrechnung-abzg-nachlass]", value: "[offene-posten-schlussrechnung-abzg-nachlass]" },
+                    { text: "[zahlungen-gesamt]", value: "[zahlungen-gesamt]" },
+                    { text: "[schlussrechnung-offener-gesamtbetrag]", value: "[schlussrechnung-offener-gesamtbetrag]" },
                 ]
             });
         },
