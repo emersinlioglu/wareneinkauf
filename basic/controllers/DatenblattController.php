@@ -900,7 +900,9 @@ class DatenblattController extends Controller
                 ->andFilterWhere(['or',
                     ['like', 'debitor_nr', $_GET['term']],
                     ['like', 'vorname', $_GET['term']],
-                    ['like', 'nachname', $_GET['term']]
+                    ['like', 'nachname', $_GET['term']],
+                    ['like', 'vorname2', $_GET['term']],
+                    ['like', 'nachname2', $_GET['term']]
                 ])
                 ->all();
 
@@ -908,6 +910,8 @@ class DatenblattController extends Controller
                 'debitor_nr' => array('title' => 'Debitor-Nr.'),
                 'vorname' => array('title' => 'Vorname'),
                 'nachname' => array('title' => 'Nachname'),
+                'vorname2' => array('title' => 'Vorname2'),
+                'nachname2' => array('title' => 'Nachname2'),
             );
             $results = array();
 
@@ -922,7 +926,9 @@ class DatenblattController extends Controller
                 'label' => '',
                 'debitor_nr' => 'Debitor-Nr.',
                 'vorname' => 'Vorname',
-                'nachname' => 'Nachname'
+                'nachname' => 'Nachname',
+                'vorname2' => 'Vorname2',
+                'nachname2' => 'Nachname2'
             );
 
             foreach ($kaeufers as $kaeufer) {

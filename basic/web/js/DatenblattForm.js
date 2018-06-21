@@ -250,7 +250,9 @@ var DatenblattForm = function () {
                     var columns = [
                         // 'debitor_nr',
                         'vorname',
-                        'nachname'
+                        'nachname',
+                        'vorname2',
+                        'nachname2'
                     ];
 
                     var a = $('<a>');

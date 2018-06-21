@@ -3,16 +3,19 @@
 namespace app\controllers;
 
 use app\models\Meilenstein;
+use app\models\AbschlagMeilenstein;
 use app\models\ProjektAbschlag;
 use app\models\User;
 use kartik\mpdf\Pdf;
 use Yii;
 use app\models\Projekt;
 use app\models\ProjektSearch;
+use app\models\Datenblatt;
 use webvimark\modules\UserManagement\models\search\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * ProjektController implements the CRUD actions for Projekt model.
@@ -283,7 +286,7 @@ class ProjektController extends Controller
         return $pdf->render();
     }
 
-    public function actionKonfiguration($id) {
+    public function actionKonfiguration($id, $message = null) {
 
         $projekt =  $this->findModel($id);
 
@@ -322,6 +325,8 @@ class ProjektController extends Controller
 
         return $this->render('konfiguration', [
             'projekt' => $projekt,
+            'message' => $message
+
         ]);
     }
 
@@ -341,6 +346,116 @@ class ProjektController extends Controller
         }
 
         return $this->redirect(['konfiguration', 'id' => $projekt->id]);
+    }
+
+    public function actionCopyMeilensteine($id) {
+
+        $istaenderbar = true;
+
+        $datenblaetter = Datenblatt::find()->where(['projekt_id' => $id])->all();
+
+        if (count($datenblaetter) > 0) {
+
+          foreach ($datenblaetter as $datenblatt) {
+
+              $meilensteine = $datenblatt->benutzteMeilensteinIds;
+
+              if (count($meilensteine) > 0) {
+
+                $istaenderbar = false;
+              }
+
+             $abschlaege = $datenblatt->angeforderteAbschlagIds;
+
+              if (count($abschlaege) > 0) {
+
+                $istaenderbar = false;
+              }
+
+          }
+        }
+
+
+        if (!$istaenderbar) {
+            
+            $message = "Änderung nicht möglich, Meilensteine und Abschläge werden bereits verwendet in folgenden Datenblättern: <br/>";
+
+            foreach ($datenblaetter as $datenblatt)  {
+
+                if ($datenblatt->benutzteMeilensteinIds || $datenblatt->angeforderteAbschlagIds) {
+                    
+                     $message .= $datenblatt->id.",&nbsp;";
+                }
+            }
+
+            $projekt =  $this->findModel($id);
+
+            return $this->redirect(['konfiguration', 'id' => $projekt->id, 'message' => $message]);
+        }
+
+        else  {
+        
+            $projekt =  $this->findModel($id);
+            $projektMeilensteine = $projekt->meilensteins;
+
+
+            if (count($projektMeilensteine) > 0) {
+
+               foreach ($projektMeilensteine as $pMeilenstein) {
+
+                  $meilenstein = Meilenstein::findOne($pMeilenstein->id);
+
+                  if (count($meilenstein->abschlagMeilensteins) == 0) {
+                     $meilenstein->delete();
+                  }
+
+               }
+            }
+
+            $projektAbschlaege = $projekt->projektAbschlags;
+
+            if (count($projektAbschlaege) > 0) {
+
+               foreach ($projektAbschlaege as $pAbschlag) {
+
+                    $projektAbschlag = ProjektAbschlag::findOne($pAbschlag->id);
+                    $projektAbschlag->delete();
+               }           
+            }
+
+
+            $copyProjektId = Yii::$app->request->post('projektId');
+            $copyProjekt =  $this->findModel($copyProjektId);
+            $meilensteine = $copyProjekt->meilensteins;
+            $abschlaege = $copyProjekt->projektAbschlags;
+
+
+            foreach($meilensteine as $mstein) {
+
+                $meilenstein = new Meilenstein();
+                $meilenstein->projekt_id = $projekt->id;
+                $meilenstein->kaufvertrag_prozent = $mstein->kaufvertrag_prozent;
+                $meilenstein->number = $mstein->number;
+                $meilenstein->name = $mstein->name;        
+                $meilenstein->save();
+
+           } 
+
+
+           foreach($abschlaege as $pabschlag) {    
+
+                $projektAbschlag = new ProjektAbschlag();
+                $projektAbschlag->projekt_id = $projekt->id;
+                $projektAbschlag->kaufvertrag_prozent = $pabschlag->kaufvertrag_prozent;
+                $projektAbschlag->name = $pabschlag->name;            
+                $projektAbschlag->save();
+
+            }
+
+            return $this->redirect(['konfiguration', 'id' => $projekt->id]);
+
+        }
+
     }
 
     public function actionAddMeilenstein($id) {

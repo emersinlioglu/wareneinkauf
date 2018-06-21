@@ -2,6 +2,8 @@
 
 use yii\widgets\ActiveForm;
 use \yii\helpers\Html;
+use \yii\helpers\ArrayHelper;
+use app\models\User;
 
 
 $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
@@ -139,6 +141,37 @@ $this->title = 'Projekt (' . $projekt->name . '): Abschläge konfigurieren';
             </div>
             <div id="collapse-meilenstein" class="panel-collapse collapse in" aria-expanded="false">
                 <div class="box-body">
+
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['projekt/copy-meilensteine', 'id' => $projekt->id],
+                        'enableClientScript' => false,
+                    ]); ?>
+
+                    <div class="form-group">
+                        <label for="projektId">Wählen Sie ein Projekt, um dessen Meilensteine zu übernehmen</label>
+                        <?php
+                            echo Html::dropDownList('projektId', 'null',
+                                ArrayHelper::map(User::getProjects(), 'id', 'name'),
+                                ['class' => 'form-control', 'prompt' => 'Wählen Sie ein Projekt...'])
+                        ?>
+
+                    </div>
+                
+
+                    <?php if($message != null): ?>
+                        <div class="alert alert-danger fade in alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                            <?= $message ?>
+                        </div>
+                    <?php endif; ?>
+
+
+                    <div class="form-group" style="text-align: right;">
+                        <?= Html::submitButton('Kopieren', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
+                    </div>
+
+                    <?php ActiveForm::end(); ?>
+
 
                     <?php if(strval($projekt->getProzentSummeMeilensteine()) != strval('100')): ?>
                         <div class="alert alert-danger fade in alert-dismissable">
