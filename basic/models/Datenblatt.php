@@ -467,7 +467,8 @@ class Datenblatt extends \yii\db\ActiveRecord
     public function getSchlussrechnungOffenerGesamtbetrag() {
 
         $total = .0;
-        $total += $this->getAbschlagSumme();
+        $total += $this->getKaufpreisSumme();
+        $total += $this->getSonderwuenscheBetragSumme();
 
         return $total;
     }
