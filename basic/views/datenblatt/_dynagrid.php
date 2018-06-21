@@ -341,7 +341,8 @@ if (!User::hasRole('Sonderwunsch', false)) {
 
     $gridColumns[] = [
         'value'=> "zahlungSumme",
-        'label' => "Zahlungen- bereits gezahlt:"
+        'label' => "Zahlungen- bereits gezahlt:",
+        'format' => ['currency'],
     ];
 
     $gridColumns[] = [
