@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \app\models\VorlageTyp;
+use \app\models\Projekt;
 use \yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -85,6 +86,8 @@ $this->registerJs('
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'vorlage_typ_id')->dropDownList(ArrayHelper::map(VorlageTyp::find()->all(), 'id', 'name')) ?>
+
+    <?= $form->field($model, 'projekt_id')->dropDownList(ArrayHelper::map(Projekt::find()->all(), 'id', 'name')) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

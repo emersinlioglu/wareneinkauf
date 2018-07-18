@@ -23,6 +23,15 @@ $this->params['breadcrumbs'][] = $model->name;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('<i class="fa  fa-print text-white"></i>   Drucken', ['report', 'id' => $model->id], [
+            'class' => 'btn btn-info',
+            'data' => [
+                'class' => 'btn btn-info',
+                'target' => '_blank',
+                'data-toggle' => 'tooltip',
+                'title' => 'Generate the pdf'
+            ],
+        ]) ?>
     </p>
 
     <?= DetailView::widget([
@@ -33,6 +42,10 @@ $this->params['breadcrumbs'][] = $model->name;
                 'attribute' => 'vorlageTyp.name',
                 'label' => 'Vorlagetyp'
             ],
+            [
+                'attribute' => 'projekt.name',
+                'label' => 'Projekt'
+            ],            
             'name',
             'betreff',
 //            'text:ntext',

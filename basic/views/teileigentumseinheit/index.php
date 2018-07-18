@@ -35,6 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
 
             <?= GridView::widget([
+                'floatHeader' => true,
+                'floatHeaderOptions' => [
+                    'position' => 'absolute',
+                 ],
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [

@@ -14,6 +14,7 @@ use Yii;
  * @property string $deleted
  *
  * @property VorlageTyp $vorlageTyp
+ * @property Projekt $projekt
  */
 class Vorlage extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class Vorlage extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'betreff', 'text', 'vorlage_typ_id'], 'required'],
-            [['vorlage_typ_id'], 'integer'],
+            [['vorlage_typ_id', 'projekt_id'], 'integer'],
             [['deleted'], 'safe'],
             [['text'], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -52,6 +53,7 @@ class Vorlage extends \yii\db\ActiveRecord
             'text' => 'Vorlage',
             'deleted' => 'Gelöscht',
             'vorlage_typ_id' => 'Typ',
+            'projekt_id' => 'Projekt',
         ];
     }
 
@@ -78,5 +80,14 @@ class Vorlage extends \yii\db\ActiveRecord
                 'vorlage_typ_id' => $vorlageTypId
             ])
             ->all();
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjekt()
+    {
+        return $this->hasOne(Projekt::className(), ['id' => 'projekt_id']);
     }
 }
