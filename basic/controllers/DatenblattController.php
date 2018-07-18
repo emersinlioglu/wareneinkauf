@@ -70,7 +70,7 @@ class DatenblattController extends Controller
 
         // new dataprovider
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
-        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByQueryBuilderOnlyNotDeleted($rules, $projektId, Yii::$app->request->queryParams);
 
         // max count of teileigentumseinheits of filtered datenblatts
         $maxCountTEEinheits = Haus::find()
@@ -113,6 +113,84 @@ class DatenblattController extends Controller
 
         // max count of zahlungs of filtered datenblatts
         $models = $dataProvider->getModels();    
+        $maxCountZahlungs = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->zahlungs);
+            $maxCountZahlungs = max($maxCountZahlungs, $count);
+        }
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'maxCountTEEinheits' => $maxCountTEEinheits,
+            'maxCountSonderwunsches' => $maxCountSonderwunsches,
+            'maxCountAbschlags' => $maxCountAbschlags,
+            'maxCountNachlasses' => $maxCountNachlasses,
+            'maxCountZinsverzugs' => $maxCountZinsverzugs,
+            'maxCountZahlungs' => $maxCountZahlungs,
+            'projekt' => User::getActiveProjekt(),
+            'dynagridProfileId' => \app\models\User::getCurrentUser()->getAktiveDynagridProfileId(),
+        ]);
+    }
+
+    /**
+     * Lists all Datenblatt models.
+     * @return mixed
+     */
+    public function actionCanceled()
+    {
+        $searchModel = new DatenblattSearch();
+        $projektId = User::getActiveProjekt() ? User::getActiveProjekt()->id : null;
+
+        if (!User::hasAccessToProject()) {
+            return $this->redirect(['site/project-access-error']);
+        }
+
+        // new dataprovider
+        $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
+        $dataProvider = $searchModel->searchByQueryBuilderOnlyDeleted($rules, $projektId, Yii::$app->request->queryParams);
+
+        // max count of teileigentumseinheits of filtered datenblatts
+        $maxCountTEEinheits = Haus::find()
+            ->select("COUNT('teileigentumseinheit.id') as cnt")
+            ->joinWith(['teileigentumseinheits'])
+            ->where(['teileigentumseinheit.projekt_id' => $projektId])
+            ->groupBy(['haus.id'])
+            ->max('cnt');
+        $maxCountTEEinheits = intval($maxCountTEEinheits);
+
+        // max count of sonderwuensche of filtered datenblatts
+        $models = $dataProvider->getModels();
+        $maxCountSonderwunsches = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->sonderwunsches);
+            $maxCountSonderwunsches = max($maxCountSonderwunsches, $count);
+        }
+
+        // max count of abschlags of filtered datenblatts
+        $models = $dataProvider->getModels();
+        $maxCountAbschlags = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->abschlags);
+            $maxCountAbschlags = max($maxCountAbschlags, $count);
+        }
+
+        // max count of nachlasses of filtered datenblatts
+        $models = $dataProvider->getModels();
+        $maxCountNachlasses = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->nachlasses);
+            $maxCountNachlasses = max($maxCountNachlasses, $count);
+        }
+
+        $maxCountZinsverzugs = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->zinsverzugs);
+            $maxCountZinsverzugs = max($maxCountZinsverzugs, $count);
+        }
+
+        // max count of zahlungs of filtered datenblatts
+        $models = $dataProvider->getModels();
         $maxCountZahlungs = 0;
         foreach ($models as $datenblatt) {
             $count = count($datenblatt->zahlungs);
@@ -736,25 +814,22 @@ class DatenblattController extends Controller
 //        $this->redirect(['update', 'id' => $datenblattId]);
     }
 
-
     /**
-     * Deletes an existing Datenblatt model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
      */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
         $name = $model->id;
         $haus = $model->haus;
-        if ($model->delete()) {
+        $datetime = date('Y-m-d H:i:s');
+        $model->deleted = $datetime;
+        if ($model->save()) {
             if ($haus) {
-                foreach ($haus->teileigentumseinheits as $te) {
-                    $te->haus_id = null;
-                    $te->save();
-                }
-                $haus->delete();
+                $haus->deleted = $datetime;
+                $haus->save();
             }
             Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
         }

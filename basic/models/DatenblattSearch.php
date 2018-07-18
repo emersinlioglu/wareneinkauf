@@ -50,7 +50,7 @@ class DatenblattSearch extends Datenblatt
             [['kaeufer', 'kaeufer_debitornr',
                 'kaeufer_titel', 'kaeufer_nachname', 'kaeufer_vorname', 'kaeufer_email', 'kaeufer_festnetz', 'kaeufer_handy',
                 'kaeufer_titel2', 'kaeufer_nachname2', 'kaeufer_vorname2',
-                'sap_debitor_nr', 'intern_debitor_nr'], 'safe'],
+                'sap_debitor_nr', 'intern_debitor_nr', 'deleted'], 'safe'],
             [['projekt_name', 'firma_name', 'firma_nr'], 'safe'],
         ];
     }
@@ -238,11 +238,22 @@ class DatenblattSearch extends Datenblatt
         return $dataProvider;
     }
 
+    public function searchByQueryBuilderOnlyDeleted($rules, $projektId, $params) {
+        $dataprovider = $this->searchByQueryBuilder($rules, $projektId, $params);
+        $dataprovider->query->andWhere('datenblatt.deleted IS NOT NULL');
+        return $dataprovider;
+    }
+
+    public function searchByQueryBuilderOnlyNotDeleted($rules, $projektId, $params) {
+        $dataprovider = $this->searchByQueryBuilder($rules, $projektId, $params);
+        $dataprovider->query->andWhere('datenblatt.deleted IS NULL');
+        return $dataprovider;
+    }
+
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
+     * @param $rules
+     * @param $projektId
+     * @param $params
      * @return ActiveDataProvider
      */
     public function searchByQueryBuilder($rules, $projektId, $params)

@@ -17,6 +17,7 @@ use yii\helpers\Html;
  * @property string $status
  * @property integer $rechnung_vertrieb
  * @property integer $creator_user_id
+ * @property string $deleted
  *
  * @property Datenblatt[] $datenblatts
  * @property Projekt $projekt
@@ -52,6 +53,7 @@ class Haus extends \yii\db\ActiveRecord
     {
         return [
             [['creator_user_id'], 'required'],
+            [['deleted'], 'safe'],
             [['projekt_id', 'firma_id', 'rechnung_vertrieb', 'creator_user_id'], 'integer'],
             [['plz', 'ort', 'strasse', 'status'], 'string', 'max' => 255],
             [['hausnr'], 'string', 'max' => 45]
@@ -74,6 +76,7 @@ class Haus extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'rechnung_vertrieb' => Yii::t('app', 'Rechnung Vertrieb'),
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
+            'deleted' => Yii::t('app', 'Gelöscht'),
         ];
     }
 

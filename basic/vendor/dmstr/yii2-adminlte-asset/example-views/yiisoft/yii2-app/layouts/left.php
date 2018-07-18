@@ -130,6 +130,13 @@
 //                        'items' => $datenblattItems,
                     ],
                     [
+                        'label' => 'Datenblätter (storniert)',
+                        'icon' => 'fa fa-file-text text-blue',
+                        'url' => ['/datenblatt/canceled']
+//                        'url' => '#',
+//                        'items' => $datenblattItems,
+                    ],
+                    [
                         'label' => 'Einstellungen',
                         'icon' => 'fa fa-share',
                         'url' => '#',

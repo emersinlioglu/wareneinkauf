@@ -26,7 +26,7 @@ use Yii;
  * @property integer $creator_user_id
  * @property string $sap_debitor_nr
  * @property string $intern_debitor_nr
- *
+ * @property string $deleted
  *
  * @property Abschlag[] $abschlags
  * @property Firma $firma
@@ -258,7 +258,7 @@ class Datenblatt extends \yii\db\ActiveRecord
         return [
             //[['kaeufer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Kaeufer::className(), 'targetAttribute' => 'id'],
             [['creator_user_id'], 'required'],
-            [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
+            [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge', 'deleted'], 'safe'],
             [['firma_id', 'projekt_id', 'haus_id', 'nummer', 'kaeufer_id', 'aktiv', 'auflassung', 'creator_user_id'], 'integer'], //'kaeufer_id',
             [['besondere_regelungen_kaufvertrag', 'sonstige_anmerkungen', 'sap_debitor_nr', 'intern_debitor_nr'], 'string']
         ];
@@ -289,6 +289,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             'creator_user_id' => Yii::t('app', 'Ersteller ID'),
             'sap_debitor_nr' => Yii::t('app', 'SAP-Debitor Nr.'),
             'intern_debitor_nr' => Yii::t('app', 'Interne-Debitor Nr.'),
+            'deleted' => Yii::t('app', 'Gelöscht'),
         ];
     }
 
