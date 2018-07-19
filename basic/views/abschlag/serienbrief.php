@@ -3,10 +3,13 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use app\models\Vorlage;
+use app\models\User;
 use kartik\datecontrol\DateControl;
 use \app\models\VorlageTyp;
 
 $this->title = 'Serienbriefe';
+
+$projektId = User::getActiveProjekt() ? User::getActiveProjekt()->id : null;
 ?>
 
 <?php
@@ -69,7 +72,7 @@ $this->registerJs('
                             </div>
                             <div class="col-sm-3">
                                 <?= $form->field($abschlagModel, 'vorlage_id')->dropDownList(
-                                    ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_ABSCHLAG), 'id', 'name'),
+                                    ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_ABSCHLAG, $projektId), 'id', 'name'),
                                     [
                                         'class' => 'form-control',
                                         'prompt'=>'Vorlage auswählen'
@@ -222,7 +225,7 @@ $this->registerJs('
                                     <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                                     <?= Html::dropDownList(
                                         'vorlage', null,
-                                        ArrayHelper::map(Vorlage::find()->where(['deleted' => null])->all(), 'id', 'name'),
+                                        ArrayHelper::map(Vorlage::find()->where(['deleted' => null, 'projekt_id' => $projektId])->all(), 'id', 'name'),
                                         [
                                             'class' => 'form-control',
                                             'prompt'=>'Vorlage auswählen'
@@ -300,7 +303,7 @@ $this->registerJs('
                                 <div class="form-group">
                                     <label class="control-label" for="datenblatt-firma_id">Vorlage</label>
                                     <?= Html::dropDownList('sonderwunschVorlageId', null,
-                                        ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_SONDERWUNSCH),'id', 'name'),
+                                        ArrayHelper::map(Vorlage::getVorlagen(VorlageTyp::TYPE_SONDERWUNSCH, $projektId),'id', 'name'),
                                         ['prompt' => 'Bitte auswählen', 'class'=>'form-control']);
                                     ?>
                                 </div>

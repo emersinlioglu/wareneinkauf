@@ -73,11 +73,12 @@ class Vorlage extends \yii\db\ActiveRecord
         return $this->hasOne(VorlageTyp::className(), ['id' => 'vorlage_typ_id']);
     }
 
-    public static function getVorlagen($vorlageTypId) {
+    public static function getVorlagen($vorlageTypId, $projektId) {
         return Vorlage::find()
             ->where([
                 'deleted' => null,
-                'vorlage_typ_id' => $vorlageTypId
+                'vorlage_typ_id' => $vorlageTypId,
+                'projekt_id' => $projektId,
             ])
             ->all();
     }
