@@ -337,16 +337,13 @@ class TeileigentumseinheitController extends Controller
 
         if (isset($_GET['term'])) {
 
-//            var_dump($datenblattId);
-
             $datenblatt = Datenblatt::findOne($datenblattId);
 
             if ($datenblatt && $datenblatt->projekt) {
 
                 $teileigentumseinheiten = Teileigentumseinheit::find()
-                    ->joinWith(['haus'])
                     ->where(['like', 'te_nummer', $_GET['term']])
-                    ->andWhere("(haus_id IS NULL OR haus_id = '') or (haus.deleted IS NOT NULL)")
+                    ->andWhere("(haus_id IS NULL OR haus_id = '')")
                     ->andWhere("teileigentumseinheit.projekt_id = " . $datenblatt->projekt_id)
                     ->orderBy('CAST(te_nummer AS DECIMAL)')
                     ->all();

@@ -2,37 +2,28 @@
 
 namespace app\controllers;
 
+use app\models\Abschlag;
 use app\models\AbschlagMeilenstein;
-use app\models\DynagridProfile;
-use app\models\Haus;
-use app\models\Kunde;
-use app\models\Projekt;
-use app\models\Meilenstein;
-use app\models\QueryBuilderProfile;
-use app\models\Teileigentumseinheit;
-use app\models\Zinsverzug;
-use Yii;
-use yii\data\ActiveDataProvider;
 use app\models\Datenblatt;
+use app\models\DatenblattLog;
 use app\models\DatenblattSearch;
+use app\models\Haus;
+use app\models\Kaeufer;
+use app\models\Meilenstein;
+use app\models\Nachlass;
+use app\models\QueryBuilderProfile;
+use app\models\Sonderwunsch;
+use app\models\Teileigentumseinheit;
+use app\models\TeileigentumseinheitLog;
+use app\models\User;
+use app\models\Zahlung;
+use app\models\Zinsverzug;
+use kartik\mpdf\Pdf;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
-
-use app\models\DynamicForm;
-use app\models\Nachlass;
-use app\models\Zahlung;
-use app\models\Kaeufer;
-use app\models\Sonderwunsch;
-use app\models\Abschlag;
-use yii\widgets\ActiveForm;
-use kartik\mpdf\Pdf;
-use app\models\User;
-
-
 
 
 /**
@@ -70,7 +61,7 @@ class DatenblattController extends Controller
 
         // new dataprovider
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
-        $dataProvider = $searchModel->searchByQueryBuilderOnlyNotDeleted($rules, $projektId, Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
 
         // max count of teileigentumseinheits of filtered datenblatts
         $maxCountTEEinheits = Haus::find()
@@ -822,17 +813,29 @@ class DatenblattController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $name = $model->id;
-        $haus = $model->haus;
-        $datetime = date('Y-m-d H:i:s');
-        $model->deleted = $datetime;
-        if ($model->save()) {
-            if ($haus) {
-                $haus->deleted = $datetime;
-                $haus->save();
+
+        // log datenblatt und teileigentumseinheiten
+        $datenblattLog = new DatenblattLog();
+        $datenblattLog->setAttributes($model->getAttributes());
+        $datenblattLog->deleted_by = User::getCurrentUser()->id;
+        if ($datenblattLog->save() && $model->haus) {
+            foreach ($model->haus->teileigentumseinheits as $te) {
+                $teLog = new TeileigentumseinheitLog();
+                $teLog->setAttributes($te->getAttributes());
+                $teLog->datenblatt_log_id = $datenblattLog->id;
+                $teLog->save();
             }
-            Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
         }
+
+//        // hard delete datenblatt
+//        $name = $model->id;
+//        $haus = $model->haus;
+//        if ($model->delete()) {
+//            if ($haus) {
+//                $haus->delete();
+//            }
+//            Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
+//        }
 
         return $this->redirect(['index']);
     }

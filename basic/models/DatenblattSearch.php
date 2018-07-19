@@ -238,18 +238,6 @@ class DatenblattSearch extends Datenblatt
         return $dataProvider;
     }
 
-    public function searchByQueryBuilderOnlyDeleted($rules, $projektId, $params) {
-        $dataprovider = $this->searchByQueryBuilder($rules, $projektId, $params);
-        $dataprovider->query->andWhere('datenblatt.deleted IS NOT NULL');
-        return $dataprovider;
-    }
-
-    public function searchByQueryBuilderOnlyNotDeleted($rules, $projektId, $params) {
-        $dataprovider = $this->searchByQueryBuilder($rules, $projektId, $params);
-        $dataprovider->query->andWhere('datenblatt.deleted IS NULL');
-        return $dataprovider;
-    }
-
     /**
      * @param $rules
      * @param $projektId
