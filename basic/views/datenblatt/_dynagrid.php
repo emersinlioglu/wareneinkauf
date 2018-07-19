@@ -11,53 +11,15 @@
 
 <?php
 
-use yii\helpers\Html;
+use app\models\User;
 use kartik\dynagrid\DynaGrid;
-use kartik\grid\GridView;
-use kartik\dynagrid\Module;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use \yii\helpers\Url;
-use \app\models\User;
 
 $gridColumns = [
     //['class' => 'yii\grid\SerialColumn'],
     ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
-
-    /*
-    [
-        'attribute' => 'projekt_name',
-        'value'=>'projekt.name',
-        'label' => 'Projekt'
-    ],
-    [
-        'attribute' => 'firma_nr',
-        'value'=>'firma.nr',
-        'label' => 'Firmen Nr.'
-    ],
-
-    [
-        //'attribute' => 'haus_strasse',
-        'value'=>'haus.strasse',
-        'label' => 'Straße'
-    ],
-    [
-        //'attribute' => 'haus_hausnr',
-        'value'=>'haus.hausnr',
-        'label' => 'Haus Nr.'
-    ],
-
-    [
-        //'attribute' => 'haus_plz',
-        'value'=>'haus.plz',
-        'label' => 'Plz'
-    ],
-    [
-        //'attribute' => 'haus_ort',
-        'value'=>'haus.ort',
-        'label' => 'Ort'
-    ],
-
-    */
 ];
 
 $gridColumns[] = [

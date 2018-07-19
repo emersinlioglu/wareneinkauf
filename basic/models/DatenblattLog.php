@@ -33,6 +33,7 @@ use Yii;
  * @property Kaeufer $kaeufer
  * @property Projekt $projekt
  * @property User $deletedBy
+ * @property User $createdBy
  */
 class DatenblattLog extends \yii\db\ActiveRecord
 {
@@ -114,7 +115,7 @@ class DatenblattLog extends \yii\db\ActiveRecord
      */
     public function getTeileigentumseinheits()
     {
-        return $this->hasMany(Teileigentumseinheit::className(), ['datenblatt_id' => 'id']);
+        return $this->hasMany(TeileigentumseinheitLog::className(), ['datenblatt_log_id' => 'id']);
     }
 
     /**
@@ -123,6 +124,14 @@ class DatenblattLog extends \yii\db\ActiveRecord
     public function getDeletedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'deleted_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'creator_user_id']);
     }
 
     /**
