@@ -1,6 +1,16 @@
 ALTER TABLE `datenblatt`
   DROP COLUMN `deleted`;
 
+UPDATE teileigentumseinheit
+  SET haus_id = NULL
+  WHERE haus_id NOT IN (SELECT id FROM haus);
+
+ALTER TABLE `teileigentumseinheit`
+  CHANGE COLUMN `haus_id` `haus_id` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `id`;
+
+ALTER TABLE `teileigentumseinheit`
+  ADD CONSTRAINT `FK_teileigentumseinheit_haus` FOREIGN KEY (`haus_id`) REFERENCES `haus` (`id`) ON DELETE SET NULL;
+
 CREATE TABLE `datenblatt_log` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `firma_id` INT(10) UNSIGNED NULL DEFAULT NULL,
@@ -54,3 +64,6 @@ CREATE TABLE `teileigentumseinheit_log` (
   ENGINE=InnoDB
   ROW_FORMAT=COMPACT
 ;
+
+ALTER TABLE `teileigentumseinheit_log`
+  ADD CONSTRAINT `FK_teileigentumseinheit_log_datenblatt_log` FOREIGN KEY (`datenblatt_log_id`) REFERENCES `datenblatt_log` (`id`) ON DELETE CASCADE;

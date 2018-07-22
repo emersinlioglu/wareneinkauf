@@ -827,15 +827,15 @@ class DatenblattController extends Controller
             }
         }
 
-//        // hard delete datenblatt
-//        $name = $model->id;
-//        $haus = $model->haus;
-//        if ($model->delete()) {
-//            if ($haus) {
-//                $haus->delete();
-//            }
-//            Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
-//        }
+        // hard delete datenblatt
+        $name = $model->id;
+        $haus = $model->haus;
+        if ($model->delete()) {
+            if ($haus) {
+                $haus->delete();
+            }
+            Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
+        }
 
         return $this->redirect(['index']);
     }
