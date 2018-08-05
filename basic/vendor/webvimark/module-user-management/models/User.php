@@ -11,6 +11,7 @@ use webvimark\modules\UserManagement\models\rbacDB\Route;
 use webvimark\modules\UserManagement\UserManagementModule;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\models\KonfigurationUser;
 
 /**
  * This is the model class for table "user".
@@ -338,6 +339,14 @@ class User extends UserIdentity
 	{
 		return $this->hasMany(Role::className(), ['name' => 'item_name'])
 			->viaTable(Yii::$app->getModule('user-management')->auth_assignment_table, ['user_id'=>'id']);
+	}
+
+		/**
+	* @return \yii\db\ActiveQuery
+	*/
+	public function getAgreed()
+	{
+		return $this->hasMany(KonfigurationUser::className(), ['user_id' => 'id']);
 	}
 
 

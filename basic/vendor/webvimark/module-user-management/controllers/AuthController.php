@@ -15,13 +15,15 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use app\models\KonfigurationUser;
+use app\models\Konfiguration;
 
 class AuthController extends BaseController
 {
 	/**
 	 * @var array
 	 */
-	public $freeAccessActions = ['login', 'logout', 'confirm-registration-email'];
+	public $freeAccessActions = ['login', 'logout', 'confirm-registration-email', 'password-recovery', 'password-recovery-receive'];
 
 	/**
 	 * @return array
@@ -32,6 +34,66 @@ class AuthController extends BaseController
 			'captcha' => $this->module->captchaOptions,
 		];
 	}
+
+
+	/**
+	 * Login form - Prüfen ob, User Konfiguration bestätigt hat
+	 *
+	 * @return string
+	 */
+	public function actionLoginKonfiguration($id = null, $zustimmung = null)
+	{
+		  $konfigurationuser = KonfigurationUser::find()->where(['user_id' => Yii::$app->user->id])->andWhere(['konfiguration_id'=>$id])->one();
+
+          if($konfigurationuser == null && $zustimmung == 1)
+          {
+	          $konfigurationuser = new KonfigurationUser;
+	          $konfigurationuser->user_id = Yii::$app->user->id;
+	          $konfigurationuser->konfiguration_id = $id;
+	          $konfigurationuser->zustimmung_datum = date("Y-m-d");
+	          $konfigurationuser->save();
+          }
+
+          $datenow = date('Y-m-d');
+          $konfigurationen = Konfiguration::find()->where(['>', 'id', $id])->andWhere(['>=', 'deleted', $datenow])->orderBy(['id'=>SORT_DESC])->all();
+          $konfigurationusers = KonfigurationUser::find()->where(['user_id'=>Yii::$app->user->id])->orderBy(['konfiguration_id'=>SORT_DESC])->all();
+
+  	      $konfigurationen_zuordnen = [];
+    	
+
+    	  foreach($konfigurationen as $konfiguration)
+          {
+    		$nichtzugeordnet = true;
+
+        	foreach($konfigurationusers as $kuser)
+            {
+            	if($konfiguration->id == $kuser->konfiguration_id)
+            	{
+                    $nichtzugeordnet = false;
+            	}
+            }
+
+
+            if($nichtzugeordnet)
+            {
+            	array_push($konfigurationen_zuordnen, $konfiguration); 
+            }
+
+     	  }
+
+
+          if(count($konfigurationen_zuordnen) > 0)
+          {
+          	  return $this->renderAjax('konfigurationUser', ['konfigurationen' => $konfigurationen_zuordnen]);
+          }
+
+          else
+          {
+              return $this->redirect(['login']);
+          }
+
+	}	
+
 
 	/**
 	 * Login form
@@ -46,6 +108,8 @@ class AuthController extends BaseController
 		}
 
 		$model = new LoginForm();
+		$modelPassword = null;
+		$datenow = date('Y-m-d');
 
 		if ( Yii::$app->request->isAjax AND $model->load(Yii::$app->request->post()) )
 		{
@@ -55,12 +119,57 @@ class AuthController extends BaseController
 
 		if ( $model->load(Yii::$app->request->post()) AND $model->login() )
 		{
+		   $konfigurationuser = KonfigurationUser::find()->where(['user_id'=>Yii::$app->user->id])->orderBy(['konfiguration_id'=>SORT_DESC])->all();
+
+	        if(count($konfigurationuser) == 0)
+	        {
+	        	$konfigurationen = Konfiguration::find()->where(['>=', 'deleted', $datenow])->orderBy(['id'=>SORT_DESC])->all();
+
+	        	if(count($konfigurationen) > 0)
+	        	{
+
+	        		return $this->renderAjax('konfigurationUser', ['konfigurationen' => $konfigurationen]);
+	            }
+	        }
+
+	        else
+	        {
+	        	$konfigurationen_zuordnen = [];
+	        	$konfigurationen = Konfiguration::find()->where(['>=', 'deleted', $datenow])->orderBy(['id'=>SORT_DESC])->all();
+
+	        	foreach($konfigurationen as $konfiguration)
+	        	{
+	        		$nichtzugeordnet = true;
+
+		        	foreach($konfigurationuser as $kuser)
+		            {
+		            	if($konfiguration->id == $kuser->konfiguration_id)
+		            	{
+                            $nichtzugeordnet = false;
+		            	}
+		            }
+
+		            if($nichtzugeordnet)
+		            {
+		            	array_push($konfigurationen_zuordnen, $konfiguration); 
+		            }
+
+	        	}
+
+            	if(count($konfigurationen_zuordnen) > 0)
+	        	{
+	        		return $this->renderAjax('konfigurationUser', ['konfigurationen' => $konfigurationen_zuordnen]);
+	            }	  
+	        }
+
+
 		    // set active projekt id in session
             \app\models\User::setActiveProjekt(Yii::$app->request->post('projekt_id'));
 			return $this->goBack();
 		}
 
-		return $this->renderIsAjax('login', compact('model'));
+
+		return $this->renderIsAjax('login', compact('model', 'modelPassword'));
 	}
 
 	/**
@@ -216,27 +325,29 @@ class AuthController extends BaseController
 			return $this->goHome();
 		}
 
-		$model = new PasswordRecoveryForm();
+		//$model = new PasswordRecoveryForm();
+		$modelPassword = new PasswordRecoveryForm();
+		$model = new LoginForm();
 
-		if ( Yii::$app->request->isAjax AND $model->load(Yii::$app->request->post()) )
+		if ( Yii::$app->request->isAjax AND $modelPassword->load(Yii::$app->request->post()) )
 		{
 			Yii::$app->response->format = Response::FORMAT_JSON;
 
 			// Ajax validation breaks captcha. See https://github.com/yiisoft/yii2/issues/6115
 			// Thanks to TomskDiver
-			$validateAttributes = $model->attributes;
+			$validateAttributes = $modelPassword->attributes;
 			unset($validateAttributes['captcha']);
 
-			return ActiveForm::validate($model, $validateAttributes);
+			return ActiveForm::validate($modelPassword, $validateAttributes);
 		}
 
-		if ( $model->load(Yii::$app->request->post()) AND $model->validate() )
+		if ( $modelPassword->load(Yii::$app->request->post()) AND $modelPassword->validate() )
 		{
-			if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
+			if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_REQUEST, ['model'=>$modelPassword]) )
 			{
-				if ( $model->sendEmail(false) )
+				if ( $modelPassword->sendEmail(false) )
 				{
-					if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
+					if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_REQUEST, ['model'=>$modelPassword]) )
 					{
 						return $this->renderIsAjax('passwordRecoverySuccess');
 					}
@@ -248,7 +359,8 @@ class AuthController extends BaseController
 			}
 		}
 
-		return $this->renderIsAjax('passwordRecovery', compact('model'));
+		//return $this->renderIsAjax('passwordRecovery', compact('model'));
+		return $this->renderIsAjax('login', compact('model', 'modelPassword'));
 	}
 
 	/**

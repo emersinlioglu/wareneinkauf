@@ -81,6 +81,12 @@ $this->params['breadcrumbs'][] = $this->title;
 					),
 					'created_at:datetime',
 					'updated_at:datetime',
+					[
+						'label'=>'Zugestimmt am',
+						'value'=> (($model->agreed) ? $model->agreed[0]->zustimmung_datum : 'NOW'),
+						'format'=> ['date', 'php:d.m.Y'],
+						'visible'=>($model->agreed),
+					],
 				],
 			]) ?>
 

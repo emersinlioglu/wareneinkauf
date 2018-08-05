@@ -97,7 +97,7 @@ $config = [
             // Here you can set your handler to change layout for any controller or action
             // Tip: you can use this event in any module
             'on beforeAction' => function(yii\base\ActionEvent $event) {
-                if ( $event->action->uniqueId == 'user-management/auth/login' ) {
+                if ( $event->action->uniqueId == 'user-management/auth/login' || $event->action->uniqueId == 'user-management/auth/password-recovery') {
                     $event->action->controller->layout = 'loginLayout.php';
                 };
             },
@@ -114,6 +114,7 @@ $config = [
             'decimalSeparator' => ',', 
             'thousandSeparator' => '.', 
             'currencyCode' => 'EUR',
+            'defaultTimeZone' => 'Europe/Berlin',
         ],
 
         'assetManager' => [

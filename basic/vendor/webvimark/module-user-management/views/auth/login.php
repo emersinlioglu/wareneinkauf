@@ -8,6 +8,7 @@ use webvimark\modules\UserManagement\components\GhostHtml;
 use webvimark\modules\UserManagement\UserManagementModule;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\captcha\Captcha;
 use \yii\helpers\ArrayHelper;
 use \app\models\Projekt;
 ?>
@@ -23,6 +24,7 @@ use \app\models\Projekt;
 
 					<?php $form = ActiveForm::begin([
 						'id'      => 'login-form',
+						'action' => ['/user-management/auth/login'],
 						'options'=>['autocomplete'=>'off'],
 						'validateOnBlur'=>false,
 						'fieldConfig' => [
@@ -58,17 +60,51 @@ use \app\models\Projekt;
 							) ?>
 						</div>
 						<div class="col-sm-6 text-right">
-							<?= GhostHtml::a(
+							<?= Html::a(
 								UserManagementModule::t('front', "Forgot password ?"),
 								['/user-management/auth/password-recovery']
 							) ?>
 						</div>
 					</div>
 
-
-
-
 					<?php ActiveForm::end() ?>
+
+					<?php if ($modelPassword != null): ?>
+
+						<div class="password-recovery">
+
+							<?php if ( Yii::$app->session->hasFlash('error') ): ?>
+								<div class="alert-alert-warning">
+									<?= Yii::$app->session->getFlash('error') ?>
+								</div>
+							<?php endif; ?>
+
+							<?php $form = ActiveForm::begin([
+								'id'=>'user',
+								'action' => ['/user-management/auth/password-recovery'],
+								'layout'=>'default',
+								'validateOnBlur'=>false,
+							]); ?>
+
+							<?= $form->field($modelPassword, 'email')->textInput(['maxlength' => 255, 'autofocus'=>true]) ?>
+
+							<?= $form->field($modelPassword, 'captcha')->widget(Captcha::className(), [
+								'template' => '<div class="row"><div class="col-sm-4">{image}</div><div class="col-sm-8">{input}</div></div>',
+								'captchaAction'=>['/user-management/auth/captcha']
+							]) ?>
+
+							<div class="form-group">
+									<?= Html::submitButton(
+										UserManagementModule::t('front', 'Recover'),
+										['class' => 'btn btn-lg btn-primary btn-block']
+									) ?>
+							</div>
+
+							<?php ActiveForm::end(); ?>
+
+						</div>
+
+				   <?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -89,7 +125,7 @@ html, body {
 	position: relative;
 	top: 30%;
 }
-#login-wrapper .registration-block {
+#login-wrapper .registration-block .password-recovery {
 	margin-top: 15px;
 }
 CSS;

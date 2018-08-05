@@ -141,7 +141,7 @@
                         'items' => [
                             ['label' => 'Einheitstypenverwaltung', 'icon' => 'fa fa-file-code-o', 'url' => ['/einheitstyp/index'],],
                             ['label' => 'Vorlagen', 'icon' => 'fa fa-file-code-o', 'url' => ['/vorlage/index'],],
-
+                            ['label' => 'Administrative Konfiguration', 'icon' => 'fa fa-file-code-o', 'url' => ['/konfiguration/index'],],
                             
                         ],
                     ],
