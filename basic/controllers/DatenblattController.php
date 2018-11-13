@@ -18,8 +18,11 @@ use app\models\TeileigentumseinheitLog;
 use app\models\User;
 use app\models\Zahlung;
 use app\models\Zinsverzug;
+use kartik\dynagrid\models\DynaGridConfig;
+use kartik\dynagrid\models\DynaGridSettings;
 use kartik\mpdf\Pdf;
 use Yii;
+use yii\db\ActiveRecord;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -124,6 +127,118 @@ class DatenblattController extends Controller
         ]);
     }
 
+    public function actionExport() {
+        $searchModel = new DatenblattSearch();
+        $projektId = User::getActiveProjekt() ? User::getActiveProjekt()->id : null;
+
+        if (!User::hasAccessToProject()) {
+            return $this->redirect(['site/project-access-error']);
+        }
+
+        // new dataprovider
+        $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
+        $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
+
+        echo "<pre>";
+
+        $gridColumns = Datenblatt::getGridColumns(User::getActiveProjekt()->id, $dataProvider->getModels());
+
+        $models = $dataProvider->models;
+        $fields = Yii::$app->request->post('fields');
+
+        $results = [];
+        $row = [];
+        foreach ($fields as $field) {
+            foreach ($gridColumns as $gridColumn) {
+
+//                print_r($gridColumn['value']);
+//                echo $field;
+//                exit;
+
+                if (!array_key_exists('value', $gridColumn) && !array_key_exists('attribute', $gridColumn) ) {
+                    print_r($gridColumn);
+                    exit;
+                }
+                if ($field == $gridColumn['value'] || $field == $gridColumn['attribute']) {
+                    $row[] = $gridColumn['label'];
+                }
+            }
+        }
+        $results[] = $row;
+
+        /** @var ActiveRecord $model */
+        foreach ($models as $model) {
+            $row = [];
+            foreach ($fields as $field) {
+                $parts = explode('.', $field);
+                $obj = $model;
+                foreach ($parts as $part) {
+                    $obj = $obj->{$part};
+                }
+                $row[$field] = $obj;
+            }
+            $results[] = $row;
+        }
+
+        print_r($results);
+        exit;
+
+
+
+        require_once __DIR__ . '/../vendor/phpexcel/PHPExcel.php';
+        // Create new PHPExcel object
+        $objPHPExcel = new \PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+            ->setLastModifiedBy("Maarten Balliauw")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0);
+        $testArray = [
+            [
+                'a' => 'aa',
+                'b' => 'bbb',
+                'c' => 'cc',
+                'd' => 'dddd',
+            ],
+            [
+                'a' => '55.99',
+                'b' => '66,2',
+                'c' => 77.0,
+                'd' => 88.88,
+            ]
+        ];
+        $objPHPExcel->getActiveSheet()->fromArray($testArray, NULL, 'A1');
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Simple');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+//        // Redirect output to a client’s web browser (Excel2007)
+//        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//        header('Content-Disposition: attachment;filename="01simple.xlsx"');
+//        header('Cache-Control: max-age=0');
+//        // If you're serving to IE 9, then the following may be needed
+//        header('Cache-Control: max-age=1');
+//
+//        // If you're serving to IE over SSL, then the following may be needed
+//        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+//        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+//        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+//        header ('Pragma: public'); // HTTP/1.0
+
+//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//        $objWriter->save('php://output');
+    }
+
     /**
      * Lists all Datenblatt models.
      * @return mixed
@@ -141,62 +256,9 @@ class DatenblattController extends Controller
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
         $dataProvider = $searchModel->searchByQueryBuilderOnlyDeleted($rules, $projektId, Yii::$app->request->queryParams);
 
-        // max count of teileigentumseinheits of filtered datenblatts
-        $maxCountTEEinheits = Haus::find()
-            ->select("COUNT('teileigentumseinheit.id') as cnt")
-            ->joinWith(['teileigentumseinheits'])
-            ->where(['teileigentumseinheit.projekt_id' => $projektId])
-            ->groupBy(['haus.id'])
-            ->max('cnt');
-        $maxCountTEEinheits = intval($maxCountTEEinheits);
-
-        // max count of sonderwuensche of filtered datenblatts
-        $models = $dataProvider->getModels();
-        $maxCountSonderwunsches = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->sonderwunsches);
-            $maxCountSonderwunsches = max($maxCountSonderwunsches, $count);
-        }
-
-        // max count of abschlags of filtered datenblatts
-        $models = $dataProvider->getModels();
-        $maxCountAbschlags = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->abschlags);
-            $maxCountAbschlags = max($maxCountAbschlags, $count);
-        }
-
-        // max count of nachlasses of filtered datenblatts
-        $models = $dataProvider->getModels();
-        $maxCountNachlasses = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->nachlasses);
-            $maxCountNachlasses = max($maxCountNachlasses, $count);
-        }
-
-        $maxCountZinsverzugs = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->zinsverzugs);
-            $maxCountZinsverzugs = max($maxCountZinsverzugs, $count);
-        }
-
-        // max count of zahlungs of filtered datenblatts
-        $models = $dataProvider->getModels();
-        $maxCountZahlungs = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->zahlungs);
-            $maxCountZahlungs = max($maxCountZahlungs, $count);
-        }
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'maxCountTEEinheits' => $maxCountTEEinheits,
-            'maxCountSonderwunsches' => $maxCountSonderwunsches,
-            'maxCountAbschlags' => $maxCountAbschlags,
-            'maxCountNachlasses' => $maxCountNachlasses,
-            'maxCountZinsverzugs' => $maxCountZinsverzugs,
-            'maxCountZahlungs' => $maxCountZahlungs,
             'projekt' => User::getActiveProjekt(),
             'dynagridProfileId' => \app\models\User::getCurrentUser()->getAktiveDynagridProfileId(),
         ]);

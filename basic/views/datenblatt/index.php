@@ -40,13 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  echo $this->render('_dynagrid', [
         'dataProvider' => $dataProvider,
         'searchModel' => $searchModel,
-        'maxCountTEEinheits' => $maxCountTEEinheits,
-        'maxCountSonderwunsches' => $maxCountSonderwunsches,
-        'maxCountAbschlags' => $maxCountAbschlags,
-        'maxCountNachlasses' => $maxCountNachlasses,
-        'maxCountZinsverzugs' => $maxCountZinsverzugs,
-        'maxCountZahlungs' => $maxCountZahlungs,
         'dynagridProfileId' => $dynagridProfileId,
+        'projekt' => $projekt,
     ]); ?>
 
 </div>
