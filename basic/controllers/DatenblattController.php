@@ -7,6 +7,7 @@ use app\models\AbschlagMeilenstein;
 use app\models\Datenblatt;
 use app\models\DatenblattLog;
 use app\models\DatenblattSearch;
+use app\models\Entschaedigung;
 use app\models\Haus;
 use app\models\Kaeufer;
 use app\models\Meilenstein;
@@ -513,9 +514,14 @@ class DatenblattController extends Controller
                     $item->validate();
                     $item->save();
                 }
+            }
 
-//                $isVal = Zahlung::validateMultiple($modelDatenblatt->zahlungs);
-//                error_log('result: ' . ($isVal ? 'ja' : 'nein'));
+            // Entschaedigung
+            if (Entschaedigung::loadMultiple($modelDatenblatt->entschaedigungs, $data)) {
+                foreach ($modelDatenblatt->entschaedigungs as $item) {
+                    $item->validate();
+                    $item->save();
+                }
             }
 
 //            // reload models
@@ -809,8 +815,8 @@ class DatenblattController extends Controller
     }
 
     /**
-     * Add new zahlung
-     * @param int $datenblattId
+     * @param $datenblattId
+     * @return mixed
      */
     public function actionAddzahlung($datenblattId)
     {
@@ -832,6 +838,20 @@ class DatenblattController extends Controller
 //        return $this->renderPartial('_zahlung', [
 //            'modelDatenblatt' => $modelDatenblatt
 //        ]);
+
+        return $this->actionUpdate($datenblattId);
+//        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    /**
+     * @param $datenblattId
+     * @return mixed
+     */
+    public function actionAddentschaedigung($datenblattId)
+    {
+        $new = new Entschaedigung();
+        $new->datenblatt_id = $datenblattId;
+        $new->save();
 
         return $this->actionUpdate($datenblattId);
 //        $this->redirect(['update', 'id' => $datenblattId]);
@@ -991,6 +1011,26 @@ class DatenblattController extends Controller
 
         $model = $this->findModel($datenblattId);
         if ($item = Zahlung::findOne($zahlungId)) {
+            $item->delete();
+        }
+
+        return $this->actionUpdate($datenblattId, true);
+//        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    /**
+     * @param $datenblattId
+     * @param $entschaedigungId
+     * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDeleteentschaedigung($datenblattId, $entschaedigungId)
+    {
+        $this->actionUpdate($datenblattId);
+
+        $model = $this->findModel($datenblattId);
+        if ($item = Entschaedigung::findOne($entschaedigungId)) {
             $item->delete();
         }
 

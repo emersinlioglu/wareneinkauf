@@ -8,7 +8,6 @@ use kartik\money\MaskMoney;
 /* @var $modelNachlass app\models\Nachlass */
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
-<div class="col-md-6">
 <div class="box-group" id="accordion">
     <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
     <div class="panel box box-primary">
@@ -83,5 +82,4 @@ use kartik\money\MaskMoney;
             </div>
         </div>
     </div>
-</div>
 </div>

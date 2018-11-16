@@ -152,7 +152,7 @@ $this->registerJs('
         <li class=""><a href="#tab-kaeuferdaten" data-toggle="tab">Käuferdaten</a></li>
         <li class=""><a href="#tab-sonderwuensche" data-toggle="tab">Sonderwünsche</a></li>
         <li class=""><a href="#tab-kaufpreisabrechnung" data-toggle="tab">Kaufpreisabrechnung/Abschlag-Emails</a></li>
-        <li class=""><a href="#tab-minderungen" data-toggle="tab">Minderungen/Zahlungen/Verzugszins</a></li>
+        <li class=""><a href="#tab-minderungen" data-toggle="tab">Minderungen/Zahlungen/Verzugszins/Entschädigungen</a></li>
     </ul>
     <div id="" class="tab-content">
         <div id="tab-te-details" class="tab-pane active">
@@ -218,23 +218,25 @@ $this->registerJs('
         <div id="tab-minderungen" class="tab-pane">
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
 
                     <?= $this->render('_nachlass', [
                         'form' => $form,
                         'modelDatenblatt' => $modelDatenblatt,
                     ]) ?>
-
-                    <?= $this->render('_zahlung', [
+                    <?= $this->render('_zinsverzug', [
                         'form' => $form,
                         'modelDatenblatt' => $modelDatenblatt,
                     ]) ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
 
-                    <?= $this->render('_zinsverzug', [
+                </div>
+                <div class="col-md-6">
+                    <?= $this->render('_entschaedigung', [
+                        'form' => $form,
+                        'modelDatenblatt' => $modelDatenblatt,
+                    ]) ?>
+
+                    <?= $this->render('_zahlung', [
                         'form' => $form,
                         'modelDatenblatt' => $modelDatenblatt,
                     ]) ?>

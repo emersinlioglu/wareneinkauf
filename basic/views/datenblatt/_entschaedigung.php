@@ -9,26 +9,22 @@ use kartik\money\MaskMoney;
 /* @var $modelNachlass app\models\Nachlass */
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
-
+<style>
+    #collapse-entschaedigung .control-label {
+        display: none;
+    }
+</style>
 <div class="box-group" id="accordion">
-    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
     <div class="panel box box-primary">
         <div class="box-header with-border">
             <h4 class="box-title">
-                <a data-toggle="collapse" data-parent="#collapse-zahlung" href="#collapse-zahlung"
+                <a data-toggle="collapse" data-parent="#collapse-entschaedigung" href="#collapse-entschaedigung"
                    aria-expanded="true" class="">
-                    Zahlungen:
-
-                    <?php
-                    $total = 0;
-                    foreach ($modelDatenblatt->zahlungs as $key => $modelZahlung) {
-                        $total += $modelZahlung->betrag;
-                    } ?>
-                    (Summe: <?= Yii::$app->formatter->asCurrency($total) ?>)
+                    Entschädigungen: (Summe: <?= Yii::$app->formatter->asCurrency($modelDatenblatt->getEntschaedigungSumme()) ?>)
                 </a>
             </h4>
         </div>
-        <div id="collapse-zahlung" class="panel-collapse collapse in" aria-expanded="false">
+        <div id="collapse-entschaedigung" class="panel-collapse collapse in" aria-expanded="false">
             <div class="box-body">
 
                 <table class="table table-bordered">
@@ -38,22 +34,20 @@ use kartik\money\MaskMoney;
                         <th>Bemerkung</th>
                         <th>
                             <?= Html::a('<span class="fa fa-plus"> </span>',
-                                Yii::$app->urlManager->createUrl(["datenblatt/addzahlung", 'datenblattId' => $modelDatenblatt->id]),
-                                ['class' => 'add-button add-zahlung btn btn-success btn-xl']) ?>
+                                Yii::$app->urlManager->createUrl(["datenblatt/addentschaedigung", 'datenblattId' => $modelDatenblatt->id]),
+                                ['class' => 'add-button add-entschaedigung btn btn-success btn-xl']) ?>
                         </th>
                     </tr>
                     <?php
 
-                    $rechnungstellungBetrag = 0;
-
-                    foreach ($modelDatenblatt->zahlungs as $key => $modelZahlung): ?>
-                        <tr class="sonderwunsch">
+                    foreach ($modelDatenblatt->entschaedigungs as $key => $modelEntschaedigung): ?>
+                        <tr class="entschaedigung">
                             <td>
                                 <div class="hide">
-                                    <?= $form->field($modelZahlung, "[$key]id")->textInput() ?>
+                                    <?= $form->field($modelEntschaedigung, "[$key]id")->textInput() ?>
                                 </div>
                                 <?php
-                                echo $form->field($modelZahlung, "[$key]datum")->widget(DateControl::classname(), [
+                                echo $form->field($modelEntschaedigung, "[$key]datum")->widget(DateControl::classname(), [
                                     'type' => DateControl::FORMAT_DATE,
                                     'options' => [
                                         'pluginOptions' => [
@@ -64,7 +58,7 @@ use kartik\money\MaskMoney;
                                 ?>
                             </td>
                             <td>
-                                <?= $form->field($modelZahlung, "[$key]betrag")
+                                <?= $form->field($modelEntschaedigung, "[$key]betrag")
                                     //->textInput()
                                     ->widget(MaskMoney::classname(), [
                                         'options' => [
@@ -80,18 +74,17 @@ use kartik\money\MaskMoney;
                                 ?>
                             </td>
                             <td>
-                                <?= $form->field($modelZahlung, "[$key]bemerkung")->textInput([]) ?>
+                                <?= $form->field($modelEntschaedigung, "[$key]bemerkung")->textInput([]) ?>
                             </td>
                             <td>
                                 <?= Html::a('<span class="fa fa-minus"></span>',
-                                    Yii::$app->urlManager->createUrl(["datenblatt/deletezahlung", 'datenblattId' => $modelDatenblatt->id, 'zahlungId' => $modelZahlung->id]),
-                                    ['class' => 'delete-button add-zahlung btn btn-danger btn-xl']) ?>
+                                    Yii::$app->urlManager->createUrl(["datenblatt/deleteentschaedigung", 'datenblattId' => $modelDatenblatt->id, 'entschaedigungId' => $modelEntschaedigung->id]),
+                                    ['class' => 'delete-button add-entschaedigung btn btn-danger btn-xl']) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
 
                 </table>
-
 
             </div>
         </div>

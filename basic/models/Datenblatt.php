@@ -35,6 +35,7 @@ use Yii;
  * @property Nachlass[] $nachlasses
  * @property Sonderwunsch[] $sonderwunsches
  * @property Zahlung[] $zahlungs
+ * @property Entschaedigung[] $entschaedigungs
  * @property Zinsverzug[] $zinsverzugs
  */
 class Datenblatt extends \yii\db\ActiveRecord
@@ -86,7 +87,7 @@ class Datenblatt extends \yii\db\ActiveRecord
         }
     }
 
-        public function __get($attribute) {
+    public function __get($attribute) {
 
         if (substr($attribute, 0, 9) == 'teeinheit' && strpos($attribute, '__')) {
 
@@ -244,6 +245,36 @@ class Datenblatt extends \yii\db\ActiveRecord
 
             return $value;
         }
+
+        if (substr($attribute, 0, strlen('entschaedigung')) == 'entschaedigung' && strpos($attribute, '__')) {
+
+            $parts = explode('__', $attribute);
+            //$relatedObject = $parts[0];
+            $nth = $parts[1];
+            $attributeName = $parts[2];
+
+            $value = '';
+            if (count($this->entschaedigungs) > $nth) {
+
+                $entschaedigung = $this->entschaedigungs[$nth];
+                switch($attributeName) {
+//                    case 'datum':
+//                        $value = $entschaedigung->{$attributeName};
+//                        break;
+//                    case 'betrag':
+//                        $value = $entschaedigung->{$attributeName};
+//                        break;
+//                    case 'bemerkung':
+//                        $value = $entschaedigung->{$attributeName};
+//                        break;
+                    default:
+                        $value = $entschaedigung->{$attributeName};
+                        break;
+                }
+            }
+
+            return $value;
+        }
         
 
         return parent::__get($attribute);
@@ -364,6 +395,14 @@ class Datenblatt extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntschaedigungs()
+    {
+        return $this->hasMany(Entschaedigung::className(), ['datenblatt_id' => 'id']);
+    }
+
+    /**
      * @return string
      */
     public function getTenummerHtml() {
@@ -458,6 +497,16 @@ class Datenblatt extends \yii\db\ActiveRecord
         $total = 0;
         foreach ($this->zahlungs as $zahlung) {
             $total += $zahlung->betrag;
+        }
+
+        return $total;
+    }
+
+    public function getEntschaedigungSumme() {
+
+        $total = 0;
+        foreach ($this->entschaedigungs as $item) {
+            $total += $item->betrag;
         }
 
         return $total;
@@ -1094,6 +1143,13 @@ class Datenblatt extends \yii\db\ActiveRecord
             $maxCountZahlungs = max($maxCountZahlungs, $count);
         }
 
+        // max count of entschaedigungs of filtered datenblatts
+        $maxCountEntschaedigungs = 0;
+        foreach ($models as $datenblatt) {
+            $count = count($datenblatt->entschaedigungs);
+            $maxCountEntschaedigungs = max($maxCountEntschaedigungs, $count);
+        }
+
         $gridColumns[] = [
             'value' => 'schlussrechnungSonderwunschBetrag',
             'label' => 'Schlussrechnung - Sonderwunsch Betrag',
@@ -1383,6 +1439,31 @@ class Datenblatt extends \yii\db\ActiveRecord
             $gridColumns[] = [
                 'value'=> "offenePosten",
                 'label' => "Offene Posten:",
+                'format' => ['currency'],
+            ];
+
+            // Entschaedigungen
+            for ($i = 0; $i < $maxCountEntschaedigungs; $i++) {
+                $cnt = $i + 1;
+                $gridColumns[] = [
+                    'value'=> "entschaedigung__{$i}__datumLabel",
+                    'label' => "{$cnt}. Entschädigung-Datum:",
+                ];
+                $gridColumns[] = [
+                    'value'=> "entschaedigung__{$i}__bemerkung",
+                    'label' => "{$cnt}. Entschädigung-Bemerkung:",
+                ];
+                $gridColumns[] = [
+                    'value'=> "entschaedigung__{$i}__betrag",
+                    'label' => "{$cnt}. Entschädigung-Betrag:",
+                    'format' => ['currency'],
+                    'pageSummary' => true
+                ];
+            }
+
+            $gridColumns[] = [
+                'value'=> "entschaedigungSumme",
+                'label' => "Entschädigungen-Summe :",
                 'format' => ['currency'],
             ];
 
