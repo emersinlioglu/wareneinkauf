@@ -153,6 +153,7 @@ $this->registerJs('
         <li class=""><a href="#tab-sonderwuensche" data-toggle="tab">Sonderwünsche</a></li>
         <li class=""><a href="#tab-kaufpreisabrechnung" data-toggle="tab">Kaufpreisabrechnung/Abschlag-Emails</a></li>
         <li class=""><a href="#tab-minderungen" data-toggle="tab">Minderungen/Zahlungen/Verzugszins/Entschädigungen</a></li>
+        <li class=""><a href="#tab-protokoll" data-toggle="tab">Protokoll</a></li>
     </ul>
     <div id="" class="tab-content">
         <div id="tab-te-details" class="tab-pane active">
@@ -250,6 +251,16 @@ $this->registerJs('
                 </div>
             </div>
 
+        </div>
+        <div id="tab-protokoll" class="tab-pane">
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $this->render('_protokoll', [
+                        'form' => $form,
+                        'modelDatenblatt' => $modelDatenblatt,
+                    ]) ?>
+                </div>
+            </div>
         </div>
     </div>
 

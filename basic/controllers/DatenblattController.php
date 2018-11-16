@@ -12,6 +12,7 @@ use app\models\Haus;
 use app\models\Kaeufer;
 use app\models\Meilenstein;
 use app\models\Nachlass;
+use app\models\Protokoll;
 use app\models\QueryBuilderProfile;
 use app\models\Sonderwunsch;
 use app\models\Teileigentumseinheit;
@@ -858,6 +859,23 @@ class DatenblattController extends Controller
     }
 
     /**
+     * @param $datenblattId
+     * @return mixed
+     */
+    public function actionAddProtokoll($datenblattId)
+    {
+        $new = new Protokoll();
+        $new->datenblatt_id = $datenblattId;
+        $new->user_id = User::getCurrentUser()->id;
+        $new->erstellt_am = date('Y-m-d H:i:s');
+        $new->bemerkung = Yii::$app->request->post('newProtokoll');
+        $new->save();
+
+        return $this->actionUpdate($datenblattId);
+//        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    /**
      * Add new nachlass
      * @param int $datenblattId
      */
@@ -1031,6 +1049,26 @@ class DatenblattController extends Controller
 
         $model = $this->findModel($datenblattId);
         if ($item = Entschaedigung::findOne($entschaedigungId)) {
+            $item->delete();
+        }
+
+        return $this->actionUpdate($datenblattId, true);
+//        return $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    /**
+     * @param $datenblattId
+     * @param $protokollId
+     * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDeleteProtokoll($datenblattId, $protokollId)
+    {
+        $this->actionUpdate($datenblattId);
+
+        $model = $this->findModel($datenblattId);
+        if ($item = Protokoll::findOne($protokollId)) {
             $item->delete();
         }
 

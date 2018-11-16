@@ -36,6 +36,7 @@ use Yii;
  * @property Sonderwunsch[] $sonderwunsches
  * @property Zahlung[] $zahlungs
  * @property Entschaedigung[] $entschaedigungs
+ * @property Protokoll[] $protokolls
  * @property Zinsverzug[] $zinsverzugs
  */
 class Datenblatt extends \yii\db\ActiveRecord
@@ -400,6 +401,14 @@ class Datenblatt extends \yii\db\ActiveRecord
     public function getEntschaedigungs()
     {
         return $this->hasMany(Entschaedigung::className(), ['datenblatt_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProtokolls()
+    {
+        return $this->hasMany(Protokoll::className(), ['datenblatt_id' => 'id'])->orderBy(['erstellt_am' => SORT_DESC]);
     }
 
     /**
