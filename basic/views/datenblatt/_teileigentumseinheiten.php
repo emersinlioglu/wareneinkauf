@@ -33,6 +33,7 @@
                             <th>Hausnr.</th>
                             <th>TE-Typ</th>
                             <th>TE</th>
+                            <th>Zähler abgemeldet</th>
                             <th>gefördert</th>
                             <th>Geschoss</th>
                             <th>Zimmer</th>
@@ -54,6 +55,7 @@
                                 <td><?= $teileigentumseinheit->hausnr ?></td>
                                 <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
                                 <td><?= $teileigentumseinheit->te_nummer ?></td>
+                                <td><?= $teileigentumseinheit->zaehler_abgemeldet ? 'ja' : 'nein' ?></td>
                                 <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
                                 <td><?= $teileigentumseinheit->geschoss ?></td>
                                 <td><?= $teileigentumseinheit->zimmer ?></td>
