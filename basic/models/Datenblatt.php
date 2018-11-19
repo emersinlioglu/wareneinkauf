@@ -1137,11 +1137,11 @@ class Datenblatt extends \yii\db\ActiveRecord
         }
 
         // max count of abschlags of filtered datenblatts
-        $maxCountAbschlags = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->abschlags);
-            $maxCountAbschlags = max($maxCountAbschlags, $count);
-        }
+        $maxCountAbschlags = 7;
+//        foreach ($models as $datenblatt) {
+//            $count = count($datenblatt->abschlags);
+//            $maxCountAbschlags = max($maxCountAbschlags, $count);
+//        }
 
         // max count of nachlasses of filtered datenblatts
         $maxCountNachlasses = 0;
