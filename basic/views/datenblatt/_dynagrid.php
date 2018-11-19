@@ -225,6 +225,7 @@ echo DynaGrid::widget([
 //        'multiple'=>'multiple',
 //    ]);
 ?>
+<?php ActiveForm::end(); ?>
 
 <!-- custom export -->
 <?php
