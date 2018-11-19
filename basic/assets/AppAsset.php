@@ -41,6 +41,7 @@ class AppAsset extends AssetBundle
         'js/ProjektForm.js',
         'js/Serienbrief.js',
         'js/tinymce/tinymce.min.js',
+        'js/jquery.doubleScroll.js',
         'js/query-builder.standalone.min.js',
 
         'i18n/query-builder.de.js',
