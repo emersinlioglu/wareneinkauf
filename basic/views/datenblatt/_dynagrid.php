@@ -144,7 +144,7 @@ echo DynaGrid::widget([
 
     'gridOptions'=>[
         'floatHeader' => true,
-//        'showPageSummary'=>true,
+        'showPageSummary'=>true,
         'floatHeaderOptions' => [
             'position' => 'absolute',
         ],
@@ -168,7 +168,8 @@ echo DynaGrid::widget([
         'toolbar' =>  [
             'before' => '{pager} {toggleData} {export}'
 //            'before' => '{dynagridFilter} {dynagridSort} {dynagrid}'
-//            . '<a id="" class="btn btn-default serienbrief" title="Serienbrief"><i class="fa fa-share"></i> Serienbrief</a>',
+//                . '<a id="" data-exportmiteuro-url="'.Url::to(['datenblatt/index', 'exportMitEuro' => $euroExport]).'"
+//                        class="btn btn-default exportmiteuro" title="Export mit €"><i class="fa fa-share"></i> '.$buttonEuro.'</a>',
 ////            'before' => '<div class="pull-right">{pager}</div>',
         ],
         'autoXlFormat'=>true,
@@ -194,6 +195,16 @@ echo DynaGrid::widget([
 );
 
 ?>
+
+<?php $form = ActiveForm::begin([
+    'action' => ['abschlag/serienbrief'],
+    'method' => 'post',
+    'options' => array(
+        'class' => 'datenblatt-selection-form hide',
+    )
+]); ?>
+<?= Html::submitButton('submitSelection', ['name' => 'submitSelection', 'value' => 'selection']) ?>
+<?php ActiveForm::end(); ?>
 
 <?php $form = ActiveForm::begin([
     'action' => ['datenblatt/export'],
@@ -281,6 +292,13 @@ $this->registerJs(<<<JS
             }
             
         });
+        
+        $('.exportmiteuro').click(function(e) {
+            e.preventDefault();
+            window.location = $(this).attr('data-exportmiteuro-url');            
+        });
+
+        $('.kv-grid-container').doubleScroll();
     });
 JS
 );

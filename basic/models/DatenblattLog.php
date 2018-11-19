@@ -185,7 +185,7 @@ class DatenblattLog extends \yii\db\ActiveRecord
         // calculate kaufpreis
         $kaufpreisTotal = 0;
         /* @var $teileh Teileigentumseinheit */
-        foreach ($this-->teileigentumseinheits as $item) {
+        foreach ($this->teileigentumseinheits as $item) {
             $kaufpreisTotal += (float)$item->kaufpreis;
         }
     }

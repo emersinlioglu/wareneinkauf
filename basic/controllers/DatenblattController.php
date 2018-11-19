@@ -68,14 +68,30 @@ class DatenblattController extends Controller
         $rules = Json::decode(QueryBuilderProfile::getActiveFilterRules());
         $dataProvider = $searchModel->searchByQueryBuilder($rules, $projektId, Yii::$app->request->queryParams);
 
+        $modelsToDelete = DatenblattSearch::findAll(['aktiv' => 0]);
+        foreach ($modelsToDelete as $modelToDelete) {
+            $modelToDelete->delete();
+        }
+
         // max count of teileigentumseinheits of filtered datenblatts
-        $maxCountTEEinheits = Haus::find()
-            ->select("COUNT('teileigentumseinheit.id') as cnt")
-            ->joinWith(['teileigentumseinheits'])
-            ->where(['teileigentumseinheit.projekt_id' => $projektId])
-            ->groupBy(['haus.id'])
-            ->max('cnt');
-        $maxCountTEEinheits = intval($maxCountTEEinheits);
+//        $maxCountTEEinheits = Haus::find()
+//            ->select("COUNT('teileigentumseinheit.id') as cnt")
+//            ->joinWith(['teileigentumseinheits'])
+//            ->where(['teileigentumseinheit.projekt_id' => $projektId])
+//            ->groupBy(['haus.id'])
+//            ->max('cnt');
+//        $maxCountTEEinheits = intval($maxCountTEEinheits);
+
+        // max count of teileigentumseinheits of filtered datenblatts
+        $models = $dataProvider->getModels();
+        $maxCountTEEinheits = 0;
+        foreach ($models as $datenblatt) {
+            if ($datenblatt->haus) {
+                $count = count($datenblatt->haus->teileigentumseinheits);
+                $maxCountTEEinheits = max($maxCountTEEinheits, $count);
+            }
+        }
+
 
         // max count of sonderwuensche of filtered datenblatts
         $models = $dataProvider->getModels();    
@@ -557,6 +573,31 @@ class DatenblattController extends Controller
         $modelKaeufer = new Kaeufer();
         if ($modelDatenblatt->kaeufer) {
             $modelKaeufer = $modelDatenblatt->kaeufer;
+
+            if (!$modelDatenblatt->haus_id) {
+                $haus = new Haus();
+                $haus->projekt_id = $modelDatenblatt->projekt_id;
+                $haus->firma_id = $modelDatenblatt->firma_id;
+                $haus->creator_user_id = User::getCurrentUser()->id;
+                $haus->save();
+
+                $modelDatenblatt->haus_id = $haus->id;
+                $modelDatenblatt->save();
+
+                $teileigentumseinheiten = $modelKaeufer->zugewieseneTeileigentumseinheiten;
+                foreach($teileigentumseinheiten as $te) {
+
+                    $te->status = Teileigentumseinheit::STATUS_VERKAUFT;
+                    $te->haus_id = $modelDatenblatt->haus_id;
+                    $te->save();
+                }
+            }
+
+            if ($modelDatenblatt->haus && !$modelDatenblatt->haus->strasse) {
+                $modelDatenblatt->updateAddresseVonProjekt();
+            }
+
+            $modelDatenblatt->refresh();
         }
 
         // calculate kaufpreis
@@ -816,6 +857,79 @@ class DatenblattController extends Controller
     }
 
     /**
+     * Move abschlag
+     * @param int $datenblattId
+     */
+    public function actionMoveabschlag($datenblattId, $altposition, $neuposition)
+    {
+        $abschlaege = Abschlag::find()->where(['datenblatt_id' => $datenblattId])->all();
+        $abschlagalt = Abschlag::findOne($abschlaege[$altposition]->id);
+        $abschlagneu = Abschlag::findOne($abschlaege[$neuposition]->id);
+
+        $abschlaegemeilensteinealt = AbschlagMeilenstein::find()->where(['abschlag_id' => $abschlaege[$altposition]->id])->all();
+        $abschlaegemeilensteineneu = AbschlagMeilenstein::find()->where(['abschlag_id' => $abschlaege[$neuposition]->id])->all();
+
+        foreach($abschlaegemeilensteinealt as $abmeialt) {
+            $abmeialt->abschlag_id = $abschlaege[$neuposition]->id;
+            $abmeialt->save();
+
+        }
+
+        foreach($abschlaegemeilensteineneu as $abmeineu) {
+            $abmeineu->abschlag_id = $abschlaege[$altposition]->id;
+            $abmeineu->save();
+        }
+
+        $tmp = new Abschlag();
+
+        $tmp->id = $abschlagalt->id;
+        $tmp->datenblatt_id = $abschlagalt->datenblatt_id;
+        $tmp->name = $abschlagalt->name;
+        $tmp->kaufvertrag_prozent = $abschlagalt->kaufvertrag_prozent;
+        $tmp->kaufvertrag_betrag = $abschlagalt->kaufvertrag_betrag;
+        $tmp->kaufvertrag_angefordert = $abschlagalt->kaufvertrag_angefordert;
+        $tmp->sonderwunsch_prozent = $abschlagalt->sonderwunsch_prozent;
+        $tmp->sonderwunsch_betrag = $abschlagalt->sonderwunsch_betrag;
+        $tmp->sonderwunsch_angefordert = $abschlagalt->sonderwunsch_angefordert;
+        $tmp->summe = $abschlagalt->summe;
+        $tmp->vorlage_id = $abschlagalt->vorlage_id;
+        $tmp->erstell_datum = $abschlagalt->erstell_datum;
+        $tmp->mail_gesendet = $abschlagalt->mail_gesendet;
+        $tmp->pdf_inhalt = $abschlagalt->pdf_inhalt;
+
+        $abschlagalt->name = $abschlagneu->name;
+        $abschlagalt->kaufvertrag_prozent = $abschlagneu->kaufvertrag_prozent;
+        $abschlagalt->kaufvertrag_betrag = $abschlagneu->kaufvertrag_betrag;
+        $abschlagalt->kaufvertrag_angefordert = $abschlagneu->kaufvertrag_angefordert;
+        $abschlagalt->sonderwunsch_prozent = $abschlagneu->sonderwunsch_prozent;
+        $abschlagalt->sonderwunsch_betrag = $abschlagneu->sonderwunsch_betrag;
+        $abschlagalt->sonderwunsch_angefordert = $abschlagneu->sonderwunsch_angefordert;
+        $abschlagalt->summe = $abschlagneu->summe;
+        $abschlagalt->vorlage_id = $abschlagneu->vorlage_id;
+        $abschlagalt->erstell_datum = $abschlagneu->erstell_datum;
+        $abschlagalt->mail_gesendet = $abschlagneu->mail_gesendet;
+        $abschlagalt->pdf_inhalt = $abschlagneu->pdf_inhalt;
+        $abschlagalt->save();
+
+        $abschlagneu->name = $tmp->name;
+        $abschlagneu->kaufvertrag_prozent = $tmp->kaufvertrag_prozent;
+        $abschlagneu->kaufvertrag_betrag = $tmp->kaufvertrag_betrag;
+        $abschlagneu->kaufvertrag_angefordert = $tmp->kaufvertrag_angefordert;
+        $abschlagneu->sonderwunsch_prozent = $tmp->sonderwunsch_prozent;
+        $abschlagneu->sonderwunsch_betrag = $tmp->sonderwunsch_betrag;
+        $abschlagneu->sonderwunsch_angefordert = $tmp->sonderwunsch_angefordert;
+        $abschlagneu->summe = $tmp->summe;
+        $abschlagneu->vorlage_id = $tmp->vorlage_id;
+        $abschlagneu->erstell_datum = $tmp->erstell_datum;
+        $abschlagneu->mail_gesendet = $tmp->mail_gesendet;
+        $abschlagneu->pdf_inhalt = $tmp->pdf_inhalt;
+        $abschlagneu->save();
+
+        //return $this->actionUpdate($datenblattId);
+        $this->redirect(['konfiguration', 'id' => $datenblattId]);
+    }
+
+    /**
      * @param $datenblattId
      * @return mixed
      */
@@ -932,6 +1046,12 @@ class DatenblattController extends Controller
         $haus = $model->haus;
         if ($model->delete()) {
             if ($haus) {
+                foreach ($haus->teileigentumseinheits as $te) {
+                    $te->haus_id = null;
+                    $te->kaeufer_id = null;
+                    $te->status = Teileigentumseinheit::STATUS_FREI;
+                    $te->save();
+                }
                 $haus->delete();
             }
             Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
@@ -1237,7 +1357,7 @@ class DatenblattController extends Controller
         return $pdf->render();
     }
 
-    public function actionAddTeileigentumseinheit($datenblattId, $teId) {
+    public function actionAddTeileigentumseinheit($datenblattId, $teId, $kaId) {
 
         /** @var Datenblatt $model */
         $model = $this->findModel($datenblattId);
@@ -1261,6 +1381,8 @@ class DatenblattController extends Controller
         if (!$model->isAbschlagAngefordert()) {
             $te = Teileigentumseinheit::findOne($teId);
             $te->haus_id = $model->haus_id;
+            $te->kaeufer_id = $kaId;
+            $te->status = Teileigentumseinheit::STATUS_VERKAUFT;
             if (!$te->status) {
                 $te->status = Teileigentumseinheit::STATUS_VERKAUFT;
             }
@@ -1269,10 +1391,10 @@ class DatenblattController extends Controller
             $model->refresh();
         }
 
-        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model]);
+        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model, 'modelKaeufer' => null]);
     }
 
-    public function actionRemoveTeileigentumseinheit($datenblattId, $teId) {
+    public function actionRemoveTeileigentumseinheit($datenblattId, $teId, $kaId) {
 
         $model = $this->findModel($datenblattId);
 
@@ -1280,12 +1402,16 @@ class DatenblattController extends Controller
 
             $te = Teileigentumseinheit::findOne($teId);
             $te->haus_id = null;
+            if($te->kaeufer_id == $kaId) {
+                $te->kaeufer_id = null;
+                $te->status = Teileigentumseinheit::STATUS_FREI;
+            }
             $te->save();
 
             $model->refresh();
         }
 
-        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model]);
+        return $this->renderPartial('_teileigentumseinheiten', ['modelDatenblatt' => $model, 'modelKaeufer' => null]);
     }
 
     /**

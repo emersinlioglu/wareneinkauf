@@ -1,5 +1,6 @@
 <?php
 /** @var \app\models\Datenblatt $modelDatenblatt */
+use app\models\User;
 ?>
 
 <div class="box-group" id="accordion">
@@ -26,32 +27,32 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <table class="table te-einheiten">
                     <thead>
-                        <tr>
-                            <th>Hausnr.</th>
-                            <th>TE-Typ</th>
-                            <th>TE</th>
-                            <th>Zähler abgemeldet</th>
-                            <th>gefördert</th>
-                            <th>Geschoss</th>
-                            <th>Zimmer</th>
-                            <th class="text-align-right">ME-Anteil</th>
-                            <th class="text-align-right">Wohnfläche</th>
-                            <th class="text-align-right">Kaufpreis</th>
-                            <th class="text-align-right">KP/Einheit</th>
-                            <th class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>" style="width: 5%;">Action</th>
-                        </tr>
+                    <tr>
+                        <th>Hausnr.</th>
+                        <th>TE-Typ</th>
+                        <th>TE</th>
+                        <th>Zähler abgemeldet</th>
+                        <th>gefördert</th>
+                        <th>Geschoss</th>
+                        <th>Zimmer</th>
+                        <th class="text-align-right">ME-Anteil</th>
+                        <th class="text-align-right">Wohnfläche</th>
+                        <th class="text-align-right">Kaufpreis</th>
+                        <th class="text-align-right">KP/Einheit</th>
+                        <th class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>" style="width: 5%;">Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
-                        if ($modelDatenblatt->haus):
+                    <?php
+                    /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
+                    if ($modelDatenblatt->haus):
                         foreach ($modelDatenblatt->haus->teileigentumseinheits as $teileigentumseinheit): ?>
                             <tr
-                                data-prefix-debitor-nr="<?= $teileigentumseinheit->einheitstyp->prefix_debitor_nr ?>"
-                                data-te-nummer="<?= $teileigentumseinheit->te_nummer ?>">
+                                    data-prefix-debitor-nr="<?= $teileigentumseinheit->einheitstyp->prefix_debitor_nr ?>"
+                                    data-te-nummer="<?= $teileigentumseinheit->te_nummer ?>">
                                 <td><?= $teileigentumseinheit->hausnr ?></td>
                                 <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
                                 <td><?= $teileigentumseinheit->te_nummer ?></td>
@@ -66,18 +67,47 @@
                                 <?php if(!isset($hideActions)): ?>
                                     <td class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
                                         <?= \yii\helpers\Html::a('<span class="fa fa-minus"></span>',
-                                            Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id]),
+                                            Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id, 'kaId' => $teileigentumseinheit->kaeufer_id]),
                                             ['class' => 'delete-button delete-zahlung btn btn-danger btn-xl']) ?>
                                     </td>
                                 <?php endif; ?>
                             </tr>
                         <?php
                         endforeach;
-                        endif;
-                        ?>
+                    endif;
+                    ?>
+                    <?php
+                    /* @var $teileigentumseinheit app\models\Teileigentumseinheit */
+                    if (!User::hasRole('Sonderwunsch') && $modelKaeufer != null && $modelKaeufer->zugewieseneTeileigentumseinheiten && !$modelDatenblatt->haus):
+                        foreach ($modelKaeufer->zugewieseneTeileigentumseinheiten as $teileigentumseinheit): ?>
+                            <tr
+                                    data-prefix-debitor-nr="<?= $teileigentumseinheit->einheitstyp->prefix_debitor_nr ?>"
+                                    data-te-nummer="<?= $teileigentumseinheit->te_nummer ?>">
+                                <td><?= $teileigentumseinheit->hausnr ?></td>
+                                <td><?= $teileigentumseinheit->einheitstyp->name ?></td>
+                                <td><?= $teileigentumseinheit->te_nummer ?></td>
+                                <td><?= $teileigentumseinheit->gefoerdert ? 'ja' : 'nein' ?></td>
+                                <td><?= $teileigentumseinheit->geschoss ?></td>
+                                <td><?= $teileigentumseinheit->zimmer ?></td>
+                                <td class="text-align-right"><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->me_anteil,2) ?></td>
+                                <td class="text-align-right"><?= Yii::$app->formatter->asDecimal($teileigentumseinheit->wohnflaeche) ?> <?= $teileigentumseinheit->einheitstyp->einheit ?></td>
+                                <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kaufpreis, 2, ',', '.'); ?> €</td>
+                                <td class="text-align-right"><?= number_format ((float)$teileigentumseinheit->kp_einheit, 2, ',', '.'); ?> €</td>
+                                <?php if(!isset($hideActions)): ?>
+                                    <td class="text-align-right <?= $modelDatenblatt->isAbschlagAngefordert() ? 'hide' : '' ?>">
+                                        <?= \yii\helpers\Html::a('<span class="fa fa-minus"></span>',
+                                            Yii::$app->urlManager->createUrl(["datenblatt/remove-teileigentumseinheit", 'datenblattId' => $modelDatenblatt->id , 'teId' => $teileigentumseinheit->id, 'kaId' => $teileigentumseinheit->kaeufer_id]),
+                                            ['class' => 'delete-button delete-zahlung btn btn-danger btn-xl']) ?>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php
+                        endforeach;
+                    endif;
+                    ?>
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
     </div>

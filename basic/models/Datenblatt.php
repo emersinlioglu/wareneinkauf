@@ -112,6 +112,17 @@ class Datenblatt extends \yii\db\ActiveRecord
                     case 'gefoerdert':
                         $value = $te->{$attributeName} ? 'J' : 'N';
                         break;
+                    case 'wohnflaeche':
+                        $value = (float)$te->{$attributeName};
+                        break;
+                    case 'zimmer':
+                        $value = $te->{$attributeName};
+
+                        if (strlen(strstr($value, '.')) > 0) {
+                            $value = Yii::$app->formatter->asDecimal($value, 1);
+                        }
+
+                        break;
                     default:                
                         $value = $te->{$attributeName};
                         break;
@@ -437,7 +448,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             }
         }
 
-        return implode('/ ', $teNummers);
+        return implode('\\ ', $teNummers);
     }
 
     /**

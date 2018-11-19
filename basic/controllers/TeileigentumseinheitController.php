@@ -49,6 +49,7 @@ class TeileigentumseinheitController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'dynagridProfileId' => \app\models\User::getCurrentUser()->getAktiveDynagridProfileId(),
         ]);
     }
 

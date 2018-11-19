@@ -71,7 +71,7 @@ use \app\models\Kaeufer;
                 </div>
 
                 <div class="col-sm-6">
-                    <h3>Projekt-Zuordungen</h3>
+                    <h3>Projekt-Zuordnungen</h3>
 
                     <br>
                     <?php
@@ -108,10 +108,15 @@ use \app\models\Kaeufer;
                     </table>
                 </div>
 
-                <div class="row <?= !User::hasRole('immomarkler') ? 'hide' : '' ?>">
+                <div class="row <?= !User::hasRole('vertrieb_extern') || $model->id == null ? 'hide' : '' ?>">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label>Teileigentumseinheiten</label>
+                            <label>
+                                Teileigentumseinheiten
+                                <?php if(!$nichtgekauft):?>
+                                    <span style="color: #f00;">sind bereits verkauft (nicht &auml;nderbar)</span>
+                                <?php endif ?>
+                            </label>
                             <?= Html::dropDownList('teileigentumseinheits', null,
                                 ArrayHelper::map(Kaeufer::getFreieTeileigentumseinheiten(), 'id', 'te_nummer'),
                                 ['prompt' => 'Bitte auswählen', 'class'=>'form-control']
@@ -154,3 +159,4 @@ $this->registerJs(<<<EOT
 EOT
 );
 ?>
+

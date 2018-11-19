@@ -11,7 +11,7 @@ use kartik\widgets\Select2;
 /* @var $model app\models\Sim */
 
 $this->title = Yii::t('app', 'Teileigentumseinheiten importieren');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Sims'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Teileigentumseinheiten'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sim-create">

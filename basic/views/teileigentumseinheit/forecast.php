@@ -1,3 +1,14 @@
+<style>
+    .kv-panel-before .pagination {
+        margin: 0;
+        float: left;
+        margin-right: 20px;
+    }
+    /*.kv-grid-table tr > *:last-child {*/
+    /*display: none;*/
+    /*}*/
+</style>
+
 <?php
 
 use yii\helpers\Html;
@@ -52,11 +63,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'zimmer',
                     'width'=>'50px',
+                    'value' => function($model, $index, $widget){
+                        return (strlen(strstr($model->zimmer, ".")) > 0 ? Yii::$app->formatter->asDecimal($model->zimmer, 1) : $model->zimmer);
+                    },
                 ],
                 [
                     'attribute' => 'me_anteil',
                     'contentOptions' => ['class' => 'text-right'],
-        //                'format'=>['decimal',2]
+                    'format'=>['decimal',2]
                 ],
                 [
                     'attribute' => 'wohnflaeche',
@@ -94,9 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             echo DynaGrid::widget([
                 'columns' => $columns,
-        //            'storage' => DynaGrid::TYPE_DB,
-        //            'userSpecific' => true,
-        //            'enableMultiSort' => true,
+                //            'storage' => DynaGrid::TYPE_DB,
+                //            'userSpecific' => true,
+                //            'enableMultiSort' => true,
 
                 'gridOptions' => [
                     'dataProvider' => $dataProvider,

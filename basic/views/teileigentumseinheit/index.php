@@ -1,24 +1,37 @@
+<style>
+    .kv-panel-before .pagination {
+        margin: 0;
+        float: left;
+        margin-right: 20px;
+    }
+    /*.kv-grid-table tr > *:last-child {*/
+    /*display: none;*/
+    /*}*/
+
+    .teileigentumseinheit-index .datenblatt-link {
+        white-space: nowrap;
+    }
+</style>
+
 <?php
 
 use kartik\money\MaskMoney;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use \kartik\dynagrid\DynaGrid;
 use app\models\User;
 use app\models\Haus;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TeileigentumseinheitSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Teileigentumseinheits';
+$this->title = 'Teileigentumseinheiten';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
-<style>
-    .teileigentumseinheit-index .datenblatt-link {
-        white-space: nowrap;
-    }
-</style>
 
 <div class="teileigentumseinheit-index">
 
@@ -28,80 +41,104 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     <?php endif; ?>
 
-<!--    <pre>-->
-<!--    --><?php //var_dump($searchModel) ?>
+    <!--    <pre>-->
+    <!--    --><?php //var_dump($searchModel) ?>
 
     <div class="panel panel-default">
         <div class="panel-body">
 
-            <?= GridView::widget([
-                'floatHeader' => true,
-                'floatHeaderOptions' => [
-                    'position' => 'absolute',
-                 ],
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+            <?php
 
-                    [
-                        'class' => 'yii\grid\ActionColumn',
-                        'buttons' => [
-                            'update' => function ($url, $model, $key) {
-                                return User::hasPermission('write_ownership') ? Html::a('Update', $url) : '';
-                            },
-                            'delete' => function ($url, $model, $key) {
+            $columns = [
+                ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT, 'pageSummary'=>'Summe'],
 
-                                if (User::hasPermission('write_ownership')) {
-                                    /** @var $model \app\models\Haus */
-                                    $haus = $model->haus;
-                                    if ($haus && count($haus->datenblatts) > 0) {
+                [
+                    'class' => 'kartik\grid\ActionColumn',
+                    //'contentOptions' => ['style' => 'width:200px;'],
+                    //'header'=>'Actions',
+                    'order'=>DynaGrid::ORDER_FIX_LEFT,
+                    //    'pageSummary'=>'Seitensumme',
+                    'template' => '{view}{update}{delete} ',
+                    'buttons' => [
+                        'view' => function ($url, $model) {
 
-                                        $ids = array();
-                                        foreach ($haus->datenblatts as $datenblatt) {
-                                            $ids[] = $datenblatt->id;
-                                        }
-                                        return '<a href="' . $url . '" class="not-deletable" data-datenblatts="'.implode(',', $ids).'">Delete</a>';
-                                    } else {
-                                        return Html::a('Delete', $url, [
-                                            'data' => [
-                                                'confirm' => 'Sind Sie sich sicher?',
-                                                'method' => 'post',
-                                            ],
-                                        ]);
-                                    }
-                                }
-
+                            if (User::hasPermission('read_ownership')) {
+                                return Html::a('<span class="fa fa-search"></span> Anzeigen ', $url, [
+                                    'title' => Yii::t('app', 'View'),
+                                    'class'=>'btn btn-primary btn-xs',
+                                ]);
+                            } else {
+                                return '';
                             }
-                        ]
-                    ],
+                        },
+                        'update' => function ($url, $model) {
+                            if (User::hasPermission('write_ownership')) {
+                                return Html::a('<span class=" glyphicon glyphicon-pencil"></span> Bearbeiten', $url, [
+                                    'title' => Yii::t('app', 'Update'),
+                                    'class'=>'btn btn-primary btn-xs',
+                                ]);
+                            } else {
+                                return '';
+                            }
+                        },
 
-                    [
-                        'attribute' => 'projekt_name',
-                        'value' => 'projekt.name',
-                        'label' => 'Projekt'
-                    ],
-                    [
-                        'attribute' => 'firma_name',
-                        'value' => 'projekt.firma.name',
-                        'label' => 'Firma'
-                    ],
-                    [
-                        'attribute' => 'firma_nr',
-                        'value' => 'projekt.firma.nr',
-                        'label' => 'Firmen Nr.'
-                    ],
-                    [
-                        'attribute' => 'status',
-                        'value' => 'status',
-                        'filter' => Html::activeDropDownList(
-                            $searchModel,
-                            'status',
-                            \app\models\Teileigentumseinheit::statusOptions(),
-                            ['class'=>'Alle','prompt' => '']
-                        ),
-                        'label' => 'Status'
-                    ],
+                        'delete' => function ($url, $model, $key) {
+
+                            if (User::hasPermission('write_ownership')) {
+                                /** @var $model \app\models\Haus */
+                                $haus = $model->haus;
+                                if ($haus && count($haus->datenblatts) > 0) {
+
+                                    $ids = array();
+                                    foreach ($haus->datenblatts as $datenblatt) {
+                                        $ids[] = $datenblatt->id;
+                                    }
+
+                                    return Html::a('<span class="glyphicon glyphicon-trash"></span> Löschen', $url, [
+                                        'title' => Yii::t('app', 'Delete'),
+                                        'class'=>'btn btn-primary btn-xs not-deletable',
+                                        'data-datenblatts'=> implode(',', $ids)
+                                    ]);
+                                } else {
+
+                                    return Html::a('<span class="glyphicon glyphicon-trash"></span> Löschen', $url, [
+                                        'title' => Yii::t('app', 'Delete'),
+                                        'class'=>'btn btn-primary btn-xs',
+                                        'data-confirm'=>'Wollen Sie diesen Eintrag wirklich löschen?',
+                                        'data-method'=>'post',
+                                    ]);
+                                }
+                            }
+
+                        }
+                    ]
+                ],
+                [
+                    'attribute' => 'projekt_name',
+                    'value' => 'projekt.name',
+                    'label' => 'Projekt'
+                ],
+                [
+                    'attribute' => 'firma_name',
+                    'value' => 'projekt.firma.name',
+                    'label' => 'Firma'
+                ],
+                [
+                    'attribute' => 'firma_nr',
+                    'value' => 'projekt.firma.nr',
+                    'label' => 'Firmen Nr.'
+                ],
+                [
+                    'attribute' => 'status',
+                    'value' => 'status',
+                    'filter' => Html::activeDropDownList(
+                        $searchModel,
+                        'status',
+                        \app\models\Teileigentumseinheit::statusOptions(),
+                        ['class'=>'Alle','prompt' => '']
+                    ),
+                    'label' => 'Status'
+                ],
 //                    [
 //                        'attribute' => 'haus_status',
 //                        'value' => 'haus.status',
@@ -113,70 +150,129 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        ),
 //                        'label' => 'Status'
 //                    ],
-                    'te_nummer',
-                    [
-                        'class' => 'kartik\grid\BooleanColumn',
-                        'attribute' => 'rechnung_vertrieb',
-                        'vAlign' => 'middle',
-                        'trueLabel' => 'Ja',
-                        'falseLabel' => 'Nein',
-                        'label' => 'R.Vetrieb',
-                        // 'filterType'=>GridView::FILTER_CHECKBOX,
-                    ],
-                    [
-                        'class' => 'kartik\grid\BooleanColumn',
-                        'attribute' => 'zaehler_abgemeldet',
-                        'vAlign' => 'middle',
-                        'trueLabel' => 'Ja',
-                        'falseLabel' => 'Nein',
-                    ],
-                    [
-                        'class' => 'kartik\grid\BooleanColumn',
-                        'attribute' => 'gefoerdert',
-                        'vAlign' => 'middle',
-                        'trueLabel' => 'Ja',
-                        'falseLabel' => 'Nein',
-                         //'filterType'=> GridView::FILTER_,
-                    ],
-
-                    'einheitstyp_id',
-
-                     'geschoss',
-                     'zimmer',
-                     [
-                         'attribute' => 'me_anteil',
-                         'format' => ['decimal', 2],
-                         'contentOptions' => ['class' => 'text-right'],
-                     ],
-                     [
-                         'attribute' => 'wohnflaeche',
-                         'format' => ['decimal', 2],
-                         'contentOptions' => ['class' => 'text-right'],
-                     ],
-                     'kaufpreis:currency',
-                     'kp_einheit:currency',
-
-                    [
-                        'label' => 'Datenblatt',
-                        'format' => 'raw',
-                        'value' => function ($model, $key, $index, $widget) {
-                            $link = '';
-                            if ($model->haus && count($model->haus->datenblatts) > 0) {
-                                $url = \yii\helpers\Url::to(['datenblatt/update', 'id' => $model->haus->datenblatts[0]->id]);
-                                $link = Html::a('> Datenblatt', $url, ['target' => '_blank', 'class' => 'datenblatt-link']);
-                            }
-
-                            return $link;
-                        },
-                    ],
-
-
+                'te_nummer',
+                [
+                    'class' => 'kartik\grid\BooleanColumn',
+                    'attribute' => 'zaehler_abgemeldet',
+                    'vAlign' => 'middle',
+                    'trueLabel' => 'Ja',
+                    'falseLabel' => 'Nein',
                 ],
-            ]); ?>
+                [
+                    'class' => 'kartik\grid\BooleanColumn',
+                    'attribute' => 'rechnung_vertrieb',
+                    'vAlign' => 'middle',
+                    'trueLabel' => 'Ja',
+                    'falseLabel' => 'Nein',
+                    'label' => 'R.Vertrieb',
+                    // 'filterType'=>GridView::FILTER_CHECKBOX,
+                ],
+                [
+                    'class' => 'kartik\grid\BooleanColumn',
+                    'attribute' => 'gefoerdert',
+                    'vAlign' => 'middle',
+                    'trueLabel' => 'Ja',
+                    'falseLabel' => 'Nein',
+                    'label' => 'Gefördert',
+                    //'filterType'=> GridView::FILTER_,
+                ],
+
+                'einheitstyp_id',
+
+                'geschoss',
+                [
+                    'attribute' => 'zimmer',
+                    'value' => function($model, $index, $widget){
+                        return (strlen(strstr($model->zimmer, ".")) > 0 ? Yii::$app->formatter->asDecimal($model->zimmer, 1) : $model->zimmer);
+                    },
+                ],
+                [
+                    'attribute' => 'me_anteil',
+                    'format' => ['decimal', 2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'wohnflaeche',
+                    'format' => ['decimal', 2],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'kaufpreis',
+                    'format' => ['decimal', 2],
+                    'pageSummary' => true
+                ],
+                [
+                    'attribute' => 'kp_einheit',
+                    'format' => ['decimal', 2],
+                    'pageSummary' => true
+                ],
+                [
+                    'label' => 'Datenblatt',
+                    'format' => 'raw',
+                    'value' => function ($model, $key, $index, $widget) {
+                        $link = '';
+                        if ($model->haus && count($model->haus->datenblatts) > 0) {
+                            $url = \yii\helpers\Url::to(['datenblatt/update', 'id' => $model->haus->datenblatts[0]->id]);
+                            $link = Html::a('> Datenblatt', $url, ['target' => '_blank', 'class' => 'datenblatt-link']);
+                        }
+
+                        return $link;
+                    },
+                ],
+            ];
+
+            echo DynaGrid::widget([
+                'columns' => $columns,
+                'storage' => DynaGrid::TYPE_DB,
+                'userSpecific' => true,
+                'enableMultiSort' => true,
+
+                'gridOptions' => [
+                    'floatHeader' => true,
+                    'showPageSummary'=>true,
+                    'floatHeaderOptions' => [
+                        'position' => 'absolute',
+                    ],
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'panel' => [
+                        'heading' => '<h3 class="panel-title">Teileigentumseinheiten</h3>',
+                        'before' => '{dynagridFilter} {dynagridSort} {dynagrid}',
+                    ],
+                    'toolbar' => [
+                        'before' => '{pager} {toggleData} {export}'
+//                            . '<a id="" data-exportmiteuro-url="'.Url::to(['teileigentumseinheit/index']).'" class="btn btn-default exportmiteuro" title="Export"><i class="fa fa-share"></i> Export</a>',
+                    ],
+                    'autoXlFormat' => true,
+                    'export' => [
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => '_BLANK'
+                    ],
+                ],
+                'options' => [
+                    'id' => 'dynagrid-teileigentumseinheiten' . $dynagridProfileId,
+                    'class' => User::hasPermission('export') ? '' : 'no-export'
+                ]
+            ]);
+            ?>
+
 
         </div>
     </div>
 </div>
+
+<?php
+$this->registerJs(<<<JS
+    $(function() {
+        $('.exportmiteuro').click(function(e) {
+            e.preventDefault();
+            window.location = $(this).attr('data-exportmiteuro-url');            
+        });
+    });
+JS
+);
+?>
 
 <?php
 $this->registerJs(

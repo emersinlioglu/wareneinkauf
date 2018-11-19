@@ -54,7 +54,7 @@ use \app\models\Projekt;
 
 					<div class="row registration-block">
 						<div class="col-sm-6">
-							<?= GhostHtml::a(
+							<?= Html::a(
 								UserManagementModule::t('front', "Registration"),
 								['/user-management/auth/registration']
 							) ?>

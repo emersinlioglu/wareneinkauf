@@ -12,14 +12,15 @@ if (strlen($kaeuferName2) > 1) {
 }
 
 $this->title = 'Käufer aktualisieren: (' . $kaeuferName1 . ')';
-$this->params['breadcrumbs'][] = ['label' => 'Kaeufers', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Käufer', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Aktualisieren';
 ?>
 <div class="kaeufer-update">
 
     <?= $this->render('_form', [
         'model' => $model,
+        'nichtgekauft' => $nichtgekauft,
     ]) ?>
 
 </div>

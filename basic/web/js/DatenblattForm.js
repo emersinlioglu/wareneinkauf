@@ -1,4 +1,11 @@
 var DatenblattForm = function () {
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href"); // activated tab
+        window.location = "index.php?r=datenblatt/update&id=" + $("#datenblatt-form").data("datenblatt-id") + target;
+        $('html, body').animate({ scrollTop: 0 }, 0);
+    });
+
     var _ = this;
     _form = null;
     
@@ -194,6 +201,8 @@ var DatenblattForm = function () {
 
         var self = this;
 
+        window.location = "index.php?r=datenblatt/update&id=" + $("#datenblatt-form").data("datenblatt-id") + "#tab-kaeuferdaten";
+
         if ($('#search-kaufer').length) {
 
             $('#search-kaufer')
@@ -240,6 +249,8 @@ var DatenblattForm = function () {
                             $('[name="Kaeufer[festnetz]"]').val(ui.item.festnetz);
                             $('[name="Kaeufer[handy]"]').val(ui.item.handy);
 
+                            window.location = "index.php?r=datenblatt/update&id=" + $("#datenblatt-form").data("datenblatt-id") + "#tab-kaeuferdaten";
+
                         }
 
                         $(this).val(' ');
@@ -281,6 +292,8 @@ var DatenblattForm = function () {
 
         var self = this;
 
+        window.location = "index.php?r=datenblatt/update&id=" + $('#datenblatt-form').data('datenblatt-id') + "#tab-te-details";
+
         $('#search-teileigentumseinheit')
             .keydown(function(e){
                 if(e.which == 13) {
@@ -293,14 +306,17 @@ var DatenblattForm = function () {
                 minLength: 1,
                 select: function (event, ui) {
 
-                    if (ui.item && ui.item.id) {
-
+                    if(ui.item && ui.item.id && $('#datenblatt-form').data('kaeufer-id') == undefined) {
+                        alert("Bitte suchen und wählen Sie zuerst einen Käufer im Tab Käuferdaten aus. Anschließend speichern Sie bitte den Käufer mit dem Update-Button.");
+                    }
+                    if (ui.item && ui.item.id && $('#datenblatt-form').data('kaeufer-id') != undefined) {
                         $.get(
-                            'index.php?r=datenblatt/add-teileigentumseinheit&datenblattId=' + $('#datenblatt-form').data('datenblatt-id')  + '&teId=' + ui.item.id,
+                            'index.php?r=datenblatt/add-teileigentumseinheit&datenblattId=' + $('#datenblatt-form').data('datenblatt-id')  + '&teId=' + ui.item.id + '&kaId=' + $('#datenblatt-form').data('kaeufer-id'),
                             function(data) {
                                 $('.table.te-einheiten').replaceWith($(data).find('.table.te-einheiten'));
 
-                                location.reload();
+                                // location.reload();
+                                window.location = "index.php?r=datenblatt/update&id=" + $('#datenblatt-form').data('datenblatt-id') + "#tab-te-details";
 
                                 _.initPlusMinusIcons('#collapse-te');
                             }

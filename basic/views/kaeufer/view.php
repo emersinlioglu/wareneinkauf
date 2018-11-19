@@ -74,4 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endforeach; ?>
     </ul>
 
+    <h3>Zugeordnete Teileigentumseinheiten</h3>
+    <ul>
+        <?php foreach($model->zugewieseneTeileigentumseinheiten as $te): ?>
+            <li><?= $te->te_nummer ?></li>
+        <?php endforeach; ?>
+    </ul>
+
 </div>

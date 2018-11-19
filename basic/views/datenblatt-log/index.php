@@ -12,10 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
-.grid-view .glyphicon-trash,
-.grid-view .glyphicon-pencil {
-    display: none;
-}
+    .grid-view .glyphicon-trash,
+    .grid-view .glyphicon-pencil {
+        display: none;
+    }
 </style>
 <div class="datenblatt-log-index">
 
@@ -82,14 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => '2. Käufer Anrede'
                     ],
                     [
-                        'attribute' => 'kaeufer_vorname2',
-                        'value'=>'kaeufer.vorname2',
-                        'label' => '2. Käufer Vorname'
-                    ],
-                    [
                         'attribute' => 'kaeufer_titel2',
                         'value'=>'kaeufer.titel2',
                         'label' => '2. Käufer Titel'
+                    ],
+                    [
+                        'attribute' => 'kaeufer_vorname2',
+                        'value'=>'kaeufer.vorname2',
+                        'label' => '2. Käufer Vorname'
                     ],
                     [
                         'attribute' => 'kaeufer_nachname2',

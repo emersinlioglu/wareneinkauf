@@ -20,9 +20,50 @@ $this->params['breadcrumbs'][] = $model->id;
         'model' => $model,
         'attributes' => [
             'firma.name',
+            [
+                'attribute' => 'firma_nr',
+                'value'=> $model->firma->nr,
+                'label' => 'Buchungskr.'
+            ],
             'projekt.name',
-            'nummer',
-            'kaeufer.vorname1',
+            [
+                'value' => $model->kaeufer ? $model->kaeufer->anredeLabel : '',
+                'label' => 'Käufer Anrede'
+            ],
+            [
+                'attribute' => 'kaeufer_titel',
+                'value' => $model->kaeufer ? $model->kaeufer->titel : '',
+                'label' => 'Käufer Titel'
+            ],
+            [
+                'attribute' => 'kaeufer_vorname',
+                'value' => $model->kaeufer ? $model->kaeufer->vorname : '',
+                'label' => 'Käufer Vorname'
+            ],
+            [
+                'attribute' => 'kaeufer_nachname',
+                'value' => $model->kaeufer ? $model->kaeufer->nachname : '',
+                'label' => 'Käufer Name'
+            ],
+            [
+                'value'=> $model->kaeufer ? $model->kaeufer->anrede2Label : '',
+                'label' => '2. Käufer Anrede'
+            ],
+            [
+                'attribute' => 'kaeufer_titel2',
+                'value'=> $model->kaeufer ? $model->kaeufer->titel2 : '',
+                'label' => '2. Käufer Titel'
+            ],
+            [
+                'attribute' => 'kaeufer_vorname2',
+                'value'=> $model->kaeufer ? $model->kaeufer->vorname2 : '',
+                'label' => '2. Käufer Vorname'
+            ],
+            [
+                'attribute' => 'kaeufer_nachname2',
+                'value'=> $model->kaeufer ? $model->kaeufer->nachname2 : '',
+                'label' => '2. Käufer Name'
+            ],
             'besondere_regelungen_kaufvertrag:ntext',
             'sonstige_anmerkungen:ntext',
             'aktiv:boolean',
@@ -51,9 +92,6 @@ $this->params['breadcrumbs'][] = $model->id;
         <tr>
             <th>Einheitstyp</th>
             <th>TE-Nr</th>
-            <th>Projekt</th>
-            <th>Firma</th>
-            <th>Firma-Nr</th>
             <th>Status</th>
             <th>Gefördert</th>
             <th>Kaufpreis</th>
@@ -64,9 +102,6 @@ $this->params['breadcrumbs'][] = $model->id;
             <tr>
                 <td><?= $te->einheitstyp ?  $te->einheitstyp->name : '' ?></td>
                 <td><?= $te->te_nummer ?></td>
-                <td><?= $te->projekt ? $te->projekt->name : ''?></td>
-                <td><?= $te->projekt && $te->projekt->firma ? $te->projekt->firma->name : ''?></td>
-                <td><?= $te->projekt && $te->projekt->firma ? $te->projekt->firma->nr : ''?></td>
                 <td><?= $te->status ?></td>
                 <td><?= $te->gefoerdert ? 'ja' : 'nein' ?></td>
                 <td><?= Yii::$app->formatter->asCurrency($te->kaufpreis) ?></td>

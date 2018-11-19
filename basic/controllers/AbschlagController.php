@@ -296,7 +296,11 @@ class AbschlagController extends Controller
                         $value = $replaceData[$platzhalterName];
                         switch ($platzhalterName) {
                             case '[kaeufer]':
-                                $value = str_replace('<br>', ', ', $value);
+                                $value = str_replace('<br>', PHP_EOL, $value);
+                                break;
+                            case '[persoenliche-briefanrede]':
+                                $value = str_replace(', ', ','.PHP_EOL, $value);
+                                $value = str_replace(PHP_EOL.'<br>', '', $value);
                                 break;
                         }
                         $rowData[$platzhalterName] = $value;

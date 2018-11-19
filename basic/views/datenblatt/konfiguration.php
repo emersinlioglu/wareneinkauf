@@ -10,97 +10,114 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
 /** @var \app\models\Abschlag $abschlag */
 /** @var \app\models\ProjektAbschlag $abschlagAbschlag */
 ?>
-<style>
-    .abschlag-tabelle.table > tbody > tr > td {
-        vertical-align: middle;
-    }
-</style>
-<div class="row">
+    <style>
+        .abschlag-tabelle.table > tbody > tr > td {
+            vertical-align: middle;
+        }
+    </style>
+    <div class="row">
 
-    <div class="box-group col-sm-6" id="accordion">
-        <div class="panel box box-primary">
-            <div class="box-header with-border">
-                <h4 class="box-title">
-                    <a data-toggle="collapse" data-parent="#collapse-abschlag" href="#collapse-abschlag" aria-expanded="true" class="">
-                        Abschläge:
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse-abschlag" class="panel-collapse collapse in" aria-expanded="false">
-                <div class="box-body">
+        <div class="box-group col-sm-6" id="accordion">
+            <div class="panel box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">
+                        <a data-toggle="collapse" data-parent="#collapse-abschlag" href="#collapse-abschlag" aria-expanded="true" class="">
+                            Abschläge:
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-abschlag" class="panel-collapse collapse in" aria-expanded="false">
+                    <div class="box-body">
 
-                    <?php $form = ActiveForm::begin([
-                        'enableClientScript' => false,
-                    ]); ?>
+                        <?php $form = ActiveForm::begin([
+                            'enableClientScript' => false,
+                            'id' => 'abschlaege-form',
+                        ]); ?>
 
                         <table class="table table-bordered abschlag-tabelle"
                                data-angeforderte-prozent-summe="<?= $angeforderteProzentSumme ?>">
                             <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Prozent-Summe (%)</th>
-                                    <th>Meilensteine</th>
-                                    <th style="width: 5%;">
-                                        <?php echo Html::a('<span class="fa fa-plus"> </span>',
-                                            Yii::$app->urlManager->createUrl(["datenblatt/addabschlag", 'datenblattId' => $datenblatt->id]),
-                                            ['class' => 'add-button add-zahlung btn btn-success btn-xl']) ?>
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Prozent-Summe (%)</th>
+                                <th>Meilensteine</th>
+                                <th style="width: 5%;">
+                                    <?php echo Html::a('<span class="fa fa-plus"> </span>',
+                                        Yii::$app->urlManager->createUrl(["datenblatt/addabschlag", 'datenblattId' => $datenblatt->id]),
+                                        ['class' => 'add-button add-zahlung btn btn-success btn-xl']) ?>
+                                </th>
+                                <!--<th>Operation</th>-->
+                                <th>Verschieben</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($datenblatt->abschlags as $key => $abschlag): ?>
-                                    <tr data-is-editable="<?= $abschlag->isDeletable() ? 1 : 0 ?>">
-                                        <td>
-                                            <div class="hide">
-                                                <?= $form->field($abschlag, "[$key]id")->hiddenInput() ?>
-                                            </div>
-                                            <?= $form->field($abschlag, "[$key]name")->textInput([])->label(false) ?>
-                                        </td>
-                                        <td class="prozent-summe" style="text-align: right;">
-                                            <?php echo Yii::$app->formatter->asDecimal($abschlag->kaufvertrag_prozent, 2); ?>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            <ol class="sortable zuordnung <?= $abschlag->isDeletable() ? 'meilenstein' : '' ?>">
-                                                <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein): ?>
-                                                    <li data-meilenstein-id="<?= $abschlagMeilenstein->meilenstein->id ?>" data-prozent="<?= $abschlagMeilenstein->meilenstein->kaufvertrag_prozent ?>">
-                                                        <i class="glyphicon <?= $abschlag->isDeletable() ? 'glyphicon-move' : 'glyphicon-ok' ?>"></i>
-                                                        <?= $abschlagMeilenstein->meilenstein->name ?>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ol>
+                            <?php foreach ($datenblatt->abschlags as $key => $abschlag): ?>
+                                <tr id="row<?= $key ?>" data-is-editable="<?= $abschlag->isDeletable() ? 1 : 0 ?>">
+                                    <td>
+                                        <div class="hide">
+                                            <?= $form->field($abschlag, "[$key]id")->hiddenInput() ?>
+                                        </div>
+                                        <?= $form->field($abschlag, "[$key]name")->textInput([])->label(false) ?>
+                                    </td>
+                                    <td class="prozent-summe" style="text-align: right;">
+                                        <?php echo Yii::$app->formatter->asDecimal($abschlag->kaufvertrag_prozent, 2); ?>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <ol class="sortable zuordnung <?= $abschlag->isDeletable() ? 'meilenstein' : '' ?>">
+                                            <?php foreach ($abschlag->abschlagMeilensteins as $abschlagMeilenstein): ?>
+                                                <li data-meilenstein-id="<?= $abschlagMeilenstein->meilenstein->id ?>" data-prozent="<?= $abschlagMeilenstein->meilenstein->kaufvertrag_prozent ?>">
+                                                    <i class="glyphicon <?= $abschlag->isDeletable() ? 'glyphicon-move' : 'glyphicon-ok' ?>"></i>
+                                                    <?= $abschlagMeilenstein->meilenstein->name ?>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ol>
 
-                                            <div class="hide">
-                                                <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$abschlag->id]", $abschlag->getZuordnungenAsString(),
-                                                    ['class' => 'abschlag-zuordnungen'])
-                                                ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <?php
-                                                if($abschlag->isDeletable()) {
-                                                    echo Html::a('<span class="fa fa-minus"></span>',
-                                                        Yii::$app->urlManager->createUrl(["datenblatt/deleteabschlag", 'datenblattId' => $datenblatt->id , 'abschlagId' => $abschlag->id]),
-                                                        ['class' => 'delete-button btn btn-danger btn-xl']);
-                                                } else {
-                                                    echo Yii::$app->formatter->asDate($abschlag->kaufvertrag_angefordert);
-                                                }
+                                        <div class="hide">
+                                            <?php echo Html::textInput("AbschlagMeilensteinZuordnung[$abschlag->id]", $abschlag->getZuordnungenAsString(),
+                                                ['class' => 'abschlag-zuordnungen'])
                                             ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-
-                                <tr>
-                                    <td></td>
-                                    <td class="prozent-summe-zugewiesen" style="text-align: right;">
-                                        <?= Yii::$app->formatter->asDecimal(
-                                            $datenblatt->getZugewieseneMeilensteinProzentSumme(),
-                                            2
-                                        )
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        if($abschlag->isDeletable()) {
+                                            echo Html::a('<span class="fa fa-minus"></span>',
+                                                Yii::$app->urlManager->createUrl(["datenblatt/deleteabschlag", 'datenblattId' => $datenblatt->id , 'abschlagId' => $abschlag->id]),
+                                                ['class' => 'deleteabschlag-button btn btn-danger btn-xl']);
+                                        } else {
+                                            echo Yii::$app->formatter->asDate($abschlag->kaufvertrag_angefordert);
+                                        }
                                         ?>
                                     </td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        <?php
+                                        if($abschlag->isDeletable()) {
+                                            echo Html::a('<span class="glyphicon glyphicon-arrow-up"></span>',
+                                                    Yii::$app->urlManager->createUrl(["datenblatt/moveabschlag", 'datenblattId' => $datenblatt->id, 'altposition' => $key, 'neuposition' => $key - 1]),
+                                                    ['class' => 'move-up btn btn-sm btn-primary'])."&nbsp;";
+                                            echo Html::a('<span class="glyphicon glyphicon-arrow-down"></span>',
+                                                Yii::$app->urlManager->createUrl(["datenblatt/moveabschlag", 'datenblattId' => $datenblatt->id, 'altposition' => $key, 'neuposition' => $key + 1]),
+                                                ['class' => 'move-down btn btn-sm btn-primary']);
+                                        } else {
+
+                                        }
+                                        ?>
+                                    </td>
                                 </tr>
+                            <?php endforeach; ?>
+
+                            <tr>
+                                <td></td>
+                                <td class="prozent-summe-zugewiesen" style="text-align: right;">
+                                    <?= Yii::$app->formatter->asDecimal(
+                                        $datenblatt->getZugewieseneMeilensteinProzentSumme(),
+                                        2
+                                    )
+                                    ?>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                             </tbody>
 
                         </table>
@@ -109,17 +126,17 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                             <?= Html::submitButton('Aktualisieren', ['class' => 'btn btn-primary', 'name' => 'submit']) ?>
                         </div>
 
-                    <?php ActiveForm::end(); ?>
+                        <?php ActiveForm::end(); ?>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <?php
-    $this->registerJs('
+        <?php
+        $this->registerJs('
         $(function(){
-        
+
             function updateMeilensteinZuordnungen() {
                 var totalProzentSumme = parseFloat($(".abschlag-tabelle").attr("data-angeforderte-prozent-summe")) | 0;
                 $(".abschlag-tabelle tbody tr").each(function () {
@@ -157,92 +174,146 @@ $this->title = 'Datenblatt-Abschläge konfigurieren';
                 onDrop: function ($item, container, _super) {
                     updateMeilensteinZuordnungen();
                 }
-            });
+            });    
     
         });
     ');
-    ?>
+        ?>
 
-    <div class="box-group col-sm-6" id="accordion">
-        <div class="panel box box-primary">
-            <div class="box-header with-border">
-                <h4 class="box-title">
-                    <a data-toggle="collapse" data-parent="#collapse-meilenstein" href="#collapse-meilenstein"
-                       aria-expanded="true" class="">
-                        Meilensteine:
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse-meilenstein" class="panel-collapse collapse in" aria-expanded="false">
-                <div class="box-body">
+        <div class="box-group col-sm-6" id="accordion">
+            <div class="panel box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">
+                        <a data-toggle="collapse" data-parent="#collapse-meilenstein" href="#collapse-meilenstein"
+                           aria-expanded="true" class="">
+                            Meilensteine:
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-meilenstein" class="panel-collapse collapse in" aria-expanded="false">
+                    <div class="box-body">
 
-                    <?php if(strval($projekt->getProzentSummeMeilensteine()) != '100'): ?>
-                        <div class="alert alert-danger fade in alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                            <strong>Wichtig!</strong> Die Summe von Prozent-Angaben müssen 100 sein.<br>
-                            Aktuell: <?= $projekt->getProzentSummeMeilensteine() ?>
-                        </div>
-                    <?php endif; ?>
+                        <?php if(strval($projekt->getProzentSummeMeilensteine()) != '100'): ?>
+                            <div class="alert alert-danger fade in alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                <strong>Wichtig!</strong> Die Summe von Prozent-Angaben müssen 100 sein.<br>
+                                Aktuell: <?= $projekt->getProzentSummeMeilensteine() ?>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php $form = ActiveForm::begin([
-                        'action' => ['projekt/update-meilensteine', 'id' => $projekt->id],
-                        'options' => []
-                    ]); ?>
+                        <?php $form = ActiveForm::begin([
+                            'action' => ['projekt/update-meilensteine', 'id' => $projekt->id],
+                            'options' => []
+                        ]); ?>
 
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="">Drag&Drop</th>
-                            <th style="">Name</th>
-<!--                            <th style="">Nummer</th>-->
-                            <th>Prozent-Summe (%)</th>
-                        </tr>
-                        <?php foreach ($projekt->meilensteins as $key => $meilenstein): ?>
+                        <table class="table table-bordered">
                             <tr>
-                                <td>
-                                    <ol class="meilenstein sortable">
-                                        <?php if(!in_array($meilenstein->id, $datenblatt->getBenutzteMeilensteinIds())): ?>
-                                            <li data-meilenstein-id="<?= $meilenstein->id ?>" data-prozent="<?= $meilenstein->kaufvertrag_prozent ?>">
-                                                <i class="glyphicon glyphicon-move"></i><?= $meilenstein->name ?>
-                                            </li>
-                                        <?php endif; ?>
-                                    </ol>
-                                </td>
-                                <td>
-                                    <div class="hide">
-                                        <?= $form->field($meilenstein, "[$key]id")->hiddenInput() ?>
-                                    </div>
-                                    <?= $form->field($meilenstein, "[$key]name")->textInput(['disabled' => 'disabled'])->label(false) ?>
-                                </td>
-<!--                                <td>-->
-<!--                                    --><?php // echo $form->field($meilenstein, "[$key]number")->textInput(['disabled' => 'disabled'])->label(false) ?>
-<!--                                </td>-->
-                                <td>
-                                    <?= $form->field($meilenstein, "[$key]kaufvertrag_prozent")
-                                        ->widget(\kartik\money\MaskMoney::classname(), [
-                                            'options' => [
-                                                'id' => $key . '-kaufvertrag_prozent-id',
-                                                'style' => 'text-align: right',
-                                                'disabled' => 'disabled'
-                                            ],
-                                        ])->label(false)
-                                    ?>
-                                </td>
+                                <th style="">Drag&Drop</th>
+                                <th style="">Name</th>
+                                <!--                            <th style="">Nummer</th>-->
+                                <th>Prozent-Summe (%)</th>
                             </tr>
-                        <?php endforeach; ?>
+                            <?php foreach ($projekt->meilensteins as $key => $meilenstein): ?>
+                                <tr>
+                                    <td>
+                                        <ol class="meilenstein sortable">
+                                            <?php if(!in_array($meilenstein->id, $datenblatt->getBenutzteMeilensteinIds())): ?>
+                                                <li data-meilenstein-id="<?= $meilenstein->id ?>" data-prozent="<?= $meilenstein->kaufvertrag_prozent ?>">
+                                                    <i class="glyphicon glyphicon-move"></i><?= $meilenstein->name ?>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ol>
+                                    </td>
+                                    <td>
+                                        <div class="hide">
+                                            <?= $form->field($meilenstein, "[$key]id")->hiddenInput() ?>
+                                        </div>
+                                        <?= $form->field($meilenstein, "[$key]name")->textInput(['disabled' => 'disabled'])->label(false) ?>
+                                    </td>
+                                    <!--                                <td>-->
+                                    <!--                                    --><?php // echo $form->field($meilenstein, "[$key]number")->textInput(['disabled' => 'disabled'])->label(false) ?>
+                                    <!--                                </td>-->
+                                    <td>
+                                        <?= $form->field($meilenstein, "[$key]kaufvertrag_prozent")
+                                            ->widget(\kartik\money\MaskMoney::classname(), [
+                                                'options' => [
+                                                    'id' => $key . '-kaufvertrag_prozent-id',
+                                                    'style' => 'text-align: right',
+                                                    'disabled' => 'disabled'
+                                                ],
+                                            ])->label(false)
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
 
-                        <tr>
-                            <td>Summe</td>
-                            <td></td>
-<!--                            <td></td>-->
-                            <td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($projekt->getProzentSummeMeilensteine(), 2) ?></td>
-                        </tr>
+                            <tr>
+                                <td>Summe</td>
+                                <td></td>
+                                <!--                            <td></td>-->
+                                <td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($projekt->getProzentSummeMeilensteine(), 2) ?></td>
+                            </tr>
 
-                    </table>
+                        </table>
 
-                    <?php ActiveForm::end(); ?>
+                        <?php ActiveForm::end(); ?>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div id="deleteModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Bestätigung</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Möchten Sie die Änderung wirklich durchführen?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                    <button type="button" class="btn btn-primary">Abschicken</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+$this->registerJs('
+        $(function(){
+
+            $(".deleteabschlag-button").click(function(e) {
+                 e.preventDefault();
+                 $("#deleteModal").modal({show: true});
+
+                 var elm = $(this);
+                 _form = $("#abschlaege-form");
+
+                 $("#deleteModal").on("click",".btn-primary",function(){
+
+                    var panelId     = elm.closest(".panel-collapse").attr("id");
+
+                    // POST Request
+                    $.post(elm.attr("href") , _form.serialize(), function(data) {
+
+                        $(".skin-blue.sidebar-mini").html($(data).find(".skin-blue.sidebar-mini").html());
+                        var newContent = $(data).find("#" + panelId + " .box-body");
+
+                        // set html
+                        var boxBody = _form.find("#" + panelId + " .box-body");
+                        boxBody.replaceWith(newContent);
+
+                        $("#deleteModal").modal("hide");
+
+                    });
+
+                });
+            });    
+    
+        });
+    ');
+?>

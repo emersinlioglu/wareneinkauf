@@ -66,7 +66,7 @@ class KaeuferController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($nichtgekauft=true)
     {
         $model = new Kaeufer();
         $model->user_id = User::getCurrentUser()->id;
@@ -88,6 +88,7 @@ class KaeuferController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'nichtgekauft' => $nichtgekauft,
         ]);
     }
 
@@ -97,7 +98,7 @@ class KaeuferController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $nichtgekauft=true)
     {
         $model = $this->findModel($id);
 
@@ -119,6 +120,7 @@ class KaeuferController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'nichtgekauft' => $nichtgekauft,
         ]);
     }
 
@@ -126,30 +128,42 @@ class KaeuferController extends Controller
 
         /** @var $kaeufer Kaeufer */
         $kaeufer = Kaeufer::findOne($kaeuferId);
+        $nichtgekauft = true;
+        $teileigentumseinheiten = $kaeufer->zugewieseneTeileigentumseinheiten;
+        foreach($teileigentumseinheiten as $teileigentumseinheit) {
+            if($teileigentumseinheit->status  == Teileigentumseinheit::STATUS_VERKAUFT) {
+                $nichtgekauft = false;
+            }
+        }
+
         /** @var $te Teileigentumseinheit  */
         $te = Teileigentumseinheit::findOne($teId);
 
-        if ($kaeufer && $te) {
+        if ($nichtgekauft && $kaeufer && $te && $te->status == Teileigentumseinheit::STATUS_FREI) {
             $te->kaeufer_id = $kaeufer->id;
+            $te->status = Teileigentumseinheit::STATUS_RESERVIERT;
             $te->save();
         }
 
-        return $this->redirect(['update', 'id' => $kaeufer->id]);
+        return $this->redirect(['update', 'id' => $kaeufer->id, 'nichtgekauft' => $nichtgekauft]);
     }
 
     public function actionUnassignTeileigentumseinheit($kaeuferId, $teId) {
 
         /** @var $kaeufer Kaeufer */
         $kaeufer = Kaeufer::findOne($kaeuferId);
+        $nichtgekauft = false;
         /** @var $te Teileigentumseinheit  */
         $te = Teileigentumseinheit::findOne($teId);
 
-        if ($kaeufer && $te && $te->kaeufer_id == $kaeufer->id) {
+        if ($kaeufer && $te && $te->kaeufer_id == $kaeufer->id && $te->status != Teileigentumseinheit::STATUS_VERKAUFT) {
+            $nichtgekauft = true;
             $te->kaeufer_id = null;
+            $te->status = Teileigentumseinheit::STATUS_FREI;
             $te->save();
         }
 
-        return $this->redirect(['update', 'id' => $kaeufer->id]);
+        return $this->redirect(['update', 'id' => $kaeufer->id, 'nichtgekauft' => $nichtgekauft]);
     }
 
     private function saveKaeuferProdukts($model, $kaeuferProjektIds = array()) {

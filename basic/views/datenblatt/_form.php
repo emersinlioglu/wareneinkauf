@@ -27,6 +27,7 @@ $this->registerJs('
         // after reload form
         $(document).on(\'ready pjax:success\', function() {
             new DatenblattForm();
+            $("html, body").animate({ scrollTop: 0 }, 0); 
         });
         
 //        // To disable f5
@@ -57,6 +58,7 @@ $this->registerJs('
         //'class' => 'datenblatt-form',
         'id' => 'datenblatt-form',
         'data-datenblatt-id' => $modelDatenblatt->id,
+        'data-kaeufer-id' => $modelKaeufer->id,
     )
 ]); ?>
 
@@ -148,31 +150,15 @@ $this->registerJs('
     </div>
 
     <ul class="nav nav-tabs well">
-        <li class="active"><a href="#tab-te-details" data-toggle="tab">Teileigentumseinheiten</a></li>
-        <li class=""><a href="#tab-kaeuferdaten" data-toggle="tab">Käuferdaten</a></li>
+        <li class="active"><a href="#tab-kaeuferdaten" data-toggle="tab">Käuferdaten</a></li>
+        <li class=""><a href="#tab-te-details" data-toggle="tab">Teileigentumseinheiten</a></li>
         <li class=""><a href="#tab-sonderwuensche" data-toggle="tab">Sonderwünsche</a></li>
         <li class=""><a href="#tab-kaufpreisabrechnung" data-toggle="tab">Kaufpreisabrechnung/Abschlag-Emails</a></li>
         <li class=""><a href="#tab-minderungen" data-toggle="tab">Minderungen/Zahlungen/Verzugszins/Entschädigungen</a></li>
         <li class=""><a href="#tab-protokoll" data-toggle="tab">Protokoll</a></li>
     </ul>
     <div id="" class="tab-content">
-        <div id="tab-te-details" class="tab-pane active">
-            <?= $this->render('_hausdetails', [
-                'form' => $form,
-                'modelDatenblatt' => $modelDatenblatt,
-            ]) ?>
-
-            <?= $this->render('_teileigentumseinheiten', [
-                'form' => $form,
-                'modelDatenblatt' => $modelDatenblatt,
-            ]) ?>
-
-            <?= $this->render('_zaehlerangaben', [
-                'form' => $form,
-                'modelDatenblatt' => $modelDatenblatt
-            ]) ?>
-        </div>
-        <div id="tab-kaeuferdaten" class="tab-pane">
+        <div id="tab-kaeuferdaten" class="tab-pane active">
 
             <?php //if ($modelDatenblatt->kaeufer): ?>
             <?= $this->render('_kaeuferdaten', [
@@ -189,6 +175,22 @@ $this->registerJs('
                 </div>
             </div>
 
+        </div>
+        <div id="tab-te-details" class="tab-pane">
+            <?= $this->render('_hausdetails', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt,
+            ]) ?>
+
+            <?= $this->render('_teileigentumseinheiten', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt,
+            ]) ?>
+
+            <?= $this->render('_zaehlerangaben', [
+                'form' => $form,
+                'modelDatenblatt' => $modelDatenblatt
+            ]) ?>
         </div>
         <div id="tab-sonderwuensche" class="tab-pane">
             <?= $this->render('_sonderwuensche', [
