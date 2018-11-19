@@ -6,6 +6,7 @@ use app\models\Datenblatt;
 use app\models\Einheitstyp;
 use app\models\Kaeufer;
 use app\models\Projekt;
+use app\models\Zaehlerstand;
 use Yii;
 use app\models\Teileigentumseinheit;
 use app\models\TeileigentumseinheitSearch;
@@ -168,14 +169,22 @@ class TeileigentumseinheitController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $preventPost = false)
     {
         $model = $this->findModel($id);
+        $data = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if (!$preventPost && $model->load($data)) {
 
             $model->kaufpreis = $model->verkaufspreis;
             if ($model->save()) {
+
+                if (Zaehlerstand::loadMultiple($model->zaehlerstands, $data)) {
+                    foreach ($model->zaehlerstands as $item) {
+                        $item->save();
+                    }
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -183,6 +192,28 @@ class TeileigentumseinheitController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionAddzaehlerstand($teileigentumseinheitId) {
+
+        $new = new Zaehlerstand();
+        $new->teileigentumseinheit_id = $teileigentumseinheitId;
+        $new->save();
+
+        return $this->actionUpdate($teileigentumseinheitId);
+//        $this->redirect(['update', 'id' => $datenblattId]);
+    }
+
+    public function actionDeletezaehlerstand($teileigentumseinheitId, $zaehlerstandId)
+    {
+        $this->actionUpdate($teileigentumseinheitId);
+
+        if ($zaehlerstand = Zaehlerstand::findOne($zaehlerstandId)) {
+            $zaehlerstand->delete();
+        }
+
+        return $this->actionUpdate($teileigentumseinheitId, true);
+        //return $this->redirect(['update', 'id' => $hausId]);
     }
 
     /**

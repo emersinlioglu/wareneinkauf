@@ -22,7 +22,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
     {
         return [
             [['id', 'haus_id', 'einheitstyp_id', 'gefoerdert', 'projekt_id'], 'integer'],
-            [['projekt_id', 'rechnung_vertrieb', 'status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
+            [['projekt_id', 'rechnung_vertrieb', 'zaehler_abgemeldet', 'status', 'firma_name', 'firma_nr', 'hausnr', 'te_nummer', 'geschoss', 'zimmer', 'me_anteil', 'wohnflaeche', 'gefoerdert', 'verkaufspreis_begruendung'], 'safe'],
             [['kaufpreis', 'kp_einheit', 'forecast_preis', 'verkaufspreis'], 'number'],
         ];
     }
@@ -80,6 +80,7 @@ class TeileigentumseinheitSearch extends Teileigentumseinheit
 //            'cast(me_anteil as decimal(11,2))' => str_replace(',', '.', $this->me_anteil),
             'teileigentumseinheit.status' => $this->status,
             'teileigentumseinheit.rechnung_vertrieb' => $this->rechnung_vertrieb,
+            'teileigentumseinheit.zaehler_abgemeldet' => $this->zaehler_abgemeldet,
             'teileigentumseinheit.projekt_id' => $activeProjekt ? $activeProjekt->id : 0,
         ]);
 

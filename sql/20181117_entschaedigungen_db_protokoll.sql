@@ -28,3 +28,26 @@ CREATE TABLE `protokoll` (
   ENGINE=InnoDB
   ROW_FORMAT=COMPACT
 ;
+
+ALTER TABLE `zaehlerstand`
+  ADD COLUMN `teileigentumseinheit_id` INT UNSIGNED NULL AFTER `haus_id`,
+  ADD CONSTRAINT `FK_zaehlerstand_teileigentumseinheit` FOREIGN KEY (`teileigentumseinheit_id`) REFERENCES `teileigentumseinheit` (`id`);
+
+update zaehlerstand zs
+set
+  zs.teileigentumseinheit_id = (
+    select t.id from teileigentumseinheit t
+      inner join haus h on h.id = t.haus_id
+    where
+      h.id = zs.haus_id
+    limit 0, 1
+  )
+;
+
+ALTER TABLE `zaehlerstand`
+  ALTER `haus_id` DROP DEFAULT;
+ALTER TABLE `zaehlerstand`
+  CHANGE COLUMN `haus_id` `haus_id` INT(10) UNSIGNED NULL AFTER `datum`;
+
+ALTER TABLE `teileigentumseinheit`
+  ADD COLUMN `zaehler_abgemeldet` TINYINT(1) NULL DEFAULT '0' AFTER `rechnung_vertrieb`;

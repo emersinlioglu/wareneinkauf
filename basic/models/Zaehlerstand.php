@@ -13,6 +13,7 @@ use Yii;
  * @property string $stand
  * @property string $datum
  * @property string $haus_id
+ * @property integer $teileigentumseinheit_id
  *
  * @property Haus $haus
  */
@@ -33,8 +34,8 @@ class Zaehlerstand extends \yii\db\ActiveRecord
     {
         return [
             [['datum'], 'safe'],
-            [['haus_id'], 'required'],
-            [['haus_id'], 'integer'],
+            [['teileigentumseinheit_id'], 'required'],
+            [['haus_id', 'teileigentumseinheit_id'], 'integer'],
             [['name', 'nummer', 'stand'], 'string', 'max' => 45]
         ];
     }

@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'einheitstyp_id',
             'te_nummer',
             'gefoerdert:boolean',
+            'zaehler_abgemeldet:boolean',
             'geschoss',
             'zimmer',
             'me_anteil:decimal',
@@ -47,5 +48,31 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+
+    <div class="container-table zaehlerstand" id='zaehlerstand-id'>
+        <h2>Zählerstand-Angaben:</h2>
+
+        <table class="table no-label">
+            <tr>
+                <th style="width: 30%;">Medium-Name.</th>
+                <th style="width: 30%;">Medium-Nr.</th>
+                <th style="width: 20%;">Zählerstand</th>
+                <th style="width: 20%;">Datum</th>
+            </tr>
+            <?php
+            /* @var $zaehlerstand app\models\Zaehlerstand */
+            foreach ($model->zaehlerstands as $key => $zaehlerstand): ?>
+                <tr>
+                    <td><?= $zaehlerstand->name ?></td>
+                    <td><?= $zaehlerstand->nummer ?></td>
+                    <td><?= $zaehlerstand->stand ?></td>
+                    <td><?= Yii::$app->formatter->asDatetime($zaehlerstand->datum, 'php:d.m.Y H:i') ?></td>
+                </tr>
+            <?php
+            endforeach;
+            ?>
+        </table>
+
+    </div>
 
 </div>

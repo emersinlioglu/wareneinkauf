@@ -28,9 +28,10 @@ class Haus extends \yii\db\ActiveRecord
 {
     const STATUS_FREI = 'frei';
     const STATUS_RESERVIERT = 'reserviert';
-    const STATUS_VERKAUFT   = 'verkauft';
+    const STATUS_VERKAUFT = 'verkauft';
 
-    public static function statusOptions() {
+    public static function statusOptions()
+    {
         return [
             Haus::STATUS_FREI => 'Frei',
             Haus::STATUS_RESERVIERT => 'Reserviert',
@@ -96,7 +97,7 @@ class Haus extends \yii\db\ActiveRecord
         return $this->hasOne(Projekt::className(), ['id' => 'projekt_id']);
     }
 
-     /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getFirma()
@@ -112,12 +113,13 @@ class Haus extends \yii\db\ActiveRecord
         return $this->hasMany(Teileigentumseinheit::className(), ['haus_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getZaehlerstands()
     {
-        return $this->hasMany(Zaehlerstand::className(), ['haus_id' => 'id']);
+        $result = [];
+        foreach ($this->teileigentumseinheits as $teileigentumseinheit) {
+            $result += $teileigentumseinheit->zaehlerstands;
+        }
+        return $result;
     }
 
     /**

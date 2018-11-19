@@ -132,12 +132,6 @@ class HausController extends Controller
                 }
             }
 
-            if (Zaehlerstand::loadMultiple($model->zaehlerstands, $data)) {
-                foreach ($model->zaehlerstands as $item) {
-                    $item->save();
-                }
-            }
-
         }
 
         return $this->render('update', [
@@ -158,20 +152,6 @@ class HausController extends Controller
 
         $this->actionUpdate($hausId);
         return $this->redirect(['update', 'id' => $hausId]);
-    }
-    
-    /**
-     * Add new
-     * @param int $datenblattId
-     */
-    public function actionAddzaehlerstand($hausId) {
-        
-        $new = new Zaehlerstand();
-        $new->haus_id = $hausId;
-        $new->save();
-
-        return $this->actionUpdate($hausId);
-//        $this->redirect(['update', 'id' => $datenblattId]);
     }
 
     /**
@@ -206,31 +186,6 @@ class HausController extends Controller
         $this->actionUpdate($hausId, true);
         return $this->redirect(['update', 'id' => $hausId]);
     }
-    
-    /**
-     * Deletes an existing Teileigentumseinheit model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionDeletezaehlerstand($hausId, $zaehlerstandId)
-    {
-        $this->actionUpdate($hausId);
-        
-        if ($zaehlerstand = Zaehlerstand::findOne($zaehlerstandId)) {
-            $zaehlerstand->delete();
-        }
-        
-        return $this->actionUpdate($hausId, true);
-        //return $this->redirect(['update', 'id' => $hausId]);
-    }
-
-
-
-
-
-
-
 
     /**
      * Finds the Haus model based on its primary key value.

@@ -18,6 +18,7 @@ use Yii;
  * @property string $zimmer
  * @property string $status
  * @property integer $rechnung_vertrieb
+ * @property integer $zaehler_abgemeldet
  * @property string $me_anteil
  * @property double $wohnflaeche
  * @property double $kaufpreis
@@ -32,6 +33,7 @@ use Yii;
  * @property Projekt $projekt
  * @property Haus $haus
  * @property Kaeufer $kaeufer
+ * @property Zaehlerstand[] $zaehlerstands
  */
 class Teileigentumseinheit extends \yii\db\ActiveRecord
 {
@@ -62,7 +64,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     {
         return [
             [['te_nummer', 'einheitstyp_id', 'status'], 'required'],
-            [['haus_id', 'einheitstyp_id', 'gefoerdert', 'rechnung_vertrieb'], 'integer'],
+            [['haus_id', 'einheitstyp_id', 'gefoerdert', 'rechnung_vertrieb', 'zaehler_abgemeldet'], 'integer'],
             [['kaufpreis', 'kp_einheit', 'wohnflaeche', 'forecast_preis', 'verkaufspreis', 'me_anteil'], 'number'],
             [['te_nummer'], 'string', 'max' => 255],
             [['hausnr', 'geschoss', 'zimmer', 'status'], 'string', 'max' => 45],
@@ -97,6 +99,7 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
             'forecast_price' => Yii::t('app', 'Forecast'),
             'verkaufspreis' => Yii::t('app', 'Verkaufspreis'),
             'verkaufspreis_begruendung' => Yii::t('app', 'Begründung'),
+            'zaehler_abgemeldet' => Yii::t('app', 'Zähler abgemeldet'),
         ];
     }
 
@@ -140,6 +143,13 @@ class Teileigentumseinheit extends \yii\db\ActiveRecord
     public function getHaus()
     {
         return $this->hasOne(Haus::className(), ['id' => 'haus_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getZaehlerstands() {
+        return $this->hasMany(Zaehlerstand::className(), ['teileigentumseinheit_id' => 'id']);
     }
 
     public function getStatusLabel() {

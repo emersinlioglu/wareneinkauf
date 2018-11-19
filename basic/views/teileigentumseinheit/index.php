@@ -125,6 +125,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     [
                         'class' => 'kartik\grid\BooleanColumn',
+                        'attribute' => 'zaehler_abgemeldet',
+                        'vAlign' => 'middle',
+                        'trueLabel' => 'Ja',
+                        'falseLabel' => 'Nein',
+                    ],
+                    [
+                        'class' => 'kartik\grid\BooleanColumn',
                         'attribute' => 'gefoerdert',
                         'vAlign' => 'middle',
                         'trueLabel' => 'Ja',
