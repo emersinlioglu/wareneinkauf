@@ -1402,6 +1402,17 @@ class Datenblatt extends \yii\db\ActiveRecord
                     'value'=> "abschlag__{$i}__kaufvertrag_angefordert",
                     'label' => "{$cnt}. Abschlag-Angefordert"
                 ];
+                $gridColumns[] = [
+                    'value'=> "abschlag__{$i}__sonderwunsch_prozent",
+                    'label' => "{$cnt}. Abschlag-Sonderwunsch-Prozent (%)",
+                    'format' => ['decimal', 'decimals' => 2],
+                ];
+                $gridColumns[] = [
+                    'value'=> "abschlag__{$i}__sonderwunsch_betrag",
+                    'label' => "{$cnt}. Abschlag-Sonderwunsch-Betrag",
+                    'format' => ['currency'],
+                    'pageSummary' => true
+                ];
             }
 
             for ($i = 0; $i < $maxCountNachlasses; $i++) {
