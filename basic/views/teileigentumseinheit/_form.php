@@ -36,7 +36,6 @@ $this->registerJs('
             <?= $form->field($model, 'geschoss')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'zimmer')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'rechnung_vertrieb')->checkbox() ?>
-            <?= $form->field($model, 'zaehler_abgemeldet')->checkbox() ?>
             <?= $form->field($model, 'status')->dropDownList(Teileigentumseinheit::statusOptions(), ['prompt' => 'Bitte wählen'])->label('Status'); ?>
         </div>
         <div class="col-sm-3">
@@ -95,6 +94,7 @@ $this->registerJs('
                 <th style="width: 30%;">Medium-Nr.</th>
                 <th style="width: 20%;">Zählerstand</th>
                 <th style="width: 20%;">Datum</th>
+                <th>Abgemeldet</th>
                 <th>
                     <?php if (!$model->haus->isNewRecord): ?>
                         <!--?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?-->
@@ -112,12 +112,20 @@ $this->registerJs('
                         <span class="hide">
                             <?= $form->field($zaehlerstand, 'id')->hiddenInput(['name' => "Zaehlerstand[$key][id]"]) ?>
                         </span>
-                        <?= $form->field($zaehlerstand, 'name')->textInput(['name' => "Zaehlerstand[$key][name]"]) ?>
+                        <?php
+                            $options = [];
+                            if ($zaehlerstand->zaehler_abgemeldet) { $options['readonly'] = 'readonly'; }
+                            echo $form->field($zaehlerstand, 'name')->textInput(['name' => "Zaehlerstand[$key][name]"] + $options)
+                        ?>
                     </td>
-                    <td><?= $form->field($zaehlerstand, 'nummer')->textInput(['name' => "Zaehlerstand[$key][nummer]"]) ?></td>
-                    <td><?= $form->field($zaehlerstand, 'stand')->textInput(['name' => "Zaehlerstand[$key][stand]"]) ?></td>
+                    <td><?= $form->field($zaehlerstand, 'nummer')->textInput(['name' => "Zaehlerstand[$key][nummer]"] + $options) ?></td>
+                    <td><?= $form->field($zaehlerstand, 'stand')->textInput(['name' => "Zaehlerstand[$key][stand]"] + $options) ?></td>
                     <td>
                         <?php
+
+                        $options = [];
+                        if ($zaehlerstand->zaehler_abgemeldet) { $options['disabled'] = 'disabled'; }
+
                         echo '<label>Datum</label>';
                         echo $form->field($zaehlerstand, "[$key]datum")->widget(DateControl::classname(), [
                             'type' => DateControl::FORMAT_DATE,
@@ -125,10 +133,14 @@ $this->registerJs('
                                 'pluginOptions' => [
                                     'removeButton' => false,
                                     'autoclose' => true
-                                ]
-                            ]
+                                ],
+
+                            ] + $options
                         ]);
                         ?>
+                    </td>
+                    <td>
+                        <?= $form->field($zaehlerstand, "[$key]zaehler_abgemeldet")->checkbox([], false) ?>
                     </td>
                     <td>
                         <label>&nbsp;</label>

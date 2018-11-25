@@ -51,3 +51,9 @@ ALTER TABLE `zaehlerstand`
 
 ALTER TABLE `teileigentumseinheit`
   ADD COLUMN `zaehler_abgemeldet` TINYINT(1) NULL DEFAULT '0' AFTER `rechnung_vertrieb`;
+
+ALTER TABLE `teileigentumseinheit`
+  DROP COLUMN `zaehler_abgemeldet`;
+
+ALTER TABLE `zaehlerstand`
+  ADD COLUMN `zaehler_abgemeldet` TINYINT(1) NULL DEFAULT '0';

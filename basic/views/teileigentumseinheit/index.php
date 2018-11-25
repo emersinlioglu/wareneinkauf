@@ -153,13 +153,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'te_nummer',
                 [
                     'class' => 'kartik\grid\BooleanColumn',
-                    'attribute' => 'zaehler_abgemeldet',
-                    'vAlign' => 'middle',
-                    'trueLabel' => 'Ja',
-                    'falseLabel' => 'Nein',
-                ],
-                [
-                    'class' => 'kartik\grid\BooleanColumn',
                     'attribute' => 'rechnung_vertrieb',
                     'vAlign' => 'middle',
                     'trueLabel' => 'Ja',

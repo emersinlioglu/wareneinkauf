@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'einheitstyp_id',
             'te_nummer',
             'gefoerdert:boolean',
-            'zaehler_abgemeldet:boolean',
             'geschoss',
             'zimmer',
             'me_anteil:decimal',
@@ -58,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th style="width: 30%;">Medium-Nr.</th>
                 <th style="width: 20%;">Zählerstand</th>
                 <th style="width: 20%;">Datum</th>
+                <th style="width: 20%;">Abgemeldet</th>
             </tr>
             <?php
             /* @var $zaehlerstand app\models\Zaehlerstand */
@@ -67,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td><?= $zaehlerstand->nummer ?></td>
                     <td><?= $zaehlerstand->stand ?></td>
                     <td><?= Yii::$app->formatter->asDatetime($zaehlerstand->datum, 'php:d.m.Y H:i') ?></td>
+                    <td><?= $zaehlerstand->zaehler_abgemeldet ? 'ja' : 'nein' ?></td>
                 </tr>
             <?php
             endforeach;

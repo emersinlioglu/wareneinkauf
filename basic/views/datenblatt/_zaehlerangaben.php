@@ -1,5 +1,5 @@
 <?php 
-
+use yii\helpers\Html;
 ?>
 
 <div class="box-group" id="accordion">
@@ -23,6 +23,8 @@
                         <th>Medium-Nr.</th>
                         <th>Zählerstand</th>
                         <th>Datum</th>
+                        <th>Abgemeldet</th>
+                        <th></th>
                     </tr>
                     <?php 
                     /* @var $zaehlerstand app\models\Zaehlerstand */
@@ -32,7 +34,12 @@
                             <td><?= $zaehlerstand->name ?></td>
                             <td><?= $zaehlerstand->nummer ?></td>
                             <td><?= $zaehlerstand->stand ?></td>
-                            <td><?= Yii::$app->formatter->asDate($zaehlerstand->datum) ?>
+                            <td><?= Yii::$app->formatter->asDate($zaehlerstand->datum) ?></td>
+                            <td><?= $zaehlerstand->zaehler_abgemeldet ? 'ja' : 'nein' ?></td>
+                            <td>
+                                <?= Html::a('<span class="glyphicon glyphicon-pencil"> Bearbeiten</span>',
+                                    Yii::$app->urlManager->createUrl(["teileigentumseinheit/update", 'id' => $zaehlerstand->teileigentumseinheit_id]),
+                                    ['class' => 'btn btn-primary btn-xl']) ?>
                             </td>
                         </tr>
                     <?php 

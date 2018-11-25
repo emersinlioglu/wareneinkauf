@@ -14,6 +14,7 @@ use Yii;
  * @property string $datum
  * @property string $haus_id
  * @property integer $teileigentumseinheit_id
+ * @property integer $zaehler_abgemeldet
  *
  * @property Haus $haus
  */
@@ -35,7 +36,7 @@ class Zaehlerstand extends \yii\db\ActiveRecord
         return [
             [['datum'], 'safe'],
             [['teileigentumseinheit_id'], 'required'],
-            [['haus_id', 'teileigentumseinheit_id'], 'integer'],
+            [['haus_id', 'teileigentumseinheit_id', 'zaehler_abgemeldet'], 'integer'],
             [['name', 'nummer', 'stand'], 'string', 'max' => 45]
         ];
     }
@@ -52,6 +53,7 @@ class Zaehlerstand extends \yii\db\ActiveRecord
             'stand' => 'Stand',
             'datum' => 'Datum',
             'haus_id' => 'Haus ID',
+            'zaehler_abgemeldet' => Yii::t('app', 'Zähler abgemeldet'),
         ];
     }
 
