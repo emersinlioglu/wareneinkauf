@@ -586,9 +586,8 @@ class DatenblattController extends Controller
 
                 $teileigentumseinheiten = $modelKaeufer->zugewieseneTeileigentumseinheiten;
                 foreach($teileigentumseinheiten as $te) {
-
                     $te->status = Teileigentumseinheit::STATUS_VERKAUFT;
-                    $te->haus_id = $modelDatenblatt->haus_id;
+                    $te->kaeufer_id = $modelDatenblatt->kaeufer_id;
                     $te->save();
                 }
             }
