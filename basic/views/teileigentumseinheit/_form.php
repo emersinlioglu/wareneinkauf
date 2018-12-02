@@ -96,7 +96,7 @@ $this->registerJs('
                 <th style="width: 20%;">Datum</th>
                 <th>Abgemeldet</th>
                 <th>
-                    <?php if (!$model->haus->isNewRecord): ?>
+                    <?php if (!$model->isNewRecord): ?>
                         <!--?= Html::submitButton('<span class="fa fa-plus"> Teileigentumseinheit hinzufügen</span>', ['class' => 'btn btn-success', 'name' => 'addnew']) ?-->
                         <?= Html::a('<span class="fa fa-plus"> </span>',
                             Yii::$app->urlManager->createUrl(["teileigentumseinheit/addzaehlerstand", 'teileigentumseinheitId' => $model->id]),
