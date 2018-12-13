@@ -16,13 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (User::hasPermission('write_customer')): ?>
         <p>
             <?= Html::a('Aktualisieren', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Löschen', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Sind Sie sich sicher, diesen Datensatz zu löschen?',
-                    'method' => 'post',
-                ],
-            ]) ?>
+            <?php
+//            echo Html::a('Löschen', ['delete', 'id' => $model->id], [
+//                'class' => 'btn btn-danger',
+//                'data' => [
+//                    'confirm' => 'Sind Sie sich sicher, diesen Datensatz zu löschen?',
+//                    'method' => 'post',
+//                ],
+//            ]) ?>
         </p>
     <?php endif; ?>
 

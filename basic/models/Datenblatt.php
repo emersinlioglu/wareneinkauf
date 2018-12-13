@@ -1471,6 +1471,7 @@ class Datenblatt extends \yii\db\ActiveRecord
                 'value'=> "offenePosten",
                 'label' => "Offene Posten:",
                 'format' => ['currency'],
+                'pageSummary' => true
             ];
 
             // Entschaedigungen
