@@ -1222,11 +1222,20 @@ class Datenblatt extends \yii\db\ActiveRecord
             'value'=>'intern_debitor_nr',
             'label' => 'Interne Debitoren Nr.'
         ];
+        $gridColumns[] = [
+            'attribute' => 'besondere_regelungen_kaufvertrag',
+            'label' => 'Besondere Regelungen Kaufvertrag'
+        ];
 
         $gridColumns[] = [
             'value' => 'kaeufer.anredeLabel',
             //'value'=> '$data->anrede == 1 ? "Herr" : "Frau"',
             'label' => 'Käufer Anrede'
+        ];
+        $gridColumns[] = [
+            'attribute' => 'kaeufer_firma',
+            'value' => 'kaeufer.firma',
+            'label' => 'Käufer Firma'
         ];
         $gridColumns[] = [
             'attribute' => 'kaeufer_titel',

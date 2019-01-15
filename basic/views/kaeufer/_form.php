@@ -46,6 +46,11 @@ use \app\models\Kaeufer;
 
                     <div class="row">
                         <div class="col-sm-6">
+                            <?= $form->field($model, 'firma')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
                             <?= $form->field($model, 'strasse')->textInput(['maxlength' => true]) ?>
                             <?= $form->field($model, 'plz')->textInput(['maxlength' => true]) ?>
                             <?= $form->field($model, 'land')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\Land::$laender, 'code', 'name'), ['prompt' => 'Auswählen']) ?>

@@ -17,6 +17,7 @@ use Yii;
  * @property integer $auflassung
  * @property integer $anrede
  * @property string $titel
+ * @property string $firma
  * @property string $vorname
  * @property string $nachname
  * @property string $strasse
@@ -56,7 +57,7 @@ class Kaeufer extends \yii\db\ActiveRecord
         return [
             [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
             [['auflassung', 'anrede', 'anrede2'], 'integer'],
-            [['land', 'debitor_nr', 'titel', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
+            [['land', 'debitor_nr', 'titel', 'firma', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
         ];
     }
 
@@ -76,6 +77,7 @@ class Kaeufer extends \yii\db\ActiveRecord
             'auflassung' => Yii::t('app', 'Auflassung'),
             'anrede' => Yii::t('app', 'Anrede'),
             'titel' => Yii::t('app', 'Titel'),
+            'firma' => Yii::t('app', 'Firma'),
             'vorname' => Yii::t('app', 'Vorname'),
             'nachname' => Yii::t('app', 'Nachname'),
             'strasse' => Yii::t('app', 'Strasse'),

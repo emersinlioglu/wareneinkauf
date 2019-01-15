@@ -1,0 +1,2 @@
+ALTER TABLE `kaeufer`
+  ADD COLUMN `firma` VARCHAR(255) NULL DEFAULT '' AFTER `titel`;

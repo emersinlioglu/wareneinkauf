@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'anrede',
                 'value' => $model->anrede == 1 ? 'Frau' : 'Herrn',
             ],
+            'firma',
             'titel',
             'vorname',
             'nachname',
