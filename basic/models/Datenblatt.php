@@ -1285,7 +1285,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             $gridColumns[] = [
                 'value' => 'schlussrechnungKaufvertragBetrag',
                 'label' => 'Schlussrechnung - Kaufvertrag Betrag',
-//        'format' => ['currency'],
+                'format' => ['currency'],
                 'pageSummary' => true
             ];
             $gridColumns[] =  [
