@@ -202,7 +202,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]' => Yii::$app->formatter->number2text(round($this->kaufvertrag_betrag, 2)),
             '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
             '[abschlag-nr]' => $abschlagNr,
-            '[debitor-nr]' => $datenblatt->kaeufer ? $datenblatt->kaeufer->debitor_nr : '',
+            '[debitor-nr]' => $datenblatt->sap_debitor_nr,
 //            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herrn',
 //            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
 //            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
