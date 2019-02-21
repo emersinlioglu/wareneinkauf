@@ -159,10 +159,15 @@ class Abschlag extends \yii\db\ActiveRecord
         $kaeufer = $datenblatt->kaeufer;
         if ($kaeufer) {
             if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
-                $kaeuferDaten[] = ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+                $kaeuferDaten[] =
+                    ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' '  .
+                    (strlen($kaeufer->titel) ? $kaeufer->titel . ' ' : '') .
+                    $kaeufer->vorname . ' ' . $kaeufer->nachname;
             }
             if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
-                $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
+                $kaeuferDaten[] = ($kaeufer->anrede2 == 1 ? 'Frau' : 'Herrn') . ' ' .
+                    (strlen($kaeufer->titel2) ? $kaeufer->titel2 . ' ' : '') .
+                    $kaeufer->vorname2 . ' ' . $kaeufer->nachname2;
             }
             if ($kaeufer->anrede == 0 && $kaeufer->anrede2 == 1) {
                 $kaeuferDaten = array_reverse($kaeuferDaten);
@@ -174,7 +179,9 @@ class Abschlag extends \yii\db\ActiveRecord
                 $kaeuferNamen=implode('<br>', $kaeuferDaten);
             } else {
                 $kaeuferNamen =
-                    ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' . $kaeufer->vorname . ' ' . $kaeufer->nachname;
+                    ($kaeufer->anrede == 1 ? 'Frau' : 'Herrn') . ' ' .
+                    (strlen($kaeufer->titel) ? $kaeufer->titel . ' ' : '') .
+                    $kaeufer->vorname . ' ' . $kaeufer->nachname;
             }
 
         }
