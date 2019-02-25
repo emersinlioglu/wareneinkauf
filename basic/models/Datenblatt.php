@@ -772,6 +772,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             if (strlen($kaeufer->vorname . $kaeufer->nachname) > 0) {
                 $kaeuferDaten[] = [
                     'anrede' => $kaeufer->anrede,
+                    'titel' => $kaeufer->titel,
                     'vorname' => $kaeufer->vorname,
                     'nachname' => $kaeufer->nachname
                 ];
@@ -779,6 +780,7 @@ class Datenblatt extends \yii\db\ActiveRecord
             if (strlen($kaeufer->vorname2 . $kaeufer->nachname2) > 0) {
                 $kaeuferDaten[] = [
                     'anrede' => $kaeufer->anrede2,
+                    'titel' => $kaeufer->titel2,
                     'vorname' => $kaeufer->vorname2,
                     'nachname' => $kaeufer->nachname2
                 ];
@@ -806,7 +808,9 @@ class Datenblatt extends \yii\db\ActiveRecord
             if ($key == 0) {
                 $anredeSatz = ucfirst($anredeSatz);
             }
-//            $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['vorname'] . ' ' . $data['nachname'] . ', ';
+            if (strlen($data['titel'])) {
+                $anredeSatz  .= ' ' . $data['titel'];
+            }
             $persoenlicheBriefanrede .= $anredeSatz . ' ' . $data['nachname'] . ', ';
         }
         $persoenlicheBriefanrede .= '<br>';
