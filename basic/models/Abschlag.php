@@ -203,7 +203,7 @@ class Abschlag extends \yii\db\ActiveRecord
             '[projekt-name]' => $projekt->name,
             '[projekt-strasse]' => $projekt->strasse . ' ' . $projekt->hausnr,
             '[projekt-ort]' => $projekt->ort,
-            '[wohnung-nr]' => $datenblatt->haus->tenummer,
+            '[wohnung-nr]' => $datenblatt->haus->getTenummerForEinheitstypWithoutPrefix(Einheitstyp::TYPE_HAUS),
             '[kaufpreisabrechnung-kaufvertrag-in-prozent]' => $kaufpreisabrechnungKaufvertragInProzent,
             '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
             '[kaufpreisabrechnung-kaufvertrag-betrag-in-worten]' => Yii::$app->formatter->number2text(round($this->kaufvertrag_betrag, 2)),

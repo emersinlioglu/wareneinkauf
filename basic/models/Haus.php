@@ -175,6 +175,14 @@ class Haus extends \yii\db\ActiveRecord
         return $tenummer;
     }
 
+    public function getTenummerForEinheitstypWithoutPrefix($einheitstypId, $nth = 1) {
+        $tenummer = $this->getTenummerForEinheitstyp($einheitstypId, $nth);
+        if ($pos = strpos($tenummer, '-')) {
+            $tenummer = substr($tenummer, $pos+1);
+        }
+        return $tenummer;
+    }
+
     public function hatDatenblattMitAngefodertemAbschlag() {
         $result = false;
         /** @var Datenblatt $datenblatt */
