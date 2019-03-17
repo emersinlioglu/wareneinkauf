@@ -90,12 +90,19 @@ class User extends \webvimark\modules\UserManagement\models\User {
     }
 
     /**
+     * @return mixed
+     */
+    public static function getActiveProjektId() {
+        return \Yii::$app->session->get('activeProjektId');
+    }
+
+    /**
      * @return null|Projekt
      */
     public static function getActiveProjekt() {
-        $activeProjektId = \Yii::$app->session->get('activeProjektId');
         $activeProjekt = null;
-        if (!$activeProjektId) {
+        $activeProjektId = User::getActiveProjektId();
+        if (!$activeProjektId || !User::hasAccessToProject()) {
             $projekts = User::getProjects();
             if (count($projekts)) {
                 $activeProjekt = $projekts[0];
@@ -116,7 +123,7 @@ class User extends \webvimark\modules\UserManagement\models\User {
 
     public static function hasAccessToProject() {
         $query = Projekt::find();
-        $projektId = User::getActiveProjekt() ? User::getActiveProjekt()->id : null;
+        $projektId = User::getActiveProjektId();
         if (!\Yii::$app->user->isSuperadmin) {
             $query->leftJoin('projekt_user pu', 'pu.projekt_id = projekt.id AND projekt.id = ' . $projektId);
             $query->andFilterWhere(['or',
