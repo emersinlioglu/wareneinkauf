@@ -125,11 +125,11 @@ class DatenblattController extends Controller
 
         // max count of zahlungs of filtered datenblatts
         $models = $dataProvider->getModels();    
-        $maxCountZahlungs = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->zahlungs);
-            $maxCountZahlungs = max($maxCountZahlungs, $count);
-        }
+        $maxCountZahlungs = 19;
+//        foreach ($models as $datenblatt) {
+//            $count = count($datenblatt->zahlungs);
+//            $maxCountZahlungs = max($maxCountZahlungs, $count);
+//        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

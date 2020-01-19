@@ -33,6 +33,7 @@ use Yii;
  * @property string $vorname2
  * @property string $nachname2
  * @property integer $user_id
+ * @property string $typ
  *
  * @property Datenblatt[] $datenblatts
  * @property KaeuferProjekt[] $kaeuferProjekts
@@ -57,6 +58,8 @@ class Kaeufer extends \yii\db\ActiveRecord
         return [
             [['beurkundung_am', 'verbindliche_fertigstellung', 'uebergang_bnl', 'abnahme_se', 'abnahme_ge'], 'safe'],
             [['auflassung', 'anrede', 'anrede2'], 'integer'],
+            [['typ'], 'string'],
+            [['typ'], 'required'],
             [['land', 'debitor_nr', 'titel', 'firma', 'vorname', 'nachname', 'strasse', 'hausnr', 'plz', 'ort', 'festnetz', 'handy', 'email', 'titel2', 'vorname2', 'nachname2'], 'string', 'max' => 255]
         ];
     }
@@ -92,6 +95,7 @@ class Kaeufer extends \yii\db\ActiveRecord
             'titel2' => Yii::t('app', 'Titel2'),
             'vorname2' => Yii::t('app', 'Vorname2'),
             'nachname2' => Yii::t('app', 'Nachname2'),
+            'typ' => Yii::t('app', 'Typ'),
         ];
     }
 

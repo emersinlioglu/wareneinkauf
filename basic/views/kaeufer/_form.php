@@ -76,6 +76,10 @@ use \app\models\Kaeufer;
                 </div>
 
                 <div class="col-sm-6">
+                    <h3>Kundentyp</h3>
+
+                    <?= $form->field($model, 'typ')->radioList(['Kapitalanleger' => 'Kapitalanleger', 'Eigennutzer' => 'Eigennutzer'], ['separator' => '<br>']); ?>
+
                     <h3>Projekt-Zuordnungen</h3>
 
                     <br>

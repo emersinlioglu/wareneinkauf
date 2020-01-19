@@ -1161,11 +1161,13 @@ class Datenblatt extends \yii\db\ActiveRecord
         }
 
         // max count of zahlungs of filtered datenblatts
-        $maxCountZahlungs = 0;
-        foreach ($models as $datenblatt) {
-            $count = count($datenblatt->zahlungs);
-            $maxCountZahlungs = max($maxCountZahlungs, $count);
-        }
+        $maxCountZahlung = Zahlung::find()
+            ->select("COUNT(*) as cnt")
+            ->joinWith(['datenblatt'])
+            ->where(['datenblatt.projekt_id' => $projektId])
+            ->groupBy(['datenblatt_id'])
+            ->max('cnt');
+        $maxCountZahlungs = intval($maxCountZahlung);
 
         // max count of entschaedigungs of filtered datenblatts
         $maxCountEntschaedigungs = 0;

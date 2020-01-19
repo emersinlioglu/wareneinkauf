@@ -149,6 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => 'anredeLabel',
                         'filter' => array(0 => 'Herr', 1 => 'Frau'),
                     ],
+                    'typ',
                     'firma',
                     'titel',
                     'vorname',
