@@ -6,6 +6,7 @@ use app\models\Vorlage;
 use app\models\User;
 use kartik\datecontrol\DateControl;
 use \app\models\VorlageTyp;
+use \app\models\Sonderwunsch;
 
 $this->title = 'Serienbriefe';
 
@@ -417,6 +418,71 @@ $this->registerJs('
                             <div class="col-sm-6">
                                 <b>Platzhalter exportieren.</b><br>
                                 Die Platzhalter, die in der zugewiesenen Vorlage benutzt worden sind, können hier als Csv-Datei exportiert werden.
+                            </div>
+                        </div>
+
+                        <?php foreach ($datenblattIds as $datenblattId): ?>
+                            <?= Html::hiddenInput('datenblatt[]', $datenblattId); ?>
+                        <?php endforeach; ?>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?= Html::submitButton('Export Platzhalter', ['name' => 'submit-button', 'value' => 'selection', 'class' => 'btn btn-primary']) ?>
+                            </div>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="box-group" id="accordion">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <div class="panel box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">
+                        <a data-toggle="collapse" data-parent="#collapse-export-daten" href="#collapse-export-daten" aria-expanded="true" class="">
+                            Sonderwunsch-Platzhalter exportieren:
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-export-daten" class="panel-collapse collapse in" aria-expanded="false">
+                    <div class="box-body">
+
+                        <?php
+                        $form = ActiveForm::begin([
+                            'action' => ['abschlag/export-sonderwunsch-platzhalter'],
+                            'method' => 'get',
+                            'options' => array(
+                                'class' => 'export-sonderwunsch-platzhalter',
+                                'target'=>'_blank'
+                            )
+                        ]);
+                        ?>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="datenblatt-firma_id">Sonderwunsch-Vorlage</label>
+                                    <?= Html::dropDownList('vorlage_id', null,
+                                        ArrayHelper::map(Vorlage::findAll([
+                                            'vorlage_typ_id' => VorlageTyp::TYPE_SONDERWUNSCH,
+                                            'deleted' => null,
+                                            'projekt_id' => $projektId
+                                        ]), 'id', 'name'),
+                                        ['prompt' => 'Bitte auswählen', 'class'=>'form-control']); ?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <b>Sonderwunsch-Platzhalter exportieren.</b><br>
                             </div>
                         </div>
 

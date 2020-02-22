@@ -875,7 +875,7 @@ class Datenblatt extends \yii\db\ActiveRecord
     //            '[kaufpreisabrechnung-kaufvertrag-betrag]' => number_format($this->kaufvertrag_betrag, 2, ',', '.'),
     //            '[erstell-datum]' => Yii::$app->formatter->asDate($this->erstell_datum, 'medium'),
     //            '[abschlag-nr]' => $abschlagNr,
-            '[debitor-nr]' => $datenblatt->kaeufer->debitor_nr,
+            '[debitor-nr]' => $datenblatt->sap_debitor_nr,
 //            '[kaeufer-anrede]' => $datenblatt->kaeufer->anrede == 1 ? 'Frau' : 'Herrn',
 //            '[kaeufer-vorname]' => $datenblatt->kaeufer->vorname,
 //            '[kaeufer-nachname]' => $datenblatt->kaeufer->nachname,
@@ -897,10 +897,29 @@ class Datenblatt extends \yii\db\ActiveRecord
             '[einheitstypname-aussenstellplatz]' => $einheitstypAussenstellplatz->name,
             '[einheitstypname-keller]' => $einheitstypKeller->name,
             '[sonderwuensche-zusammenfassung]' => $datenblatt->getSonderwunschZusammenfassungTabelle(),
+            '[sonderwuensche-gesamtbetrag]' => $datenblatt->getSonderwunschAngefortSumme(),
             '[aktuelles-datum]' => date('d.m.Y'),
         ];
 
         return $replaceData;
+    }
+
+    public function getSonderwunschReplaceData() {
+        $data = [];
+        foreach ($this->sonderwunsches as $i => $sonderwunsch) {
+            $key = $i+1;
+            $data  = array_merge($data , [
+                "[SW-{$key}-name]" => $sonderwunsch->name,
+                "[SW-{$key}-angebot-datum]" => $sonderwunsch->angebot_datum,
+                "[SW-{$key}-angebot-betrag]" => $sonderwunsch->angebot_betrag,
+                "[SW-{$key}-beauftragt-datum]" => $sonderwunsch->beauftragt_datum,
+                "[SW-{$key}-beauftragt-betrag]" => $sonderwunsch->beauftragt_betrag,
+                "[SW-{$key}-rs-betrag]" => $sonderwunsch->rechnungsstellung_betrag,
+                "[SW-{$key}-rs-datum]" => $sonderwunsch->rechnungsstellung_datum,
+                "[SW-{$key}-rs-rgnr]" => $sonderwunsch->rechnungsstellung_rg_nr,
+            ]);
+        }
+        return $data;
     }
 
     public function getSonderwunschPdfContent(Vorlage $vorlage) {
@@ -937,17 +956,25 @@ class Datenblatt extends \yii\db\ActiveRecord
             $sonderwuenscheZusammenfassung .= '</td>';
             $sonderwuenscheZusammenfassung .= '</tr>';
         }
-        $sonderwuenscheZusammenfassung .= '<tr class="bordertop">';
-        $sonderwuenscheZusammenfassung .= '<td>';
-        $sonderwuenscheZusammenfassung .= "<b>Zahlungsbetrag Gesamt</b>";
-        $sonderwuenscheZusammenfassung .= '</td>';
-        $sonderwuenscheZusammenfassung .= '<td style="text-align: right;">';
-        $sonderwuenscheZusammenfassung .= "<b>".Yii::$app->formatter->asCurrency($this->getSonderwunschBeauftragtSumme()) . "</b>";
-        $sonderwuenscheZusammenfassung .= '</td>';
-        $sonderwuenscheZusammenfassung .= '</tr>';
+//        $sonderwuenscheZusammenfassung .= '<tr class="bordertop">';
+//        $sonderwuenscheZusammenfassung .= '<td>';
+//        $sonderwuenscheZusammenfassung .= "<b>Zahlungsbetrag Gesamt</b>";
+//        $sonderwuenscheZusammenfassung .= '</td>';
+//        $sonderwuenscheZusammenfassung .= '<td style="text-align: right;">';
+//        $sonderwuenscheZusammenfassung .= "<b>".Yii::$app->formatter->asCurrency($this->getSonderwunschBeauftragtSumme()) . "</b>";
+//        $sonderwuenscheZusammenfassung .= '</td>';
+//        $sonderwuenscheZusammenfassung .= '</tr>';
         $sonderwuenscheZusammenfassung .= '</table>';
 
         return $sonderwuenscheZusammenfassung;
+    }
+
+    public function getSonderwunschAngefortSumme() {
+        $summe = 0;
+        foreach ($this->getAngeforderteSonderwuensche() as $sonderwunsch) {
+            $summe += $sonderwunsch->beauftragt_betrag;
+        }
+        return $summe;
     }
 
     public function isAbschlagAngefordert() {

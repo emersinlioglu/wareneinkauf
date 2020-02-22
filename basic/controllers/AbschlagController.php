@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use app\models\Datenblatt;
 use app\models\Vorlage;
+use app\models\User;
 use Yii;
 use app\models\Abschlag;
 use app\models\AbschlagSearch;
 use yii\data\ActiveDataProvider;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -77,6 +79,7 @@ class AbschlagController extends Controller
             'abschlagOptions' => $abschlagOptions,
             'datenblattIds' => $datenblattIds,
             'abschlagModel' => $abschlagModel,
+            'projektId' => User::getActiveProjekt()->id
         ]);
     }
 
@@ -313,6 +316,103 @@ class AbschlagController extends Controller
         }
 
         return $this->array_to_csv_download($data, 'platzhalter.csv');
+    }
+
+
+    public function actionExportSonderwunschPlatzhalter() {
+
+        $vorlageId = Yii::$app->request->get('vorlage_id', null);
+        $datenblattIds = Yii::$app->request->get('datenblatt', []);
+        $datenblatts = Datenblatt::find()->where(['id' => $datenblattIds])->all();
+        $vorlage = Vorlage::findOne(['id' => $vorlageId]);
+
+        if (!$vorlage) {
+            echo "Bitte wählen Sie eine Sonderwunsch-Vorlage";
+            return;
+        }
+
+        $data = [];
+        $platzhalterNamen = [];
+        preg_match_all("/\[[a-zA-Z-]*\]/", $vorlage->text, $platzhalterNamen);
+        if (count($platzhalterNamen) > 0) {
+            $platzhalterNamen = $platzhalterNamen[0];
+        } else {
+            $platzhalterNamen = [];
+        }
+        $platzhalterNamen = array_unique($platzhalterNamen);
+
+
+        $cnt = 0;
+        $sonderwunschHheaders = [];
+        /** @var Datenblatt $datenblatt */
+        foreach($datenblatts as $key => $datenblatt) {
+            $cnt = max($cnt, count($datenblatt->sonderwunsches));
+        }
+        for ($i=0;$i<$cnt;$i++) {
+            $key = $i+1;
+            $sonderwunschHheaders = array_merge($sonderwunschHheaders, [
+                "[SW-{$key}-name]",
+                "[SW-{$key}-angebot-datum]",
+                "[SW-{$key}-angebot-betrag]",
+                "[SW-{$key}-beauftragt-datum]",
+                "[SW-{$key}-beauftragt-betrag]",
+                "[SW-{$key}-rs-betrag]",
+                "[SW-{$key}-rs-datum]",
+                "[SW-{$key}-rs-rgnr]",
+            ]);
+        }
+        $platzhalterNamen = array_merge($platzhalterNamen, $sonderwunschHheaders);
+
+        $data[] = $platzhalterNamen;
+
+        /** @var Datenblatt $datenblatt */
+        foreach($datenblatts as $datenblatt) {
+
+            $rowData = [];
+
+            if(!$datenblatt->kaeufer) {
+                return $this->render('error', [
+                    'errors' => [
+                        "Datenblatt mit der ID ({$datenblatt->id}) hat keinen Käufer"
+                    ]
+                ]);
+            }
+
+            $replaceData = array_merge($datenblatt->getReplaceData(), $datenblatt->getSonderwunschReplaceData());
+            /*
+            <table style="width: 60%; margin: 0 auto;"><tr><td>Beauftragt vom 16.10.2018 (Ausbau)</td><td style="text-align: right;">432,43 €</td></tr><tr><td>Beauftragt vom 24.01.2020 (Reparatur)</td><td style="text-align: right;">2,33 €</td></tr><tr><td>Beauftragt vom 29.01.2020 (Abriss)</td><td style="text-align: right;">121,21 €</td></tr><tr class="bordertop"><td><b>Zahlungsbetrag Gesamt</b></td><td style="text-align: right;"><b>555,97 €</b></td></tr></table>
+            */
+            //$replaceData['[sonderwuensche-zusammenfassung]'] =  preg_replace('pattern', '', $replaceData['[sonderwuensche-zusammenfassung]'])
+
+            $replaceData['[sonderwuensche-zusammenfassung]'] = str_replace('<td style="text-align: right;">', ' ', $replaceData['[sonderwuensche-zusammenfassung]']);
+            $replaceData['[sonderwuensche-zusammenfassung]'] = strip_tags($replaceData['[sonderwuensche-zusammenfassung]']);
+            $replaceData['[sonderwuensche-zusammenfassung]'] = str_replace('€', '€'. PHP_EOL, $replaceData['[sonderwuensche-zusammenfassung]']);
+
+            //$replaceData['[sonderwuensche-zusammenfassung]'] =  str_replace(')', ') ', str_replace('€', '€'. PHP_EOL, strip_tags($replaceData['[sonderwuensche-zusammenfassung]'])));
+
+            $replaceData['[briefanrede]'] = str_replace('<br>', PHP_EOL, $replaceData['[briefanrede]']);
+
+            foreach ($platzhalterNamen as $platzhalterName) {
+                if (isset($replaceData[$platzhalterName])) {
+                    $value = $replaceData[$platzhalterName];
+                    switch ($platzhalterName) {
+                        case '[kaeufer]':
+                            $value = str_replace('<br>', PHP_EOL, $value);
+                            break;
+                        case '[persoenliche-briefanrede]':
+                            $value = str_replace(', ', ','.PHP_EOL, $value);
+                            $value = str_replace(PHP_EOL.'<br>', '', $value);
+                            break;
+                    }
+                    $rowData[$platzhalterName] = $value;
+                } else {
+                    $rowData[$platzhalterName] = '';
+                }
+            }
+            $data[] = $rowData;
+        }
+
+        return $this->array_to_csv_download($data, 'sonderwunsch-platzhalter.csv');
     }
 
     function array_to_csv_download($array, $filename = "export.csv", $delimiter=";") {
