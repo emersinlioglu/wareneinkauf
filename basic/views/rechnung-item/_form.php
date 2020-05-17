@@ -20,6 +20,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'kunde_rechnungsnr')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'bemerkung')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'benutzernummer')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'kunde_id')->textInput() ?>
 
     <?= $form->field($model, 'artikel_id')->textInput() ?>

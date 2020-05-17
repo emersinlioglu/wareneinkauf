@@ -2,11 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\Artikel;
 use app\models\Hersteller;
+use app\models\Kunde;
 use app\models\Lieferant;
+use app\models\Rechnung;
+use app\models\Warenart;
 use Yii;
 use app\models\RechnungItem;
 use app\models\RechnungItemSearch;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -113,7 +118,7 @@ class RechnungItemController extends Controller
     {
         $errors = [];
         $fehlgeschlageneTeileigentumseinheiten = [];
-        $teileigentumseinheitenZumSpeichern = [];
+        $rechnungItemsZuSpeichern = [];
 
         if (Yii::$app->request->isPost) {
 
@@ -131,13 +136,16 @@ class RechnungItemController extends Controller
                 $sheet = $objPHPExcel->getSheet(0);
                 $highestRow = $sheet->getHighestRow();
 
+                echo "<pre>";
 //                echo "<pre>";
 //                print_r($sheet->toArray());
 
+                $cnt = 0;
+                $itemCnt = 0;
                 for ($row = 1; $row <= $highestRow; $row++) {
 
                     $lieferantName = strval($sheet->getCellByColumnAndRow(0, $row)->getValue());
-                    $rechnungsDatum = strval($sheet->getCellByColumnAndRow(1, $row)->getValue());
+                    $rechnungsDatum = \DateTime::createFromFormat('m-d-y', strval($sheet->getCellByColumnAndRow(1, $row)->getFormattedValue()));
                     $lieferantRechnungsnr = strval($sheet->getCellByColumnAndRow(2, $row)->getValue());
                     $artikelNr = strval($sheet->getCellByColumnAndRow(3, $row)->getValue());
                     $herstellerName = strval($sheet->getCellByColumnAndRow(4, $row)->getValue());
@@ -145,37 +153,169 @@ class RechnungItemController extends Controller
                     $anzahl = strval($sheet->getCellByColumnAndRow(6, $row)->getValue());
                     $artikelBezeichnung = strval($sheet->getCellByColumnAndRow(7, $row)->getValue());
                     $seriennummer = strval($sheet->getCellByColumnAndRow(8, $row)->getValue());
-                    $warenartNr = strval($sheet->getCellByColumnAndRow(9, $row)->getValue());
+                    $warenartName = strval($sheet->getCellByColumnAndRow(9, $row)->getValue());
                     $betrag = strval($sheet->getCellByColumnAndRow(10, $row)->getValue());
-                    $kunde = strval($sheet->getCellByColumnAndRow(11, $row)->getValue());
-                    $rechnungsNr = strval($sheet->getCellByColumnAndRow(12, $row)->getValue());
+                    $kundenname = strval($sheet->getCellByColumnAndRow(11, $row)->getValue());
+                    $kundenRechnungsNr = strval($sheet->getCellByColumnAndRow(12, $row)->getValue());
                     $bemerkung = strval($sheet->getCellByColumnAndRow(13, $row)->getValue());
                     $benutzerNr = strval($sheet->getCellByColumnAndRow(14, $row)->getValue());
+
+//                    print_r([
+//                        '$lieferantName' => $lieferantName,
+//                        '$rechnungsDatum' => $rechnungsDatum,
+//                        '$lieferantRechnungsnr' => $lieferantRechnungsnr,
+//                        '$artikelNr' => $artikelNr,
+//                        '$herstellerName' => $herstellerName,
+//                        '$herstellerArtikelNr' => $herstellerArtikelNr,
+//                        '$anzahl' => $anzahl,
+//                        '$artikelBezeichnung' => $artikelBezeichnung,
+//                        '$seriennummer' => $seriennummer,
+//                        '$warenartName' => $warenartName,
+//                        '$betrag' => $betrag,
+//                        '$kundenname' => $kundenname,
+//                        '$kundenRechnungsNr' => $kundenRechnungsNr,
+//                        '$bemerkung' => $bemerkung,
+//                        '$benutzerNr' => $benutzerNr,
+//                    ]);
+
+                    if (!$rechnungsDatum || !$artikelNr || !$lieferantRechnungsnr) {
+                        continue;
+                    }
+
+                    $cnt++;
+
+                    $rechnungsDatum->setTime(0, 0 ,0);
+
 
                     // Lieferant
                     $lieferant = Lieferant::findOne(['name' => $lieferantName]);
                     if (!$lieferant) {
                         $lieferant = new Lieferant(['name' => $lieferantName]);
-                        $lieferant->save();
+                        if (!$lieferant->save()) {
+                            throw new Exception('Lieferant ist nicht valid');
+                        }
                     }
 
                     // Hersteller
-                    $hersteller = Hersteller::findOne(['name' => $lieferantName]);
+                    $hersteller = Hersteller::findOne(['name' => $herstellerName]);
                     if (!$hersteller) {
                         $hersteller = new Hersteller(['name' => $herstellerName]);
-                        $hersteller->save();
+                        if (!$hersteller->save()) {
+                            throw new Exception('Hersteller ist nicht valid');
+                        }
                     }
 
+                    // Warenart
+                    $warenart = Warenart::findOne(['name' => $warenartName]);
+                    if (!$warenart) {
+                        $warenart = new Warenart(['name' => $warenartName]);
+                        if (!$warenart->save()) {
+                            throw new Exception('Warenart ist nicht valid');
+                        }
+                    }
+
+                    // Kunde
+                    $kunde = Kunde::findOne(['name' => $kundenname]);
+                    if (!$kunde) {
+                        $kunde = new Kunde(['name' => $kundenname]);
+                        if (!$kunde->save()) {
+                            throw new Exception('Kunde ist nicht valid');
+                        }
+                    }
+
+                    // Artikel
+                    $artikel = Artikel::findOne(['nummer' => $artikelNr]);
+                    if (!$artikel) {
+                        $artikel = new Artikel([
+                            'nummer' => $artikelNr,
+                            'bezeichnung' => $artikelBezeichnung,
+                            'seriennummer' => $seriennummer,
+                            'hersteller_artikelnr' => $herstellerArtikelNr,
+                            'hersteller_id' => $hersteller->id,
+                            'warenart_id' => $warenart->id,
+                        ]);
+                        if (!$artikel->save()) {
+                            throw new Exception('Artikel ist nicht valid');
+                        }
+                    }
+
+                    // Rechnung
+                    $rechnung = Rechnung::findOne([
+                        'nummer' => $lieferantRechnungsnr,
+                        'datum' => $rechnungsDatum->format('Y-m-d H:i:s'),
+                        'lieferant_id' => $lieferant->id
+                    ]);
+                    if (!$rechnung) {
+                        $rechnung = new Rechnung([
+                            'nummer' => $lieferantRechnungsnr,
+                            'datum' => $rechnungsDatum->format('Y-m-d H:i:s'),
+                            'lieferant_id' => $lieferant->id
+                        ]);
+                        if (!$rechnung->save()) {
+                            throw new Exception('Rechnung ist nicht valid', print_r($rechnung->errors, 1));
+                        }
+                    }
+
+                    // Rechnung.Item
+                    $rechnungItem = RechnungItem::findOne([
+                        'rechnung_id' => $rechnung->id,
+                        'anzahl' => $anzahl,
+                        'netto_einzel_betrag' => $betrag,
+                        'kunde_rechnungsnr' => $kundenRechnungsNr,
+                        'bemerkung' => $bemerkung,
+                        'benutzernummer' => $benutzerNr,
+                        'kunde_id' => $kunde->id,
+                        'artikel_id' => $artikel->id,
+                    ]);
+                    if (!$rechnungItem) {
+                        $rechnungItem = new RechnungItem([
+                            'rechnung_id' => $rechnung->id,
+                            'anzahl' => $anzahl,
+                            'netto_einzel_betrag' => $betrag,
+                            'kunde_rechnungsnr' => $kundenRechnungsNr,
+                            'bemerkung' => $bemerkung,
+                            'benutzernummer' => $benutzerNr,
+                            'kunde_id' => $kunde->id,
+                            'artikel_id' => $artikel->id,
+                        ]);
+                        if (!$rechnungItem->save()) {
+                            throw new Exception('RechnungItem ist nicht valid');
+                        }
+                    } else {
+                        $itemCnt++;
+
+                    print_r([
+                        '$lieferantName' => $lieferantName,
+                        '$rechnungsDatum' => $rechnungsDatum,
+                        '$lieferantRechnungsnr' => $lieferantRechnungsnr,
+                        '$artikelNr' => $artikelNr,
+                        '$herstellerName' => $herstellerName,
+                        '$herstellerArtikelNr' => $herstellerArtikelNr,
+                        '$anzahl' => $anzahl,
+                        '$artikelBezeichnung' => $artikelBezeichnung,
+                        '$seriennummer' => $seriennummer,
+                        '$warenartName' => $warenartName,
+                        '$betrag' => $betrag,
+                        '$kundenname' => $kundenname,
+                        '$kundenRechnungsNr' => $kundenRechnungsNr,
+                        '$bemerkung' => $bemerkung,
+                        '$benutzerNr' => $benutzerNr,
+                    ]);
+                    }
                 }
 
             }
 
-            if (count($errors) + count($fehlgeschlageneTeileigentumseinheiten) == 0) {
-                foreach ($teileigentumseinheitenZumSpeichern as $te) {
-                    $te->save();
-                }
-                return $this->redirect(['teileigentumseinheit/index', ['TeileigentumseinheitSearch[projekt_id]' => $projekt->id]]);
-            }
+//            if (count($errors) + count($fehlgeschlageneTeileigentumseinheiten) == 0) {
+//                foreach ($rechnungItemsZuSpeichern as $te) {
+//                    $te->save();
+//                }
+
+            echo "cnt: " . $cnt;
+            echo "itemCnt: " . $itemCnt;
+            die;
+                return $this->redirect(['rechnung-item/index', []]);
+//            }
         }
 
         return $this->render('import', [

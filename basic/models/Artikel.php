@@ -10,7 +10,6 @@ use Yii;
  * @property integer $id
  * @property string $nummer
  * @property string $bezeichnung
- * @property string $seriennummer
  * @property string $hersteller_artikelnr
  * @property integer $hersteller_id
  * @property integer $warenart_id
@@ -37,7 +36,7 @@ class Artikel extends \yii\db\ActiveRecord
         return [
             [['nummer'], 'required'],
             [['hersteller_id', 'warenart_id'], 'integer'],
-            [['nummer', 'seriennummer', 'hersteller_artikelnr'], 'string', 'max' => 255],
+            [['nummer', 'hersteller_artikelnr'], 'string', 'max' => 255],
             [['bezeichnung'], 'string', 'max' => 512]
         ];
     }
@@ -51,7 +50,6 @@ class Artikel extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nummer' => 'Nummer',
             'bezeichnung' => 'Bezeichnung',
-            'seriennummer' => 'Seriennummer',
             'hersteller_artikelnr' => 'Hersteller Artikelnr',
             'hersteller_id' => 'Hersteller ID',
             'warenart_id' => 'Warenart ID',

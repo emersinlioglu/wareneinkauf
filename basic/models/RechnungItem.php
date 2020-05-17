@@ -12,6 +12,9 @@ use Yii;
  * @property integer $anzahl
  * @property string $netto_einzel_betrag
  * @property string $kunde_rechnungsnr
+ * @property string $bemerkung
+ * @property string $benutzernummer
+ * @property string $seriennummer
  * @property integer $kunde_id
  * @property integer $artikel_id
  *
@@ -37,7 +40,8 @@ class RechnungItem extends \yii\db\ActiveRecord
         return [
             [['rechnung_id', 'anzahl', 'kunde_id', 'artikel_id'], 'integer'],
             [['netto_einzel_betrag'], 'number'],
-            [['kunde_rechnungsnr'], 'string', 'max' => 255]
+            [['bemerkung'], 'string'],
+            [['kunde_rechnungsnr', 'benutzernummer', 'seriennummer'], 'string', 'max' => 255]
         ];
     }
 
@@ -52,6 +56,9 @@ class RechnungItem extends \yii\db\ActiveRecord
             'anzahl' => 'Anzahl',
             'netto_einzel_betrag' => 'Netto Einzel Betrag',
             'kunde_rechnungsnr' => 'Kunde Rechnungsnr',
+            'bemerkung' => 'Bemerkung',
+            'benutzernummer' => 'Benutzernummer',
+            'seriennummer' => 'Seriennummer',
             'kunde_id' => 'Kunde ID',
             'artikel_id' => 'Artikel ID',
         ];

@@ -25,6 +25,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'kunde_rechnungsnr') ?>
 
+    <?php // echo $form->field($model, 'bemerkung') ?>
+
+    <?php // echo $form->field($model, 'benutzernummer') ?>
+
     <?php // echo $form->field($model, 'kunde_id') ?>
 
     <?php // echo $form->field($model, 'artikel_id') ?>
