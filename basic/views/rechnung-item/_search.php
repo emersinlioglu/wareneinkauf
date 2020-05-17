@@ -29,6 +29,8 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'benutzernummer') ?>
 
+    <?php // echo $form->field($model, 'seriennummer') ?>
+
     <?php // echo $form->field($model, 'kunde_id') ?>
 
     <?php // echo $form->field($model, 'artikel_id') ?>

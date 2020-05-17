@@ -20,7 +20,7 @@ class RechnungItemSearch extends RechnungItem
         return [
             [['id', 'rechnung_id', 'anzahl', 'kunde_id', 'artikel_id'], 'integer'],
             [['netto_einzel_betrag'], 'number'],
-            [['kunde_rechnungsnr', 'bemerkung', 'benutzernummer'], 'safe'],
+            [['kunde_rechnungsnr', 'bemerkung', 'benutzernummer', 'seriennummer'], 'safe'],
         ];
     }
 
@@ -67,7 +67,8 @@ class RechnungItemSearch extends RechnungItem
 
         $query->andFilterWhere(['like', 'kunde_rechnungsnr', $this->kunde_rechnungsnr])
             ->andFilterWhere(['like', 'bemerkung', $this->bemerkung])
-            ->andFilterWhere(['like', 'benutzernummer', $this->benutzernummer]);
+            ->andFilterWhere(['like', 'benutzernummer', $this->benutzernummer])
+            ->andFilterWhere(['like', 'seriennummer', $this->seriennummer]);
 
         return $dataProvider;
     }

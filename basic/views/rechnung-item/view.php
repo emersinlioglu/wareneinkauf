@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'kunde_rechnungsnr',
             'bemerkung:ntext',
             'benutzernummer',
+            'seriennummer',
             'kunde_id',
             'artikel_id',
         ],

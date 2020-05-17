@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'benutzernummer')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'seriennummer')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'kunde_id')->textInput() ?>
 
     <?= $form->field($model, 'artikel_id')->textInput() ?>

@@ -184,7 +184,7 @@ class RechnungItemController extends Controller
 
                     $cnt++;
 
-                    $rechnungsDatum->setTime(0, 0 ,0);
+                    $rechnungsDatum->setTime(0, 0, 0);
 
 
                     // Lieferant
@@ -229,7 +229,6 @@ class RechnungItemController extends Controller
                         $artikel = new Artikel([
                             'nummer' => $artikelNr,
                             'bezeichnung' => $artikelBezeichnung,
-                            'seriennummer' => $seriennummer,
                             'hersteller_artikelnr' => $herstellerArtikelNr,
                             'hersteller_id' => $hersteller->id,
                             'warenart_id' => $warenart->id,
@@ -264,6 +263,7 @@ class RechnungItemController extends Controller
                         'kunde_rechnungsnr' => $kundenRechnungsNr,
                         'bemerkung' => $bemerkung,
                         'benutzernummer' => $benutzerNr,
+                        'seriennummer' => $seriennummer,
                         'kunde_id' => $kunde->id,
                         'artikel_id' => $artikel->id,
                     ]);
@@ -275,6 +275,7 @@ class RechnungItemController extends Controller
                             'kunde_rechnungsnr' => $kundenRechnungsNr,
                             'bemerkung' => $bemerkung,
                             'benutzernummer' => $benutzerNr,
+                            'seriennummer' => $seriennummer,
                             'kunde_id' => $kunde->id,
                             'artikel_id' => $artikel->id,
                         ]);
@@ -284,38 +285,29 @@ class RechnungItemController extends Controller
                     } else {
                         $itemCnt++;
 
-                    print_r([
-                        '$lieferantName' => $lieferantName,
-                        '$rechnungsDatum' => $rechnungsDatum,
-                        '$lieferantRechnungsnr' => $lieferantRechnungsnr,
-                        '$artikelNr' => $artikelNr,
-                        '$herstellerName' => $herstellerName,
-                        '$herstellerArtikelNr' => $herstellerArtikelNr,
-                        '$anzahl' => $anzahl,
-                        '$artikelBezeichnung' => $artikelBezeichnung,
-                        '$seriennummer' => $seriennummer,
-                        '$warenartName' => $warenartName,
-                        '$betrag' => $betrag,
-                        '$kundenname' => $kundenname,
-                        '$kundenRechnungsNr' => $kundenRechnungsNr,
-                        '$bemerkung' => $bemerkung,
-                        '$benutzerNr' => $benutzerNr,
-                    ]);
+//                        print_r([
+//                            '$lieferantName' => $lieferantName,
+//                            '$rechnungsDatum' => $rechnungsDatum,
+//                            '$lieferantRechnungsnr' => $lieferantRechnungsnr,
+//                            '$artikelNr' => $artikelNr,
+//                            '$herstellerName' => $herstellerName,
+//                            '$herstellerArtikelNr' => $herstellerArtikelNr,
+//                            '$anzahl' => $anzahl,
+//                            '$artikelBezeichnung' => $artikelBezeichnung,
+//                            '$seriennummer' => $seriennummer,
+//                            '$warenartName' => $warenartName,
+//                            '$betrag' => $betrag,
+//                            '$kundenname' => $kundenname,
+//                            '$kundenRechnungsNr' => $kundenRechnungsNr,
+//                            '$bemerkung' => $bemerkung,
+//                            '$benutzerNr' => $benutzerNr,
+//                        ]);
                     }
                 }
 
             }
 
-//            if (count($errors) + count($fehlgeschlageneTeileigentumseinheiten) == 0) {
-//                foreach ($rechnungItemsZuSpeichern as $te) {
-//                    $te->save();
-//                }
-
-            echo "cnt: " . $cnt;
-            echo "itemCnt: " . $itemCnt;
-            die;
-                return $this->redirect(['rechnung-item/index', []]);
-//            }
+            return $this->redirect(['rechnung-item/index', []]);
         }
 
         return $this->render('import', [
