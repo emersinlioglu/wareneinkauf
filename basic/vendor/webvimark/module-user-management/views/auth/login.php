@@ -10,7 +10,6 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\captcha\Captcha;
 use \yii\helpers\ArrayHelper;
-use \app\models\Projekt;
 ?>
 
 <div class="container" id="login-wrapper">
@@ -31,13 +30,6 @@ use \app\models\Projekt;
 							'template'=>"{input}\n{error}",
 						],
 					]) ?>
-
-                    <div class="form-group field-datenblatt-firma_id has-success">
-                        <?= Html::dropDownList('projekt_id', null,
-                            ArrayHelper::map(Projekt::find()->all(), 'id', 'name'),
-                            array('label' => 'Dimension type', 'class' => 'form-control',
-                                'prompt'=>'Projekt auswählen', 'required' => 'required')) ?>
-                    </div>
 
 					<?= $form->field($model, 'username')
 						->textInput(['placeholder'=>$model->getAttributeLabel('username'), 'autocomplete'=>'off']) ?>

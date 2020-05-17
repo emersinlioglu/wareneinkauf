@@ -108,32 +108,12 @@
                         ],
                     ],
 
-                    
-                    ['label' => 'Firmen', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
-                    ['label' => 'Projekte', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    //['label' => 'Teileigentumseinheiten', 'icon' => 'fa fa-home text-green','url' => ['/haus/index']],
-                    [
-                        'label' => 'Teileigentumseinheiten',
-                        'icon' => 'fa fa-file-text text-green',
-                        'url' => ['/teileigentumseinheit/index']
-//                        'url' => ['/haus/index']
-//                        'url' => '#',
-//                        'items' => $teItems,
-                    ],
-                    ['label' => 'Forecast', 'icon' => 'fa fa-home text-green','url' => ['/teileigentumseinheit/forecast']],
-                    ['label' => 'Käufer', 'icon' => 'fa fa-users text-yellow', 'url' => ['/kaeufer/index']],
-                    [
-                        'label' => 'Datenblätter',
-                        'icon' => 'fa fa-file-text text-blue',
-                        'url' => ['/datenblatt/index']
-//                        'url' => '#',
-//                        'items' => $datenblattItems,
-                    ],
-                    [
-                        'label' => 'Datenblätter (storniert)',
-                        'icon' => 'fa fa-file-text text-blue',
-                        'url' => ['/datenblatt-log/index']
-                    ],
+                    ['label' => 'Wareneingang', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Lieferant', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Artikel', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Hersteller', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Kunde', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
+                    ['label' => 'Warenart', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
                     [
                         'label' => 'Einstellungen',
                         'icon' => 'fa fa-share',

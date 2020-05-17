@@ -4,7 +4,7 @@ $dbConfig = [];
 
 $dbConfig = [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=abgproject',
+    'dsn' => 'mysql:host=localhost;dbname=wareneinkauf',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

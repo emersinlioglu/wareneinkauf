@@ -3,7 +3,6 @@ use dosamigos\chartjs\ChartJs;
 use miloschuman\highcharts\Highcharts;
 /* @var $this yii\web\View */
 
-//$this->title = 'ABG Projekt Manager';
 $this->title = '';
 ?>
 <div class="site-index">
@@ -37,10 +36,6 @@ $this->title = '';
     </div>
 
     <div class="body-content">
-
-        <?= \app\components\ProjectDashboard::widget([
-            'userId' => (!Yii::$app->user->isSuperadmin ? Yii::$app->user->getId() : null)
-        ]) ?>
 
         <?php
 //        echo Highcharts::widget([

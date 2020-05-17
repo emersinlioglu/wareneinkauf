@@ -35,66 +35,6 @@ class AuthController extends BaseController
 		];
 	}
 
-
-	/**
-	 * Login form - Prüfen ob, User Konfiguration bestätigt hat
-	 *
-	 * @return string
-	 */
-	public function actionLoginKonfiguration($id = null, $zustimmung = null)
-	{
-		  $konfigurationuser = KonfigurationUser::find()->where(['user_id' => Yii::$app->user->id])->andWhere(['konfiguration_id'=>$id])->one();
-
-          if($konfigurationuser == null && $zustimmung == 1)
-          {
-	          $konfigurationuser = new KonfigurationUser;
-	          $konfigurationuser->user_id = Yii::$app->user->id;
-	          $konfigurationuser->konfiguration_id = $id;
-	          $konfigurationuser->zustimmung_datum = date("Y-m-d");
-	          $konfigurationuser->save();
-          }
-
-          $datenow = date('Y-m-d');
-          $konfigurationen = Konfiguration::find()->where(['>', 'id', $id])->andWhere(['>=', 'deleted', $datenow])->orderBy(['id'=>SORT_DESC])->all();
-          $konfigurationusers = KonfigurationUser::find()->where(['user_id'=>Yii::$app->user->id])->orderBy(['konfiguration_id'=>SORT_DESC])->all();
-
-  	      $konfigurationen_zuordnen = [];
-    	
-
-    	  foreach($konfigurationen as $konfiguration)
-          {
-    		$nichtzugeordnet = true;
-
-        	foreach($konfigurationusers as $kuser)
-            {
-            	if($konfiguration->id == $kuser->konfiguration_id)
-            	{
-                    $nichtzugeordnet = false;
-            	}
-            }
-
-
-            if($nichtzugeordnet)
-            {
-            	array_push($konfigurationen_zuordnen, $konfiguration); 
-            }
-
-     	  }
-
-
-          if(count($konfigurationen_zuordnen) > 0)
-          {
-          	  return $this->renderAjax('konfigurationUser', ['konfigurationen' => $konfigurationen_zuordnen]);
-          }
-
-          else
-          {
-              return $this->redirect(['login']);
-          }
-
-	}	
-
-
 	/**
 	 * Login form
 	 *

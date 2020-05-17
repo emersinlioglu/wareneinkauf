@@ -2,17 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\Einheitstyp;
-use app\models\Projekt;
-use app\models\TeileigentumseinheitSearch;
-use app\models\User;
-use miloschuman\highcharts\Highcharts;
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\LoginForm;
+use app\models\User;
+use Yii;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 class SiteController extends Controller
 {
@@ -61,8 +56,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $einheitstypModel = new Einheitstyp();
-        $projektModel     = new Projekt();
+//        $einheitstypModel = new Einheitstyp();
+//        $projektModel     = new Projekt();
 
 //        $verkaufsentwicklungData = [];
 //        $verkaufsentwicklungDataProProjekt = [];
@@ -82,9 +77,9 @@ class SiteController extends Controller
 //            }
 //        }
 
-        if (User::hasRole('Sonderwunsch', false)) {
-            $this->redirect(['datenblatt/index']);
-        }
+//        if (User::hasRole('Sonderwunsch', false)) {
+//            $this->redirect(['datenblatt/index']);
+//        }
 
         return $this->render('index', [
 //            'verkaufsentwicklungData'           => $verkaufsentwicklungData,
