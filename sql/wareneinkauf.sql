@@ -172,9 +172,12 @@ CREATE TABLE IF NOT EXISTS `rechnung_item` (
   `netto_einzel_betrag` decimal(10,2) DEFAULT NULL,
   `kunde_rechnungsnr` varchar(255) DEFAULT NULL,
   `kunde_id` int(11) DEFAULT '1',
+  `artikel_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_rechnung_item_rechnung` (`rechnung_id`),
   KEY `FK_rechnung_item_kunde` (`kunde_id`),
+  KEY `FK_rechnung_item_artikel` (`artikel_id`),
+  CONSTRAINT `FK_rechnung_item_artikel` FOREIGN KEY (`artikel_id`) REFERENCES `artikel` (`id`),
   CONSTRAINT `FK_rechnung_item_kunde` FOREIGN KEY (`kunde_id`) REFERENCES `kunde` (`id`),
   CONSTRAINT `FK_rechnung_item_rechnung` FOREIGN KEY (`rechnung_id`) REFERENCES `rechnung` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

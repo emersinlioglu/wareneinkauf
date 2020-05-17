@@ -108,12 +108,12 @@
                         ],
                     ],
 
-                    ['label' => 'Wareneingang', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Lieferant', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Artikel', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Hersteller', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Kunde', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/projekt/index']],
-                    ['label' => 'Warenart', 'icon' => 'fa fa-building text-red', 'url' => ['/firma/index']],
+                    ['label' => 'Rechnung', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/rechnung-item/index']],
+                    ['label' => 'Lieferant', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/lieferant/index']],
+                    ['label' => 'Artikel', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/artikel/index']],
+                    ['label' => 'Hersteller', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/hersteller/index']],
+                    ['label' => 'Kunde', 'icon' => 'fa fa-dashboard text-aqua','url' => ['/kunde/index']],
+                    ['label' => 'Warenart', 'icon' => 'fa fa-building text-red', 'url' => ['/warenart/index']],
                     [
                         'label' => 'Einstellungen',
                         'icon' => 'fa fa-share',
