@@ -127,10 +127,10 @@ CREATE TABLE IF NOT EXISTS `hersteller` (
 
 -- Exportiere Struktur von Tabelle wareneinkauf.kunde
 CREATE TABLE IF NOT EXISTS `kunde` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(255) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- Exportiere Daten aus Tabelle wareneinkauf.kunde: ~0 rows (ungefähr)
 /*!40000 ALTER TABLE `kunde` DISABLE KEYS */;
@@ -140,8 +140,8 @@ REPLACE INTO `kunde` (`id`, `name`) VALUES
 
 -- Exportiere Struktur von Tabelle wareneinkauf.lieferant
 CREATE TABLE IF NOT EXISTS `lieferant` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(255) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -264,8 +264,8 @@ CREATE TABLE IF NOT EXISTS `user_visit_log` (
 
 -- Exportiere Struktur von Tabelle wareneinkauf.warenart
 CREATE TABLE IF NOT EXISTS `warenart` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(255) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
